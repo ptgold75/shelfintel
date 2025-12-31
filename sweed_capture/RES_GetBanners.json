@@ -1,0 +1,233 @@
+{
+  "status": 200,
+  "url": "https://web-ui-production.sweedpos.com/_api/proxy/Banners/GetBanners",
+  "data": {
+    "banners": [
+      {
+        "id": 24351,
+        "name": "30% Off Storewide",
+        "link": null,
+        "image": "https://media.sweedpos.com/store/production/1764256673_933a5bf4-c7c3-42d7-9d83-90ae4cc3e39b.png",
+        "mobileImage": "https://media.sweedpos.com/store/production/1764256672_c446a33f-1e8f-4c03-b507-45c2ed6c9f34.png",
+        "startDate": "2025-12-01T00:00:00Z",
+        "endDate": "2025-12-31T18:00:00Z",
+        "promo": {
+          "id": 102928,
+          "name": "30% Off Storewide",
+          "shortName": null,
+          "description": null,
+          "isBogo": null,
+          "interval": [],
+          "bannerUrl": null,
+          "mobileBannerUrl": null,
+          "productImages": [],
+          "filter": {
+            "promotion": [
+              -1
+            ]
+          },
+          "displayInDiscountMenu": false,
+          "isConditional": false,
+          "scheduleDisplayText": null
+        }
+      },
+      {
+        "id": 11634,
+        "name": "2 for $45 Curio Everyday Brand Eighths",
+        "link": null,
+        "image": "https://media.sweedpos.com/store/production/1756131423_d1ab5db7-631b-422f-958b-f87c02da9cf1.jpg",
+        "mobileImage": "https://media.sweedpos.com/store/production/1756131422_147cd312-f685-4ef8-a289-e7bc689d2427.jpg",
+        "startDate": "2025-09-01T00:00:00Z",
+        "endDate": null,
+        "promo": {
+          "id": 87850,
+          "name": "2 for $45 Curio Everyday Brand Eighths",
+          "shortName": null,
+          "description": null,
+          "isBogo": null,
+          "interval": [],
+          "bannerUrl": null,
+          "mobileBannerUrl": null,
+          "productImages": [],
+          "filter": {
+            "promotion": [
+              -1
+            ]
+          },
+          "displayInDiscountMenu": false,
+          "isConditional": false,
+          "scheduleDisplayText": null
+        }
+      },
+      {
+        "id": 11447,
+        "name": "2 for $150 gLeaf Half Ounces",
+        "link": null,
+        "image": "https://media.sweedpos.com/store/production/1755541257_3c452070-27ab-4dac-815f-4734652088f6.png",
+        "mobileImage": "https://media.sweedpos.com/store/production/1755541257_dd8b5486-1c88-4bf0-8600-fb70e653c33c.png",
+        "startDate": "2025-08-18T00:00:00Z",
+        "endDate": null,
+        "promo": {
+          "id": 87407,
+          "name": "2 for $150 gLeaf Half Ounces",
+          "shortName": null,
+          "description": null,
+          "isBogo": null,
+          "interval": [],
+          "bannerUrl": null,
+          "mobileBannerUrl": null,
+          "productImages": [],
+          "filter": {
+            "promotion": [
+              -1
+            ]
+          },
+          "displayInDiscountMenu": false,
+          "isConditional": false,
+          "scheduleDisplayText": null
+        }
+      },
+      {
+        "id": 10101,
+        "name": "30% Off Evermore Brands",
+        "link": null,
+        "image": "https://media.sweedpos.com/store/production/1751549310_ccb1a024-c8e0-4028-8977-080de534a2c4.png",
+        "mobileImage": "https://media.sweedpos.com/store/production/1751549309_e36ca79f-2d1f-4c88-a502-3f1eed0d24a5.png",
+        "startDate": "2025-12-28T00:00:00Z",
+        "endDate": "2026-01-03T20:00:00Z",
+        "promo": {
+          "id": 84086,
+          "name": "30% Off Evermore Brands",
+          "shortName": null,
+          "description": null,
+          "isBogo": null,
+          "interval": [],
+          "bannerUrl": null,
+          "mobileBannerUrl": null,
+          "productImages": [],
+          "filter": {
+            "promotion": [
+              -1
+            ]
+          },
+          "displayInDiscountMenu": false,
+          "isConditional": false,
+          "scheduleDisplayText": null
+        }
+      },
+      {
+        "id": 10100,
+        "name": "25% Off Curaleaf Brands",
+        "link": null,
+        "image": "https://media.sweedpos.com/store/production/1758897903_9fa2becf-3a2c-4ab8-93ae-c595100e3d50.png",
+        "mobileImage": "https://media.sweedpos.com/store/production/1758897902_6e0d3f05-b5ab-4c65-a0ca-04bdaee8e255.png",
+        "startDate": "2025-12-28T00:00:00Z",
+        "endDate": "2026-01-03T20:00:00Z",
+        "promo": {
+          "id": 84098,
+          "name": "25% Off Curaleaf Brands",
+          "shortName": null,
+          "description": null,
+          "isBogo": null,
+          "interval": [],
+          "bannerUrl": null,
+          "mobileBannerUrl": null,
+          "productImages": [],
+          "filter": {
+            "promotion": [
+              -1
+            ]
+          },
+          "displayInDiscountMenu": false,
+          "isConditional": false,
+          "scheduleDisplayText": null
+        }
+      },
+      {
+        "id": 10099,
+        "name": "25% Off Holistic Brands",
+        "link": null,
+        "image": "https://media.sweedpos.com/store/production/1759156350_bbef7ee3-5c89-4dab-bb55-d94804870372.png",
+        "mobileImage": "https://media.sweedpos.com/store/production/1759156350_8181ac62-f30b-4388-8447-88ca200bb5af.png",
+        "startDate": "2025-12-28T00:00:00Z",
+        "endDate": "2026-01-03T20:00:00Z",
+        "promo": {
+          "id": 84087,
+          "name": "25% Off Holistic Brands",
+          "shortName": null,
+          "description": null,
+          "isBogo": null,
+          "interval": [],
+          "bannerUrl": null,
+          "mobileBannerUrl": null,
+          "productImages": [],
+          "filter": {
+            "promotion": [
+              -1
+            ]
+          },
+          "displayInDiscountMenu": false,
+          "isConditional": false,
+          "scheduleDisplayText": null
+        }
+      },
+      {
+        "id": 10097,
+        "name": "25% Off District Cannabis",
+        "link": null,
+        "image": "https://media.sweedpos.com/store/production/1758897761_b2f0d2ab-0e22-44fb-862d-329fa6468039.png",
+        "mobileImage": "https://media.sweedpos.com/store/production/1758897761_cf4867c2-6d66-42e6-a631-1ba9a74c9eaa.png",
+        "startDate": "2025-12-28T00:00:00Z",
+        "endDate": "2026-01-03T20:00:00Z",
+        "promo": {
+          "id": 84084,
+          "name": "25% Off District Cannabis",
+          "shortName": null,
+          "description": null,
+          "isBogo": null,
+          "interval": [],
+          "bannerUrl": null,
+          "mobileBannerUrl": null,
+          "productImages": [],
+          "filter": {
+            "promotion": [
+              -1
+            ]
+          },
+          "displayInDiscountMenu": false,
+          "isConditional": false,
+          "scheduleDisplayText": null
+        }
+      },
+      {
+        "id": 9671,
+        "name": "20% Off Sunmed",
+        "link": null,
+        "image": "https://media.sweedpos.com/store/production/1758897843_97939d10-3945-4c46-b1bf-1ca1efad1026.png",
+        "mobileImage": "https://media.sweedpos.com/store/production/1758897843_b2b44984-9c3c-4b96-86e3-6fd967d3eeea.png",
+        "startDate": "2025-12-30T00:00:00Z",
+        "endDate": null,
+        "promo": {
+          "id": 84095,
+          "name": "20% Off Sunmed",
+          "shortName": null,
+          "description": null,
+          "isBogo": null,
+          "interval": [],
+          "bannerUrl": null,
+          "mobileBannerUrl": null,
+          "productImages": [],
+          "filter": {
+            "promotion": [
+              -1
+            ]
+          },
+          "displayInDiscountMenu": false,
+          "isConditional": false,
+          "scheduleDisplayText": null
+        }
+      }
+    ],
+    "viewAllCount": 11
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "status": 200,
+  "url": "https://web-ui-production.sweedpos.com/_api/proxy/Referral/Get",
+  "data": {
+    "id": 198,
+    "createdAt": "2025-04-11T00:15:10Z",
+    "finishedAt": null,
+    "referralsCompleted": 796,
+    "referralsSignedUp": 796,
+    "enabled": true,
+    "showInEcommerce": true,
+    "referrerDiscountType": "DollarOffDiscount",
+    "referrerDiscountName": "Dollar-off discount",
+    "referrerDiscountAmount": 10.0,
+    "referrerCodeExpirationInDays": 30,
+    "referrerPromocodeMinApplyAmount": 0.0,
+    "referralDiscountType": "DollarOffDiscount",
+    "referralDiscountName": "Dollar-off discount",
+    "referralDiscountAmount": 10.0,
+    "referralMinInvoiceAmount": 0.0,
+    "referralMinInvoiceCount": 0,
+    "referralCodeExpirationInDays": 30,
+    "referralPromocodeMinApplyAmount": 0.0,
+    "terms": "<p>Refer a friend and you both get $10 off! Your friend gets $10 off their first purchase after signing up, and once they complete it, you\u2019ll receive $10 off too! Offer valid for 30 days. No cash value.&nbsp;</p>\n"
+  }
+}

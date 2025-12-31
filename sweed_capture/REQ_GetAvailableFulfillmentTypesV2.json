@@ -1,0 +1,20 @@
+{
+  "method": "POST",
+  "url": "https://web-ui-production.sweedpos.com/_api/proxy/Store/GetAvailableFulfillmentTypesV2",
+  "headers": {
+    "sec-ch-ua-platform": "\"macOS\"",
+    "ssr": "false",
+    "referer": "https://www.gleaf.com/",
+    "sec-ch-ua": "\"HeadlessChrome\";v=\"143\", \"Chromium\";v=\"143\", \"Not A(Brand\";v=\"24\"",
+    "storeid": "376",
+    "x-cookie": "ph_phc_2nivojw7hzgkbwhzhZOK2c8fopTpWrsez7LoSAkovgP_posthog=%7B%22distinct_id%22%3A%22019b7664-f564-7a58-a3f1-afa0adc552de%22%2C%22%24sesid%22%3A%5B1767217886564%2C%22019b7664-f564-7a58-a3f1-af9e6f147fa7%22%2C1767217886564%5D%7D",
+    "sec-ch-ua-mobile": "?0",
+    "baggage": "sentry-environment=production,sentry-release=2025-12-29%40release-release-3447,sentry-public_key=4fa8c6bf9066c0f3aef56c6c278ff9ab,sentry-trace_id=6aa33e04197bdd9b398e3494c756c5cf",
+    "sentry-trace": "6aa33e04197bdd9b398e3494c756c5cf-b01bde4ecf91e709-0",
+    "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/143.0.7499.4 Safari/537.36",
+    "accept": "*/*",
+    "traceid": "f409a353-3c7b-4872-87f6-b5d2806e75dc",
+    "content-type": "application/json"
+  },
+  "post_data": "{\"saleType\":\"Recreational\"}"
+}

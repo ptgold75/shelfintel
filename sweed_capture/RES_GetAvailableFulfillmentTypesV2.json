@@ -1,0 +1,31 @@
+{
+  "status": 200,
+  "url": "https://web-ui-production.sweedpos.com/_api/proxy/Store/GetAvailableFulfillmentTypesV2",
+  "data": {
+    "storeFulfillmentOptions": [
+      {
+        "fulfillmentType": "InStorePickup",
+        "title": "In-store pickup",
+        "children": []
+      }
+    ],
+    "organizationFulfillmentTypeInfos": [
+      {
+        "name": "Pickup",
+        "storeIds": [
+          375,
+          376,
+          377,
+          457,
+          458,
+          483,
+          484,
+          485,
+          486,
+          487,
+          546
+        ]
+      }
+    ]
+  }
+}

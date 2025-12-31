@@ -1,0 +1,13 @@
+{
+  "status": 200,
+  "url": "https://web-ui-production.sweedpos.com/_api/proxy/Account/GetAccountFulfillmentPreferences",
+  "data": {
+    "accountId": null,
+    "storeId": 376,
+    "fulfillmentType": "InStorePickup",
+    "deliveryAddress": null,
+    "deliverySecondaryAddress": null,
+    "deliveryLatitude": null,
+    "deliveryLongitude": null
+  }
+}

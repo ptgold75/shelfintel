@@ -1,0 +1,20 @@
+{
+  "url": "https://web-ui-production.sweedpos.com/_api/proxy/Products/GetShopInShopsList",
+  "method": "POST",
+  "headers": {
+    "sec-ch-ua-platform": "\"macOS\"",
+    "ssr": "false",
+    "referer": "https://www.gleaf.com/",
+    "sec-ch-ua": "\"HeadlessChrome\";v=\"143\", \"Chromium\";v=\"143\", \"Not A(Brand\";v=\"24\"",
+    "storeid": "376",
+    "x-cookie": "ph_phc_2nivojw7hzgkbwhzhZOK2c8fopTpWrsez7LoSAkovgP_posthog=%7B%22distinct_id%22%3A%22019b766f-29ae-7636-b2eb-719235976515%22%2C%22%24sesid%22%3A%5B1767218555309%2C%22019b766f-29ad-7b74-a604-16225f19b353%22%2C1767218555309%5D%7D",
+    "sec-ch-ua-mobile": "?0",
+    "baggage": "sentry-environment=production,sentry-release=2025-12-29%40release-release-3447,sentry-public_key=4fa8c6bf9066c0f3aef56c6c278ff9ab,sentry-trace_id=6aa33e04197bdd9b398e3494c756c5cf",
+    "sentry-trace": "6aa33e04197bdd9b398e3494c756c5cf-9b73ef60a40a76ab-0",
+    "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/143.0.7499.4 Safari/537.36",
+    "accept": "*/*",
+    "traceid": "98f5f835-c3b9-465e-b2b5-f1d579978506",
+    "content-type": "application/json"
+  },
+  "post_data": "{\"saleType\":\"Recreational\",\"platformOs\":\"web\"}"
+}

@@ -1,0 +1,106 @@
+{
+  "url": "https://web-ui-production.sweedpos.com/_api/proxy/Products/GetProductCategoryList",
+  "status": 200,
+  "data": [
+    {
+      "id": 3763,
+      "name": "Flower",
+      "imageUrl": "https://media.sweedpos.com/store/production/1722692187_1875bf10-42e3-4afa-b5c9-bdcf157ebe68.jpg",
+      "filter": {
+        "category": [
+          495364
+        ]
+      }
+    },
+    {
+      "id": 3776,
+      "name": "Cartridges",
+      "imageUrl": "https://media.sweedpos.com/store/production/1722693599_a7e86086-1f7e-4df2-ac96-d6e6e525191c.jpg",
+      "filter": {
+        "category": [
+          495378
+        ]
+      }
+    },
+    {
+      "id": 3765,
+      "name": "Edibles",
+      "imageUrl": "https://media.sweedpos.com/store/production/1722692389_70d1d08d-0ce6-4970-bac9-d951013a7eae.jpg",
+      "filter": {
+        "category": [
+          495366
+        ]
+      }
+    },
+    {
+      "id": 3778,
+      "name": "All In One Cartridges",
+      "imageUrl": "https://media.sweedpos.com/store/production/1722693648_e23e0230-4493-4e28-abe0-6e7d2afdb3a3.jpg",
+      "filter": {
+        "category": [
+          495380
+        ]
+      }
+    },
+    {
+      "id": 3766,
+      "name": "Pre-Rolls",
+      "imageUrl": "https://media.sweedpos.com/store/production/1722692437_c23e2bda-ad3d-46b6-8483-ade326ccd6f3.jpg",
+      "filter": {
+        "category": [
+          495367
+        ]
+      }
+    },
+    {
+      "id": 3764,
+      "name": "Concentrates",
+      "imageUrl": "https://media.sweedpos.com/store/production/1722692354_4f624d2c-1b29-44c1-994b-61bd3d190712.jpg",
+      "filter": {
+        "category": [
+          495365
+        ]
+      }
+    },
+    {
+      "id": 4151,
+      "name": "Infused Pre-Rolls",
+      "imageUrl": "https://media.sweedpos.com/store/production/1727958544_da557b11-796b-4b42-adb8-4da290872a5b.png",
+      "filter": {
+        "category": [
+          607255
+        ]
+      }
+    },
+    {
+      "id": 3769,
+      "name": "Beverages",
+      "imageUrl": "https://media.sweedpos.com/store/production/1722693574_2be54a8c-24b9-4fda-90cb-4ea4176ad876.jpg",
+      "filter": {
+        "category": [
+          495370
+        ]
+      }
+    },
+    {
+      "id": 3770,
+      "name": "Topicals",
+      "imageUrl": "https://media.sweedpos.com/store/production/1722693525_c60e4a93-bb55-4ca9-b0b6-6f74c2e32f61.jpg",
+      "filter": {
+        "category": [
+          495371
+        ]
+      }
+    },
+    {
+      "id": 3775,
+      "name": "Accessories",
+      "imageUrl": "https://media.sweedpos.com/store/production/1722693510_189aee4c-ad3e-4e4c-a517-85e3410bdada.jpg",
+      "filter": {
+        "category": [
+          495377
+        ]
+      }
+    }
+  ]
+}

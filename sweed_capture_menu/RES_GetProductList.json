@@ -1,0 +1,4986 @@
+{
+  "url": "https://web-ui-production.sweedpos.com/_api/proxy/Products/GetProductList",
+  "status": 200,
+  "data": {
+    "filters": [
+      {
+        "key": "quickFilter",
+        "type": "Multiple",
+        "options": [
+          {
+            "id": 2,
+            "name": "Deals",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 3,
+            "name": "Popular",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          }
+        ],
+        "uiLabel": "",
+        "expandedByDefault": true,
+        "presentation": "Tag"
+      },
+      {
+        "key": "strainPrevalence",
+        "type": "Multiple",
+        "options": [
+          {
+            "id": 9362,
+            "name": "Hybrid",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 9364,
+            "name": "Indica",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 9363,
+            "name": "Indica Dominant",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 9366,
+            "name": "Sativa",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 9365,
+            "name": "Sativa Dominant",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          }
+        ],
+        "uiLabel": "Strain prevalence",
+        "expandedByDefault": true,
+        "presentation": "Tag"
+      },
+      {
+        "key": "promotion",
+        "type": "Multiple",
+        "options": [
+          {
+            "id": 880087,
+            "name": "2 for $150",
+            "disabled": null,
+            "selected": false,
+            "tooltip": {
+              "title": "2 for $150",
+              "description": null
+            }
+          },
+          {
+            "id": 884536,
+            "name": "2 for $45",
+            "disabled": null,
+            "selected": false,
+            "tooltip": {
+              "title": "2 for $45",
+              "description": null
+            }
+          },
+          {
+            "id": 824524,
+            "name": "20% OFF",
+            "disabled": null,
+            "selected": false,
+            "tooltip": {
+              "title": "20% OFF",
+              "description": null
+            }
+          },
+          {
+            "id": 824516,
+            "name": "25% OFF",
+            "disabled": null,
+            "selected": false,
+            "tooltip": {
+              "title": "25% OFF",
+              "description": null
+            }
+          },
+          {
+            "id": 824527,
+            "name": "25% OFF",
+            "disabled": null,
+            "selected": false,
+            "tooltip": {
+              "title": "25% OFF",
+              "description": "Cannot stack discounts"
+            }
+          },
+          {
+            "id": 824513,
+            "name": "25% OFF",
+            "disabled": null,
+            "selected": false,
+            "tooltip": {
+              "title": "25% OFF",
+              "description": null
+            }
+          },
+          {
+            "id": 980322,
+            "name": "30% Off",
+            "disabled": null,
+            "selected": false,
+            "tooltip": {
+              "title": "30% Off",
+              "description": null
+            }
+          },
+          {
+            "id": 824515,
+            "name": "30% OFF",
+            "disabled": null,
+            "selected": false,
+            "tooltip": {
+              "title": "30% OFF",
+              "description": null
+            }
+          },
+          {
+            "id": 658372,
+            "name": "40% Off",
+            "disabled": null,
+            "selected": false,
+            "tooltip": {
+              "title": "40% Off",
+              "description": null
+            }
+          }
+        ],
+        "uiLabel": "Deal",
+        "expandedByDefault": false,
+        "presentation": "Checkbox"
+      },
+      {
+        "key": "category",
+        "type": "Multiple",
+        "options": [
+          {
+            "id": 495364,
+            "name": "Flower",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 495378,
+            "name": "Cartridges",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 495366,
+            "name": "Edibles",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 495380,
+            "name": "All In One Cartridges",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 495367,
+            "name": "Pre-Rolls",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 495365,
+            "name": "Concentrates",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 607255,
+            "name": "Infused Pre-Rolls",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 495370,
+            "name": "Beverages",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 495371,
+            "name": "Topicals",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 495377,
+            "name": "Accessories",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          }
+        ],
+        "uiLabel": "Category",
+        "expandedByDefault": false,
+        "presentation": "Checkbox"
+      },
+      {
+        "key": "subcategory",
+        "type": "Multiple",
+        "options": [
+          {
+            "id": 495385,
+            "name": "Buds",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          }
+        ],
+        "uiLabel": "Subcategory",
+        "expandedByDefault": false,
+        "presentation": "Checkbox"
+      },
+      {
+        "key": "productType",
+        "type": "Multiple",
+        "options": [
+          {
+            "id": 492970,
+            "name": "Buds",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 493013,
+            "name": "Ground Bud",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 493046,
+            "name": "Popcorn",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          }
+        ],
+        "uiLabel": "Product type",
+        "expandedByDefault": false,
+        "presentation": "Checkbox"
+      },
+      {
+        "key": "totalSize",
+        "type": "Multiple",
+        "options": [
+          {
+            "id": -153884650,
+            "name": "14g",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 1921380536,
+            "name": "28g",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 243139977,
+            "name": "3.5g",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": -2142629064,
+            "name": "5g",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": -1077867793,
+            "name": "7g",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          }
+        ],
+        "uiLabel": "Total size",
+        "expandedByDefault": false,
+        "presentation": "Checkbox"
+      },
+      {
+        "key": "unitSize",
+        "type": "Multiple",
+        "options": [
+          {
+            "id": 493129,
+            "name": "14g",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 493132,
+            "name": "28g",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 493116,
+            "name": "3.5g",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 928450,
+            "name": "5g",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 493124,
+            "name": "7g",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          }
+        ],
+        "uiLabel": "Unit size",
+        "expandedByDefault": false,
+        "presentation": "Checkbox"
+      },
+      {
+        "key": "thcRange",
+        "type": "Range",
+        "range": {
+          "min": 0,
+          "max": 100,
+          "unitAbbr": "%"
+        },
+        "uiLabel": "THC potency",
+        "expandedByDefault": false,
+        "presentation": "Checkbox"
+      },
+      {
+        "key": "cbdRange",
+        "type": "Range",
+        "range": {
+          "min": 0,
+          "max": 100,
+          "unitAbbr": "%"
+        },
+        "uiLabel": "CBD potency",
+        "expandedByDefault": false,
+        "presentation": "Checkbox"
+      },
+      {
+        "key": "brand",
+        "type": "Multiple",
+        "options": [
+          {
+            "id": 525712,
+            "name": "(The) Essence",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 495005,
+            "name": "Belushis Farm",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 923421,
+            "name": "BL^CK MRKT",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 495049,
+            "name": "Cookies",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 495052,
+            "name": "Culta",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 495053,
+            "name": "Cultivar Collection",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 495054,
+            "name": "Curio",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 495063,
+            "name": "District Cannabis",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 495086,
+            "name": "Evermore",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 495090,
+            "name": "Fade Co.",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 495095,
+            "name": "Find",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 495116,
+            "name": "Garcia",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 495120,
+            "name": "gLeaf",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 495125,
+            "name": "Good Green",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 495129,
+            "name": "Grassroots",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 495136,
+            "name": "Grow West",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 495167,
+            "name": "In House",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 495191,
+            "name": "Khalifa Kush",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 495195,
+            "name": "Kind Tree",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 495236,
+            "name": "Matter",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 495243,
+            "name": "Modern Flower",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 936524,
+            "name": "Mother Exotic",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 508651,
+            "name": "Nature's Heritage",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 495257,
+            "name": "Old Pal Cannabis",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 904540,
+            "name": "Redemption",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 495290,
+            "name": "Roll One",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 495295,
+            "name": "Rythm",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 495297,
+            "name": "Savvy",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 495300,
+            "name": "Seed & Strain",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 495312,
+            "name": "Small A$$ Buds",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 495322,
+            "name": "Strane",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 495326,
+            "name": "Sunmed",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 495338,
+            "name": "Triple Seven",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 495346,
+            "name": "Verano",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          }
+        ],
+        "uiLabel": "Brand",
+        "expandedByDefault": false,
+        "presentation": "Checkbox"
+      },
+      {
+        "key": "price",
+        "type": "Range",
+        "range": {
+          "min": 0,
+          "max": 250,
+          "unitAbbr": "$"
+        },
+        "uiLabel": "Price",
+        "expandedByDefault": false,
+        "presentation": "Checkbox"
+      },
+      {
+        "key": "strainTerpene",
+        "type": "Multiple",
+        "options": [
+          {
+            "id": 36,
+            "name": "A Pinene",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 31,
+            "name": "B Pinene",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 39,
+            "name": "beta-Eudesmol",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 17,
+            "name": "Bisabolol",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 28,
+            "name": "Camphene",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 5,
+            "name": "Caryophyllene",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 32,
+            "name": "Caryophyllene Oxide",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 25,
+            "name": "Eucalyptol",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 14,
+            "name": "Fenchol",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 27,
+            "name": "Guaiol",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 6,
+            "name": "Humulene",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 4,
+            "name": "Limonene",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 2,
+            "name": "Linalool",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 1,
+            "name": "Myrcene",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 21,
+            "name": "Nerolidol",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 7,
+            "name": "Ocimene",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 3,
+            "name": "Pinene",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 10,
+            "name": "Terpineol",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 8,
+            "name": "Terpinolene",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 35,
+            "name": "y-Terpinene",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          }
+        ],
+        "uiLabel": "Terpene",
+        "expandedByDefault": false,
+        "presentation": "Checkbox"
+      },
+      {
+        "key": "strain",
+        "type": "Multiple",
+        "options": [
+          {
+            "id": 493281,
+            "name": "Acai Sherbert",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 508735,
+            "name": "Acid Queen",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 493317,
+            "name": "Animal Face",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 493319,
+            "name": "Animal Mint Cake",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 908887,
+            "name": "Apple Z",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 493374,
+            "name": "Banana Punch",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 493380,
+            "name": "Banana Treez",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 493384,
+            "name": "Bapple Fritz",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 846802,
+            "name": "Berry Payton",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 493422,
+            "name": "Black Cherry Gelato",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 493479,
+            "name": "Blueberry Muffins",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 939641,
+            "name": "Bolo Runtz",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 493498,
+            "name": "Brownie Scout",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 728487,
+            "name": "Bubblegum Skunk",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 493509,
+            "name": "Buckin Runtz",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 493515,
+            "name": "Burnt Toast #4",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 493608,
+            "name": "Cherry Pie OG",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 508700,
+            "name": "Chili Lime",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 718488,
+            "name": "Chunky Monkey",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 904548,
+            "name": "Cindy Mob",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 493655,
+            "name": "Commerce City Kush",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 514100,
+            "name": "Dank Dough",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 728999,
+            "name": "Deadband",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 777474,
+            "name": "Dos Si Dos",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 493742,
+            "name": "Dosidos",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 853673,
+            "name": "Dulce de Uva",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 907894,
+            "name": "Finger Lime Haze",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 493809,
+            "name": "Florida Wedding",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 939644,
+            "name": "Formula Z",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 493835,
+            "name": "Frosting",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 777750,
+            "name": "Frozen Grapes",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 522805,
+            "name": "Fuji",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 527487,
+            "name": "Funky Guava",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 728529,
+            "name": "Gator Breath",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 493900,
+            "name": "GMO x Skywalker OG",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 728504,
+            "name": "Government Oasis",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 493942,
+            "name": "Grape Bubblegum",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 514094,
+            "name": "Guava Cooler",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 842871,
+            "name": "GUMI #6",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 494008,
+            "name": "Gummie Bunz",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 494009,
+            "name": "Gush Mints",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 1056226,
+            "name": "Half Moonana",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 494014,
+            "name": "Han Solo Burger",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 494017,
+            "name": "Hash Burger",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 494032,
+            "name": "Headcracker",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 1000092,
+            "name": "Hickory Hash",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 494062,
+            "name": "Huckleberry Soda",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 494070,
+            "name": "Ice Cream Cake",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 939643,
+            "name": "Illemonati",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 718260,
+            "name": "Infinity Linx",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 494077,
+            "name": "Intergalactic",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 494086,
+            "name": "Jack Herer",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 494093,
+            "name": "Jelly Breath",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 777475,
+            "name": "Kandy Jack",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 494122,
+            "name": "Khalifa Mints",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 494237,
+            "name": "L'Orange",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 494150,
+            "name": "LA Baker",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 494152,
+            "name": "LA Chocolat",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 494157,
+            "name": "LA Kush Cake",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 728503,
+            "name": "Larry Bird Mints",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 494198,
+            "name": "Lemon Maraschino",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 494199,
+            "name": "Lemon Margy",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 494224,
+            "name": "Lilac Diesel",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 923423,
+            "name": "Limone OG",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 494295,
+            "name": "Member Berry",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 494299,
+            "name": "Mexican Flan",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 494338,
+            "name": "Monkey Berries",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 686424,
+            "name": "Mood Ring",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 494351,
+            "name": "Motor Breath",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 494357,
+            "name": "Mule Fuel",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 494370,
+            "name": "Night Cap",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 494400,
+            "name": "ONYCD 3.0",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 494439,
+            "name": "Papa Don",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 494461,
+            "name": "Peanut Butter Breath",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 902533,
+            "name": "Pepper Poundcake",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 494468,
+            "name": "Permanent Marker",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 494522,
+            "name": "Private Reserve OG",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 583473,
+            "name": "Purple Octane x Jealousy",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 508733,
+            "name": "Rain Drops",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 728530,
+            "name": "Rainbow Guava #5",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 494574,
+            "name": "Ray Charles",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 728506,
+            "name": "Sequoia Strawberry",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 777476,
+            "name": "Sherbanger",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 1056227,
+            "name": "Slingria",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 794338,
+            "name": "Sour Bobby",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 494661,
+            "name": "Sour Diesel",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 792256,
+            "name": "Sour OG Chem",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 494696,
+            "name": "Spritzer",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 904554,
+            "name": "Stanky Leg",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 494699,
+            "name": "Star 91",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 583703,
+            "name": "Starkiller",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 494717,
+            "name": "Strawberry Candy #4",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 728507,
+            "name": "Strawberry Jelly",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 494758,
+            "name": "Sunshine #4",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 494765,
+            "name": "Super Gremlin",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 728484,
+            "name": "Swampwater Fumez",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 494812,
+            "name": "Thai #5",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 494817,
+            "name": "The Beavs",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 865214,
+            "name": "Tropical Adhesive",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 494936,
+            "name": "White Walker OG",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          }
+        ],
+        "uiLabel": "Strain",
+        "expandedByDefault": false,
+        "presentation": "Checkbox"
+      },
+      {
+        "key": "qualityLine",
+        "type": "Multiple",
+        "options": [
+          {
+            "id": 719208,
+            "name": "Everyday",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          },
+          {
+            "id": 725840,
+            "name": "Reserve",
+            "disabled": null,
+            "selected": false,
+            "tooltip": null
+          }
+        ],
+        "uiLabel": "Quality line",
+        "expandedByDefault": false,
+        "presentation": "Checkbox"
+      }
+    ],
+    "searchFilters": [],
+    "sortingMethods": [
+      {
+        "id": 7,
+        "name": "Most Popular",
+        "selected": true
+      },
+      {
+        "id": 1,
+        "name": "Price high to low",
+        "selected": false
+      },
+      {
+        "id": 2,
+        "name": "Price low to high",
+        "selected": false
+      },
+      {
+        "id": 3,
+        "name": "A-Z",
+        "selected": false
+      },
+      {
+        "id": 4,
+        "name": "Z-A",
+        "selected": false
+      },
+      {
+        "id": 5,
+        "name": "Newest first",
+        "selected": false
+      },
+      {
+        "id": 6,
+        "name": "Newest last",
+        "selected": false
+      },
+      {
+        "id": 8,
+        "name": "THC% high to low",
+        "selected": false
+      },
+      {
+        "id": 9,
+        "name": "THC% low to high",
+        "selected": false
+      },
+      {
+        "id": 10,
+        "name": "THC mg high to low",
+        "selected": false
+      },
+      {
+        "id": 11,
+        "name": "THC mg low to high",
+        "selected": false
+      }
+    ],
+    "attributes": null,
+    "source": "ProductSearch",
+    "promos": [
+      {
+        "id": 45484,
+        "name": "New Markdowns - 40% Off",
+        "shortName": "40% Off",
+        "description": null,
+        "isBogo": null,
+        "startDate": null,
+        "endDate": null,
+        "interval": null,
+        "bannerUrl": null,
+        "mobileBannerUrl": "https://media.sweedpos.com/store/production/1743612181_358663bf-1eab-4b91-8172-3959738b47d6.png",
+        "displayInUpsellModal": false,
+        "displayInCatalog": false,
+        "productImages": [
+          "https://media.sweedpos.com/store/production/1744848124_0ccad16a-4e47-457b-b419-6daa6815c460.avif",
+          "https://media.sweedpos.com/store/production/1735491027_6e4f358e-9caa-4021-97e0-2151c4c15584.jpg",
+          "https://media.sweedpos.com/store/production/1742663154_7c84b325-b313-40e9-904b-dc27ded04942.avif"
+        ],
+        "filter": null,
+        "displayInDiscountMenu": true,
+        "isConditional": false,
+        "applicationMode": null,
+        "discountAmount": null,
+        "discountPercent": null,
+        "minCartAmount": null,
+        "minCartAmountNeeded": null,
+        "matchedUserSegmentIds": null,
+        "scheduleDisplayText": {
+          "rangeType": "Daily",
+          "days": "",
+          "datePart": "",
+          "timePart": "12:00 AM - 08:00 PM",
+          "full": "Daily, 12:00 AM - 08:00 PM"
+        },
+        "isActiveBySchedule": true,
+        "fulfilmentTypes": [],
+        "promoWizardGeneration": null,
+        "shopInShop": null
+      },
+      {
+        "id": 84084,
+        "name": "25% Off District Cannabis",
+        "shortName": "25% OFF",
+        "description": null,
+        "isBogo": null,
+        "startDate": null,
+        "endDate": null,
+        "interval": null,
+        "bannerUrl": "https://media.sweedpos.com/store/production/1758897761_b2f0d2ab-0e22-44fb-862d-329fa6468039.png",
+        "mobileBannerUrl": "https://media.sweedpos.com/store/production/1758897761_cf4867c2-6d66-42e6-a631-1ba9a74c9eaa.png",
+        "displayInUpsellModal": false,
+        "displayInCatalog": false,
+        "productImages": [
+          "https://media.sweedpos.com/store/production/1753710419_0bb9686a-b99b-40db-bcdf-3460988b377d.webp",
+          "https://media.sweedpos.com/store/production/1748352281_4a50c6ca-1ffa-41dd-b751-5e98e366b928.png",
+          "https://media.sweedpos.com/store/production/1722095810_0ffafbf6-06e8-461a-8de2-9180153eb2e1.jpg"
+        ],
+        "filter": null,
+        "displayInDiscountMenu": true,
+        "isConditional": false,
+        "applicationMode": null,
+        "discountAmount": null,
+        "discountPercent": null,
+        "minCartAmount": null,
+        "minCartAmountNeeded": null,
+        "matchedUserSegmentIds": null,
+        "scheduleDisplayText": {
+          "rangeType": "Daily",
+          "days": "",
+          "datePart": "till January 3, 2026",
+          "timePart": "12:00 AM - 08:00 PM",
+          "full": "Daily, 12:00 AM - 08:00 PM, till January 3, 2026"
+        },
+        "isActiveBySchedule": true,
+        "fulfilmentTypes": [],
+        "promoWizardGeneration": null,
+        "shopInShop": null
+      },
+      {
+        "id": 84086,
+        "name": "30% Off Evermore Brands",
+        "shortName": "30% OFF",
+        "description": null,
+        "isBogo": null,
+        "startDate": null,
+        "endDate": null,
+        "interval": null,
+        "bannerUrl": "https://media.sweedpos.com/store/production/1751549310_ccb1a024-c8e0-4028-8977-080de534a2c4.png",
+        "mobileBannerUrl": "https://media.sweedpos.com/store/production/1751549309_e36ca79f-2d1f-4c88-a502-3f1eed0d24a5.png",
+        "displayInUpsellModal": false,
+        "displayInCatalog": false,
+        "productImages": [
+          "https://media.sweedpos.com/store/production/1748447804_13201469-7dec-47d8-8375-91e595d367e1.avif",
+          "https://media.sweedpos.com/store/production/1755107368_2d5f2338-2564-4423-ab8d-adaa3c09ae40.webp",
+          "https://media.sweedpos.com/store/production/1748553799_ae35f04e-74fe-4b93-89bb-70ed67c2bfab.png"
+        ],
+        "filter": null,
+        "displayInDiscountMenu": true,
+        "isConditional": false,
+        "applicationMode": null,
+        "discountAmount": null,
+        "discountPercent": null,
+        "minCartAmount": null,
+        "minCartAmountNeeded": null,
+        "matchedUserSegmentIds": null,
+        "scheduleDisplayText": {
+          "rangeType": "Daily",
+          "days": "",
+          "datePart": "till January 3, 2026",
+          "timePart": "12:00 AM - 08:00 PM",
+          "full": "Daily, 12:00 AM - 08:00 PM, till January 3, 2026"
+        },
+        "isActiveBySchedule": true,
+        "fulfilmentTypes": [],
+        "promoWizardGeneration": null,
+        "shopInShop": null
+      },
+      {
+        "id": 84087,
+        "name": "25% Off Holistic Brands",
+        "shortName": "25% OFF",
+        "description": null,
+        "isBogo": null,
+        "startDate": null,
+        "endDate": null,
+        "interval": null,
+        "bannerUrl": "https://media.sweedpos.com/store/production/1759156350_bbef7ee3-5c89-4dab-bb55-d94804870372.png",
+        "mobileBannerUrl": "https://media.sweedpos.com/store/production/1759156350_8181ac62-f30b-4388-8447-88ca200bb5af.png",
+        "displayInUpsellModal": false,
+        "displayInCatalog": false,
+        "productImages": [
+          "https://media.sweedpos.com/store/production/1722088410_00fd64af-1cb6-4070-bd24-71ad1d5e5108.jpg",
+          "https://media.sweedpos.com/store/production/1722090232_d6b8b63c-d038-419b-ad2a-17ee84005913.jpg",
+          "https://media.sweedpos.com/store/production/1722090657_1d4dde56-8fde-4b00-a1f8-563509ecce64.jpg"
+        ],
+        "filter": null,
+        "displayInDiscountMenu": true,
+        "isConditional": false,
+        "applicationMode": null,
+        "discountAmount": null,
+        "discountPercent": null,
+        "minCartAmount": null,
+        "minCartAmountNeeded": null,
+        "matchedUserSegmentIds": null,
+        "scheduleDisplayText": {
+          "rangeType": "Daily",
+          "days": "",
+          "datePart": "till January 3, 2026",
+          "timePart": "12:00 AM - 08:00 PM",
+          "full": "Daily, 12:00 AM - 08:00 PM, till January 3, 2026"
+        },
+        "isActiveBySchedule": true,
+        "fulfilmentTypes": [],
+        "promoWizardGeneration": null,
+        "shopInShop": null
+      },
+      {
+        "id": 84095,
+        "name": "20% Off Sunmed",
+        "shortName": "20% OFF",
+        "description": null,
+        "isBogo": null,
+        "startDate": null,
+        "endDate": null,
+        "interval": null,
+        "bannerUrl": "https://media.sweedpos.com/store/production/1758897843_97939d10-3945-4c46-b1bf-1ca1efad1026.png",
+        "mobileBannerUrl": "https://media.sweedpos.com/store/production/1758897843_b2b44984-9c3c-4b96-86e3-6fd967d3eeea.png",
+        "displayInUpsellModal": false,
+        "displayInCatalog": false,
+        "productImages": [
+          "https://media.sweedpos.com/store/production/1722049543_45852cc3-e227-4178-843c-70ad226a5a41.jpg",
+          "https://media.sweedpos.com/store/production/1725899195_59e88baf-f55f-4da3-b3d4-5dd930824243.png",
+          "https://media.sweedpos.com/store/production/1725899430_e5e5b940-9225-44d4-ac49-93fb36d15155.png"
+        ],
+        "filter": null,
+        "displayInDiscountMenu": true,
+        "isConditional": false,
+        "applicationMode": null,
+        "discountAmount": null,
+        "discountPercent": null,
+        "minCartAmount": null,
+        "minCartAmountNeeded": null,
+        "matchedUserSegmentIds": null,
+        "scheduleDisplayText": {
+          "rangeType": "Daily",
+          "days": "",
+          "datePart": "",
+          "timePart": "12:00 AM - 08:00 PM",
+          "full": "Daily, 12:00 AM - 08:00 PM"
+        },
+        "isActiveBySchedule": true,
+        "fulfilmentTypes": [],
+        "promoWizardGeneration": null,
+        "shopInShop": null
+      },
+      {
+        "id": 84098,
+        "name": "25% Off Curaleaf Brands",
+        "shortName": "25% OFF",
+        "description": "Cannot stack discounts",
+        "isBogo": null,
+        "startDate": null,
+        "endDate": null,
+        "interval": null,
+        "bannerUrl": "https://media.sweedpos.com/store/production/1758897903_9fa2becf-3a2c-4ab8-93ae-c595100e3d50.png",
+        "mobileBannerUrl": "https://media.sweedpos.com/store/production/1758897902_6e0d3f05-b5ab-4c65-a0ca-04bdaee8e255.png",
+        "displayInUpsellModal": false,
+        "displayInCatalog": false,
+        "productImages": [
+          "https://media.sweedpos.com/store/production/1724349287_3e30cffb-565f-48b2-ad68-a6c7c1f9148b",
+          "https://media.sweedpos.com/store/production/1724349136_1ce82a8c-3efb-4eec-ac32-eab33513ca98",
+          "https://media.sweedpos.com/store/production/1722092015_009bb854-056d-4c9a-b2d6-3343bb4553df.jpg"
+        ],
+        "filter": null,
+        "displayInDiscountMenu": true,
+        "isConditional": false,
+        "applicationMode": null,
+        "discountAmount": null,
+        "discountPercent": null,
+        "minCartAmount": null,
+        "minCartAmountNeeded": null,
+        "matchedUserSegmentIds": null,
+        "scheduleDisplayText": {
+          "rangeType": "Daily",
+          "days": "",
+          "datePart": "till January 3, 2026",
+          "timePart": "12:00 AM - 08:00 PM",
+          "full": "Daily, 12:00 AM - 08:00 PM, till January 3, 2026"
+        },
+        "isActiveBySchedule": true,
+        "fulfilmentTypes": [],
+        "promoWizardGeneration": null,
+        "shopInShop": null
+      },
+      {
+        "id": 87407,
+        "name": "2 for $150 gLeaf Half Ounces",
+        "shortName": "2 for $150",
+        "description": null,
+        "isBogo": null,
+        "startDate": null,
+        "endDate": null,
+        "interval": null,
+        "bannerUrl": "https://media.sweedpos.com/store/production/1755541257_3c452070-27ab-4dac-815f-4734652088f6.png",
+        "mobileBannerUrl": "https://media.sweedpos.com/store/production/1755541257_dd8b5486-1c88-4bf0-8600-fb70e653c33c.png",
+        "displayInUpsellModal": false,
+        "displayInCatalog": false,
+        "productImages": [
+          "https://media.sweedpos.com/store/production/1755796622_30f0ba8d-c030-4c6c-859c-58c760214a0a.jpg",
+          "https://media.sweedpos.com/store/production/1722054195_2a4a9ac4-c4f0-49f6-ba1f-982e64bf48af.jpg",
+          "https://media.sweedpos.com/store/production/1724346295_01d327f1-1e33-4382-9a47-bef2560bc04b.jpg"
+        ],
+        "filter": null,
+        "displayInDiscountMenu": true,
+        "isConditional": false,
+        "applicationMode": null,
+        "discountAmount": null,
+        "discountPercent": null,
+        "minCartAmount": null,
+        "minCartAmountNeeded": null,
+        "matchedUserSegmentIds": null,
+        "scheduleDisplayText": {
+          "rangeType": "Daily",
+          "days": "",
+          "datePart": "",
+          "timePart": "12:00 AM - 08:00 PM",
+          "full": "Daily, 12:00 AM - 08:00 PM"
+        },
+        "isActiveBySchedule": true,
+        "fulfilmentTypes": [],
+        "promoWizardGeneration": null,
+        "shopInShop": null
+      },
+      {
+        "id": 87850,
+        "name": "2 for $45 Curio Everyday Brand Eighths",
+        "shortName": "2 for $45",
+        "description": null,
+        "isBogo": null,
+        "startDate": null,
+        "endDate": null,
+        "interval": null,
+        "bannerUrl": "https://media.sweedpos.com/store/production/1756131423_d1ab5db7-631b-422f-958b-f87c02da9cf1.jpg",
+        "mobileBannerUrl": "https://media.sweedpos.com/store/production/1756131422_147cd312-f685-4ef8-a289-e7bc689d2427.jpg",
+        "displayInUpsellModal": false,
+        "displayInCatalog": false,
+        "productImages": [
+          "https://media.sweedpos.com/store/production/1755194722_5ac8f86d-21d1-4043-b2d2-60362f721fbb.avif"
+        ],
+        "filter": null,
+        "displayInDiscountMenu": true,
+        "isConditional": false,
+        "applicationMode": null,
+        "discountAmount": null,
+        "discountPercent": null,
+        "minCartAmount": null,
+        "minCartAmountNeeded": null,
+        "matchedUserSegmentIds": null,
+        "scheduleDisplayText": {
+          "rangeType": "Daily",
+          "days": "",
+          "datePart": "",
+          "timePart": "12:00 AM - 08:00 PM",
+          "full": "Daily, 12:00 AM - 08:00 PM"
+        },
+        "isActiveBySchedule": true,
+        "fulfilmentTypes": [],
+        "promoWizardGeneration": null,
+        "shopInShop": null
+      },
+      {
+        "id": 102928,
+        "name": "30% Off Storewide",
+        "shortName": "30% Off",
+        "description": null,
+        "isBogo": null,
+        "startDate": null,
+        "endDate": null,
+        "interval": null,
+        "bannerUrl": "https://media.sweedpos.com/store/production/1764256673_933a5bf4-c7c3-42d7-9d83-90ae4cc3e39b.png",
+        "mobileBannerUrl": "https://media.sweedpos.com/store/production/1764256672_c446a33f-1e8f-4c03-b507-45c2ed6c9f34.png",
+        "displayInUpsellModal": false,
+        "displayInCatalog": false,
+        "productImages": [
+          "https://media.sweedpos.com/store/production/1752075939_7ef37acc-92ec-448e-8a00-05c043041138.png",
+          "https://media.sweedpos.com/store/production/1722046628_715eb2e0-5e8f-4e6d-92f0-d5787cb57083.png",
+          "https://media.sweedpos.com/store/production/1722047243_cfc5d6ec-d0d2-48e1-b9ac-656f341644fe.png"
+        ],
+        "filter": null,
+        "displayInDiscountMenu": true,
+        "isConditional": false,
+        "applicationMode": null,
+        "discountAmount": null,
+        "discountPercent": null,
+        "minCartAmount": null,
+        "minCartAmountNeeded": null,
+        "matchedUserSegmentIds": null,
+        "scheduleDisplayText": {
+          "rangeType": "Monthly",
+          "days": "31",
+          "datePart": "till December 31",
+          "timePart": "12:00 AM - 06:00 PM",
+          "full": "Monthly, 31, 12:00 AM - 06:00 PM, till December 31"
+        },
+        "isActiveBySchedule": true,
+        "fulfilmentTypes": [],
+        "promoWizardGeneration": null,
+        "shopInShop": null
+      }
+    ],
+    "page": 1,
+    "pageSize": 24,
+    "total": 142,
+    "list": [
+      {
+        "id": 312411,
+        "name": "Ice Cream Cake ",
+        "description": null,
+        "category": {
+          "id": 495364,
+          "name": "Flower"
+        },
+        "subcategory": {
+          "id": 495385,
+          "name": "Buds"
+        },
+        "images": [
+          "https://media.sweedpos.com/store/production/1746720242_94aad13c-fbb6-47c5-8235-5e32dd913131.png"
+        ],
+        "brand": {
+          "name": "Roll One",
+          "filter": null,
+          "tagId": null
+        },
+        "strain": {
+          "name": "Ice Cream Cake",
+          "prevalence": {
+            "name": "Indica"
+          },
+          "flavors": [],
+          "terpenes": [
+            {
+              "name": "Myrcene"
+            },
+            {
+              "name": "Linalool"
+            },
+            {
+              "name": "Pinene"
+            },
+            {
+              "name": "Limonene"
+            },
+            {
+              "name": "Caryophyllene"
+            },
+            {
+              "name": "Humulene"
+            },
+            {
+              "name": "Terpinolene"
+            },
+            {
+              "name": "Terpineol"
+            },
+            {
+              "name": "Camphene"
+            },
+            {
+              "name": "B Pinene"
+            },
+            {
+              "name": "Caryophyllene Oxide"
+            }
+          ]
+        },
+        "tags": [],
+        "effects": [],
+        "qualityLine": null,
+        "productType": {
+          "name": "Buds"
+        },
+        "variants": [
+          {
+            "id": 439427,
+            "name": "3.5g",
+            "sku": "Rol-Bud-Bud-",
+            "images": [],
+            "strengthLevel": null,
+            "labTests": {
+              "thc": {
+                "value": [
+                  22.29
+                ],
+                "unitAbbr": "%"
+              },
+              "cbd": null,
+              "displayThc": null
+            },
+            "saleType": "Both",
+            "availableQty": 39.0,
+            "unitSize": {
+              "value": 3.5,
+              "unitAbbr": "G"
+            },
+            "unitsInPackage": 1,
+            "price": 30.0,
+            "promoPrice": 21.0,
+            "discount": 0,
+            "tierPricePresetId": null,
+            "tierPricing": [],
+            "promos": [
+              {
+                "id": 102928,
+                "name": null,
+                "shortName": "30% Off",
+                "description": null,
+                "isBogo": null,
+                "startDate": null,
+                "endDate": null,
+                "interval": null,
+                "bannerUrl": null,
+                "mobileBannerUrl": null,
+                "displayInUpsellModal": false,
+                "displayInCatalog": false,
+                "productImages": null,
+                "filter": null,
+                "displayInDiscountMenu": false,
+                "isConditional": false,
+                "applicationMode": null,
+                "discountAmount": null,
+                "discountPercent": null,
+                "minCartAmount": null,
+                "minCartAmountNeeded": null,
+                "matchedUserSegmentIds": null,
+                "scheduleDisplayText": null,
+                "isActiveBySchedule": true,
+                "fulfilmentTypes": [],
+                "promoWizardGeneration": null,
+                "shopInShop": null
+              }
+            ],
+            "reminderStatus": null,
+            "isPacked": true,
+            "qtyStepSize": 1.0,
+            "stockType": "Default"
+          }
+        ],
+        "customName": null
+      },
+      {
+        "id": 168737,
+        "name": "L'Orange",
+        "description": "Strain Description: L'Orange [orig: Oregon Lemon x Orange Crush], is an uplifting sativa dominant strain bursting with the aroma of fresh, juicy oranges.\n--\nRYTHM Premium Flower offers a variety of expertly cultivated and meticulously cured strains with optimal potencies, lush aromas, and rich flavors.\n-- \nPackaging may vary by market",
+        "category": {
+          "id": 495364,
+          "name": "Flower"
+        },
+        "subcategory": {
+          "id": 495385,
+          "name": "Buds"
+        },
+        "images": [],
+        "brand": {
+          "name": "Rythm",
+          "filter": null,
+          "tagId": null
+        },
+        "strain": {
+          "name": "L'Orange",
+          "prevalence": {
+            "name": "Sativa"
+          },
+          "flavors": [],
+          "terpenes": [
+            {
+              "name": "Myrcene"
+            },
+            {
+              "name": "Linalool"
+            },
+            {
+              "name": "Pinene"
+            },
+            {
+              "name": "Limonene"
+            },
+            {
+              "name": "Caryophyllene"
+            },
+            {
+              "name": "Humulene"
+            },
+            {
+              "name": "Terpineol"
+            },
+            {
+              "name": "Bisabolol"
+            },
+            {
+              "name": "Camphene"
+            },
+            {
+              "name": "B Pinene"
+            }
+          ]
+        },
+        "tags": [],
+        "effects": [],
+        "qualityLine": null,
+        "productType": {
+          "name": "Buds"
+        },
+        "variants": [
+          {
+            "id": 230066,
+            "name": "3.5g",
+            "sku": "03149832",
+            "images": [
+              "https://media.sweedpos.com/store/production/1722973680_c2acfa8f-ab63-4de0-a43a-0c192397d878.png"
+            ],
+            "strengthLevel": null,
+            "labTests": {
+              "thc": {
+                "value": [
+                  25.99
+                ],
+                "unitAbbr": "%"
+              },
+              "cbd": null,
+              "displayThc": null
+            },
+            "saleType": "Both",
+            "availableQty": 38.0,
+            "unitSize": {
+              "value": 3.5,
+              "unitAbbr": "G"
+            },
+            "unitsInPackage": 1,
+            "price": 55.0,
+            "promoPrice": 38.5,
+            "discount": 0,
+            "tierPricePresetId": null,
+            "tierPricing": [],
+            "promos": [
+              {
+                "id": 102928,
+                "name": null,
+                "shortName": "30% Off",
+                "description": null,
+                "isBogo": null,
+                "startDate": null,
+                "endDate": null,
+                "interval": null,
+                "bannerUrl": null,
+                "mobileBannerUrl": null,
+                "displayInUpsellModal": false,
+                "displayInCatalog": false,
+                "productImages": null,
+                "filter": null,
+                "displayInDiscountMenu": false,
+                "isConditional": false,
+                "applicationMode": null,
+                "discountAmount": null,
+                "discountPercent": null,
+                "minCartAmount": null,
+                "minCartAmountNeeded": null,
+                "matchedUserSegmentIds": null,
+                "scheduleDisplayText": null,
+                "isActiveBySchedule": true,
+                "fulfilmentTypes": [],
+                "promoWizardGeneration": null,
+                "shopInShop": null
+              }
+            ],
+            "reminderStatus": null,
+            "isPacked": true,
+            "qtyStepSize": 1.0,
+            "stockType": "Default"
+          }
+        ],
+        "customName": null
+      },
+      {
+        "id": 249847,
+        "name": "Member Berry",
+        "description": null,
+        "category": {
+          "id": 495364,
+          "name": "Flower"
+        },
+        "subcategory": {
+          "id": 495385,
+          "name": "Buds"
+        },
+        "images": [
+          "https://media.sweedpos.com/store/production/1737048751_5cc07be0-2685-4779-a614-f099dbfa5a3d.jpg"
+        ],
+        "brand": {
+          "name": "Roll One",
+          "filter": null,
+          "tagId": null
+        },
+        "strain": {
+          "name": "Member Berry",
+          "prevalence": {
+            "name": "Hybrid"
+          },
+          "flavors": [],
+          "terpenes": [
+            {
+              "name": "Myrcene"
+            },
+            {
+              "name": "Linalool"
+            },
+            {
+              "name": "Caryophyllene"
+            },
+            {
+              "name": "Humulene"
+            },
+            {
+              "name": "B Pinene"
+            },
+            {
+              "name": "Caryophyllene Oxide"
+            }
+          ]
+        },
+        "tags": [],
+        "effects": [],
+        "qualityLine": null,
+        "productType": {
+          "name": "Buds"
+        },
+        "variants": [
+          {
+            "id": 347008,
+            "name": "3.5g",
+            "sku": "Rol-Bud-Bud-",
+            "images": [],
+            "strengthLevel": null,
+            "labTests": {
+              "thc": {
+                "value": [
+                  22.25
+                ],
+                "unitAbbr": "%"
+              },
+              "cbd": null,
+              "displayThc": null
+            },
+            "saleType": "Both",
+            "availableQty": 77.0,
+            "unitSize": {
+              "value": 3.5,
+              "unitAbbr": "G"
+            },
+            "unitsInPackage": 1,
+            "price": 30.0,
+            "promoPrice": 21.0,
+            "discount": 0,
+            "tierPricePresetId": null,
+            "tierPricing": [],
+            "promos": [
+              {
+                "id": 102928,
+                "name": null,
+                "shortName": "30% Off",
+                "description": null,
+                "isBogo": null,
+                "startDate": null,
+                "endDate": null,
+                "interval": null,
+                "bannerUrl": null,
+                "mobileBannerUrl": null,
+                "displayInUpsellModal": false,
+                "displayInCatalog": false,
+                "productImages": null,
+                "filter": null,
+                "displayInDiscountMenu": false,
+                "isConditional": false,
+                "applicationMode": null,
+                "discountAmount": null,
+                "discountPercent": null,
+                "minCartAmount": null,
+                "minCartAmountNeeded": null,
+                "matchedUserSegmentIds": null,
+                "scheduleDisplayText": null,
+                "isActiveBySchedule": true,
+                "fulfilmentTypes": [],
+                "promoWizardGeneration": null,
+                "shopInShop": null
+              }
+            ],
+            "reminderStatus": null,
+            "isPacked": true,
+            "qtyStepSize": 1.0,
+            "stockType": "Default"
+          }
+        ],
+        "customName": null
+      },
+      {
+        "id": 281913,
+        "name": "Dos Si Dos",
+        "description": "Everything you need to elevate your adventure. Our Ready to Roll resealable pouches include high-quality, pre-ground flower, unbleached hemp rolling papers, and crutches.",
+        "category": {
+          "id": 495364,
+          "name": "Flower"
+        },
+        "subcategory": {
+          "id": 495385,
+          "name": "Buds"
+        },
+        "images": [
+          "https://media.sweedpos.com/store/production/1740074913_0633defe-7044-41a7-a590-104d5263a7ab.avif"
+        ],
+        "brand": {
+          "name": "Old Pal Cannabis",
+          "filter": null,
+          "tagId": null
+        },
+        "strain": {
+          "name": "Dos Si Dos",
+          "prevalence": {
+            "name": "Hybrid"
+          },
+          "flavors": [],
+          "terpenes": [
+            {
+              "name": "Myrcene"
+            },
+            {
+              "name": "Linalool"
+            },
+            {
+              "name": "Pinene"
+            },
+            {
+              "name": "Limonene"
+            },
+            {
+              "name": "Caryophyllene"
+            },
+            {
+              "name": "Humulene"
+            },
+            {
+              "name": "B Pinene"
+            }
+          ]
+        },
+        "tags": [],
+        "effects": [],
+        "qualityLine": null,
+        "productType": {
+          "name": "Ground Bud"
+        },
+        "variants": [
+          {
+            "id": 389891,
+            "name": "14g",
+            "sku": "Old-Bud-Gro-",
+            "images": [],
+            "strengthLevel": null,
+            "labTests": {
+              "thc": {
+                "value": [
+                  21.49
+                ],
+                "unitAbbr": "%"
+              },
+              "cbd": null,
+              "displayThc": null
+            },
+            "saleType": "Both",
+            "availableQty": 13.0,
+            "unitSize": {
+              "value": 14.0,
+              "unitAbbr": "G"
+            },
+            "unitsInPackage": 1,
+            "price": 75.0,
+            "promoPrice": 52.5,
+            "discount": 0,
+            "tierPricePresetId": null,
+            "tierPricing": [],
+            "promos": [
+              {
+                "id": 102928,
+                "name": null,
+                "shortName": "30% Off",
+                "description": null,
+                "isBogo": null,
+                "startDate": null,
+                "endDate": null,
+                "interval": null,
+                "bannerUrl": null,
+                "mobileBannerUrl": null,
+                "displayInUpsellModal": false,
+                "displayInCatalog": false,
+                "productImages": null,
+                "filter": null,
+                "displayInDiscountMenu": false,
+                "isConditional": false,
+                "applicationMode": null,
+                "discountAmount": null,
+                "discountPercent": null,
+                "minCartAmount": null,
+                "minCartAmountNeeded": null,
+                "matchedUserSegmentIds": null,
+                "scheduleDisplayText": null,
+                "isActiveBySchedule": true,
+                "fulfilmentTypes": [],
+                "promoWizardGeneration": null,
+                "shopInShop": null
+              }
+            ],
+            "reminderStatus": null,
+            "isPacked": true,
+            "qtyStepSize": 1.0,
+            "stockType": "Default"
+          }
+        ],
+        "customName": null
+      },
+      {
+        "id": 202007,
+        "name": "Ray Charles",
+        "description": "\nOne of the most classic Grassroots strains, Ray Charles is a favorite for Indica lovers. With\n\nd e e p greens highlighted by orange stigma, it's not hard to spot Ray in a lineup. When it\n\ncomes to aroma, the Myrcene makes its presence known quickly, with a sweet mango scent to it.\n\nDig a little deeper and you'll find a fuel aroma that carries over into the flavor. On the exhale,\n\na minty taste sticks around on your palate. With the realxing mental and physical effects, this\n\nstrain is a reported favorite for sleep and pain management.",
+        "category": {
+          "id": 495364,
+          "name": "Flower"
+        },
+        "subcategory": {
+          "id": 495385,
+          "name": "Buds"
+        },
+        "images": [
+          "https://media.sweedpos.com/store/production/1764089356_0408cd6d-c01f-4d27-bcec-69e2c286fd41.avif"
+        ],
+        "brand": {
+          "name": "Grassroots",
+          "filter": null,
+          "tagId": null
+        },
+        "strain": {
+          "name": "Ray Charles",
+          "prevalence": {
+            "name": "Hybrid"
+          },
+          "flavors": [],
+          "terpenes": [
+            {
+              "name": "Myrcene"
+            },
+            {
+              "name": "Linalool"
+            },
+            {
+              "name": "Pinene"
+            },
+            {
+              "name": "Caryophyllene"
+            },
+            {
+              "name": "Humulene"
+            },
+            {
+              "name": "Fenchol"
+            },
+            {
+              "name": "B Pinene"
+            },
+            {
+              "name": "Caryophyllene Oxide"
+            }
+          ]
+        },
+        "tags": [],
+        "effects": [],
+        "qualityLine": null,
+        "productType": {
+          "name": "Buds"
+        },
+        "variants": [
+          {
+            "id": 285803,
+            "name": "3.5g",
+            "sku": "Gra-Flo-Bud-",
+            "images": [],
+            "strengthLevel": null,
+            "labTests": {
+              "thc": {
+                "value": [
+                  23.18
+                ],
+                "unitAbbr": "%"
+              },
+              "cbd": null,
+              "displayThc": null
+            },
+            "saleType": "Both",
+            "availableQty": 78.0,
+            "unitSize": {
+              "value": 3.5,
+              "unitAbbr": "G"
+            },
+            "unitsInPackage": 1,
+            "price": 50.0,
+            "promoPrice": 35.0,
+            "discount": 0,
+            "tierPricePresetId": null,
+            "tierPricing": [],
+            "promos": [
+              {
+                "id": 84098,
+                "name": null,
+                "shortName": "25% OFF",
+                "description": null,
+                "isBogo": null,
+                "startDate": null,
+                "endDate": null,
+                "interval": null,
+                "bannerUrl": null,
+                "mobileBannerUrl": null,
+                "displayInUpsellModal": false,
+                "displayInCatalog": false,
+                "productImages": null,
+                "filter": null,
+                "displayInDiscountMenu": false,
+                "isConditional": false,
+                "applicationMode": null,
+                "discountAmount": null,
+                "discountPercent": null,
+                "minCartAmount": null,
+                "minCartAmountNeeded": null,
+                "matchedUserSegmentIds": null,
+                "scheduleDisplayText": null,
+                "isActiveBySchedule": true,
+                "fulfilmentTypes": [],
+                "promoWizardGeneration": null,
+                "shopInShop": null
+              },
+              {
+                "id": 102928,
+                "name": null,
+                "shortName": "30% Off",
+                "description": null,
+                "isBogo": null,
+                "startDate": null,
+                "endDate": null,
+                "interval": null,
+                "bannerUrl": null,
+                "mobileBannerUrl": null,
+                "displayInUpsellModal": false,
+                "displayInCatalog": false,
+                "productImages": null,
+                "filter": null,
+                "displayInDiscountMenu": false,
+                "isConditional": false,
+                "applicationMode": null,
+                "discountAmount": null,
+                "discountPercent": null,
+                "minCartAmount": null,
+                "minCartAmountNeeded": null,
+                "matchedUserSegmentIds": null,
+                "scheduleDisplayText": null,
+                "isActiveBySchedule": true,
+                "fulfilmentTypes": [],
+                "promoWizardGeneration": null,
+                "shopInShop": null
+              }
+            ],
+            "reminderStatus": null,
+            "isPacked": true,
+            "qtyStepSize": 1.0,
+            "stockType": "Default"
+          }
+        ],
+        "customName": null
+      },
+      {
+        "id": 281183,
+        "name": "Gush Mints x Runtz",
+        "description": "Gush Mints x Runtz is well-balanced, offering a combination of uplifting and euphoric feelings, along with a deep sense of relaxation. Its dominant terpenes Limonene, Linalool, and Caryophyllene and may help to elevate mood and relieve stress without causing sedation which makes it a great choice for social situations or for unwinding after a long day. Packaging may vary by state. Maryland packaging shown.",
+        "category": {
+          "id": 495364,
+          "name": "Flower"
+        },
+        "subcategory": {
+          "id": 495385,
+          "name": "Buds"
+        },
+        "images": [
+          "https://media.sweedpos.com/store/production/1755194722_5ac8f86d-21d1-4043-b2d2-60362f721fbb.avif"
+        ],
+        "brand": {
+          "name": "Curio",
+          "filter": null,
+          "tagId": null
+        },
+        "strain": null,
+        "tags": [],
+        "effects": [],
+        "qualityLine": {
+          "name": "Everyday"
+        },
+        "productType": {
+          "name": "Buds"
+        },
+        "variants": [
+          {
+            "id": 388826,
+            "name": "3.5g",
+            "sku": "Cur-Bud-Bud-",
+            "images": [],
+            "strengthLevel": null,
+            "labTests": {
+              "thc": {
+                "value": [
+                  22.98
+                ],
+                "unitAbbr": "%"
+              },
+              "cbd": null,
+              "displayThc": null
+            },
+            "saleType": "Both",
+            "availableQty": 6.0,
+            "unitSize": {
+              "value": 3.5,
+              "unitAbbr": "G"
+            },
+            "unitsInPackage": 1,
+            "price": 38.0,
+            "promoPrice": 26.6,
+            "discount": 0,
+            "tierPricePresetId": null,
+            "tierPricing": [],
+            "promos": [
+              {
+                "id": 87850,
+                "name": null,
+                "shortName": "2 for $45",
+                "description": null,
+                "isBogo": null,
+                "startDate": null,
+                "endDate": null,
+                "interval": null,
+                "bannerUrl": null,
+                "mobileBannerUrl": null,
+                "displayInUpsellModal": false,
+                "displayInCatalog": false,
+                "productImages": null,
+                "filter": null,
+                "displayInDiscountMenu": false,
+                "isConditional": false,
+                "applicationMode": null,
+                "discountAmount": null,
+                "discountPercent": null,
+                "minCartAmount": null,
+                "minCartAmountNeeded": null,
+                "matchedUserSegmentIds": null,
+                "scheduleDisplayText": null,
+                "isActiveBySchedule": true,
+                "fulfilmentTypes": [],
+                "promoWizardGeneration": null,
+                "shopInShop": null
+              },
+              {
+                "id": 102928,
+                "name": null,
+                "shortName": "30% Off",
+                "description": null,
+                "isBogo": null,
+                "startDate": null,
+                "endDate": null,
+                "interval": null,
+                "bannerUrl": null,
+                "mobileBannerUrl": null,
+                "displayInUpsellModal": false,
+                "displayInCatalog": false,
+                "productImages": null,
+                "filter": null,
+                "displayInDiscountMenu": false,
+                "isConditional": false,
+                "applicationMode": null,
+                "discountAmount": null,
+                "discountPercent": null,
+                "minCartAmount": null,
+                "minCartAmountNeeded": null,
+                "matchedUserSegmentIds": null,
+                "scheduleDisplayText": null,
+                "isActiveBySchedule": true,
+                "fulfilmentTypes": [],
+                "promoWizardGeneration": null,
+                "shopInShop": null
+              }
+            ],
+            "reminderStatus": null,
+            "isPacked": true,
+            "qtyStepSize": 1.0,
+            "stockType": "Default"
+          }
+        ],
+        "customName": null
+      },
+      {
+        "id": 309956,
+        "name": "Hash Burger #7",
+        "description": null,
+        "category": {
+          "id": 495364,
+          "name": "Flower"
+        },
+        "subcategory": {
+          "id": 495385,
+          "name": "Buds"
+        },
+        "images": [
+          "https://media.sweedpos.com/store/production/1762970275_17b49dae-f836-4c64-8782-2f1d5fa06e5d.avif"
+        ],
+        "brand": {
+          "name": "Rythm",
+          "filter": null,
+          "tagId": null
+        },
+        "strain": {
+          "name": "Hash Burger",
+          "prevalence": {
+            "name": "Hybrid"
+          },
+          "flavors": [],
+          "terpenes": [
+            {
+              "name": "Myrcene"
+            },
+            {
+              "name": "Linalool"
+            },
+            {
+              "name": "Pinene"
+            },
+            {
+              "name": "Limonene"
+            },
+            {
+              "name": "Caryophyllene"
+            },
+            {
+              "name": "Humulene"
+            },
+            {
+              "name": "Terpinolene"
+            },
+            {
+              "name": "Bisabolol"
+            },
+            {
+              "name": "Camphene"
+            },
+            {
+              "name": "B Pinene"
+            },
+            {
+              "name": "Caryophyllene Oxide"
+            }
+          ]
+        },
+        "tags": [],
+        "effects": [],
+        "qualityLine": null,
+        "productType": {
+          "name": "Buds"
+        },
+        "variants": [
+          {
+            "id": 435772,
+            "name": "3.5g",
+            "sku": "Ryt-Bud-Bud-",
+            "images": [],
+            "strengthLevel": null,
+            "labTests": {
+              "thc": {
+                "value": [
+                  28.1
+                ],
+                "unitAbbr": "%"
+              },
+              "cbd": null,
+              "displayThc": null
+            },
+            "saleType": "Both",
+            "availableQty": 26.0,
+            "unitSize": {
+              "value": 3.5,
+              "unitAbbr": "G"
+            },
+            "unitsInPackage": 1,
+            "price": 55.0,
+            "promoPrice": 38.5,
+            "discount": 0,
+            "tierPricePresetId": null,
+            "tierPricing": [],
+            "promos": [
+              {
+                "id": 102928,
+                "name": null,
+                "shortName": "30% Off",
+                "description": null,
+                "isBogo": null,
+                "startDate": null,
+                "endDate": null,
+                "interval": null,
+                "bannerUrl": null,
+                "mobileBannerUrl": null,
+                "displayInUpsellModal": false,
+                "displayInCatalog": false,
+                "productImages": null,
+                "filter": null,
+                "displayInDiscountMenu": false,
+                "isConditional": false,
+                "applicationMode": null,
+                "discountAmount": null,
+                "discountPercent": null,
+                "minCartAmount": null,
+                "minCartAmountNeeded": null,
+                "matchedUserSegmentIds": null,
+                "scheduleDisplayText": null,
+                "isActiveBySchedule": true,
+                "fulfilmentTypes": [],
+                "promoWizardGeneration": null,
+                "shopInShop": null
+              }
+            ],
+            "reminderStatus": null,
+            "isPacked": true,
+            "qtyStepSize": 1.0,
+            "stockType": "Default"
+          }
+        ],
+        "customName": null
+      },
+      {
+        "id": 256634,
+        "name": "Jack Herer",
+        "description": null,
+        "category": {
+          "id": 495364,
+          "name": "Flower"
+        },
+        "subcategory": {
+          "id": 495385,
+          "name": "Buds"
+        },
+        "images": [
+          "https://media.sweedpos.com/store/production/1748552995_c8dec00f-3459-4ec1-bcd2-fe90a109886c.png"
+        ],
+        "brand": {
+          "name": "Roll One",
+          "filter": null,
+          "tagId": null
+        },
+        "strain": {
+          "name": "Jack Herer",
+          "prevalence": {
+            "name": "Sativa"
+          },
+          "flavors": [],
+          "terpenes": [
+            {
+              "name": "Myrcene"
+            },
+            {
+              "name": "Linalool"
+            },
+            {
+              "name": "Pinene"
+            },
+            {
+              "name": "Limonene"
+            },
+            {
+              "name": "Caryophyllene"
+            },
+            {
+              "name": "Humulene"
+            },
+            {
+              "name": "Bisabolol"
+            },
+            {
+              "name": "B Pinene"
+            },
+            {
+              "name": "Caryophyllene Oxide"
+            }
+          ]
+        },
+        "tags": [],
+        "effects": [],
+        "qualityLine": null,
+        "productType": {
+          "name": "Buds"
+        },
+        "variants": [
+          {
+            "id": 356013,
+            "name": "3.5g",
+            "sku": "Rol-Bud-Bud-",
+            "images": [],
+            "strengthLevel": null,
+            "labTests": {
+              "thc": {
+                "value": [
+                  23.1
+                ],
+                "unitAbbr": "%"
+              },
+              "cbd": null,
+              "displayThc": null
+            },
+            "saleType": "Both",
+            "availableQty": 73.0,
+            "unitSize": {
+              "value": 3.5,
+              "unitAbbr": "G"
+            },
+            "unitsInPackage": 1,
+            "price": 30.0,
+            "promoPrice": 21.0,
+            "discount": 0,
+            "tierPricePresetId": null,
+            "tierPricing": [],
+            "promos": [
+              {
+                "id": 102928,
+                "name": null,
+                "shortName": "30% Off",
+                "description": null,
+                "isBogo": null,
+                "startDate": null,
+                "endDate": null,
+                "interval": null,
+                "bannerUrl": null,
+                "mobileBannerUrl": null,
+                "displayInUpsellModal": false,
+                "displayInCatalog": false,
+                "productImages": null,
+                "filter": null,
+                "displayInDiscountMenu": false,
+                "isConditional": false,
+                "applicationMode": null,
+                "discountAmount": null,
+                "discountPercent": null,
+                "minCartAmount": null,
+                "minCartAmountNeeded": null,
+                "matchedUserSegmentIds": null,
+                "scheduleDisplayText": null,
+                "isActiveBySchedule": true,
+                "fulfilmentTypes": [],
+                "promoWizardGeneration": null,
+                "shopInShop": null
+              }
+            ],
+            "reminderStatus": null,
+            "isPacked": true,
+            "qtyStepSize": 1.0,
+            "stockType": "Default"
+          }
+        ],
+        "customName": null
+      },
+      {
+        "id": 166270,
+        "name": "Animal Face",
+        "description": "Animal Face is a soulful strain from venerable Seed Junky Genetics. This indica dominant strain is the perfect mix of pedigree, palate and power. A love child of the classic Face Off OG and Animal Mints, its frosty buds and bright orange hairs produce a unique citrusy, sugary, nutty flavor with hints of earth and pine. Best reserved for after-hours, this special cut will melt cares and stress away.",
+        "category": {
+          "id": 495364,
+          "name": "Flower"
+        },
+        "subcategory": {
+          "id": 495385,
+          "name": "Buds"
+        },
+        "images": [
+          "https://media.sweedpos.com/store/production/1722046562_30733b2a-d876-4f5b-b9fb-dc2d1907e2f3.png"
+        ],
+        "brand": {
+          "name": "Rythm",
+          "filter": null,
+          "tagId": null
+        },
+        "strain": {
+          "name": "Animal Face",
+          "prevalence": {
+            "name": "Indica Dominant"
+          },
+          "flavors": [],
+          "terpenes": [
+            {
+              "name": "Myrcene"
+            },
+            {
+              "name": "Linalool"
+            },
+            {
+              "name": "Pinene"
+            },
+            {
+              "name": "Limonene"
+            },
+            {
+              "name": "Caryophyllene"
+            },
+            {
+              "name": "Humulene"
+            },
+            {
+              "name": "Bisabolol"
+            },
+            {
+              "name": "Camphene"
+            },
+            {
+              "name": "B Pinene"
+            }
+          ]
+        },
+        "tags": [],
+        "effects": [],
+        "qualityLine": null,
+        "productType": {
+          "name": "Buds"
+        },
+        "variants": [
+          {
+            "id": 229939,
+            "name": "3.5g",
+            "sku": "63339792",
+            "images": [],
+            "strengthLevel": null,
+            "labTests": {
+              "thc": {
+                "value": [
+                  26.24,
+                  28.26
+                ],
+                "unitAbbr": "%"
+              },
+              "cbd": {
+                "value": [
+                  0.07
+                ],
+                "unitAbbr": "%"
+              },
+              "displayThc": null
+            },
+            "saleType": "Both",
+            "availableQty": 65.0,
+            "unitSize": {
+              "value": 3.5,
+              "unitAbbr": "G"
+            },
+            "unitsInPackage": 1,
+            "price": 55.0,
+            "promoPrice": 38.5,
+            "discount": 0,
+            "tierPricePresetId": null,
+            "tierPricing": [],
+            "promos": [
+              {
+                "id": 102928,
+                "name": null,
+                "shortName": "30% Off",
+                "description": null,
+                "isBogo": null,
+                "startDate": null,
+                "endDate": null,
+                "interval": null,
+                "bannerUrl": null,
+                "mobileBannerUrl": null,
+                "displayInUpsellModal": false,
+                "displayInCatalog": false,
+                "productImages": null,
+                "filter": null,
+                "displayInDiscountMenu": false,
+                "isConditional": false,
+                "applicationMode": null,
+                "discountAmount": null,
+                "discountPercent": null,
+                "minCartAmount": null,
+                "minCartAmountNeeded": null,
+                "matchedUserSegmentIds": null,
+                "scheduleDisplayText": null,
+                "isActiveBySchedule": true,
+                "fulfilmentTypes": [],
+                "promoWizardGeneration": null,
+                "shopInShop": null
+              }
+            ],
+            "reminderStatus": null,
+            "isPacked": true,
+            "qtyStepSize": 1.0,
+            "stockType": "Default"
+          }
+        ],
+        "customName": null
+      },
+      {
+        "id": 268640,
+        "name": "Kandy Jack",
+        "description": null,
+        "category": {
+          "id": 495364,
+          "name": "Flower"
+        },
+        "subcategory": {
+          "id": 495385,
+          "name": "Buds"
+        },
+        "images": [
+          "https://media.sweedpos.com/store/production/1740009676_d77b2168-4796-4b10-9480-646beb404c0a.avif"
+        ],
+        "brand": {
+          "name": "Old Pal Cannabis",
+          "filter": null,
+          "tagId": null
+        },
+        "strain": {
+          "name": "Kandy Jack",
+          "prevalence": {
+            "name": "Hybrid"
+          },
+          "flavors": [],
+          "terpenes": [
+            {
+              "name": "Myrcene"
+            },
+            {
+              "name": "Linalool"
+            },
+            {
+              "name": "Pinene"
+            },
+            {
+              "name": "Limonene"
+            },
+            {
+              "name": "Caryophyllene"
+            },
+            {
+              "name": "Humulene"
+            },
+            {
+              "name": "B Pinene"
+            }
+          ]
+        },
+        "tags": [],
+        "effects": [],
+        "qualityLine": null,
+        "productType": {
+          "name": "Ground Bud"
+        },
+        "variants": [
+          {
+            "id": 371409,
+            "name": "14g",
+            "sku": "Old-Bud-Gro-",
+            "images": [],
+            "strengthLevel": null,
+            "labTests": {
+              "thc": {
+                "value": [
+                  19.03
+                ],
+                "unitAbbr": "%"
+              },
+              "cbd": {
+                "value": [
+                  0.04
+                ],
+                "unitAbbr": "%"
+              },
+              "displayThc": null
+            },
+            "saleType": "Both",
+            "availableQty": 12.0,
+            "unitSize": {
+              "value": 14.0,
+              "unitAbbr": "G"
+            },
+            "unitsInPackage": 1,
+            "price": 75.0,
+            "promoPrice": 52.5,
+            "discount": 0,
+            "tierPricePresetId": null,
+            "tierPricing": [],
+            "promos": [
+              {
+                "id": 102928,
+                "name": null,
+                "shortName": "30% Off",
+                "description": null,
+                "isBogo": null,
+                "startDate": null,
+                "endDate": null,
+                "interval": null,
+                "bannerUrl": null,
+                "mobileBannerUrl": null,
+                "displayInUpsellModal": false,
+                "displayInCatalog": false,
+                "productImages": null,
+                "filter": null,
+                "displayInDiscountMenu": false,
+                "isConditional": false,
+                "applicationMode": null,
+                "discountAmount": null,
+                "discountPercent": null,
+                "minCartAmount": null,
+                "minCartAmountNeeded": null,
+                "matchedUserSegmentIds": null,
+                "scheduleDisplayText": null,
+                "isActiveBySchedule": true,
+                "fulfilmentTypes": [],
+                "promoWizardGeneration": null,
+                "shopInShop": null
+              }
+            ],
+            "reminderStatus": null,
+            "isPacked": true,
+            "qtyStepSize": 1.0,
+            "stockType": "Default"
+          }
+        ],
+        "customName": null
+      },
+      {
+        "id": 301383,
+        "name": "Beaver Cookies ",
+        "description": null,
+        "category": {
+          "id": 495364,
+          "name": "Flower"
+        },
+        "subcategory": {
+          "id": 495385,
+          "name": "Buds"
+        },
+        "images": [
+          "https://media.sweedpos.com/store/production/1760617850_7dbcac97-9f4d-4eb6-bd68-14501e0d2a49.avif"
+        ],
+        "brand": {
+          "name": "Triple Seven",
+          "filter": null,
+          "tagId": null
+        },
+        "strain": null,
+        "tags": [],
+        "effects": [],
+        "qualityLine": null,
+        "productType": {
+          "name": "Buds"
+        },
+        "variants": [
+          {
+            "id": 416656,
+            "name": "3.5g",
+            "sku": "Tri-Bud-Bud-",
+            "images": [],
+            "strengthLevel": null,
+            "labTests": {
+              "thc": {
+                "value": [
+                  25.04
+                ],
+                "unitAbbr": "%"
+              },
+              "cbd": {
+                "value": [
+                  0.07
+                ],
+                "unitAbbr": "%"
+              },
+              "displayThc": null
+            },
+            "saleType": "Both",
+            "availableQty": 19.0,
+            "unitSize": {
+              "value": 3.5,
+              "unitAbbr": "G"
+            },
+            "unitsInPackage": 1,
+            "price": 42.0,
+            "promoPrice": 29.4,
+            "discount": 0,
+            "tierPricePresetId": null,
+            "tierPricing": [],
+            "promos": [
+              {
+                "id": 102928,
+                "name": null,
+                "shortName": "30% Off",
+                "description": null,
+                "isBogo": null,
+                "startDate": null,
+                "endDate": null,
+                "interval": null,
+                "bannerUrl": null,
+                "mobileBannerUrl": null,
+                "displayInUpsellModal": false,
+                "displayInCatalog": false,
+                "productImages": null,
+                "filter": null,
+                "displayInDiscountMenu": false,
+                "isConditional": false,
+                "applicationMode": null,
+                "discountAmount": null,
+                "discountPercent": null,
+                "minCartAmount": null,
+                "minCartAmountNeeded": null,
+                "matchedUserSegmentIds": null,
+                "scheduleDisplayText": null,
+                "isActiveBySchedule": true,
+                "fulfilmentTypes": [],
+                "promoWizardGeneration": null,
+                "shopInShop": null
+              }
+            ],
+            "reminderStatus": null,
+            "isPacked": true,
+            "qtyStepSize": 1.0,
+            "stockType": "Default"
+          }
+        ],
+        "customName": null
+      },
+      {
+        "id": 323488,
+        "name": "Berry Payton",
+        "description": "Cross of Gary Payton x Tropical Runtz from Tiki Madman, offering a vibrant, fruity palate with creamy, candy-like undertones from its Gary Payton lineage. This smooth, flavorful hybrid is known for its upbeat, creative effects, balanced by the grounding presence of terpenes like linalool and caryophyllene.",
+        "category": {
+          "id": 495364,
+          "name": "Flower"
+        },
+        "subcategory": {
+          "id": 495385,
+          "name": "Buds"
+        },
+        "images": [
+          "https://media.sweedpos.com/store/production/1764784817_b5c14157-b3ee-475f-a4eb-f93bdd84d584.webp"
+        ],
+        "brand": {
+          "name": "District Cannabis",
+          "filter": null,
+          "tagId": null
+        },
+        "strain": {
+          "name": "Berry Payton",
+          "prevalence": {
+            "name": "Hybrid"
+          },
+          "flavors": [],
+          "terpenes": [
+            {
+              "name": "Myrcene"
+            },
+            {
+              "name": "Linalool"
+            },
+            {
+              "name": "Pinene"
+            },
+            {
+              "name": "Limonene"
+            },
+            {
+              "name": "Caryophyllene"
+            },
+            {
+              "name": "Humulene"
+            },
+            {
+              "name": "Bisabolol"
+            },
+            {
+              "name": "B Pinene"
+            }
+          ]
+        },
+        "tags": [],
+        "effects": [],
+        "qualityLine": null,
+        "productType": {
+          "name": "Buds"
+        },
+        "variants": [
+          {
+            "id": 471817,
+            "name": "3.5g",
+            "sku": "Dis-Bud-Bud-",
+            "images": [],
+            "strengthLevel": null,
+            "labTests": {
+              "thc": {
+                "value": [
+                  17.81
+                ],
+                "unitAbbr": "%"
+              },
+              "cbd": null,
+              "displayThc": null
+            },
+            "saleType": "Both",
+            "availableQty": 14.0,
+            "unitSize": {
+              "value": 3.5,
+              "unitAbbr": "G"
+            },
+            "unitsInPackage": 1,
+            "price": 30.0,
+            "promoPrice": 21.0,
+            "discount": 0,
+            "tierPricePresetId": null,
+            "tierPricing": [],
+            "promos": [
+              {
+                "id": 84084,
+                "name": null,
+                "shortName": "25% OFF",
+                "description": null,
+                "isBogo": null,
+                "startDate": null,
+                "endDate": null,
+                "interval": null,
+                "bannerUrl": null,
+                "mobileBannerUrl": null,
+                "displayInUpsellModal": false,
+                "displayInCatalog": false,
+                "productImages": null,
+                "filter": null,
+                "displayInDiscountMenu": false,
+                "isConditional": false,
+                "applicationMode": null,
+                "discountAmount": null,
+                "discountPercent": null,
+                "minCartAmount": null,
+                "minCartAmountNeeded": null,
+                "matchedUserSegmentIds": null,
+                "scheduleDisplayText": null,
+                "isActiveBySchedule": true,
+                "fulfilmentTypes": [],
+                "promoWizardGeneration": null,
+                "shopInShop": null
+              },
+              {
+                "id": 102928,
+                "name": null,
+                "shortName": "30% Off",
+                "description": null,
+                "isBogo": null,
+                "startDate": null,
+                "endDate": null,
+                "interval": null,
+                "bannerUrl": null,
+                "mobileBannerUrl": null,
+                "displayInUpsellModal": false,
+                "displayInCatalog": false,
+                "productImages": null,
+                "filter": null,
+                "displayInDiscountMenu": false,
+                "isConditional": false,
+                "applicationMode": null,
+                "discountAmount": null,
+                "discountPercent": null,
+                "minCartAmount": null,
+                "minCartAmountNeeded": null,
+                "matchedUserSegmentIds": null,
+                "scheduleDisplayText": null,
+                "isActiveBySchedule": true,
+                "fulfilmentTypes": [],
+                "promoWizardGeneration": null,
+                "shopInShop": null
+              }
+            ],
+            "reminderStatus": null,
+            "isPacked": true,
+            "qtyStepSize": 1.0,
+            "stockType": "Default"
+          }
+        ],
+        "customName": null
+      },
+      {
+        "id": 270010,
+        "name": "Beaver Cookies",
+        "description": null,
+        "category": {
+          "id": 495364,
+          "name": "Flower"
+        },
+        "subcategory": {
+          "id": 495385,
+          "name": "Buds"
+        },
+        "images": [
+          "https://media.sweedpos.com/store/production/1751933135_f3532511-456b-440c-939d-aa3d5a633da1.jpg",
+          "https://media.sweedpos.com/store/production/1751933135_14642ec8-888f-485a-adba-358a5f1fafd4.jpg"
+        ],
+        "brand": {
+          "name": "Seed & Strain",
+          "filter": null,
+          "tagId": null
+        },
+        "strain": null,
+        "tags": [],
+        "effects": [],
+        "qualityLine": null,
+        "productType": {
+          "name": "Buds"
+        },
+        "variants": [
+          {
+            "id": 373214,
+            "name": "3.5g",
+            "sku": "See-Bud-Bud-",
+            "images": [],
+            "strengthLevel": null,
+            "labTests": {
+              "thc": {
+                "value": [
+                  19.81
+                ],
+                "unitAbbr": "%"
+              },
+              "cbd": null,
+              "displayThc": null
+            },
+            "saleType": "Both",
+            "availableQty": 8.0,
+            "unitSize": {
+              "value": 3.5,
+              "unitAbbr": "G"
+            },
+            "unitsInPackage": 1,
+            "price": 40.0,
+            "promoPrice": 28.0,
+            "discount": 0,
+            "tierPricePresetId": null,
+            "tierPricing": [],
+            "promos": [
+              {
+                "id": 102928,
+                "name": null,
+                "shortName": "30% Off",
+                "description": null,
+                "isBogo": null,
+                "startDate": null,
+                "endDate": null,
+                "interval": null,
+                "bannerUrl": null,
+                "mobileBannerUrl": null,
+                "displayInUpsellModal": false,
+                "displayInCatalog": false,
+                "productImages": null,
+                "filter": null,
+                "displayInDiscountMenu": false,
+                "isConditional": false,
+                "applicationMode": null,
+                "discountAmount": null,
+                "discountPercent": null,
+                "minCartAmount": null,
+                "minCartAmountNeeded": null,
+                "matchedUserSegmentIds": null,
+                "scheduleDisplayText": null,
+                "isActiveBySchedule": true,
+                "fulfilmentTypes": [],
+                "promoWizardGeneration": null,
+                "shopInShop": null
+              }
+            ],
+            "reminderStatus": null,
+            "isPacked": true,
+            "qtyStepSize": 1.0,
+            "stockType": "Default"
+          }
+        ],
+        "customName": null
+      },
+      {
+        "id": 289580,
+        "name": "Finger Lime Haze",
+        "description": null,
+        "category": {
+          "id": 495364,
+          "name": "Flower"
+        },
+        "subcategory": {
+          "id": 495385,
+          "name": "Buds"
+        },
+        "images": [
+          "https://media.sweedpos.com/store/production/1724274904_3a273a9f-6ad2-4854-9c59-c5d23090f9a9.png"
+        ],
+        "brand": {
+          "name": "Garcia",
+          "filter": null,
+          "tagId": null
+        },
+        "strain": {
+          "name": "Finger Lime Haze",
+          "prevalence": {
+            "name": "Hybrid"
+          },
+          "flavors": [],
+          "terpenes": [
+            {
+              "name": "Myrcene"
+            },
+            {
+              "name": "Linalool"
+            },
+            {
+              "name": "Pinene"
+            },
+            {
+              "name": "Limonene"
+            },
+            {
+              "name": "Caryophyllene"
+            },
+            {
+              "name": "Humulene"
+            },
+            {
+              "name": "Ocimene"
+            },
+            {
+              "name": "Terpinolene"
+            },
+            {
+              "name": "Eucalyptol"
+            },
+            {
+              "name": "Camphene"
+            },
+            {
+              "name": "B Pinene"
+            },
+            {
+              "name": "y-Terpinene"
+            }
+          ]
+        },
+        "tags": [],
+        "effects": [],
+        "qualityLine": null,
+        "productType": {
+          "name": "Buds"
+        },
+        "variants": [
+          {
+            "id": 401049,
+            "name": "3.5g",
+            "sku": "Gar-Bud-Bud-",
+            "images": [],
+            "strengthLevel": null,
+            "labTests": {
+              "thc": {
+                "value": [
+                  27.29
+                ],
+                "unitAbbr": "%"
+              },
+              "cbd": {
+                "value": [
+                  0.06
+                ],
+                "unitAbbr": "%"
+              },
+              "displayThc": null
+            },
+            "saleType": "Both",
+            "availableQty": 36.0,
+            "unitSize": {
+              "value": 3.5,
+              "unitAbbr": "G"
+            },
+            "unitsInPackage": 1,
+            "price": 45.0,
+            "promoPrice": 31.5,
+            "discount": 0,
+            "tierPricePresetId": null,
+            "tierPricing": [],
+            "promos": [
+              {
+                "id": 84087,
+                "name": null,
+                "shortName": "25% OFF",
+                "description": null,
+                "isBogo": null,
+                "startDate": null,
+                "endDate": null,
+                "interval": null,
+                "bannerUrl": null,
+                "mobileBannerUrl": null,
+                "displayInUpsellModal": false,
+                "displayInCatalog": false,
+                "productImages": null,
+                "filter": null,
+                "displayInDiscountMenu": false,
+                "isConditional": false,
+                "applicationMode": null,
+                "discountAmount": null,
+                "discountPercent": null,
+                "minCartAmount": null,
+                "minCartAmountNeeded": null,
+                "matchedUserSegmentIds": null,
+                "scheduleDisplayText": null,
+                "isActiveBySchedule": true,
+                "fulfilmentTypes": [],
+                "promoWizardGeneration": null,
+                "shopInShop": null
+              },
+              {
+                "id": 102928,
+                "name": null,
+                "shortName": "30% Off",
+                "description": null,
+                "isBogo": null,
+                "startDate": null,
+                "endDate": null,
+                "interval": null,
+                "bannerUrl": null,
+                "mobileBannerUrl": null,
+                "displayInUpsellModal": false,
+                "displayInCatalog": false,
+                "productImages": null,
+                "filter": null,
+                "displayInDiscountMenu": false,
+                "isConditional": false,
+                "applicationMode": null,
+                "discountAmount": null,
+                "discountPercent": null,
+                "minCartAmount": null,
+                "minCartAmountNeeded": null,
+                "matchedUserSegmentIds": null,
+                "scheduleDisplayText": null,
+                "isActiveBySchedule": true,
+                "fulfilmentTypes": [],
+                "promoWizardGeneration": null,
+                "shopInShop": null
+              }
+            ],
+            "reminderStatus": null,
+            "isPacked": true,
+            "qtyStepSize": 1.0,
+            "stockType": "Default"
+          }
+        ],
+        "customName": null
+      },
+      {
+        "id": 282576,
+        "name": "Pineapple Skunk",
+        "description": "Seed & Strain is deeply rooted in the land, with every product hand-harvested to ensure quality and care. Our dedication to craftsmanship reflects the hardworking spirit of the community we serve. Our Pineapple Skunk delivers big, beautiful hugs every time that carry earthy, lemony, hoppy, pine aromas. Expect big Indica feels, great for unwinding from a stressful day, relaxing the body and mind. ",
+        "category": {
+          "id": 495364,
+          "name": "Flower"
+        },
+        "subcategory": {
+          "id": 495385,
+          "name": "Buds"
+        },
+        "images": [
+          "https://media.sweedpos.com/store/production/1764777658_15d72078-35aa-4dba-9c19-f8b6bf83cad8.jpg",
+          "https://media.sweedpos.com/store/production/1764777658_3f3389e8-024f-4d83-a1e7-21533f67f7ba.jpg",
+          "https://media.sweedpos.com/store/production/1764777658_947cdb2f-ab54-4169-bec6-823efbaf46e6.jpg"
+        ],
+        "brand": {
+          "name": "Seed & Strain",
+          "filter": null,
+          "tagId": null
+        },
+        "strain": null,
+        "tags": [],
+        "effects": [],
+        "qualityLine": null,
+        "productType": {
+          "name": "Buds"
+        },
+        "variants": [
+          {
+            "id": 390874,
+            "name": "3.5g",
+            "sku": "See-Bud-Bud-",
+            "images": [],
+            "strengthLevel": null,
+            "labTests": {
+              "thc": {
+                "value": [
+                  20.72
+                ],
+                "unitAbbr": "%"
+              },
+              "cbd": null,
+              "displayThc": null
+            },
+            "saleType": "Both",
+            "availableQty": 35.0,
+            "unitSize": {
+              "value": 3.5,
+              "unitAbbr": "G"
+            },
+            "unitsInPackage": 1,
+            "price": 40.0,
+            "promoPrice": 28.0,
+            "discount": 0,
+            "tierPricePresetId": null,
+            "tierPricing": [],
+            "promos": [
+              {
+                "id": 102928,
+                "name": null,
+                "shortName": "30% Off",
+                "description": null,
+                "isBogo": null,
+                "startDate": null,
+                "endDate": null,
+                "interval": null,
+                "bannerUrl": null,
+                "mobileBannerUrl": null,
+                "displayInUpsellModal": false,
+                "displayInCatalog": false,
+                "productImages": null,
+                "filter": null,
+                "displayInDiscountMenu": false,
+                "isConditional": false,
+                "applicationMode": null,
+                "discountAmount": null,
+                "discountPercent": null,
+                "minCartAmount": null,
+                "minCartAmountNeeded": null,
+                "matchedUserSegmentIds": null,
+                "scheduleDisplayText": null,
+                "isActiveBySchedule": true,
+                "fulfilmentTypes": [],
+                "promoWizardGeneration": null,
+                "shopInShop": null
+              }
+            ],
+            "reminderStatus": null,
+            "isPacked": true,
+            "qtyStepSize": 1.0,
+            "stockType": "Default"
+          }
+        ],
+        "customName": null
+      },
+      {
+        "id": 288873,
+        "name": "Berried Alive ",
+        "description": null,
+        "category": {
+          "id": 495364,
+          "name": "Flower"
+        },
+        "subcategory": {
+          "id": 495385,
+          "name": "Buds"
+        },
+        "images": [
+          "https://media.sweedpos.com/store/production/1758296323_69e0dc95-dd2b-4cc5-93b4-9200856dc193.jpg"
+        ],
+        "brand": {
+          "name": "Seed & Strain",
+          "filter": null,
+          "tagId": null
+        },
+        "strain": null,
+        "tags": [],
+        "effects": [],
+        "qualityLine": null,
+        "productType": {
+          "name": "Buds"
+        },
+        "variants": [
+          {
+            "id": 400027,
+            "name": "3.5g",
+            "sku": "See-Bud-Bud-",
+            "images": [],
+            "strengthLevel": null,
+            "labTests": {
+              "thc": {
+                "value": [
+                  23.5
+                ],
+                "unitAbbr": "%"
+              },
+              "cbd": {
+                "value": [
+                  0.05
+                ],
+                "unitAbbr": "%"
+              },
+              "displayThc": null
+            },
+            "saleType": "Both",
+            "availableQty": 49.0,
+            "unitSize": {
+              "value": 3.5,
+              "unitAbbr": "G"
+            },
+            "unitsInPackage": 1,
+            "price": 40.0,
+            "promoPrice": 28.0,
+            "discount": 0,
+            "tierPricePresetId": null,
+            "tierPricing": [],
+            "promos": [
+              {
+                "id": 102928,
+                "name": null,
+                "shortName": "30% Off",
+                "description": null,
+                "isBogo": null,
+                "startDate": null,
+                "endDate": null,
+                "interval": null,
+                "bannerUrl": null,
+                "mobileBannerUrl": null,
+                "displayInUpsellModal": false,
+                "displayInCatalog": false,
+                "productImages": null,
+                "filter": null,
+                "displayInDiscountMenu": false,
+                "isConditional": false,
+                "applicationMode": null,
+                "discountAmount": null,
+                "discountPercent": null,
+                "minCartAmount": null,
+                "minCartAmountNeeded": null,
+                "matchedUserSegmentIds": null,
+                "scheduleDisplayText": null,
+                "isActiveBySchedule": true,
+                "fulfilmentTypes": [],
+                "promoWizardGeneration": null,
+                "shopInShop": null
+              }
+            ],
+            "reminderStatus": null,
+            "isPacked": true,
+            "qtyStepSize": 1.0,
+            "stockType": "Default"
+          }
+        ],
+        "customName": null
+      },
+      {
+        "id": 328370,
+        "name": "Nightcap",
+        "description": null,
+        "category": {
+          "id": 495364,
+          "name": "Flower"
+        },
+        "subcategory": {
+          "id": 495385,
+          "name": "Buds"
+        },
+        "images": [
+          "https://media.sweedpos.com/store/production/1766497832_403dc04b-2b9c-4963-b496-c7135ae80eac.jpg"
+        ],
+        "brand": {
+          "name": "Seed & Strain",
+          "filter": null,
+          "tagId": null
+        },
+        "strain": null,
+        "tags": [],
+        "effects": [],
+        "qualityLine": null,
+        "productType": {
+          "name": "Buds"
+        },
+        "variants": [
+          {
+            "id": 479559,
+            "name": "14g",
+            "sku": "See-Bud-Bud-",
+            "images": [],
+            "strengthLevel": null,
+            "labTests": {
+              "thc": {
+                "value": [
+                  14.18
+                ],
+                "unitAbbr": "%"
+              },
+              "cbd": null,
+              "displayThc": null
+            },
+            "saleType": "Both",
+            "availableQty": 18.0,
+            "unitSize": {
+              "value": 14.0,
+              "unitAbbr": "G"
+            },
+            "unitsInPackage": 1,
+            "price": 110.0,
+            "promoPrice": 77.0,
+            "discount": 0,
+            "tierPricePresetId": null,
+            "tierPricing": [],
+            "promos": [
+              {
+                "id": 102928,
+                "name": null,
+                "shortName": "30% Off",
+                "description": null,
+                "isBogo": null,
+                "startDate": null,
+                "endDate": null,
+                "interval": null,
+                "bannerUrl": null,
+                "mobileBannerUrl": null,
+                "displayInUpsellModal": false,
+                "displayInCatalog": false,
+                "productImages": null,
+                "filter": null,
+                "displayInDiscountMenu": false,
+                "isConditional": false,
+                "applicationMode": null,
+                "discountAmount": null,
+                "discountPercent": null,
+                "minCartAmount": null,
+                "minCartAmountNeeded": null,
+                "matchedUserSegmentIds": null,
+                "scheduleDisplayText": null,
+                "isActiveBySchedule": true,
+                "fulfilmentTypes": [],
+                "promoWizardGeneration": null,
+                "shopInShop": null
+              }
+            ],
+            "reminderStatus": null,
+            "isPacked": true,
+            "qtyStepSize": 1.0,
+            "stockType": "Default"
+          }
+        ],
+        "customName": null
+      },
+      {
+        "id": 328372,
+        "name": "Moodring",
+        "description": null,
+        "category": {
+          "id": 495364,
+          "name": "Flower"
+        },
+        "subcategory": {
+          "id": 495385,
+          "name": "Buds"
+        },
+        "images": [
+          "https://media.sweedpos.com/store/production/1766497897_50684f9a-b5d5-41d2-b284-7740eb229279.jpg"
+        ],
+        "brand": {
+          "name": "Seed & Strain",
+          "filter": null,
+          "tagId": null
+        },
+        "strain": null,
+        "tags": [],
+        "effects": [],
+        "qualityLine": null,
+        "productType": {
+          "name": "Buds"
+        },
+        "variants": [
+          {
+            "id": 479563,
+            "name": "3.5g",
+            "sku": "See-Bud-Bud-",
+            "images": [],
+            "strengthLevel": null,
+            "labTests": {
+              "thc": {
+                "value": [
+                  19.15
+                ],
+                "unitAbbr": "%"
+              },
+              "cbd": null,
+              "displayThc": null
+            },
+            "saleType": "Both",
+            "availableQty": 63.0,
+            "unitSize": {
+              "value": 3.5,
+              "unitAbbr": "G"
+            },
+            "unitsInPackage": 1,
+            "price": 40.0,
+            "promoPrice": 28.0,
+            "discount": 0,
+            "tierPricePresetId": null,
+            "tierPricing": [],
+            "promos": [
+              {
+                "id": 102928,
+                "name": null,
+                "shortName": "30% Off",
+                "description": null,
+                "isBogo": null,
+                "startDate": null,
+                "endDate": null,
+                "interval": null,
+                "bannerUrl": null,
+                "mobileBannerUrl": null,
+                "displayInUpsellModal": false,
+                "displayInCatalog": false,
+                "productImages": null,
+                "filter": null,
+                "displayInDiscountMenu": false,
+                "isConditional": false,
+                "applicationMode": null,
+                "discountAmount": null,
+                "discountPercent": null,
+                "minCartAmount": null,
+                "minCartAmountNeeded": null,
+                "matchedUserSegmentIds": null,
+                "scheduleDisplayText": null,
+                "isActiveBySchedule": true,
+                "fulfilmentTypes": [],
+                "promoWizardGeneration": null,
+                "shopInShop": null
+              }
+            ],
+            "reminderStatus": null,
+            "isPacked": true,
+            "qtyStepSize": 1.0,
+            "stockType": "Default"
+          }
+        ],
+        "customName": null
+      },
+      {
+        "id": 281912,
+        "name": "Dos Si Dos",
+        "description": null,
+        "category": {
+          "id": 495364,
+          "name": "Flower"
+        },
+        "subcategory": {
+          "id": 495385,
+          "name": "Buds"
+        },
+        "images": [
+          "https://media.sweedpos.com/store/production/1757429601_28e1ce2b-fe5e-4963-9ce2-c2787c24884b.avif",
+          "https://media.sweedpos.com/store/production/1754572458_911a1216-8d38-4d08-a171-0bde8309043c.avif"
+        ],
+        "brand": {
+          "name": "Seed & Strain",
+          "filter": null,
+          "tagId": null
+        },
+        "strain": {
+          "name": "Dos Si Dos",
+          "prevalence": {
+            "name": "Hybrid"
+          },
+          "flavors": [],
+          "terpenes": [
+            {
+              "name": "Myrcene"
+            },
+            {
+              "name": "Linalool"
+            },
+            {
+              "name": "Pinene"
+            },
+            {
+              "name": "Limonene"
+            },
+            {
+              "name": "Caryophyllene"
+            },
+            {
+              "name": "Humulene"
+            },
+            {
+              "name": "B Pinene"
+            },
+            {
+              "name": "Caryophyllene Oxide"
+            }
+          ]
+        },
+        "tags": [],
+        "effects": [],
+        "qualityLine": null,
+        "productType": {
+          "name": "Buds"
+        },
+        "variants": [
+          {
+            "id": 389890,
+            "name": "3.5g",
+            "sku": "See-Bud-Bud-",
+            "images": [],
+            "strengthLevel": null,
+            "labTests": {
+              "thc": {
+                "value": [
+                  21.39
+                ],
+                "unitAbbr": "%"
+              },
+              "cbd": {
+                "value": [
+                  0.06
+                ],
+                "unitAbbr": "%"
+              },
+              "displayThc": null
+            },
+            "saleType": "Both",
+            "availableQty": 39.0,
+            "unitSize": {
+              "value": 3.5,
+              "unitAbbr": "G"
+            },
+            "unitsInPackage": 1,
+            "price": 40.0,
+            "promoPrice": 28.0,
+            "discount": 0,
+            "tierPricePresetId": null,
+            "tierPricing": [],
+            "promos": [
+              {
+                "id": 102928,
+                "name": null,
+                "shortName": "30% Off",
+                "description": null,
+                "isBogo": null,
+                "startDate": null,
+                "endDate": null,
+                "interval": null,
+                "bannerUrl": null,
+                "mobileBannerUrl": null,
+                "displayInUpsellModal": false,
+                "displayInCatalog": false,
+                "productImages": null,
+                "filter": null,
+                "displayInDiscountMenu": false,
+                "isConditional": false,
+                "applicationMode": null,
+                "discountAmount": null,
+                "discountPercent": null,
+                "minCartAmount": null,
+                "minCartAmountNeeded": null,
+                "matchedUserSegmentIds": null,
+                "scheduleDisplayText": null,
+                "isActiveBySchedule": true,
+                "fulfilmentTypes": [],
+                "promoWizardGeneration": null,
+                "shopInShop": null
+              }
+            ],
+            "reminderStatus": null,
+            "isPacked": true,
+            "qtyStepSize": 1.0,
+            "stockType": "Default"
+          }
+        ],
+        "customName": null
+      },
+      {
+        "id": 301160,
+        "name": "Monkey Berries",
+        "description": null,
+        "category": {
+          "id": 495364,
+          "name": "Flower"
+        },
+        "subcategory": {
+          "id": 495385,
+          "name": "Buds"
+        },
+        "images": [
+          "https://media.sweedpos.com/store/production/1757429594_782c9ab2-acfd-41cd-a3fd-8af1d7c2d876.avif",
+          "https://media.sweedpos.com/store/production/1754572517_9d3beb21-06f5-4ead-ad64-2852a11cb6fb.avif"
+        ],
+        "brand": {
+          "name": "Seed & Strain",
+          "filter": null,
+          "tagId": null
+        },
+        "strain": {
+          "name": "Monkey Berries",
+          "prevalence": {
+            "name": "Hybrid"
+          },
+          "flavors": [],
+          "terpenes": [
+            {
+              "name": "Myrcene"
+            },
+            {
+              "name": "Linalool"
+            },
+            {
+              "name": "Pinene"
+            },
+            {
+              "name": "Limonene"
+            },
+            {
+              "name": "Caryophyllene"
+            },
+            {
+              "name": "Humulene"
+            },
+            {
+              "name": "B Pinene"
+            }
+          ]
+        },
+        "tags": [],
+        "effects": [],
+        "qualityLine": null,
+        "productType": {
+          "name": "Buds"
+        },
+        "variants": [
+          {
+            "id": 416365,
+            "name": "3.5g",
+            "sku": "See-Bud-Bud-",
+            "images": [],
+            "strengthLevel": null,
+            "labTests": {
+              "thc": {
+                "value": [
+                  22.42
+                ],
+                "unitAbbr": "%"
+              },
+              "cbd": {
+                "value": [
+                  0.05
+                ],
+                "unitAbbr": "%"
+              },
+              "displayThc": null
+            },
+            "saleType": "Both",
+            "availableQty": 43.0,
+            "unitSize": {
+              "value": 3.5,
+              "unitAbbr": "G"
+            },
+            "unitsInPackage": 1,
+            "price": 40.0,
+            "promoPrice": 28.0,
+            "discount": 0,
+            "tierPricePresetId": null,
+            "tierPricing": [],
+            "promos": [
+              {
+                "id": 102928,
+                "name": null,
+                "shortName": "30% Off",
+                "description": null,
+                "isBogo": null,
+                "startDate": null,
+                "endDate": null,
+                "interval": null,
+                "bannerUrl": null,
+                "mobileBannerUrl": null,
+                "displayInUpsellModal": false,
+                "displayInCatalog": false,
+                "productImages": null,
+                "filter": null,
+                "displayInDiscountMenu": false,
+                "isConditional": false,
+                "applicationMode": null,
+                "discountAmount": null,
+                "discountPercent": null,
+                "minCartAmount": null,
+                "minCartAmountNeeded": null,
+                "matchedUserSegmentIds": null,
+                "scheduleDisplayText": null,
+                "isActiveBySchedule": true,
+                "fulfilmentTypes": [],
+                "promoWizardGeneration": null,
+                "shopInShop": null
+              }
+            ],
+            "reminderStatus": null,
+            "isPacked": true,
+            "qtyStepSize": 1.0,
+            "stockType": "Default"
+          }
+        ],
+        "customName": null
+      },
+      {
+        "id": 272640,
+        "name": "Kandy Jack",
+        "description": null,
+        "category": {
+          "id": 495364,
+          "name": "Flower"
+        },
+        "subcategory": {
+          "id": 495385,
+          "name": "Buds"
+        },
+        "images": [
+          "https://media.sweedpos.com/store/production/1758033136_e268207c-90b6-4604-b8dc-1aa4a60910a0.jpg",
+          "https://media.sweedpos.com/store/production/1758033136_274a56f7-6a83-43c9-8e9f-a08655a5efe9.jpg"
+        ],
+        "brand": {
+          "name": "Seed & Strain",
+          "filter": null,
+          "tagId": null
+        },
+        "strain": {
+          "name": "Kandy Jack",
+          "prevalence": {
+            "name": "Hybrid"
+          },
+          "flavors": [],
+          "terpenes": [
+            {
+              "name": "Myrcene"
+            },
+            {
+              "name": "Linalool"
+            },
+            {
+              "name": "Pinene"
+            },
+            {
+              "name": "Limonene"
+            },
+            {
+              "name": "Caryophyllene"
+            },
+            {
+              "name": "Humulene"
+            },
+            {
+              "name": "B Pinene"
+            }
+          ]
+        },
+        "tags": [],
+        "effects": [],
+        "qualityLine": null,
+        "productType": {
+          "name": "Buds"
+        },
+        "variants": [
+          {
+            "id": 376846,
+            "name": "3.5g",
+            "sku": "See-Bud-Bud-",
+            "images": [],
+            "strengthLevel": null,
+            "labTests": {
+              "thc": {
+                "value": [
+                  19.23
+                ],
+                "unitAbbr": "%"
+              },
+              "cbd": {
+                "value": [
+                  0.04
+                ],
+                "unitAbbr": "%"
+              },
+              "displayThc": null
+            },
+            "saleType": "Both",
+            "availableQty": 62.0,
+            "unitSize": {
+              "value": 3.5,
+              "unitAbbr": "G"
+            },
+            "unitsInPackage": 1,
+            "price": 40.0,
+            "promoPrice": 28.0,
+            "discount": 0,
+            "tierPricePresetId": null,
+            "tierPricing": [],
+            "promos": [
+              {
+                "id": 102928,
+                "name": null,
+                "shortName": "30% Off",
+                "description": null,
+                "isBogo": null,
+                "startDate": null,
+                "endDate": null,
+                "interval": null,
+                "bannerUrl": null,
+                "mobileBannerUrl": null,
+                "displayInUpsellModal": false,
+                "displayInCatalog": false,
+                "productImages": null,
+                "filter": null,
+                "displayInDiscountMenu": false,
+                "isConditional": false,
+                "applicationMode": null,
+                "discountAmount": null,
+                "discountPercent": null,
+                "minCartAmount": null,
+                "minCartAmountNeeded": null,
+                "matchedUserSegmentIds": null,
+                "scheduleDisplayText": null,
+                "isActiveBySchedule": true,
+                "fulfilmentTypes": [],
+                "promoWizardGeneration": null,
+                "shopInShop": null
+              }
+            ],
+            "reminderStatus": null,
+            "isPacked": true,
+            "qtyStepSize": 1.0,
+            "stockType": "Default"
+          }
+        ],
+        "customName": null
+      },
+      {
+        "id": 198517,
+        "name": "Bubblegum Skunk",
+        "description": null,
+        "category": {
+          "id": 495364,
+          "name": "Flower"
+        },
+        "subcategory": {
+          "id": 495385,
+          "name": "Buds"
+        },
+        "images": [
+          "https://media.sweedpos.com/store/production/1736875125_8267d57b-4a92-43e3-830e-d12124afb24a.png"
+        ],
+        "brand": {
+          "name": "In House",
+          "filter": null,
+          "tagId": null
+        },
+        "strain": {
+          "name": "Bubblegum Skunk",
+          "prevalence": {
+            "name": "Hybrid"
+          },
+          "flavors": [],
+          "terpenes": [
+            {
+              "name": "Myrcene"
+            },
+            {
+              "name": "Linalool"
+            },
+            {
+              "name": "Pinene"
+            },
+            {
+              "name": "Limonene"
+            },
+            {
+              "name": "Caryophyllene"
+            },
+            {
+              "name": "Humulene"
+            },
+            {
+              "name": "Bisabolol"
+            },
+            {
+              "name": "B Pinene"
+            },
+            {
+              "name": "Caryophyllene Oxide"
+            }
+          ]
+        },
+        "tags": [],
+        "effects": [],
+        "qualityLine": null,
+        "productType": {
+          "name": "Buds"
+        },
+        "variants": [
+          {
+            "id": 398106,
+            "name": "7g",
+            "sku": "In -Bud-Bud-",
+            "images": [],
+            "strengthLevel": null,
+            "labTests": {
+              "thc": {
+                "value": [
+                  17.7
+                ],
+                "unitAbbr": "%"
+              },
+              "cbd": null,
+              "displayThc": null
+            },
+            "saleType": "Both",
+            "availableQty": 38.0,
+            "unitSize": {
+              "value": 7.0,
+              "unitAbbr": "G"
+            },
+            "unitsInPackage": 1,
+            "price": 50.0,
+            "promoPrice": 35.0,
+            "discount": 0,
+            "tierPricePresetId": null,
+            "tierPricing": [],
+            "promos": [
+              {
+                "id": 102928,
+                "name": null,
+                "shortName": "30% Off",
+                "description": null,
+                "isBogo": null,
+                "startDate": null,
+                "endDate": null,
+                "interval": null,
+                "bannerUrl": null,
+                "mobileBannerUrl": null,
+                "displayInUpsellModal": false,
+                "displayInCatalog": false,
+                "productImages": null,
+                "filter": null,
+                "displayInDiscountMenu": false,
+                "isConditional": false,
+                "applicationMode": null,
+                "discountAmount": null,
+                "discountPercent": null,
+                "minCartAmount": null,
+                "minCartAmountNeeded": null,
+                "matchedUserSegmentIds": null,
+                "scheduleDisplayText": null,
+                "isActiveBySchedule": true,
+                "fulfilmentTypes": [],
+                "promoWizardGeneration": null,
+                "shopInShop": null
+              }
+            ],
+            "reminderStatus": null,
+            "isPacked": true,
+            "qtyStepSize": 1.0,
+            "stockType": "Default"
+          }
+        ],
+        "customName": null
+      },
+      {
+        "id": 275503,
+        "name": "Tropical Adhesive",
+        "description": null,
+        "category": {
+          "id": 495364,
+          "name": "Flower"
+        },
+        "subcategory": {
+          "id": 495385,
+          "name": "Buds"
+        },
+        "images": [
+          "https://media.sweedpos.com/store/production/1746111478_d1e1baea-be7c-448c-bad2-ba8b59a8d738.avif"
+        ],
+        "brand": {
+          "name": "In House",
+          "filter": null,
+          "tagId": null
+        },
+        "strain": {
+          "name": "Tropical Adhesive",
+          "prevalence": {
+            "name": "Hybrid"
+          },
+          "flavors": [],
+          "terpenes": [
+            {
+              "name": "Myrcene"
+            },
+            {
+              "name": "Linalool"
+            },
+            {
+              "name": "Pinene"
+            },
+            {
+              "name": "Limonene"
+            },
+            {
+              "name": "Caryophyllene"
+            },
+            {
+              "name": "Humulene"
+            },
+            {
+              "name": "Bisabolol"
+            },
+            {
+              "name": "B Pinene"
+            },
+            {
+              "name": "Caryophyllene Oxide"
+            }
+          ]
+        },
+        "tags": [],
+        "effects": [],
+        "qualityLine": null,
+        "productType": {
+          "name": "Buds"
+        },
+        "variants": [
+          {
+            "id": 393719,
+            "name": "7g",
+            "sku": "In -Bud-Bud-",
+            "images": [],
+            "strengthLevel": null,
+            "labTests": {
+              "thc": {
+                "value": [
+                  18.73
+                ],
+                "unitAbbr": "%"
+              },
+              "cbd": null,
+              "displayThc": null
+            },
+            "saleType": "Both",
+            "availableQty": 15.0,
+            "unitSize": {
+              "value": 7.0,
+              "unitAbbr": "G"
+            },
+            "unitsInPackage": 1,
+            "price": 50.0,
+            "promoPrice": 35.0,
+            "discount": 0,
+            "tierPricePresetId": null,
+            "tierPricing": [],
+            "promos": [
+              {
+                "id": 102928,
+                "name": null,
+                "shortName": "30% Off",
+                "description": null,
+                "isBogo": null,
+                "startDate": null,
+                "endDate": null,
+                "interval": null,
+                "bannerUrl": null,
+                "mobileBannerUrl": null,
+                "displayInUpsellModal": false,
+                "displayInCatalog": false,
+                "productImages": null,
+                "filter": null,
+                "displayInDiscountMenu": false,
+                "isConditional": false,
+                "applicationMode": null,
+                "discountAmount": null,
+                "discountPercent": null,
+                "minCartAmount": null,
+                "minCartAmountNeeded": null,
+                "matchedUserSegmentIds": null,
+                "scheduleDisplayText": null,
+                "isActiveBySchedule": true,
+                "fulfilmentTypes": [],
+                "promoWizardGeneration": null,
+                "shopInShop": null
+              }
+            ],
+            "reminderStatus": null,
+            "isPacked": true,
+            "qtyStepSize": 1.0,
+            "stockType": "Default"
+          }
+        ],
+        "customName": null
+      },
+      {
+        "id": 168756,
+        "name": "LA Kush Cake",
+        "description": "Grown by SunMed, Belushi\u2019s Farm genetics are hand harvested and cured by a small and passionate cultivation team to deliver high-testing, complex cultivars.\n\nSunMed grows Belushi's Farm's premium cultivars in full-spectrum sunlight to produce potent, flavorful and aromatic buds.\n\n______________________________________________________________________________________\n\nBelushi's Farm is both a place and a mission. Spread across 93 acres on the Rogue River in Southern Oregon, the farm welcomes friends from near and far for music, celebration and wellness and is home to the Belushi's Farm family of cannabis brands. By sharing the land and its offerings, performer and long-time proponent of cannabis, Jim Belushi, has created a gateway for connection and joy where the sun, water and air make the perfect combination to sustain naturally powerful and beautiful cannabis plants.                                  \n\nSunMed Growers and Belushi's Farm share a commitment to sustainable cultivation, social responsibility and the beneficial properties of the cannabis plant. SunMed cultivates Belushi's Farm's house strains in full-spectrum sunlight to produce potent, flavorful and aromatic buds.",
+        "category": {
+          "id": 495364,
+          "name": "Flower"
+        },
+        "subcategory": {
+          "id": 495385,
+          "name": "Buds"
+        },
+        "images": [
+          "https://media.sweedpos.com/store/production/1739291107_4e04c68c-cea3-47b2-9a16-050758f91897.png"
+        ],
+        "brand": {
+          "name": "Belushis Farm",
+          "filter": null,
+          "tagId": null
+        },
+        "strain": {
+          "name": "LA Kush Cake",
+          "prevalence": {
+            "name": "Hybrid"
+          },
+          "flavors": [],
+          "terpenes": [
+            {
+              "name": "Myrcene"
+            },
+            {
+              "name": "Linalool"
+            },
+            {
+              "name": "Pinene"
+            },
+            {
+              "name": "Limonene"
+            },
+            {
+              "name": "Caryophyllene"
+            },
+            {
+              "name": "Humulene"
+            },
+            {
+              "name": "Fenchol"
+            },
+            {
+              "name": "B Pinene"
+            }
+          ]
+        },
+        "tags": [],
+        "effects": [],
+        "qualityLine": null,
+        "productType": {
+          "name": "Buds"
+        },
+        "variants": [
+          {
+            "id": 225619,
+            "name": "3.5g",
+            "sku": "57794374",
+            "images": [],
+            "strengthLevel": null,
+            "labTests": {
+              "thc": {
+                "value": [
+                  25.51
+                ],
+                "unitAbbr": "%"
+              },
+              "cbd": null,
+              "displayThc": null
+            },
+            "saleType": "Both",
+            "availableQty": 22.0,
+            "unitSize": {
+              "value": 3.5,
+              "unitAbbr": "G"
+            },
+            "unitsInPackage": 1,
+            "price": 40.0,
+            "promoPrice": 28.0,
+            "discount": 0,
+            "tierPricePresetId": null,
+            "tierPricing": [],
+            "promos": [
+              {
+                "id": 102928,
+                "name": null,
+                "shortName": "30% Off",
+                "description": null,
+                "isBogo": null,
+                "startDate": null,
+                "endDate": null,
+                "interval": null,
+                "bannerUrl": null,
+                "mobileBannerUrl": null,
+                "displayInUpsellModal": false,
+                "displayInCatalog": false,
+                "productImages": null,
+                "filter": null,
+                "displayInDiscountMenu": false,
+                "isConditional": false,
+                "applicationMode": null,
+                "discountAmount": null,
+                "discountPercent": null,
+                "minCartAmount": null,
+                "minCartAmountNeeded": null,
+                "matchedUserSegmentIds": null,
+                "scheduleDisplayText": null,
+                "isActiveBySchedule": true,
+                "fulfilmentTypes": [],
+                "promoWizardGeneration": null,
+                "shopInShop": null
+              }
+            ],
+            "reminderStatus": null,
+            "isPacked": true,
+            "qtyStepSize": 1.0,
+            "stockType": "Default"
+          }
+        ],
+        "customName": null
+      }
+    ]
+  }
+}

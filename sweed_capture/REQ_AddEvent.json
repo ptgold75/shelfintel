@@ -1,0 +1,20 @@
+{
+  "method": "POST",
+  "url": "https://web-ui-production.sweedpos.com/_api/proxy/WebAnalytics/AddEvent",
+  "headers": {
+    "sec-ch-ua-platform": "\"macOS\"",
+    "ssr": "false",
+    "referer": "https://www.gleaf.com/",
+    "sec-ch-ua": "\"HeadlessChrome\";v=\"143\", \"Chromium\";v=\"143\", \"Not A(Brand\";v=\"24\"",
+    "storeid": "376",
+    "x-cookie": "ph_phc_2nivojw7hzgkbwhzhZOK2c8fopTpWrsez7LoSAkovgP_posthog=%7B%22distinct_id%22%3A%22019b7664-f564-7a58-a3f1-afa0adc552de%22%2C%22%24sesid%22%3A%5B1767217886564%2C%22019b7664-f564-7a58-a3f1-af9e6f147fa7%22%2C1767217886564%5D%7D; last_store=%7B%22id%22%3A376%2C%22url%22%3A%22https%3A%2F%2Fwww.gleaf.com%2Fstores%2Fmaryland%2Frockville%2Fshop%22%2C%22routeName%22%3A%22%2Fstores%2Fmaryland%2Frockville%2Fshop%22%7D; ph_phc_mGT2oFJv0Dwvi26vbLjQxFPvPLGHuUpFeyBknthFatj_posthog=%7B%22distinct_id%22%3A%22019b7664-f5de-7b16-ae4e-9bf910c96cee%22%2C%22%24sesid%22%3A%5B1767217886686%2C%22019b7664-f5de-7b16-ae4e-9bf7251fb18e%22%2C1767217886686%5D%7D; UniqueId=63fb2f8e-aaab-4fdc-8c17-917f12574e7e; _ga_8SLETQ9JS8=GS2.1.s1767217886$o1$g0$t1767217886$j60$l0$h0; _ga=GA1.1.1221307931.1767217887; _ga_5VLW6RVM5V=GS2.1.s1767217886$o1$g0$t1767217886$j60$l0$h0; ph_phc_5DZzBf3LQIUrD701qHrUlEa91Q9vTe0N28CukTS8KdU_posthog=%7B%22distinct_id%22%3A%22019b7664-f751-7d65-b4bd-aabf66cbd84f%22%7D",
+    "sec-ch-ua-mobile": "?0",
+    "baggage": "sentry-environment=production,sentry-release=2025-12-29%40release-release-3447,sentry-public_key=4fa8c6bf9066c0f3aef56c6c278ff9ab,sentry-trace_id=6aa33e04197bdd9b398e3494c756c5cf",
+    "sentry-trace": "6aa33e04197bdd9b398e3494c756c5cf-bf7a7843c53e9883-0",
+    "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/143.0.7499.4 Safari/537.36",
+    "accept": "*/*",
+    "traceid": "38294e49-df26-4934-b0d0-57c6aaae287e",
+    "content-type": "application/json"
+  },
+  "post_data": "{\"events\":[{\"appName\":\"Shop\",\"platform\":\"NewShop\",\"eventType\":\"Ui\",\"sessionId\":\"43ca19ab-2c11-4c80-b42e-cf3a015636bf\",\"sessionStarted\":\"2025-12-31T21:51:26.576Z\",\"eventCreated\":\"2025-12-31T21:51:26.638Z\",\"deviceType\":\"Desktop\",\"deviceId\":\"e9dea258-2ca3-40d1-b93d-63d8592b36d2\",\"eventName\":\"page.view\",\"eventPayload\":\"{}\",\"platformOs\":\"web\"}]}"
+}

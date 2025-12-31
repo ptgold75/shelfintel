@@ -1,0 +1,171 @@
+{
+  "status": 200,
+  "url": "https://web-ui-production.sweedpos.com/_api/proxy/Store/GetStoreInfo",
+  "data": {
+    "id": 376,
+    "name": "gLeaf - Rockville",
+    "description": null,
+    "images": [],
+    "amenities": [
+      {
+        "id": 1,
+        "name": "ATM"
+      },
+      {
+        "id": 2,
+        "name": "Free parking"
+      },
+      {
+        "id": 4,
+        "name": "Wheelchair accessible"
+      },
+      {
+        "id": 8,
+        "name": "Debit Card"
+      }
+    ],
+    "contacts": {
+      "address": "808 Hungerford Drive, Rockville, Maryland",
+      "email": "info@gleaf.com",
+      "phone": "13019173665"
+    },
+    "schedules": [
+      {
+        "id": "StoreHours",
+        "fulfillmentType": 0,
+        "name": "Store",
+        "days": [
+          [
+            [
+              "10:00",
+              "16:00"
+            ]
+          ],
+          [
+            [
+              "08:00",
+              "20:00"
+            ]
+          ],
+          [
+            [
+              "08:00",
+              "20:00"
+            ]
+          ],
+          [
+            [
+              "10:00",
+              "18:00"
+            ]
+          ],
+          [
+            [
+              "08:00",
+              "20:00"
+            ]
+          ],
+          [
+            [
+              "08:00",
+              "20:00"
+            ]
+          ],
+          [
+            [
+              "08:00",
+              "20:00"
+            ]
+          ]
+        ]
+      },
+      {
+        "id": "InStorePickup",
+        "fulfillmentType": "InStorePickup",
+        "name": "In-store pickup",
+        "days": [
+          [
+            [
+              "10:00",
+              "16:00"
+            ]
+          ],
+          [
+            [
+              "08:00",
+              "20:00"
+            ]
+          ],
+          [
+            [
+              "08:00",
+              "20:00"
+            ]
+          ],
+          [
+            [
+              "10:00",
+              "18:00"
+            ]
+          ],
+          [
+            [
+              "08:00",
+              "20:00"
+            ]
+          ],
+          [
+            [
+              "08:00",
+              "20:00"
+            ]
+          ],
+          [
+            [
+              "08:00",
+              "20:00"
+            ]
+          ]
+        ]
+      }
+    ],
+    "saleTypeSchedules": [],
+    "location": {
+      "region": {
+        "id": 27,
+        "name": "Maryland"
+      },
+      "coords": {
+        "lat": 39.0948128,
+        "lng": -77.15386389999999
+      },
+      "city": {
+        "id": 5439,
+        "name": "Rockville"
+      },
+      "zipCode": "20850"
+    },
+    "fulfillmentTypes": [
+      "Pickup"
+    ],
+    "fulfillmentOptions": [
+      {
+        "labelName": "EP",
+        "title": "In-store pickup",
+        "hasTimeIntervals": false,
+        "fulfillmentType": "InStorePickup",
+        "children": []
+      }
+    ],
+    "deliveryZones": [],
+    "routeName": null,
+    "saleTypes": [
+      "Medical",
+      "Recreational"
+    ],
+    "url": "https://www.gleaf.com/stores/maryland/rockville/shop",
+    "isMock": false,
+    "isCaregiverOrdersEnabled": false,
+    "deliveryPromos": []
+  }
+}
