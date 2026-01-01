@@ -9,6 +9,8 @@ from datetime import datetime, timezone
 from core.db import get_session
 from core.models import Dispensary, ScrapeRun, RawMenuItem
 
+from ingest.availability import update_availability
+
 from ingest.providers.generic_html import fetch_menu_items as fetch_generic
 from ingest.providers.gleaf_playwright import fetch_menu_items as fetch_gleaf
 from ingest.providers.sweed_provider import fetch_menu_items as fetch_sweed
@@ -52,18 +54,32 @@ def main():
         print("DEBUG items fetched =", len(items))
 
         for it in items:
-            db.add(RawMenuItem(
-                scrape_run_id=scrape.scrape_run_id,
-                dispensary_id=disp.dispensary_id,
-                raw_name=it.get("name"),
-                raw_category=it.get("category"),
-                raw_brand=it.get("brand"),
-                raw_price=it.get("price"),
-                raw_discount_price=it.get("discount_price"),
-                raw_discount_text=it.get("discount_text"),
-                provider_product_id=it.get("provider_product_id"),
-                raw_json=json.dumps(it.get("raw", {})),
-            ))
+            db.add(
+                RawMenuItem(
+                    scrape_run_id=scrape.scrape_run_id,
+                    dispensary_id=disp.dispensary_id,
+                    raw_name=it.get("name"),
+                    raw_category=it.get("category"),
+                    raw_brand=it.get("brand"),
+                    raw_price=it.get("price"),
+                    raw_discount_price=it.get("discount_price"),
+                    raw_discount_text=it.get("discount_text"),
+                    provider_product_id=it.get("provider_product_id"),
+                    raw_json=json.dumps(it.get("raw", {})),
+                )
+            )
+
+        # Commit raw items so availability logic can query them
+        db.commit()
+
+        stats = update_availability(
+            db,
+            dispensary_id=disp.dispensary_id,
+            scrape_run_id=scrape.scrape_run_id,
+        )
+        db.commit()
+
+        print("✅ Availability updated:", stats)
 
         scrape.status = "success"
         scrape.records_found = len(items)
