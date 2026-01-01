@@ -169,3 +169,10 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+# Update analytics summaries after scraping
+try:
+    from scripts.update_analytics_summary import update_summaries
+    update_summaries()
+except Exception as e:
+    print(f"Warning: Could not update summaries: {e}")
