@@ -4,18 +4,15 @@ from sqlalchemy.orm import sessionmaker
 
 
 def get_database_url() -> str:
-    # Streamlit Cloud uses st.secrets; locally you may also set env var
     if "DATABASE_URL" in st.secrets:
         return st.secrets["DATABASE_URL"]
     raise KeyError("Missing DATABASE_URL in Streamlit secrets")
 
 
-@st.cache_resource
 def get_engine():
     url = get_database_url()
 
-    # Force schema to public so queries like "FROM dispensary" work reliably
-    # Also ensure SSL is required (Supabase expects it)
+    # Supabase expects SSL; also force schema to public
     connect_args = {
         "sslmode": "require",
         "options": "-csearch_path=public",

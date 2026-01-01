@@ -19,17 +19,17 @@ engine = get_engine()
 
 with engine.connect() as conn:
     dispensaries_md = conn.execute(
-        text("select count(*) from dispensary where state = 'MD'")
+        text("select count(*) from public.dispensary where state = 'MD'")
     ).scalar() or 0
 
     observed_24h = conn.execute(
-        text("select count(*) from raw_menu_item where observed_at >= now() - interval '24 hours'")
+        text("select count(*) from public.raw_menu_item where observed_at >= now() - interval '24 hours'")
     ).scalar() or 0
 
     removals_7d = conn.execute(
         text("""
             select count(*)
-            from menu_item_event
+            from public.menu_item_event
             where event_type = 'disappeared'
               and event_at >= now() - interval '7 days'
         """)
