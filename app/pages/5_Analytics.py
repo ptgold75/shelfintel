@@ -16,107 +16,92 @@ st.title("📊 Shelf Intel Analytics")
 
 from core.db import get_engine
 
+# Single connection for all queries
+@st.cache_resource
+def get_db_engine():
+    return get_engine()
+
 @st.cache_data(ttl=300)
-def get_totals():
-    engine = get_engine()
+def load_all_data():
+    """Load all data in one connection."""
+    engine = get_db_engine()
     with engine.connect() as conn:
-        df = pd.read_sql(text("""
+        totals = pd.read_sql(text("""
             SELECT dimension, value_count 
             FROM analytics_summary 
             WHERE summary_type = 'total'
-            ORDER BY summary_date DESC
         """), conn)
-    return df.set_index('dimension')['value_count'].to_dict()
-
-@st.cache_data(ttl=300)
-def get_brand_data():
-    engine = get_engine()
-    with engine.connect() as conn:
-        return pd.read_sql(text("""
+        
+        brands = pd.read_sql(text("""
             SELECT dimension as brand, value_count as sku_count
             FROM analytics_summary
             WHERE summary_type = 'brand'
             ORDER BY value_count DESC
             LIMIT 30
         """), conn)
-
-@st.cache_data(ttl=300)
-def get_category_data():
-    engine = get_engine()
-    with engine.connect() as conn:
-        return pd.read_sql(text("""
+        
+        categories = pd.read_sql(text("""
             SELECT dimension as category, value_count as product_count
             FROM analytics_summary
             WHERE summary_type = 'category'
             ORDER BY value_count DESC
             LIMIT 30
         """), conn)
-
-@st.cache_data(ttl=300)
-def get_store_data():
-    engine = get_engine()
-    with engine.connect() as conn:
-        return pd.read_sql(text("""
+        
+        stores = pd.read_sql(text("""
             SELECT dimension as store_name, value_count as total_products
             FROM analytics_summary
             WHERE summary_type = 'store'
             ORDER BY value_count DESC
             LIMIT 30
         """), conn)
+    
+    return totals, brands, categories, stores
+
+try:
+    totals_df, brand_df, category_df, store_df = load_all_data()
+    totals = totals_df.set_index('dimension')['value_count'].to_dict()
+except Exception as e:
+    st.error(f"Error loading data: {e}")
+    st.stop()
 
 tab1, tab2, tab3, tab4 = st.tabs(["📈 Overview", "🏷️ Brands", "📦 Categories", "🏪 Stores"])
 
 with tab1:
     st.header("Overview")
-    try:
-        totals = get_totals()
-        col1, col2, col3 = st.columns(3)
-        col1.metric("Total Products", f"{totals.get('products', 0):,}")
-        col2.metric("Dispensaries", f"{totals.get('dispensaries', 0):,}")
-        col3.metric("Scrape Runs", f"{totals.get('scrape_runs', 0):,}")
-    except Exception as e:
-        st.error(f"Error: {e}")
+    col1, col2, col3 = st.columns(3)
+    col1.metric("Total Products", f"{totals.get('products', 0):,}")
+    col2.metric("Dispensaries", f"{totals.get('dispensaries', 0):,}")
+    col3.metric("Scrape Runs", f"{totals.get('scrape_runs', 0):,}")
 
 with tab2:
     st.header("Brand Analysis")
-    try:
-        brand_df = get_brand_data()
-        if not brand_df.empty:
-            fig = px.bar(brand_df, x="sku_count", y="brand", orientation="h", title="Top 30 Brands by SKU Count")
-            fig.update_layout(yaxis={"categoryorder":"total ascending"}, height=700)
-            st.plotly_chart(fig, use_container_width=True)
-            st.dataframe(brand_df, use_container_width=True)
-    except Exception as e:
-        st.error(f"Error: {e}")
+    if not brand_df.empty:
+        fig = px.bar(brand_df, x="sku_count", y="brand", orientation="h", title="Top 30 Brands by SKU Count")
+        fig.update_layout(yaxis={"categoryorder":"total ascending"}, height=700)
+        st.plotly_chart(fig, use_container_width=True)
+        st.dataframe(brand_df, use_container_width=True)
 
 with tab3:
     st.header("Category Breakdown")
-    try:
-        category_df = get_category_data()
-        if not category_df.empty:
-            col1, col2 = st.columns(2)
-            with col1:
-                fig = px.pie(category_df.head(15), values="product_count", names="category", title="Top 15 Categories", hole=0.4)
-                st.plotly_chart(fig, use_container_width=True)
-            with col2:
-                fig = px.bar(category_df, x="category", y="product_count", title="Products per Category")
-                fig.update_layout(xaxis_tickangle=-45)
-                st.plotly_chart(fig, use_container_width=True)
-    except Exception as e:
-        st.error(f"Error: {e}")
+    if not category_df.empty:
+        col1, col2 = st.columns(2)
+        with col1:
+            fig = px.pie(category_df.head(15), values="product_count", names="category", title="Top 15 Categories", hole=0.4)
+            st.plotly_chart(fig, use_container_width=True)
+        with col2:
+            fig = px.bar(category_df, x="category", y="product_count", title="Products per Category")
+            fig.update_layout(xaxis_tickangle=-45)
+            st.plotly_chart(fig, use_container_width=True)
 
 with tab4:
     st.header("🏪 Top Stores")
-    try:
-        store_df = get_store_data()
-        if not store_df.empty:
-            st.metric("Stores Tracked", len(store_df))
-            fig = px.bar(store_df, x="store_name", y="total_products", title="Top 30 Stores by Product Count")
-            fig.update_layout(xaxis_tickangle=-45, height=500)
-            st.plotly_chart(fig, use_container_width=True)
-            st.dataframe(store_df, use_container_width=True)
-    except Exception as e:
-        st.error(f"Error: {e}")
+    if not store_df.empty:
+        st.metric("Stores Tracked", len(store_df))
+        fig = px.bar(store_df, x="store_name", y="total_products", title="Top 30 Stores by Product Count")
+        fig.update_layout(xaxis_tickangle=-45, height=500)
+        st.plotly_chart(fig, use_container_width=True)
+        st.dataframe(store_df, use_container_width=True)
 
 st.divider()
 st.caption(f"Data from pre-computed summaries | {datetime.now().strftime('%Y-%m-%d %H:%M')}")
