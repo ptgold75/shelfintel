@@ -1,52 +1,47 @@
 import os
 import re
-import streamlit as st
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import NullPool
 
-
+# ---------------------------------
+# Connection URL
+# ---------------------------------
 def get_database_url() -> str:
-    # In Streamlit Cloud, ALWAYS use secrets.
-    if "DATABASE_URL" in st.secrets:
-        return st.secrets["DATABASE_URL"]
+    """
+    Local + cron: use env var DATABASE_URL
+    Streamlit Cloud: also uses env var via Secrets -> env injection (or you can set env locally).
+    """
+    url = os.getenv("DATABASE_URL")
+    if not url:
+        raise RuntimeError("DATABASE_URL not set")
 
-    # Local fallback for your Mac scripts / cron
-    if os.getenv("DATABASE_URL"):
-        return os.environ["DATABASE_URL"]
-
-    raise KeyError("DATABASE_URL missing: set Streamlit secret or env var")
-
-
-@st.cache_resource
-def get_engine():
-    url = get_database_url()
-
-    # Safe debug: print host only (no password)
+    # Safe debug (no password)
     m = re.search(r"@([^:/]+)", url)
     host = m.group(1) if m else "unknown"
     print("DB HOST:", host)
 
-    connect_args = {
-        "sslmode": "require",
-        "options": "-csearch_path=public",
-    }
+    return url
 
-    # Pooler (6543) => NullPool
-    if ":6543/" in url or ":6543?" in url:
-        return create_engine(
-            url,
-            pool_pre_ping=True,
-            poolclass=NullPool,
-            connect_args=connect_args,
-        )
+# ---------------------------------
+# Engine + Session
+# ---------------------------------
+_engine = None
 
-    # Direct (5432)
-    return create_engine(
+def get_engine():
+    global _engine
+    if _engine is not None:
+        return _engine
+
+    url = get_database_url()
+
+    # Use NullPool for Supabase pooler stability
+    _engine = create_engine(
         url,
+        poolclass=NullPool,
         pool_pre_ping=True,
-        connect_args=connect_args,
     )
+    return _engine
 
 
 def get_session():
