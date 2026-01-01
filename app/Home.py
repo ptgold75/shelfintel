@@ -1,43 +1,51 @@
-import os, sys
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+# app/Home.py
+"""Shelf Intel Dashboard - Home Page"""
+
+import sys
+import os
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import streamlit as st
 from sqlalchemy import text
 
+st.set_page_config(page_title="Shelf Intel", page_icon="🔍", layout="wide")
+
+st.title("🔍 Shelf Intel")
+st.subheader("Cannabis Dispensary Menu Intelligence")
+
 from core.db import get_engine
 
-st.set_page_config(page_title="ShelfIntel", layout="wide")
+# Use summary table for fast stats
+try:
+    engine = get_engine()
+    with engine.connect() as conn:
+        # Fast query from summary table
+        totals = conn.execute(text("""
+            SELECT dimension, value_count 
+            FROM analytics_summary 
+            WHERE summary_type = 'total'
+        """)).fetchall()
+        
+        stats = {row[0]: row[1] for row in totals}
+        
+        col1, col2, col3 = st.columns(3)
+        col1.metric("Products Tracked", f"{stats.get('products', 0):,}")
+        col2.metric("Dispensaries", f"{stats.get('dispensaries', 0):,}")
+        col3.metric("Scrape Runs", f"{stats.get('scrape_runs', 0):,}")
+        
+except Exception as e:
+    st.warning(f"Could not load stats: {e}")
+    st.info("Run the summary update script to populate dashboard stats.")
 
-st.title("Real-time Digital Shelf Intelligence")
-st.write(
-    "Track **menu availability**, pricing, and product movement across dispensaries—"
-    "so wholesalers and brands can spot off-menu events, distribution growth, and promo signals."
-)
-st.info("Signals are based on **menu availability**, not vault inventory.")
+st.divider()
 
-engine = get_engine()
+st.markdown("""
+### Quick Links
+- **📊 Analytics** - Brand and category breakdowns
+- **🏪 Dispensaries** - Manage tracked stores  
+- **⚙️ Admin Setup** - Configure new dispensaries
 
-with engine.connect() as conn:
-    dispensaries_md = conn.execute(
-        text("select count(*) from public.dispensary where state = 'MD'")
-    ).scalar() or 0
-
-    observed_24h = conn.execute(
-        text("select count(*) from public.raw_menu_item where observed_at >= now() - interval '24 hours'")
-    ).scalar() or 0
-
-    removals_7d = conn.execute(
-        text("""
-            select count(*)
-            from public.menu_item_event
-            where event_type = 'disappeared'
-              and event_at >= now() - interval '7 days'
-        """)
-    ).scalar() or 0
-
-c1, c2, c3 = st.columns(3)
-c1.metric("Dispensaries tracked (MD)", int(dispensaries_md))
-c2.metric("Menu items observed (24h)", int(observed_24h))
-c3.metric("Menu removals detected (7d)", int(removals_7d))
-
-st.write("Use the pages in the left sidebar to view dashboards and admin tools.")
+### About
+Shelf Intel tracks cannabis product availability and pricing across dispensaries.
+Data is scraped hourly and analyzed for demand signals.
+""")
