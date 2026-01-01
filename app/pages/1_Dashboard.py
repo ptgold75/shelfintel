@@ -27,13 +27,13 @@ engine = get_engine()
 # -----------------------------
 c1, c2, c3 = st.columns(3)
 with engine.connect() as conn:
-    d = conn.execute(text("select count(*) from dispensary")).scalar()
-    r = conn.execute(text("select count(*) from scrape_run")).scalar()
-    i = conn.execute(text("select count(*) from raw_menu_item")).scalar()
+    d = conn.execute(text("select count(*) from public.dispensary")).scalar()
+    r = conn.execute(text("select count(*) from public.scrape_run")).scalar()
+    i = conn.execute(text("select count(*) from public.raw_menu_item")).scalar()
 
-c1.metric("Dispensaries", d)
-c2.metric("Scrape runs", r)
-c3.metric("Raw menu items", i)
+c1.metric("Dispensaries", int(d or 0))
+c2.metric("Scrape runs", int(r or 0))
+c3.metric("Raw menu items", int(i or 0))
 
 # -----------------------------
 # Latest raw menu items
@@ -48,7 +48,7 @@ select
   raw_name,
   raw_price,
   raw_discount_price
-from raw_menu_item
+from public.raw_menu_item
 order by observed_at desc
 limit 200
 """
