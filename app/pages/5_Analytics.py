@@ -1,6 +1,10 @@
 # app/pages/5_Analytics.py
 """Analytics dashboard - optimized for large datasets."""
 
+import sys
+import os
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+
 import streamlit as st
 import pandas as pd
 import plotly.express as px
@@ -16,7 +20,6 @@ from core.db import get_engine
 def get_overview_stats():
     engine = get_engine()
     with engine.connect() as conn:
-        # Use approximate count from pg_stat (instant, no table scan)
         total_products = conn.execute(text("""
             SELECT reltuples::bigint FROM pg_class WHERE relname = 'raw_menu_item'
         """)).scalar() or 0
