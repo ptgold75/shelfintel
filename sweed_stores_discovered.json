@@ -1,0 +1,662 @@
+[
+  {
+    "store_id": 1,
+    "response_sample": "[{'id': 13, 'name': 'Flower', 'imageUrl': None, 'filter': {'category': [12]}}]"
+  },
+  {
+    "store_id": 3,
+    "response_sample": "[{'id': 602, 'name': 'Accessories', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1691757164_8b832934-3a03-4117-8df6-9e01b7ad398f', 'filter': {'category': [119113]}}, {'id': 737, 'name': 'Bags', 'imageUrl': None, 'filter': {'category': [153329]}}, {'id': 88, 'name': 'Candy', 'imageUrl': None, 'filter': {'category': [10740]}}, {'id': 2750, 'name': 'Cannabis flower ', 'imageUrl': None, 'filter': {'category': [273322]}}, {'id': 2312, 'name': 'Cannabis infuesd', 'imageUrl': None, '"
+  },
+  {
+    "store_id": 8,
+    "response_sample": "[{'id': 17, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1757093774_6cf1447b-9dde-4780-a2c8-e5abe54c67e0.png', 'filter': {'category': [6816]}}, {'id': 3593, 'name': 'Infused Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1757093884_bfb39471-5a54-4130-9fd0-7c77c78c115a.png', 'filter': {'category': [459005]}}, {'id': 18, 'name': 'Cartridges', 'imageUrl': 'https://media.sweedpos.com/store/production/1757093785_e4bc97b9-70a5-4cc6-9ada-bb4766ee6118.png"
+  },
+  {
+    "store_id": 9,
+    "response_sample": "[{'id': 17, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1757093774_6cf1447b-9dde-4780-a2c8-e5abe54c67e0.png', 'filter': {'category': [6816]}}, {'id': 3593, 'name': 'Infused Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1757093884_bfb39471-5a54-4130-9fd0-7c77c78c115a.png', 'filter': {'category': [459005]}}, {'id': 18, 'name': 'Cartridges', 'imageUrl': 'https://media.sweedpos.com/store/production/1757093785_e4bc97b9-70a5-4cc6-9ada-bb4766ee6118.png"
+  },
+  {
+    "store_id": 15,
+    "response_sample": "[{'id': 35, 'name': 'Edible', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1695162732_64ffa427-7ffc-46a3-89ce-38002ac8ecb8', 'filter': {'category': [8834]}}, {'id': 38, 'name': 'Concentrate', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1695161031_abf68c3e-22fc-444a-b160-b1482f409060', 'filter': {'category': [8865]}}, {'id': 76, 'name': 'Accessories', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1695939074_f2c58c4f-a4e8-4a0f-a143-74183a47c"
+  },
+  {
+    "store_id": 17,
+    "response_sample": "[{'id': 2969, 'name': 'Accessories', 'imageUrl': None, 'filter': {'category': [327003]}}, {'id': 2968, 'name': 'Edible', 'imageUrl': None, 'filter': {'category': [327002]}}, {'id': 81, 'name': 'Edibles', 'imageUrl': None, 'filter': {'category': [10103]}}, {'id': 2966, 'name': 'Extract', 'imageUrl': None, 'filter': {'category': [327000]}}, {'id': 123, 'name': 'Flower', 'imageUrl': None, 'filter': {'category': [13555]}}, {'id': 4937, 'name': 'Prerolls', 'imageUrl': None, 'filter': {'category': [72"
+  },
+  {
+    "store_id": 25,
+    "response_sample": "[{'id': 3070, 'name': 'Accessories', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1707155686_8d5e89f9-4a97-4c7d-aecf-b1723ff1cf53', 'filter': {'category': [355084]}}, {'id': 714, 'name': 'C_Infused', 'imageUrl': None, 'filter': {'category': [143454]}}, {'id': 3069, 'name': 'Cartridges', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1707149290_d97656b6-a2dd-4342-ab71-819d17a13542', 'filter': {'category': [354926]}}, {'id': 3006, 'name': 'Check', 'imageUrl': No"
+  },
+  {
+    "store_id": 26,
+    "response_sample": "[{'id': 17, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1757093774_6cf1447b-9dde-4780-a2c8-e5abe54c67e0.png', 'filter': {'category': [6816]}}, {'id': 3593, 'name': 'Infused Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1757093884_bfb39471-5a54-4130-9fd0-7c77c78c115a.png', 'filter': {'category': [459005]}}, {'id': 18, 'name': 'Cartridges', 'imageUrl': 'https://media.sweedpos.com/store/production/1757093785_e4bc97b9-70a5-4cc6-9ada-bb4766ee6118.png"
+  },
+  {
+    "store_id": 27,
+    "response_sample": "[{'id': 194, 'name': 'Accessories', 'imageUrl': 'https://media.sweedpos.com/store/production/1757093469_99f6f862-8db4-4350-84c2-2c7358df22a2.png', 'filter': {'category': [43849]}}]"
+  },
+  {
+    "store_id": 29,
+    "response_sample": "[{'id': 130, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1721967487_eda65bf5-ab59-407e-939e-d84818bd925b', 'filter': {'category': [14437]}}, {'id': 568, 'name': 'Prerolls', 'imageUrl': 'https://media.sweedpos.com/store/production/1721967561_64cc4a42-ac02-4714-aca6-db3e7e5f6bfb', 'filter': {'category': [117471]}}, {'id': 131, 'name': 'Vaporizers', 'imageUrl': 'https://media.sweedpos.com/store/production/1722887140_cc38a2a2-9741-43b5-a60f-eb0716e60b75', 'filter': {'c"
+  },
+  {
+    "store_id": 31,
+    "response_sample": "[{'id': 192, 'name': 'Edibles', 'imageUrl': 'https://media.sweedpos.com/store/production/1757093395_2957beb5-3778-4149-9665-9351f5c04a4c.png', 'filter': {'category': [43847]}}, {'id': 191, 'name': 'Pre-Rolls', 'imageUrl': 'https://media.sweedpos.com/store/production/1757093413_f0312c2f-2e3c-4309-bc92-76cb91a60e80.png', 'filter': {'category': [43844]}}, {'id': 188, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1763754723_340b0df2-a532-4ec1-9676-4f4267fbc991.png', 'fil"
+  },
+  {
+    "store_id": 32,
+    "response_sample": "[{'id': 192, 'name': 'Edibles', 'imageUrl': 'https://media.sweedpos.com/store/production/1757093395_2957beb5-3778-4149-9665-9351f5c04a4c.png', 'filter': {'category': [43847]}}, {'id': 191, 'name': 'Pre-Rolls', 'imageUrl': 'https://media.sweedpos.com/store/production/1757093413_f0312c2f-2e3c-4309-bc92-76cb91a60e80.png', 'filter': {'category': [43844]}}, {'id': 188, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1763754723_340b0df2-a532-4ec1-9676-4f4267fbc991.png', 'fil"
+  },
+  {
+    "store_id": 33,
+    "response_sample": "[{'id': 192, 'name': 'Edibles', 'imageUrl': 'https://media.sweedpos.com/store/production/1757093395_2957beb5-3778-4149-9665-9351f5c04a4c.png', 'filter': {'category': [43847]}}, {'id': 191, 'name': 'Pre-Rolls', 'imageUrl': 'https://media.sweedpos.com/store/production/1757093413_f0312c2f-2e3c-4309-bc92-76cb91a60e80.png', 'filter': {'category': [43844]}}, {'id': 188, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1763754723_340b0df2-a532-4ec1-9676-4f4267fbc991.png', 'fil"
+  },
+  {
+    "store_id": 35,
+    "response_sample": "[{'id': 192, 'name': 'Edibles', 'imageUrl': 'https://media.sweedpos.com/store/production/1757093395_2957beb5-3778-4149-9665-9351f5c04a4c.png', 'filter': {'category': [43847]}}, {'id': 191, 'name': 'Pre-Rolls', 'imageUrl': 'https://media.sweedpos.com/store/production/1757093413_f0312c2f-2e3c-4309-bc92-76cb91a60e80.png', 'filter': {'category': [43844]}}, {'id': 188, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1763754723_340b0df2-a532-4ec1-9676-4f4267fbc991.png', 'fil"
+  },
+  {
+    "store_id": 37,
+    "response_sample": "[{'id': 130, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1721967487_eda65bf5-ab59-407e-939e-d84818bd925b', 'filter': {'category': [14437]}}, {'id': 568, 'name': 'Prerolls', 'imageUrl': 'https://media.sweedpos.com/store/production/1721967561_64cc4a42-ac02-4714-aca6-db3e7e5f6bfb', 'filter': {'category': [117471]}}, {'id': 131, 'name': 'Vaporizers', 'imageUrl': 'https://media.sweedpos.com/store/production/1722887140_cc38a2a2-9741-43b5-a60f-eb0716e60b75', 'filter': {'c"
+  },
+  {
+    "store_id": 45,
+    "response_sample": "[{'id': 130, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1721967487_eda65bf5-ab59-407e-939e-d84818bd925b', 'filter': {'category': [14437]}}, {'id': 568, 'name': 'Prerolls', 'imageUrl': 'https://media.sweedpos.com/store/production/1721967561_64cc4a42-ac02-4714-aca6-db3e7e5f6bfb', 'filter': {'category': [117471]}}, {'id': 131, 'name': 'Vaporizers', 'imageUrl': 'https://media.sweedpos.com/store/production/1722887140_cc38a2a2-9741-43b5-a60f-eb0716e60b75', 'filter': {'c"
+  },
+  {
+    "store_id": 48,
+    "response_sample": "[{'id': 130, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1721967487_eda65bf5-ab59-407e-939e-d84818bd925b', 'filter': {'category': [14437]}}, {'id': 568, 'name': 'Prerolls', 'imageUrl': 'https://media.sweedpos.com/store/production/1721967561_64cc4a42-ac02-4714-aca6-db3e7e5f6bfb', 'filter': {'category': [117471]}}, {'id': 131, 'name': 'Vaporizers', 'imageUrl': 'https://media.sweedpos.com/store/production/1722887140_cc38a2a2-9741-43b5-a60f-eb0716e60b75', 'filter': {'c"
+  },
+  {
+    "store_id": 51,
+    "response_sample": "[{'id': 167, 'name': 'Edibles', 'imageUrl': 'https://media.sweedpos.com/store/production/1761924077_600e7c98-e88c-47e8-a18f-2ea5ad588625.png', 'filter': {'category': [35883]}}, {'id': 174, 'name': 'Vaporizers', 'imageUrl': 'https://media.sweedpos.com/store/production/1761924175_be79f0d4-57c4-4149-a346-6f1731bc40e8.png', 'filter': {'category': [35890]}}, {'id': 175, 'name': 'Prerolls', 'imageUrl': 'https://media.sweedpos.com/store/production/1761924213_a262b5b9-e2b6-44c4-98aa-3dc77f7bc5b8.png', '"
+  },
+  {
+    "store_id": 62,
+    "response_sample": "[{'id': 130, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1721967487_eda65bf5-ab59-407e-939e-d84818bd925b', 'filter': {'category': [14437]}}, {'id': 568, 'name': 'Prerolls', 'imageUrl': 'https://media.sweedpos.com/store/production/1721967561_64cc4a42-ac02-4714-aca6-db3e7e5f6bfb', 'filter': {'category': [117471]}}, {'id': 131, 'name': 'Vaporizers', 'imageUrl': 'https://media.sweedpos.com/store/production/1722887140_cc38a2a2-9741-43b5-a60f-eb0716e60b75', 'filter': {'c"
+  },
+  {
+    "store_id": 63,
+    "response_sample": "[{'id': 130, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1721967487_eda65bf5-ab59-407e-939e-d84818bd925b', 'filter': {'category': [14437]}}, {'id': 568, 'name': 'Prerolls', 'imageUrl': 'https://media.sweedpos.com/store/production/1721967561_64cc4a42-ac02-4714-aca6-db3e7e5f6bfb', 'filter': {'category': [117471]}}, {'id': 131, 'name': 'Vaporizers', 'imageUrl': 'https://media.sweedpos.com/store/production/1722887140_cc38a2a2-9741-43b5-a60f-eb0716e60b75', 'filter': {'c"
+  },
+  {
+    "store_id": 64,
+    "response_sample": "[{'id': 130, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1721967487_eda65bf5-ab59-407e-939e-d84818bd925b', 'filter': {'category': [14437]}}, {'id': 568, 'name': 'Prerolls', 'imageUrl': 'https://media.sweedpos.com/store/production/1721967561_64cc4a42-ac02-4714-aca6-db3e7e5f6bfb', 'filter': {'category': [117471]}}, {'id': 131, 'name': 'Vaporizers', 'imageUrl': 'https://media.sweedpos.com/store/production/1722887140_cc38a2a2-9741-43b5-a60f-eb0716e60b75', 'filter': {'c"
+  },
+  {
+    "store_id": 66,
+    "response_sample": "[{'id': 130, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1721967487_eda65bf5-ab59-407e-939e-d84818bd925b', 'filter': {'category': [14437]}}, {'id': 568, 'name': 'Prerolls', 'imageUrl': 'https://media.sweedpos.com/store/production/1721967561_64cc4a42-ac02-4714-aca6-db3e7e5f6bfb', 'filter': {'category': [117471]}}, {'id': 131, 'name': 'Vaporizers', 'imageUrl': 'https://media.sweedpos.com/store/production/1722887140_cc38a2a2-9741-43b5-a60f-eb0716e60b75', 'filter': {'c"
+  },
+  {
+    "store_id": 67,
+    "response_sample": "[{'id': 130, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1721967487_eda65bf5-ab59-407e-939e-d84818bd925b', 'filter': {'category': [14437]}}, {'id': 568, 'name': 'Prerolls', 'imageUrl': 'https://media.sweedpos.com/store/production/1721967561_64cc4a42-ac02-4714-aca6-db3e7e5f6bfb', 'filter': {'category': [117471]}}, {'id': 131, 'name': 'Vaporizers', 'imageUrl': 'https://media.sweedpos.com/store/production/1722887140_cc38a2a2-9741-43b5-a60f-eb0716e60b75', 'filter': {'c"
+  },
+  {
+    "store_id": 68,
+    "response_sample": "[{'id': 130, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1721967487_eda65bf5-ab59-407e-939e-d84818bd925b', 'filter': {'category': [14437]}}, {'id': 568, 'name': 'Prerolls', 'imageUrl': 'https://media.sweedpos.com/store/production/1721967561_64cc4a42-ac02-4714-aca6-db3e7e5f6bfb', 'filter': {'category': [117471]}}, {'id': 131, 'name': 'Vaporizers', 'imageUrl': 'https://media.sweedpos.com/store/production/1722887140_cc38a2a2-9741-43b5-a60f-eb0716e60b75', 'filter': {'c"
+  },
+  {
+    "store_id": 69,
+    "response_sample": "[{'id': 130, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1721967487_eda65bf5-ab59-407e-939e-d84818bd925b', 'filter': {'category': [14437]}}, {'id': 568, 'name': 'Prerolls', 'imageUrl': 'https://media.sweedpos.com/store/production/1721967561_64cc4a42-ac02-4714-aca6-db3e7e5f6bfb', 'filter': {'category': [117471]}}, {'id': 131, 'name': 'Vaporizers', 'imageUrl': 'https://media.sweedpos.com/store/production/1722887140_cc38a2a2-9741-43b5-a60f-eb0716e60b75', 'filter': {'c"
+  },
+  {
+    "store_id": 70,
+    "response_sample": "[{'id': 130, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1721967487_eda65bf5-ab59-407e-939e-d84818bd925b', 'filter': {'category': [14437]}}, {'id': 568, 'name': 'Prerolls', 'imageUrl': 'https://media.sweedpos.com/store/production/1721967561_64cc4a42-ac02-4714-aca6-db3e7e5f6bfb', 'filter': {'category': [117471]}}, {'id': 131, 'name': 'Vaporizers', 'imageUrl': 'https://media.sweedpos.com/store/production/1722887140_cc38a2a2-9741-43b5-a60f-eb0716e60b75', 'filter': {'c"
+  },
+  {
+    "store_id": 71,
+    "response_sample": "[{'id': 130, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1721967487_eda65bf5-ab59-407e-939e-d84818bd925b', 'filter': {'category': [14437]}}, {'id': 568, 'name': 'Prerolls', 'imageUrl': 'https://media.sweedpos.com/store/production/1721967561_64cc4a42-ac02-4714-aca6-db3e7e5f6bfb', 'filter': {'category': [117471]}}, {'id': 131, 'name': 'Vaporizers', 'imageUrl': 'https://media.sweedpos.com/store/production/1722887140_cc38a2a2-9741-43b5-a60f-eb0716e60b75', 'filter': {'c"
+  },
+  {
+    "store_id": 72,
+    "response_sample": "[{'id': 130, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1721967487_eda65bf5-ab59-407e-939e-d84818bd925b', 'filter': {'category': [14437]}}, {'id': 568, 'name': 'Prerolls', 'imageUrl': 'https://media.sweedpos.com/store/production/1721967561_64cc4a42-ac02-4714-aca6-db3e7e5f6bfb', 'filter': {'category': [117471]}}, {'id': 131, 'name': 'Vaporizers', 'imageUrl': 'https://media.sweedpos.com/store/production/1722887140_cc38a2a2-9741-43b5-a60f-eb0716e60b75', 'filter': {'c"
+  },
+  {
+    "store_id": 73,
+    "response_sample": "[{'id': 167, 'name': 'Edibles', 'imageUrl': 'https://media.sweedpos.com/store/production/1761924077_600e7c98-e88c-47e8-a18f-2ea5ad588625.png', 'filter': {'category': [35883]}}, {'id': 174, 'name': 'Vaporizers', 'imageUrl': 'https://media.sweedpos.com/store/production/1761924175_be79f0d4-57c4-4149-a346-6f1731bc40e8.png', 'filter': {'category': [35890]}}, {'id': 175, 'name': 'Prerolls', 'imageUrl': 'https://media.sweedpos.com/store/production/1761924213_a262b5b9-e2b6-44c4-98aa-3dc77f7bc5b8.png', '"
+  },
+  {
+    "store_id": 84,
+    "response_sample": "[{'id': 3124, 'name': 'Cartridges', 'imageUrl': None, 'filter': {'category': [368530]}}, {'id': 3123, 'name': 'Flower', 'imageUrl': None, 'filter': {'category': [368527]}}]"
+  },
+  {
+    "store_id": 85,
+    "response_sample": "[{'id': 3120, 'name': 'Accessories', 'imageUrl': None, 'filter': {'category': [368355]}}, {'id': 715, 'name': 'Cannabis Infused', 'imageUrl': None, 'filter': {'category': [146007]}}, {'id': 3118, 'name': 'Cartridges', 'imageUrl': None, 'filter': {'category': [368353]}}, {'id': 3119, 'name': 'Concentrates', 'imageUrl': None, 'filter': {'category': [368354]}}, {'id': 3475, 'name': 'Delivery Device', 'imageUrl': None, 'filter': {'category': [424107]}}, {'id': 429, 'name': 'Edibles', 'imageUrl': Non"
+  },
+  {
+    "store_id": 86,
+    "response_sample": "[{'id': 3120, 'name': 'Accessories', 'imageUrl': None, 'filter': {'category': [368355]}}, {'id': 715, 'name': 'Cannabis Infused', 'imageUrl': None, 'filter': {'category': [146007]}}, {'id': 3118, 'name': 'Cartridges', 'imageUrl': None, 'filter': {'category': [368353]}}, {'id': 3119, 'name': 'Concentrates', 'imageUrl': None, 'filter': {'category': [368354]}}, {'id': 3475, 'name': 'Delivery Device', 'imageUrl': None, 'filter': {'category': [424107]}}, {'id': 429, 'name': 'Edibles', 'imageUrl': Non"
+  },
+  {
+    "store_id": 87,
+    "response_sample": "[{'id': 3120, 'name': 'Accessories', 'imageUrl': None, 'filter': {'category': [368355]}}, {'id': 715, 'name': 'Cannabis Infused', 'imageUrl': None, 'filter': {'category': [146007]}}, {'id': 3118, 'name': 'Cartridges', 'imageUrl': None, 'filter': {'category': [368353]}}, {'id': 3119, 'name': 'Concentrates', 'imageUrl': None, 'filter': {'category': [368354]}}, {'id': 3475, 'name': 'Delivery Device', 'imageUrl': None, 'filter': {'category': [424107]}}, {'id': 429, 'name': 'Edibles', 'imageUrl': Non"
+  },
+  {
+    "store_id": 91,
+    "response_sample": "[{'id': 2853, 'name': 'Accessories', 'imageUrl': None, 'filter': {'category': [309586]}}]"
+  },
+  {
+    "store_id": 93,
+    "response_sample": "[{'id': 130, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1721967487_eda65bf5-ab59-407e-939e-d84818bd925b', 'filter': {'category': [14437]}}, {'id': 568, 'name': 'Prerolls', 'imageUrl': 'https://media.sweedpos.com/store/production/1721967561_64cc4a42-ac02-4714-aca6-db3e7e5f6bfb', 'filter': {'category': [117471]}}, {'id': 131, 'name': 'Vaporizers', 'imageUrl': 'https://media.sweedpos.com/store/production/1722887140_cc38a2a2-9741-43b5-a60f-eb0716e60b75', 'filter': {'c"
+  },
+  {
+    "store_id": 103,
+    "response_sample": "[{'id': 611, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1733527942_a1335cb4-603c-44eb-adfc-b4e6b9f5a57d.png', 'filter': {'category': [122145]}}, {'id': 616, 'name': 'Vapes', 'imageUrl': 'https://media.sweedpos.com/store/production/1734641229_1fe31306-7f87-4097-a38f-a84fff18e5b1.png', 'filter': {'category': [122150]}}, {'id': 614, 'name': 'Edibles', 'imageUrl': 'https://media.sweedpos.com/store/production/1733527897_63a121aa-0def-4d9b-b4e1-c3ba90262edb.png', 'filte"
+  },
+  {
+    "store_id": 104,
+    "response_sample": "[{'id': 611, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1733527942_a1335cb4-603c-44eb-adfc-b4e6b9f5a57d.png', 'filter': {'category': [122145]}}, {'id': 616, 'name': 'Vapes', 'imageUrl': 'https://media.sweedpos.com/store/production/1734641229_1fe31306-7f87-4097-a38f-a84fff18e5b1.png', 'filter': {'category': [122150]}}, {'id': 614, 'name': 'Edibles', 'imageUrl': 'https://media.sweedpos.com/store/production/1733527897_63a121aa-0def-4d9b-b4e1-c3ba90262edb.png', 'filte"
+  },
+  {
+    "store_id": 111,
+    "response_sample": "[{'id': 631, 'name': 'Accessories', 'imageUrl': 'https://media.sweedpos.com/store/production/1728021288_38775003-db49-46e5-849f-d1652f3717fb.png', 'filter': {'category': [123474]}}]"
+  },
+  {
+    "store_id": 112,
+    "response_sample": "[{'id': 628, 'name': 'Edibles', 'imageUrl': 'https://media.sweedpos.com/store/production/1728021162_8e39014d-0198-4385-8b8b-84ef43080fb9.png', 'filter': {'category': [123471]}}, {'id': 624, 'name': 'Pre-Rolls', 'imageUrl': 'https://media.sweedpos.com/store/production/1728021088_fd9a213b-7f03-4c18-a2d6-495e8600f317.png', 'filter': {'category': [123467]}}, {'id': 623, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1727978736_bb02503d-d6e5-4291-9963-98f31546db7f.png', 'f"
+  },
+  {
+    "store_id": 134,
+    "response_sample": "[{'id': 142, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1751342071_010060ab-07d8-4567-ab7b-93236042b424.png', 'filter': {'category': [18422]}}, {'id': 540, 'name': 'Prerolls', 'imageUrl': 'https://media.sweedpos.com/store/production/1751342224_d0a9af12-a81a-486c-8f1b-a547ce983bf6.png', 'filter': {'category': [117408]}}, {'id': 519, 'name': 'Vaporizers', 'imageUrl': 'https://media.sweedpos.com/store/production/1751342210_104ad01b-f204-4db0-b495-4544f11c16bb.png', '"
+  },
+  {
+    "store_id": 140,
+    "response_sample": "[{'id': 611, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1733527942_a1335cb4-603c-44eb-adfc-b4e6b9f5a57d.png', 'filter': {'category': [122145]}}, {'id': 616, 'name': 'Vapes', 'imageUrl': 'https://media.sweedpos.com/store/production/1734641229_1fe31306-7f87-4097-a38f-a84fff18e5b1.png', 'filter': {'category': [122150]}}, {'id': 614, 'name': 'Edibles', 'imageUrl': 'https://media.sweedpos.com/store/production/1733527897_63a121aa-0def-4d9b-b4e1-c3ba90262edb.png', 'filte"
+  },
+  {
+    "store_id": 142,
+    "response_sample": "[{'id': 611, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1733527942_a1335cb4-603c-44eb-adfc-b4e6b9f5a57d.png', 'filter': {'category': [122145]}}, {'id': 616, 'name': 'Vapes', 'imageUrl': 'https://media.sweedpos.com/store/production/1734641229_1fe31306-7f87-4097-a38f-a84fff18e5b1.png', 'filter': {'category': [122150]}}, {'id': 614, 'name': 'Edibles', 'imageUrl': 'https://media.sweedpos.com/store/production/1733527897_63a121aa-0def-4d9b-b4e1-c3ba90262edb.png', 'filte"
+  },
+  {
+    "store_id": 144,
+    "response_sample": "[{'id': 611, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1733527942_a1335cb4-603c-44eb-adfc-b4e6b9f5a57d.png', 'filter': {'category': [122145]}}, {'id': 616, 'name': 'Vapes', 'imageUrl': 'https://media.sweedpos.com/store/production/1734641229_1fe31306-7f87-4097-a38f-a84fff18e5b1.png', 'filter': {'category': [122150]}}, {'id': 614, 'name': 'Edibles', 'imageUrl': 'https://media.sweedpos.com/store/production/1733527897_63a121aa-0def-4d9b-b4e1-c3ba90262edb.png', 'filte"
+  },
+  {
+    "store_id": 166,
+    "response_sample": "[{'id': 611, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1733527942_a1335cb4-603c-44eb-adfc-b4e6b9f5a57d.png', 'filter': {'category': [122145]}}, {'id': 616, 'name': 'Vapes', 'imageUrl': 'https://media.sweedpos.com/store/production/1734641229_1fe31306-7f87-4097-a38f-a84fff18e5b1.png', 'filter': {'category': [122150]}}, {'id': 614, 'name': 'Edibles', 'imageUrl': 'https://media.sweedpos.com/store/production/1733527897_63a121aa-0def-4d9b-b4e1-c3ba90262edb.png', 'filte"
+  },
+  {
+    "store_id": 168,
+    "response_sample": "[{'id': 611, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1733527942_a1335cb4-603c-44eb-adfc-b4e6b9f5a57d.png', 'filter': {'category': [122145]}}, {'id': 616, 'name': 'Vapes', 'imageUrl': 'https://media.sweedpos.com/store/production/1734641229_1fe31306-7f87-4097-a38f-a84fff18e5b1.png', 'filter': {'category': [122150]}}, {'id': 614, 'name': 'Edibles', 'imageUrl': 'https://media.sweedpos.com/store/production/1733527897_63a121aa-0def-4d9b-b4e1-c3ba90262edb.png', 'filte"
+  },
+  {
+    "store_id": 169,
+    "response_sample": "[{'id': 611, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1733527942_a1335cb4-603c-44eb-adfc-b4e6b9f5a57d.png', 'filter': {'category': [122145]}}, {'id': 616, 'name': 'Vapes', 'imageUrl': 'https://media.sweedpos.com/store/production/1734641229_1fe31306-7f87-4097-a38f-a84fff18e5b1.png', 'filter': {'category': [122150]}}, {'id': 614, 'name': 'Edibles', 'imageUrl': 'https://media.sweedpos.com/store/production/1733527897_63a121aa-0def-4d9b-b4e1-c3ba90262edb.png', 'filte"
+  },
+  {
+    "store_id": 173,
+    "response_sample": "[{'id': 1022, 'name': 'Flower', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1713333499_6d2d12dd-440f-403b-b616-46d773e8aeca.jpg', 'filter': {'category': [212357]}}, {'id': 1023, 'name': 'Cartridges', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1713546553_78bc1ad6-8e72-4cd6-b897-cef0094cd14a.jpg', 'filter': {'category': [212358]}}, {'id': 1024, 'name': 'Pre-rolls', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1713333709_32d0f11f-6e43-4c3f"
+  },
+  {
+    "store_id": 176,
+    "response_sample": "[{'id': 983, 'name': 'Accessories', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1696642465_93867ed8-25a9-40d6-9ca4-01da02eeeb1e', 'filter': {'category': [207947]}}, {'id': 1020, 'name': 'Beverage', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1696642342_832fbf45-8e54-4c1d-bd68-2988865cb985', 'filter': {'category': [211263]}}, {'id': 993, 'name': 'Concentrates', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1696641744_df366c8f-a469-4479-99b"
+  },
+  {
+    "store_id": 179,
+    "response_sample": "[{'id': 1044, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1729814454_b8fcae75-c004-49a3-a6ec-9f1e70d1793d.png', 'filter': {'category': [219228]}}, {'id': 1050, 'name': 'Vapes', 'imageUrl': 'https://media.sweedpos.com/store/production/1747944787_453bc5cb-a2cd-4999-a26a-784ca71d072a.png', 'filter': {'category': [219234]}}, {'id': 1067, 'name': 'Edibles', 'imageUrl': 'https://media.sweedpos.com/store/production/1729814635_ea15785e-9582-451e-958e-ab34a382fb21.png', 'fi"
+  },
+  {
+    "store_id": 180,
+    "response_sample": "[{'id': 1044, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1729814454_b8fcae75-c004-49a3-a6ec-9f1e70d1793d.png', 'filter': {'category': [219228]}}, {'id': 1050, 'name': 'Vapes', 'imageUrl': 'https://media.sweedpos.com/store/production/1747944787_453bc5cb-a2cd-4999-a26a-784ca71d072a.png', 'filter': {'category': [219234]}}, {'id': 1067, 'name': 'Edibles', 'imageUrl': 'https://media.sweedpos.com/store/production/1729814635_ea15785e-9582-451e-958e-ab34a382fb21.png', 'fi"
+  },
+  {
+    "store_id": 181,
+    "response_sample": "[{'id': 1044, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1729814454_b8fcae75-c004-49a3-a6ec-9f1e70d1793d.png', 'filter': {'category': [219228]}}, {'id': 1050, 'name': 'Vapes', 'imageUrl': 'https://media.sweedpos.com/store/production/1747944787_453bc5cb-a2cd-4999-a26a-784ca71d072a.png', 'filter': {'category': [219234]}}, {'id': 1067, 'name': 'Edibles', 'imageUrl': 'https://media.sweedpos.com/store/production/1729814635_ea15785e-9582-451e-958e-ab34a382fb21.png', 'fi"
+  },
+  {
+    "store_id": 182,
+    "response_sample": "[{'id': 1044, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1729814454_b8fcae75-c004-49a3-a6ec-9f1e70d1793d.png', 'filter': {'category': [219228]}}, {'id': 1050, 'name': 'Vapes', 'imageUrl': 'https://media.sweedpos.com/store/production/1747944787_453bc5cb-a2cd-4999-a26a-784ca71d072a.png', 'filter': {'category': [219234]}}, {'id': 1067, 'name': 'Edibles', 'imageUrl': 'https://media.sweedpos.com/store/production/1729814635_ea15785e-9582-451e-958e-ab34a382fb21.png', 'fi"
+  },
+  {
+    "store_id": 183,
+    "response_sample": "[{'id': 1044, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1729814454_b8fcae75-c004-49a3-a6ec-9f1e70d1793d.png', 'filter': {'category': [219228]}}, {'id': 1050, 'name': 'Vapes', 'imageUrl': 'https://media.sweedpos.com/store/production/1747944787_453bc5cb-a2cd-4999-a26a-784ca71d072a.png', 'filter': {'category': [219234]}}, {'id': 1067, 'name': 'Edibles', 'imageUrl': 'https://media.sweedpos.com/store/production/1729814635_ea15785e-9582-451e-958e-ab34a382fb21.png', 'fi"
+  },
+  {
+    "store_id": 184,
+    "response_sample": "[{'id': 1044, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1729814454_b8fcae75-c004-49a3-a6ec-9f1e70d1793d.png', 'filter': {'category': [219228]}}, {'id': 1050, 'name': 'Vapes', 'imageUrl': 'https://media.sweedpos.com/store/production/1747944787_453bc5cb-a2cd-4999-a26a-784ca71d072a.png', 'filter': {'category': [219234]}}, {'id': 1067, 'name': 'Edibles', 'imageUrl': 'https://media.sweedpos.com/store/production/1729814635_ea15785e-9582-451e-958e-ab34a382fb21.png', 'fi"
+  },
+  {
+    "store_id": 185,
+    "response_sample": "[{'id': 1022, 'name': 'Flower', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1713333499_6d2d12dd-440f-403b-b616-46d773e8aeca.jpg', 'filter': {'category': [212357]}}, {'id': 1023, 'name': 'Cartridges', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1713546553_78bc1ad6-8e72-4cd6-b897-cef0094cd14a.jpg', 'filter': {'category': [212358]}}, {'id': 1024, 'name': 'Pre-rolls', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1713333709_32d0f11f-6e43-4c3f"
+  },
+  {
+    "store_id": 187,
+    "response_sample": "[{'id': 3357, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1757093738_c9961cbc-2007-46b2-b479-68e3bf22cbbf.png', 'filter': {'category': [400010]}}, {'id': 5014, 'name': 'Infused Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1757093713_d59d7a0d-7139-4fd2-a206-933cd45de146.png', 'filter': {'category': [759486]}}, {'id': 3531, 'name': 'Cartridges', 'imageUrl': 'https://media.sweedpos.com/store/production/1757093701_7542abfc-1caa-4dd6-abba-6b4f09bdcd"
+  },
+  {
+    "store_id": 188,
+    "response_sample": "[{'id': 3357, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1757093738_c9961cbc-2007-46b2-b479-68e3bf22cbbf.png', 'filter': {'category': [400010]}}, {'id': 5014, 'name': 'Infused Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1757093713_d59d7a0d-7139-4fd2-a206-933cd45de146.png', 'filter': {'category': [759486]}}, {'id': 3531, 'name': 'Cartridges', 'imageUrl': 'https://media.sweedpos.com/store/production/1757093701_7542abfc-1caa-4dd6-abba-6b4f09bdcd"
+  },
+  {
+    "store_id": 189,
+    "response_sample": "[{'id': 3357, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1757093738_c9961cbc-2007-46b2-b479-68e3bf22cbbf.png', 'filter': {'category': [400010]}}, {'id': 5014, 'name': 'Infused Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1757093713_d59d7a0d-7139-4fd2-a206-933cd45de146.png', 'filter': {'category': [759486]}}, {'id': 3531, 'name': 'Cartridges', 'imageUrl': 'https://media.sweedpos.com/store/production/1757093701_7542abfc-1caa-4dd6-abba-6b4f09bdcd"
+  },
+  {
+    "store_id": 190,
+    "response_sample": "[{'id': 3357, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1757093738_c9961cbc-2007-46b2-b479-68e3bf22cbbf.png', 'filter': {'category': [400010]}}, {'id': 5014, 'name': 'Infused Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1757093713_d59d7a0d-7139-4fd2-a206-933cd45de146.png', 'filter': {'category': [759486]}}, {'id': 3531, 'name': 'Cartridges', 'imageUrl': 'https://media.sweedpos.com/store/production/1757093701_7542abfc-1caa-4dd6-abba-6b4f09bdcd"
+  },
+  {
+    "store_id": 191,
+    "response_sample": "[{'id': 3357, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1757093738_c9961cbc-2007-46b2-b479-68e3bf22cbbf.png', 'filter': {'category': [400010]}}, {'id': 5014, 'name': 'Infused Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1757093713_d59d7a0d-7139-4fd2-a206-933cd45de146.png', 'filter': {'category': [759486]}}, {'id': 3531, 'name': 'Cartridges', 'imageUrl': 'https://media.sweedpos.com/store/production/1757093701_7542abfc-1caa-4dd6-abba-6b4f09bdcd"
+  },
+  {
+    "store_id": 193,
+    "response_sample": "[{'id': 2279, 'name': 'Accessories', 'imageUrl': 'https://media.sweedpos.com/store/production/1719432190_04b42538-a06b-48cf-a7bc-71a494bb64c1.png', 'filter': {'category': [250591]}}, {'id': 2317, 'name': 'Apparel ', 'imageUrl': 'https://media.sweedpos.com/store/production/1719432240_b86d7288-c40b-4da1-a236-6bacdbb358e8.png', 'filter': {'category': [255482]}}, {'id': 2280, 'name': 'Concentrate', 'imageUrl': 'https://media.sweedpos.com/store/production/1719432205_20c4abea-706b-49e0-928d-ff11b5b858"
+  },
+  {
+    "store_id": 194,
+    "response_sample": "[{'id': 2279, 'name': 'Accessories', 'imageUrl': 'https://media.sweedpos.com/store/production/1719432190_04b42538-a06b-48cf-a7bc-71a494bb64c1.png', 'filter': {'category': [250591]}}, {'id': 2317, 'name': 'Apparel ', 'imageUrl': 'https://media.sweedpos.com/store/production/1719432240_b86d7288-c40b-4da1-a236-6bacdbb358e8.png', 'filter': {'category': [255482]}}, {'id': 2280, 'name': 'Concentrate', 'imageUrl': 'https://media.sweedpos.com/store/production/1719432205_20c4abea-706b-49e0-928d-ff11b5b858"
+  },
+  {
+    "store_id": 195,
+    "response_sample": "[{'id': 2279, 'name': 'Accessories', 'imageUrl': 'https://media.sweedpos.com/store/production/1719432190_04b42538-a06b-48cf-a7bc-71a494bb64c1.png', 'filter': {'category': [250591]}}, {'id': 2317, 'name': 'Apparel ', 'imageUrl': 'https://media.sweedpos.com/store/production/1719432240_b86d7288-c40b-4da1-a236-6bacdbb358e8.png', 'filter': {'category': [255482]}}, {'id': 2280, 'name': 'Concentrate', 'imageUrl': 'https://media.sweedpos.com/store/production/1719432205_20c4abea-706b-49e0-928d-ff11b5b858"
+  },
+  {
+    "store_id": 196,
+    "response_sample": "[{'id': 2279, 'name': 'Accessories', 'imageUrl': 'https://media.sweedpos.com/store/production/1719432190_04b42538-a06b-48cf-a7bc-71a494bb64c1.png', 'filter': {'category': [250591]}}, {'id': 2317, 'name': 'Apparel ', 'imageUrl': 'https://media.sweedpos.com/store/production/1719432240_b86d7288-c40b-4da1-a236-6bacdbb358e8.png', 'filter': {'category': [255482]}}, {'id': 2280, 'name': 'Concentrate', 'imageUrl': 'https://media.sweedpos.com/store/production/1719432205_20c4abea-706b-49e0-928d-ff11b5b858"
+  },
+  {
+    "store_id": 199,
+    "response_sample": "[{'id': 2802, 'name': 'Flower', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1699486828_38647e31-b90f-4ad0-9723-e36a329ec661', 'filter': {'category': [307756]}}, {'id': 2803, 'name': 'Pre-Roll', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1699486830_094a2900-14c7-496e-a9d4-90dd8703151b', 'filter': {'category': [307757]}}, {'id': 2805, 'name': 'Edible', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1699486834_eabf5efb-efe0-4eb1-ab53-1c4af45"
+  },
+  {
+    "store_id": 201,
+    "response_sample": "[{'id': 2354, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1744230322_0af948b6-8f87-4a42-9f1a-4005211ac90c.png', 'filter': {'category': [255682]}}, {'id': 2511, 'name': 'Vapes', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1715616326_1751ccbf-6d7a-460d-9371-77416b78d75d.jpg', 'filter': {'category': [255839]}}, {'id': 2515, 'name': 'Pre-Roll', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1707231663_49a62d22-1b89-4a91-905e-fa4b673"
+  },
+  {
+    "store_id": 202,
+    "response_sample": "[{'id': 2373, 'name': 'Accessory', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1706802791_39553774-4473-4382-8949-cd86884f272e', 'filter': {'category': [255701]}}, {'id': 2449, 'name': 'Apparel', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1706802863_1b7b85d7-335e-48b4-8226-80c3598fdd51', 'filter': {'category': [255777]}}, {'id': 2520, 'name': 'CBD', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1707240445_0a1a675b-279c-4a14-af04-15178467"
+  },
+  {
+    "store_id": 203,
+    "response_sample": "[{'id': 2373, 'name': 'Accessory', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1706802791_39553774-4473-4382-8949-cd86884f272e', 'filter': {'category': [255701]}}, {'id': 2449, 'name': 'Apparel', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1706802863_1b7b85d7-335e-48b4-8226-80c3598fdd51', 'filter': {'category': [255777]}}, {'id': 2520, 'name': 'CBD', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1707240445_0a1a675b-279c-4a14-af04-15178467"
+  },
+  {
+    "store_id": 204,
+    "response_sample": "[{'id': 2373, 'name': 'Accessory', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1706802791_39553774-4473-4382-8949-cd86884f272e', 'filter': {'category': [255701]}}, {'id': 2449, 'name': 'Apparel', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1706802863_1b7b85d7-335e-48b4-8226-80c3598fdd51', 'filter': {'category': [255777]}}, {'id': 2520, 'name': 'CBD', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1707240445_0a1a675b-279c-4a14-af04-15178467"
+  },
+  {
+    "store_id": 205,
+    "response_sample": "[{'id': 2373, 'name': 'Accessory', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1706802791_39553774-4473-4382-8949-cd86884f272e', 'filter': {'category': [255701]}}, {'id': 2449, 'name': 'Apparel', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1706802863_1b7b85d7-335e-48b4-8226-80c3598fdd51', 'filter': {'category': [255777]}}]"
+  },
+  {
+    "store_id": 208,
+    "response_sample": "[{'id': 2373, 'name': 'Accessory', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1706802791_39553774-4473-4382-8949-cd86884f272e', 'filter': {'category': [255701]}}, {'id': 2449, 'name': 'Apparel', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1706802863_1b7b85d7-335e-48b4-8226-80c3598fdd51', 'filter': {'category': [255777]}}, {'id': 2520, 'name': 'CBD', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1707240445_0a1a675b-279c-4a14-af04-15178467"
+  },
+  {
+    "store_id": 209,
+    "response_sample": "[{'id': 2373, 'name': 'Accessory', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1706802791_39553774-4473-4382-8949-cd86884f272e', 'filter': {'category': [255701]}}, {'id': 2449, 'name': 'Apparel', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1706802863_1b7b85d7-335e-48b4-8226-80c3598fdd51', 'filter': {'category': [255777]}}, {'id': 2520, 'name': 'CBD', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1707240445_0a1a675b-279c-4a14-af04-15178467"
+  },
+  {
+    "store_id": 213,
+    "response_sample": "[{'id': 2373, 'name': 'Accessory', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1706802791_39553774-4473-4382-8949-cd86884f272e', 'filter': {'category': [255701]}}, {'id': 2449, 'name': 'Apparel', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1706802863_1b7b85d7-335e-48b4-8226-80c3598fdd51', 'filter': {'category': [255777]}}, {'id': 2520, 'name': 'CBD', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1707240445_0a1a675b-279c-4a14-af04-15178467"
+  },
+  {
+    "store_id": 214,
+    "response_sample": "[{'id': 2373, 'name': 'Accessory', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1706802791_39553774-4473-4382-8949-cd86884f272e', 'filter': {'category': [255701]}}]"
+  },
+  {
+    "store_id": 215,
+    "response_sample": "[{'id': 2373, 'name': 'Accessory', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1706802791_39553774-4473-4382-8949-cd86884f272e', 'filter': {'category': [255701]}}, {'id': 2449, 'name': 'Apparel', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1706802863_1b7b85d7-335e-48b4-8226-80c3598fdd51', 'filter': {'category': [255777]}}, {'id': 2520, 'name': 'CBD', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1707240445_0a1a675b-279c-4a14-af04-15178467"
+  },
+  {
+    "store_id": 217,
+    "response_sample": "[{'id': 2373, 'name': 'Accessory', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1706802791_39553774-4473-4382-8949-cd86884f272e', 'filter': {'category': [255701]}}, {'id': 2449, 'name': 'Apparel', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1706802863_1b7b85d7-335e-48b4-8226-80c3598fdd51', 'filter': {'category': [255777]}}, {'id': 2520, 'name': 'CBD', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1707240445_0a1a675b-279c-4a14-af04-15178467"
+  },
+  {
+    "store_id": 218,
+    "response_sample": "[{'id': 1022, 'name': 'Flower', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1713333499_6d2d12dd-440f-403b-b616-46d773e8aeca.jpg', 'filter': {'category': [212357]}}, {'id': 1023, 'name': 'Cartridges', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1713546553_78bc1ad6-8e72-4cd6-b897-cef0094cd14a.jpg', 'filter': {'category': [212358]}}, {'id': 1024, 'name': 'Pre-rolls', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1713333709_32d0f11f-6e43-4c3f"
+  },
+  {
+    "store_id": 219,
+    "response_sample": "[{'id': 1022, 'name': 'Flower', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1713333499_6d2d12dd-440f-403b-b616-46d773e8aeca.jpg', 'filter': {'category': [212357]}}, {'id': 1023, 'name': 'Cartridges', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1713546553_78bc1ad6-8e72-4cd6-b897-cef0094cd14a.jpg', 'filter': {'category': [212358]}}, {'id': 1024, 'name': 'Pre-rolls', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1713333709_32d0f11f-6e43-4c3f"
+  },
+  {
+    "store_id": 220,
+    "response_sample": "[{'id': 2373, 'name': 'Accessory', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1706802791_39553774-4473-4382-8949-cd86884f272e', 'filter': {'category': [255701]}}, {'id': 2449, 'name': 'Apparel', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1706802863_1b7b85d7-335e-48b4-8226-80c3598fdd51', 'filter': {'category': [255777]}}, {'id': 2520, 'name': 'CBD', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1707240445_0a1a675b-279c-4a14-af04-15178467"
+  },
+  {
+    "store_id": 221,
+    "response_sample": "[{'id': 2373, 'name': 'Accessory', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1706802791_39553774-4473-4382-8949-cd86884f272e', 'filter': {'category': [255701]}}, {'id': 2449, 'name': 'Apparel', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1706802863_1b7b85d7-335e-48b4-8226-80c3598fdd51', 'filter': {'category': [255777]}}]"
+  },
+  {
+    "store_id": 222,
+    "response_sample": "[{'id': 2373, 'name': 'Accessory', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1706802791_39553774-4473-4382-8949-cd86884f272e', 'filter': {'category': [255701]}}, {'id': 2449, 'name': 'Apparel', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1706802863_1b7b85d7-335e-48b4-8226-80c3598fdd51', 'filter': {'category': [255777]}}, {'id': 2520, 'name': 'CBD', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1707240445_0a1a675b-279c-4a14-af04-15178467"
+  },
+  {
+    "store_id": 224,
+    "response_sample": "[{'id': 2751, 'name': 'Accessories', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1702252149_487d6c0b-c778-43e4-9a72-b1db6c3f4737', 'filter': {'category': [273346]}}, {'id': 2846, 'name': 'Concentrate', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1702252251_a74a21e0-30db-4e13-a67e-88b29d09f037', 'filter': {'category': [308397]}}, {'id': 2849, 'name': 'Edible', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1702252552_aaee89a2-788c-43e8-9ca4"
+  },
+  {
+    "store_id": 225,
+    "response_sample": "[{'id': 611, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1733527942_a1335cb4-603c-44eb-adfc-b4e6b9f5a57d.png', 'filter': {'category': [122145]}}, {'id': 616, 'name': 'Vapes', 'imageUrl': 'https://media.sweedpos.com/store/production/1734641229_1fe31306-7f87-4097-a38f-a84fff18e5b1.png', 'filter': {'category': [122150]}}, {'id': 614, 'name': 'Edibles', 'imageUrl': 'https://media.sweedpos.com/store/production/1733527897_63a121aa-0def-4d9b-b4e1-c3ba90262edb.png', 'filte"
+  },
+  {
+    "store_id": 228,
+    "response_sample": "[{'id': 2775, 'name': 'Accessories', 'imageUrl': 'https://media.sweedpos.com/store/production/1730829547_cf0577a0-4a80-4473-b4a9-e7c68d75bb0e.png', 'filter': {'category': [300745]}}, {'id': 2780, 'name': 'Apparel', 'imageUrl': 'https://media.sweedpos.com/store/production/1730829788_bf1bc4db-801e-463a-a4b6-256b3a03929b.png', 'filter': {'category': [300750]}}, {'id': 2784, 'name': 'Beverages', 'imageUrl': 'https://media.sweedpos.com/store/production/1730829562_affbb2d9-4951-4c72-b10b-3b2fa51f4039."
+  },
+  {
+    "store_id": 229,
+    "response_sample": "[{'id': 2775, 'name': 'Accessories', 'imageUrl': 'https://media.sweedpos.com/store/production/1730829547_cf0577a0-4a80-4473-b4a9-e7c68d75bb0e.png', 'filter': {'category': [300745]}}, {'id': 2780, 'name': 'Apparel', 'imageUrl': 'https://media.sweedpos.com/store/production/1730829788_bf1bc4db-801e-463a-a4b6-256b3a03929b.png', 'filter': {'category': [300750]}}, {'id': 2784, 'name': 'Beverages', 'imageUrl': 'https://media.sweedpos.com/store/production/1730829562_affbb2d9-4951-4c72-b10b-3b2fa51f4039."
+  },
+  {
+    "store_id": 231,
+    "response_sample": "[{'id': 3028, 'name': 'Accessories', 'imageUrl': 'https://media.sweedpos.com/store/production/1722448184_f72f2abc-fd44-4872-8f52-83adfa51ea21.png', 'filter': {'category': [345942]}}, {'id': 3078, 'name': 'Concentrates', 'imageUrl': 'https://media.sweedpos.com/store/production/1722448200_4b92869e-a85d-4263-b6ec-de212f20928d.png', 'filter': {'category': [357668]}}, {'id': 4961, 'name': 'Disposable', 'imageUrl': 'https://media.sweedpos.com/store/production/1750697903_d5971ac2-339d-42d3-a4a1-3324222"
+  },
+  {
+    "store_id": 232,
+    "response_sample": "[{'id': 3028, 'name': 'Accessories', 'imageUrl': 'https://media.sweedpos.com/store/production/1722448184_f72f2abc-fd44-4872-8f52-83adfa51ea21.png', 'filter': {'category': [345942]}}, {'id': 3078, 'name': 'Concentrates', 'imageUrl': 'https://media.sweedpos.com/store/production/1722448200_4b92869e-a85d-4263-b6ec-de212f20928d.png', 'filter': {'category': [357668]}}, {'id': 4961, 'name': 'Disposable', 'imageUrl': 'https://media.sweedpos.com/store/production/1750697903_d5971ac2-339d-42d3-a4a1-3324222"
+  },
+  {
+    "store_id": 235,
+    "response_sample": "[{'id': 3141, 'name': 'Accessories', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1710876067_48d03e8c-f3ca-4398-8913-267c832bdb11.jpg', 'filter': {'category': [371260]}}, {'id': 3294, 'name': 'Beverages', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1713334118_72c83ae7-e542-4bb6-966f-c2191ebf4521.jpg', 'filter': {'category': [386500]}}, {'id': 3111, 'name': 'Concentrates', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1710876050_757dee9b-a7"
+  },
+  {
+    "store_id": 240,
+    "response_sample": "[{'id': 628, 'name': 'Edibles', 'imageUrl': 'https://media.sweedpos.com/store/production/1728021162_8e39014d-0198-4385-8b8b-84ef43080fb9.png', 'filter': {'category': [123471]}}, {'id': 624, 'name': 'Pre-Rolls', 'imageUrl': 'https://media.sweedpos.com/store/production/1728021088_fd9a213b-7f03-4c18-a2d6-495e8600f317.png', 'filter': {'category': [123467]}}, {'id': 623, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1727978736_bb02503d-d6e5-4291-9963-98f31546db7f.png', 'f"
+  },
+  {
+    "store_id": 243,
+    "response_sample": "[{'id': 3142, 'name': 'Accessories', 'imageUrl': 'https://media.sweedpos.com/store/production/1724676022_fb38a664-7f6a-42a6-b375-fd0738d2a549.png', 'filter': {'category': [371586]}}, {'id': 3143, 'name': 'Concentrates', 'imageUrl': 'https://media.sweedpos.com/store/production/1724676072_33d20418-4fb6-4e31-a5a1-6241cf217f54.png', 'filter': {'category': [371587]}}, {'id': 3144, 'name': 'Edible', 'imageUrl': 'https://media.sweedpos.com/store/production/1724676094_ba426b53-aee4-4412-878b-5fd3628bcc6"
+  },
+  {
+    "store_id": 246,
+    "response_sample": "[{'id': 3024, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1756440738_826c951d-caef-4b74-a4cc-b44e49f87ed6.png', 'filter': {'category': [345773]}}, {'id': 5544, 'name': 'Infused Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1756441083_0231f96f-d0d0-4810-9fa4-d443d8b6ee3c.png', 'filter': {'category': [891145]}}, {'id': 3086, 'name': 'Pre-Rolls', 'imageUrl': 'https://media.sweedpos.com/store/production/1718657049_e6c807cc-2e39-4ff8-9644-ddacb4fe5f9"
+  },
+  {
+    "store_id": 258,
+    "response_sample": "[{'id': 2751, 'name': 'Accessories', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1702252149_487d6c0b-c778-43e4-9a72-b1db6c3f4737', 'filter': {'category': [273346]}}, {'id': 2846, 'name': 'Concentrate', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1702252251_a74a21e0-30db-4e13-a67e-88b29d09f037', 'filter': {'category': [308397]}}, {'id': 2849, 'name': 'Edible', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1702252552_aaee89a2-788c-43e8-9ca4"
+  },
+  {
+    "store_id": 260,
+    "response_sample": "[{'id': 3024, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1756440738_826c951d-caef-4b74-a4cc-b44e49f87ed6.png', 'filter': {'category': [345773]}}, {'id': 5544, 'name': 'Infused Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1756441083_0231f96f-d0d0-4810-9fa4-d443d8b6ee3c.png', 'filter': {'category': [891145]}}, {'id': 3086, 'name': 'Pre-Rolls', 'imageUrl': 'https://media.sweedpos.com/store/production/1718657049_e6c807cc-2e39-4ff8-9644-ddacb4fe5f9"
+  },
+  {
+    "store_id": 261,
+    "response_sample": "[{'id': 3024, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1756440738_826c951d-caef-4b74-a4cc-b44e49f87ed6.png', 'filter': {'category': [345773]}}, {'id': 5544, 'name': 'Infused Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1756441083_0231f96f-d0d0-4810-9fa4-d443d8b6ee3c.png', 'filter': {'category': [891145]}}, {'id': 3086, 'name': 'Pre-Rolls', 'imageUrl': 'https://media.sweedpos.com/store/production/1718657049_e6c807cc-2e39-4ff8-9644-ddacb4fe5f9"
+  },
+  {
+    "store_id": 262,
+    "response_sample": "[{'id': 2279, 'name': 'Accessories', 'imageUrl': 'https://media.sweedpos.com/store/production/1719432190_04b42538-a06b-48cf-a7bc-71a494bb64c1.png', 'filter': {'category': [250591]}}, {'id': 2317, 'name': 'Apparel ', 'imageUrl': 'https://media.sweedpos.com/store/production/1719432240_b86d7288-c40b-4da1-a236-6bacdbb358e8.png', 'filter': {'category': [255482]}}, {'id': 2280, 'name': 'Concentrate', 'imageUrl': 'https://media.sweedpos.com/store/production/1719432205_20c4abea-706b-49e0-928d-ff11b5b858"
+  },
+  {
+    "store_id": 263,
+    "response_sample": "[{'id': 2279, 'name': 'Accessories', 'imageUrl': 'https://media.sweedpos.com/store/production/1719432190_04b42538-a06b-48cf-a7bc-71a494bb64c1.png', 'filter': {'category': [250591]}}, {'id': 2317, 'name': 'Apparel ', 'imageUrl': 'https://media.sweedpos.com/store/production/1719432240_b86d7288-c40b-4da1-a236-6bacdbb358e8.png', 'filter': {'category': [255482]}}, {'id': 2280, 'name': 'Concentrate', 'imageUrl': 'https://media.sweedpos.com/store/production/1719432205_20c4abea-706b-49e0-928d-ff11b5b858"
+  },
+  {
+    "store_id": 264,
+    "response_sample": "[{'id': 611, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1733527942_a1335cb4-603c-44eb-adfc-b4e6b9f5a57d.png', 'filter': {'category': [122145]}}, {'id': 616, 'name': 'Vapes', 'imageUrl': 'https://media.sweedpos.com/store/production/1734641229_1fe31306-7f87-4097-a38f-a84fff18e5b1.png', 'filter': {'category': [122150]}}, {'id': 614, 'name': 'Edibles', 'imageUrl': 'https://media.sweedpos.com/store/production/1733527897_63a121aa-0def-4d9b-b4e1-c3ba90262edb.png', 'filte"
+  },
+  {
+    "store_id": 273,
+    "response_sample": "[{'id': 1022, 'name': 'Flower', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1713333499_6d2d12dd-440f-403b-b616-46d773e8aeca.jpg', 'filter': {'category': [212357]}}, {'id': 1023, 'name': 'Cartridges', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1713546553_78bc1ad6-8e72-4cd6-b897-cef0094cd14a.jpg', 'filter': {'category': [212358]}}, {'id': 1024, 'name': 'Pre-rolls', 'imageUrl': 'https://sweedpos.s3.amazonaws.com/store/production/1713333709_32d0f11f-6e43-4c3f"
+  },
+  {
+    "store_id": 360,
+    "response_sample": "[{'id': 3406, 'name': 'Accessories', 'imageUrl': 'https://media.sweedpos.com/store/production/1721402686_95405b99-647d-4004-8855-e339f0d4878d.png', 'filter': {'category': [414561]}}, {'id': 3408, 'name': 'Concentrate', 'imageUrl': 'https://media.sweedpos.com/store/production/1721402741_5efa7894-ce52-4773-b534-45c2130be633.png', 'filter': {'category': [414563]}}, {'id': 3407, 'name': 'Edible', 'imageUrl': 'https://media.sweedpos.com/store/production/1722973316_81d7a8e8-e9b4-4d1a-a244-210cdaacc811"
+  },
+  {
+    "store_id": 361,
+    "response_sample": "[{'id': 3406, 'name': 'Accessories', 'imageUrl': 'https://media.sweedpos.com/store/production/1721402686_95405b99-647d-4004-8855-e339f0d4878d.png', 'filter': {'category': [414561]}}, {'id': 3408, 'name': 'Concentrate', 'imageUrl': 'https://media.sweedpos.com/store/production/1721402741_5efa7894-ce52-4773-b534-45c2130be633.png', 'filter': {'category': [414563]}}, {'id': 3407, 'name': 'Edible', 'imageUrl': 'https://media.sweedpos.com/store/production/1722973316_81d7a8e8-e9b4-4d1a-a244-210cdaacc811"
+  },
+  {
+    "store_id": 362,
+    "response_sample": "[{'id': 3406, 'name': 'Accessories', 'imageUrl': 'https://media.sweedpos.com/store/production/1721402686_95405b99-647d-4004-8855-e339f0d4878d.png', 'filter': {'category': [414561]}}, {'id': 3408, 'name': 'Concentrate', 'imageUrl': 'https://media.sweedpos.com/store/production/1721402741_5efa7894-ce52-4773-b534-45c2130be633.png', 'filter': {'category': [414563]}}, {'id': 3407, 'name': 'Edible', 'imageUrl': 'https://media.sweedpos.com/store/production/1722973316_81d7a8e8-e9b4-4d1a-a244-210cdaacc811"
+  },
+  {
+    "store_id": 363,
+    "response_sample": "[{'id': 3406, 'name': 'Accessories', 'imageUrl': 'https://media.sweedpos.com/store/production/1721402686_95405b99-647d-4004-8855-e339f0d4878d.png', 'filter': {'category': [414561]}}, {'id': 3408, 'name': 'Concentrate', 'imageUrl': 'https://media.sweedpos.com/store/production/1721402741_5efa7894-ce52-4773-b534-45c2130be633.png', 'filter': {'category': [414563]}}, {'id': 3407, 'name': 'Edible', 'imageUrl': 'https://media.sweedpos.com/store/production/1722973316_81d7a8e8-e9b4-4d1a-a244-210cdaacc811"
+  },
+  {
+    "store_id": 364,
+    "response_sample": "[{'id': 3406, 'name': 'Accessories', 'imageUrl': 'https://media.sweedpos.com/store/production/1721402686_95405b99-647d-4004-8855-e339f0d4878d.png', 'filter': {'category': [414561]}}, {'id': 3408, 'name': 'Concentrate', 'imageUrl': 'https://media.sweedpos.com/store/production/1721402741_5efa7894-ce52-4773-b534-45c2130be633.png', 'filter': {'category': [414563]}}, {'id': 3407, 'name': 'Edible', 'imageUrl': 'https://media.sweedpos.com/store/production/1722973316_81d7a8e8-e9b4-4d1a-a244-210cdaacc811"
+  },
+  {
+    "store_id": 365,
+    "response_sample": "[{'id': 3406, 'name': 'Accessories', 'imageUrl': 'https://media.sweedpos.com/store/production/1721402686_95405b99-647d-4004-8855-e339f0d4878d.png', 'filter': {'category': [414561]}}, {'id': 3408, 'name': 'Concentrate', 'imageUrl': 'https://media.sweedpos.com/store/production/1721402741_5efa7894-ce52-4773-b534-45c2130be633.png', 'filter': {'category': [414563]}}, {'id': 3407, 'name': 'Edible', 'imageUrl': 'https://media.sweedpos.com/store/production/1722973316_81d7a8e8-e9b4-4d1a-a244-210cdaacc811"
+  },
+  {
+    "store_id": 366,
+    "response_sample": "[{'id': 628, 'name': 'Edibles', 'imageUrl': 'https://media.sweedpos.com/store/production/1728021162_8e39014d-0198-4385-8b8b-84ef43080fb9.png', 'filter': {'category': [123471]}}, {'id': 624, 'name': 'Pre-Rolls', 'imageUrl': 'https://media.sweedpos.com/store/production/1728021088_fd9a213b-7f03-4c18-a2d6-495e8600f317.png', 'filter': {'category': [123467]}}, {'id': 623, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1727978736_bb02503d-d6e5-4291-9963-98f31546db7f.png', 'f"
+  },
+  {
+    "store_id": 367,
+    "response_sample": "[{'id': 167, 'name': 'Edibles', 'imageUrl': 'https://media.sweedpos.com/store/production/1761924077_600e7c98-e88c-47e8-a18f-2ea5ad588625.png', 'filter': {'category': [35883]}}, {'id': 174, 'name': 'Vaporizers', 'imageUrl': 'https://media.sweedpos.com/store/production/1761924175_be79f0d4-57c4-4149-a346-6f1731bc40e8.png', 'filter': {'category': [35890]}}, {'id': 175, 'name': 'Prerolls', 'imageUrl': 'https://media.sweedpos.com/store/production/1761924213_a262b5b9-e2b6-44c4-98aa-3dc77f7bc5b8.png', '"
+  },
+  {
+    "store_id": 373,
+    "response_sample": "[{'id': 3614, 'name': 'Edibles', 'imageUrl': 'https://media.sweedpos.com/store/production/1721706739_74d24c72-ad2f-4a41-a018-5be475eeb154.png', 'filter': {'category': [463409]}}, {'id': 3611, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1721706678_d884c03d-2aed-4bbe-bb59-35438ade6af0.png', 'filter': {'category': [463406]}}, {'id': 3612, 'name': 'Pre-Rolls', 'imageUrl': 'https://media.sweedpos.com/store/production/1721706709_de16d84b-aebd-4440-9dc5-50f2366a3639.png',"
+  },
+  {
+    "store_id": 375,
+    "response_sample": "[{'id': 3763, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1722692187_1875bf10-42e3-4afa-b5c9-bdcf157ebe68.jpg', 'filter': {'category': [495364]}}, {'id': 3776, 'name': 'Cartridges', 'imageUrl': 'https://media.sweedpos.com/store/production/1722693599_a7e86086-1f7e-4df2-ac96-d6e6e525191c.jpg', 'filter': {'category': [495378]}}, {'id': 3765, 'name': 'Edibles', 'imageUrl': 'https://media.sweedpos.com/store/production/1722692389_70d1d08d-0ce6-4970-bac9-d951013a7eae.jpg'"
+  },
+  {
+    "store_id": 376,
+    "response_sample": "[{'id': 3763, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1722692187_1875bf10-42e3-4afa-b5c9-bdcf157ebe68.jpg', 'filter': {'category': [495364]}}, {'id': 3776, 'name': 'Cartridges', 'imageUrl': 'https://media.sweedpos.com/store/production/1722693599_a7e86086-1f7e-4df2-ac96-d6e6e525191c.jpg', 'filter': {'category': [495378]}}, {'id': 3765, 'name': 'Edibles', 'imageUrl': 'https://media.sweedpos.com/store/production/1722692389_70d1d08d-0ce6-4970-bac9-d951013a7eae.jpg'"
+  },
+  {
+    "store_id": 377,
+    "response_sample": "[{'id': 3763, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1722692187_1875bf10-42e3-4afa-b5c9-bdcf157ebe68.jpg', 'filter': {'category': [495364]}}, {'id': 3776, 'name': 'Cartridges', 'imageUrl': 'https://media.sweedpos.com/store/production/1722693599_a7e86086-1f7e-4df2-ac96-d6e6e525191c.jpg', 'filter': {'category': [495378]}}, {'id': 3765, 'name': 'Edibles', 'imageUrl': 'https://media.sweedpos.com/store/production/1722692389_70d1d08d-0ce6-4970-bac9-d951013a7eae.jpg'"
+  },
+  {
+    "store_id": 378,
+    "response_sample": "[{'id': 3406, 'name': 'Accessories', 'imageUrl': 'https://media.sweedpos.com/store/production/1721402686_95405b99-647d-4004-8855-e339f0d4878d.png', 'filter': {'category': [414561]}}, {'id': 3408, 'name': 'Concentrate', 'imageUrl': 'https://media.sweedpos.com/store/production/1721402741_5efa7894-ce52-4773-b534-45c2130be633.png', 'filter': {'category': [414563]}}, {'id': 3407, 'name': 'Edible', 'imageUrl': 'https://media.sweedpos.com/store/production/1722973316_81d7a8e8-e9b4-4d1a-a244-210cdaacc811"
+  },
+  {
+    "store_id": 382,
+    "response_sample": "[{'id': 3950, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1729814987_a7c05d7f-4e53-49c5-8ba7-d658d3fc3f66.png', 'filter': {'category': [565458]}}, {'id': 3949, 'name': 'Vapes', 'imageUrl': 'https://media.sweedpos.com/store/production/1747944816_cee060a6-bc5e-437a-bb05-dd28baa70a17.png', 'filter': {'category': [565457]}}, {'id': 3953, 'name': 'Edibles', 'imageUrl': 'https://media.sweedpos.com/store/production/1729815022_e5fa81ad-6358-45b4-a0b6-acddcb18cfbe.png', 'fi"
+  },
+  {
+    "store_id": 383,
+    "response_sample": "[{'id': 3950, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1729814987_a7c05d7f-4e53-49c5-8ba7-d658d3fc3f66.png', 'filter': {'category': [565458]}}, {'id': 3957, 'name': 'Deli Style', 'imageUrl': 'https://media.sweedpos.com/store/production/1729815231_5f3825af-74f6-468f-b246-af67194f52cc.png', 'filter': {'category': [565465]}}, {'id': 3949, 'name': 'Vapes', 'imageUrl': 'https://media.sweedpos.com/store/production/1747944816_cee060a6-bc5e-437a-bb05-dd28baa70a17.png', "
+  },
+  {
+    "store_id": 384,
+    "response_sample": "[{'id': 3950, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1729814987_a7c05d7f-4e53-49c5-8ba7-d658d3fc3f66.png', 'filter': {'category': [565458]}}, {'id': 3949, 'name': 'Vapes', 'imageUrl': 'https://media.sweedpos.com/store/production/1747944816_cee060a6-bc5e-437a-bb05-dd28baa70a17.png', 'filter': {'category': [565457]}}, {'id': 3953, 'name': 'Edibles', 'imageUrl': 'https://media.sweedpos.com/store/production/1729815022_e5fa81ad-6358-45b4-a0b6-acddcb18cfbe.png', 'fi"
+  },
+  {
+    "store_id": 385,
+    "response_sample": "[{'id': 3950, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1729814987_a7c05d7f-4e53-49c5-8ba7-d658d3fc3f66.png', 'filter': {'category': [565458]}}, {'id': 3957, 'name': 'Deli Style', 'imageUrl': 'https://media.sweedpos.com/store/production/1729815231_5f3825af-74f6-468f-b246-af67194f52cc.png', 'filter': {'category': [565465]}}, {'id': 3949, 'name': 'Vapes', 'imageUrl': 'https://media.sweedpos.com/store/production/1747944816_cee060a6-bc5e-437a-bb05-dd28baa70a17.png', "
+  },
+  {
+    "store_id": 387,
+    "response_sample": "[{'id': 4029, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1727182555_7322ff27-7a1c-46be-8c89-a33e1565c802.png', 'filter': {'category': [572632]}}, {'id': 4030, 'name': 'Pre-Rolls', 'imageUrl': 'https://media.sweedpos.com/store/production/1727225351_f6565baf-e150-4c6f-825d-fb65128d9f39.png', 'filter': {'category': [572633]}}, {'id': 4034, 'name': 'Vaporizers', 'imageUrl': 'https://media.sweedpos.com/store/production/1727225375_ef6ec856-127a-4ca9-acec-17e79bc49bc9.pn"
+  },
+  {
+    "store_id": 388,
+    "response_sample": "[{'id': 4029, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1727182555_7322ff27-7a1c-46be-8c89-a33e1565c802.png', 'filter': {'category': [572632]}}, {'id': 4030, 'name': 'Pre-Rolls', 'imageUrl': 'https://media.sweedpos.com/store/production/1727225351_f6565baf-e150-4c6f-825d-fb65128d9f39.png', 'filter': {'category': [572633]}}, {'id': 4034, 'name': 'Vaporizers', 'imageUrl': 'https://media.sweedpos.com/store/production/1727225375_ef6ec856-127a-4ca9-acec-17e79bc49bc9.pn"
+  },
+  {
+    "store_id": 389,
+    "response_sample": "[{'id': 3950, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1729814987_a7c05d7f-4e53-49c5-8ba7-d658d3fc3f66.png', 'filter': {'category': [565458]}}, {'id': 3949, 'name': 'Vapes', 'imageUrl': 'https://media.sweedpos.com/store/production/1747944816_cee060a6-bc5e-437a-bb05-dd28baa70a17.png', 'filter': {'category': [565457]}}, {'id': 3953, 'name': 'Edibles', 'imageUrl': 'https://media.sweedpos.com/store/production/1729815022_e5fa81ad-6358-45b4-a0b6-acddcb18cfbe.png', 'fi"
+  },
+  {
+    "store_id": 393,
+    "response_sample": "[{'id': 3920, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1727881011_97038d7b-5ae0-4230-8dfd-9ee297d4b65e.png', 'filter': {'category': [533718]}}, {'id': 3923, 'name': 'Preroll', 'imageUrl': 'https://media.sweedpos.com/store/production/1727880979_cad1436b-3555-4532-8800-d8945785a5ce.png', 'filter': {'category': [533721]}}, {'id': 3917, 'name': 'Cartridge', 'imageUrl': 'https://media.sweedpos.com/store/production/1727880996_bc22d9ea-1c8c-485d-9fd5-28e0b643db6d.png',"
+  },
+  {
+    "store_id": 400,
+    "response_sample": "[{'id': 5032, 'name': 'Accessories', 'imageUrl': 'https://media.sweedpos.com/store/production/1746280624_49998f3f-596c-4eb2-aa6a-e0d885f7418b.png', 'filter': {'category': [778361]}}]"
+  },
+  {
+    "store_id": 457,
+    "response_sample": "[{'id': 5028, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1746280614_a41528fd-a6d2-4319-8fc4-851c65b6ed75.jpg', 'filter': {'category': [778357]}}, {'id': 5031, 'name': 'Edibles', 'imageUrl': 'https://media.sweedpos.com/store/production/1746280622_48e3091b-ac3a-4692-8a41-a40358a7d2b6.png', 'filter': {'category': [778360]}}, {'id': 5029, 'name': 'Pre-Rolls', 'imageUrl': 'https://media.sweedpos.com/store/production/1746280617_2e9c6e0a-f07b-404b-8474-bd46a0885f69.png',"
+  },
+  {
+    "store_id": 458,
+    "response_sample": "[{'id': 5028, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1746280614_a41528fd-a6d2-4319-8fc4-851c65b6ed75.jpg', 'filter': {'category': [778357]}}, {'id': 5031, 'name': 'Edibles', 'imageUrl': 'https://media.sweedpos.com/store/production/1746280622_48e3091b-ac3a-4692-8a41-a40358a7d2b6.png', 'filter': {'category': [778360]}}, {'id': 5029, 'name': 'Pre-Rolls', 'imageUrl': 'https://media.sweedpos.com/store/production/1746280617_2e9c6e0a-f07b-404b-8474-bd46a0885f69.png',"
+  },
+  {
+    "store_id": 506,
+    "response_sample": "[{'id': 611, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1733527942_a1335cb4-603c-44eb-adfc-b4e6b9f5a57d.png', 'filter': {'category': [122145]}}, {'id': 616, 'name': 'Vapes', 'imageUrl': 'https://media.sweedpos.com/store/production/1734641229_1fe31306-7f87-4097-a38f-a84fff18e5b1.png', 'filter': {'category': [122150]}}, {'id': 614, 'name': 'Edibles', 'imageUrl': 'https://media.sweedpos.com/store/production/1733527897_63a121aa-0def-4d9b-b4e1-c3ba90262edb.png', 'filte"
+  },
+  {
+    "store_id": 535,
+    "response_sample": "[{'id': 5453, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1752785917_57475f59-cceb-485a-a916-e33c61393a63.png', 'filter': {'category': [857552]}}, {'id': 5456, 'name': 'Vapes', 'imageUrl': 'https://media.sweedpos.com/store/production/1752785754_c1e1e5bf-4794-4d81-bfac-e183430c9bb3.png', 'filter': {'category': [857556]}}, {'id': 5454, 'name': 'Edibles ', 'imageUrl': 'https://media.sweedpos.com/store/production/1752785892_7fe55320-fa05-4ff2-b082-e1228bc010cf.png', 'f"
+  },
+  {
+    "store_id": 536,
+    "response_sample": "[{'id': 5453, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1752785917_57475f59-cceb-485a-a916-e33c61393a63.png', 'filter': {'category': [857552]}}, {'id': 5456, 'name': 'Vapes', 'imageUrl': 'https://media.sweedpos.com/store/production/1752785754_c1e1e5bf-4794-4d81-bfac-e183430c9bb3.png', 'filter': {'category': [857556]}}, {'id': 5454, 'name': 'Edibles ', 'imageUrl': 'https://media.sweedpos.com/store/production/1752785892_7fe55320-fa05-4ff2-b082-e1228bc010cf.png', 'f"
+  },
+  {
+    "store_id": 537,
+    "response_sample": "[{'id': 5453, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1752785917_57475f59-cceb-485a-a916-e33c61393a63.png', 'filter': {'category': [857552]}}, {'id': 5456, 'name': 'Vapes', 'imageUrl': 'https://media.sweedpos.com/store/production/1752785754_c1e1e5bf-4794-4d81-bfac-e183430c9bb3.png', 'filter': {'category': [857556]}}, {'id': 5454, 'name': 'Edibles ', 'imageUrl': 'https://media.sweedpos.com/store/production/1752785892_7fe55320-fa05-4ff2-b082-e1228bc010cf.png', 'f"
+  },
+  {
+    "store_id": 538,
+    "response_sample": "[{'id': 5453, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1752785917_57475f59-cceb-485a-a916-e33c61393a63.png', 'filter': {'category': [857552]}}, {'id': 5456, 'name': 'Vapes', 'imageUrl': 'https://media.sweedpos.com/store/production/1752785754_c1e1e5bf-4794-4d81-bfac-e183430c9bb3.png', 'filter': {'category': [857556]}}, {'id': 5454, 'name': 'Edibles ', 'imageUrl': 'https://media.sweedpos.com/store/production/1752785892_7fe55320-fa05-4ff2-b082-e1228bc010cf.png', 'f"
+  },
+  {
+    "store_id": 539,
+    "response_sample": "[{'id': 5453, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1752785917_57475f59-cceb-485a-a916-e33c61393a63.png', 'filter': {'category': [857552]}}, {'id': 5456, 'name': 'Vapes', 'imageUrl': 'https://media.sweedpos.com/store/production/1752785754_c1e1e5bf-4794-4d81-bfac-e183430c9bb3.png', 'filter': {'category': [857556]}}, {'id': 5454, 'name': 'Edibles ', 'imageUrl': 'https://media.sweedpos.com/store/production/1752785892_7fe55320-fa05-4ff2-b082-e1228bc010cf.png', 'f"
+  },
+  {
+    "store_id": 540,
+    "response_sample": "[{'id': 5453, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1752785917_57475f59-cceb-485a-a916-e33c61393a63.png', 'filter': {'category': [857552]}}, {'id': 5456, 'name': 'Vapes', 'imageUrl': 'https://media.sweedpos.com/store/production/1752785754_c1e1e5bf-4794-4d81-bfac-e183430c9bb3.png', 'filter': {'category': [857556]}}, {'id': 5454, 'name': 'Edibles ', 'imageUrl': 'https://media.sweedpos.com/store/production/1752785892_7fe55320-fa05-4ff2-b082-e1228bc010cf.png', 'f"
+  },
+  {
+    "store_id": 541,
+    "response_sample": "[{'id': 5453, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1752785917_57475f59-cceb-485a-a916-e33c61393a63.png', 'filter': {'category': [857552]}}, {'id': 5456, 'name': 'Vapes', 'imageUrl': 'https://media.sweedpos.com/store/production/1752785754_c1e1e5bf-4794-4d81-bfac-e183430c9bb3.png', 'filter': {'category': [857556]}}, {'id': 5454, 'name': 'Edibles ', 'imageUrl': 'https://media.sweedpos.com/store/production/1752785892_7fe55320-fa05-4ff2-b082-e1228bc010cf.png', 'f"
+  },
+  {
+    "store_id": 542,
+    "response_sample": "[{'id': 5453, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1752785917_57475f59-cceb-485a-a916-e33c61393a63.png', 'filter': {'category': [857552]}}, {'id': 5456, 'name': 'Vapes', 'imageUrl': 'https://media.sweedpos.com/store/production/1752785754_c1e1e5bf-4794-4d81-bfac-e183430c9bb3.png', 'filter': {'category': [857556]}}, {'id': 5454, 'name': 'Edibles ', 'imageUrl': 'https://media.sweedpos.com/store/production/1752785892_7fe55320-fa05-4ff2-b082-e1228bc010cf.png', 'f"
+  },
+  {
+    "store_id": 543,
+    "response_sample": "[{'id': 5453, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1752785917_57475f59-cceb-485a-a916-e33c61393a63.png', 'filter': {'category': [857552]}}, {'id': 5456, 'name': 'Vapes', 'imageUrl': 'https://media.sweedpos.com/store/production/1752785754_c1e1e5bf-4794-4d81-bfac-e183430c9bb3.png', 'filter': {'category': [857556]}}, {'id': 5454, 'name': 'Edibles ', 'imageUrl': 'https://media.sweedpos.com/store/production/1752785892_7fe55320-fa05-4ff2-b082-e1228bc010cf.png', 'f"
+  },
+  {
+    "store_id": 545,
+    "response_sample": "[{'id': 5453, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1752785917_57475f59-cceb-485a-a916-e33c61393a63.png', 'filter': {'category': [857552]}}, {'id': 5456, 'name': 'Vapes', 'imageUrl': 'https://media.sweedpos.com/store/production/1752785754_c1e1e5bf-4794-4d81-bfac-e183430c9bb3.png', 'filter': {'category': [857556]}}, {'id': 5454, 'name': 'Edibles ', 'imageUrl': 'https://media.sweedpos.com/store/production/1752785892_7fe55320-fa05-4ff2-b082-e1228bc010cf.png', 'f"
+  },
+  {
+    "store_id": 546,
+    "response_sample": "[{'id': 5028, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1746280614_a41528fd-a6d2-4319-8fc4-851c65b6ed75.jpg', 'filter': {'category': [778357]}}, {'id': 5031, 'name': 'Edibles', 'imageUrl': 'https://media.sweedpos.com/store/production/1746280622_48e3091b-ac3a-4692-8a41-a40358a7d2b6.png', 'filter': {'category': [778360]}}, {'id': 5029, 'name': 'Pre-Rolls', 'imageUrl': 'https://media.sweedpos.com/store/production/1746280617_2e9c6e0a-f07b-404b-8474-bd46a0885f69.png',"
+  },
+  {
+    "store_id": 547,
+    "response_sample": "[{'id': 1044, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1729814454_b8fcae75-c004-49a3-a6ec-9f1e70d1793d.png', 'filter': {'category': [219228]}}, {'id': 1050, 'name': 'Vapes', 'imageUrl': 'https://media.sweedpos.com/store/production/1747944787_453bc5cb-a2cd-4999-a26a-784ca71d072a.png', 'filter': {'category': [219234]}}, {'id': 1067, 'name': 'Edibles', 'imageUrl': 'https://media.sweedpos.com/store/production/1729814635_ea15785e-9582-451e-958e-ab34a382fb21.png', 'fi"
+  },
+  {
+    "store_id": 548,
+    "response_sample": "[{'id': 1044, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1729814454_b8fcae75-c004-49a3-a6ec-9f1e70d1793d.png', 'filter': {'category': [219228]}}, {'id': 1050, 'name': 'Vapes', 'imageUrl': 'https://media.sweedpos.com/store/production/1747944787_453bc5cb-a2cd-4999-a26a-784ca71d072a.png', 'filter': {'category': [219234]}}, {'id': 1067, 'name': 'Edibles', 'imageUrl': 'https://media.sweedpos.com/store/production/1729814635_ea15785e-9582-451e-958e-ab34a382fb21.png', 'fi"
+  },
+  {
+    "store_id": 550,
+    "response_sample": "[{'id': 5348, 'name': 'Accessories', 'imageUrl': 'https://media.sweedpos.com/store/production/1754405028_380af20d-5659-412d-9915-43bc7fb84d4e.png', 'filter': {'category': [814253]}}, {'id': 5349, 'name': 'Concentrates', 'imageUrl': 'https://media.sweedpos.com/store/production/1754405038_a9390f1f-421f-493b-85c5-8b2a09c12554.png', 'filter': {'category': [814254]}}, {'id': 5350, 'name': 'Edibles', 'imageUrl': 'https://media.sweedpos.com/store/production/1754405046_03ae50cd-0db5-433c-a73b-d5cdcabccf"
+  },
+  {
+    "store_id": 552,
+    "response_sample": "[{'id': 5131, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1747975676_9effe52a-48c3-45f2-b611-e96fdb6c3e96.png', 'filter': {'category': [800234]}}, {'id': 5130, 'name': 'Vapes', 'imageUrl': 'https://media.sweedpos.com/store/production/1747975650_f34e4a3f-9ce4-42e1-b418-374a029f733f.png', 'filter': {'category': [800233]}}, {'id': 5129, 'name': 'Edibles', 'imageUrl': 'https://media.sweedpos.com/store/production/1747975595_858d1864-c1d7-42b4-ab87-deee08e467b8.png', 'fi"
+  },
+  {
+    "store_id": 553,
+    "response_sample": "[{'id': 5131, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1747975676_9effe52a-48c3-45f2-b611-e96fdb6c3e96.png', 'filter': {'category': [800234]}}, {'id': 5130, 'name': 'Vapes', 'imageUrl': 'https://media.sweedpos.com/store/production/1747975650_f34e4a3f-9ce4-42e1-b418-374a029f733f.png', 'filter': {'category': [800233]}}, {'id': 5129, 'name': 'Edibles', 'imageUrl': 'https://media.sweedpos.com/store/production/1747975595_858d1864-c1d7-42b4-ab87-deee08e467b8.png', 'fi"
+  },
+  {
+    "store_id": 554,
+    "response_sample": "[{'id': 5131, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1747975676_9effe52a-48c3-45f2-b611-e96fdb6c3e96.png', 'filter': {'category': [800234]}}, {'id': 5130, 'name': 'Vapes', 'imageUrl': 'https://media.sweedpos.com/store/production/1747975650_f34e4a3f-9ce4-42e1-b418-374a029f733f.png', 'filter': {'category': [800233]}}, {'id': 5129, 'name': 'Edibles', 'imageUrl': 'https://media.sweedpos.com/store/production/1747975595_858d1864-c1d7-42b4-ab87-deee08e467b8.png', 'fi"
+  },
+  {
+    "store_id": 555,
+    "response_sample": "[{'id': 5131, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1747975676_9effe52a-48c3-45f2-b611-e96fdb6c3e96.png', 'filter': {'category': [800234]}}, {'id': 5130, 'name': 'Vapes', 'imageUrl': 'https://media.sweedpos.com/store/production/1747975650_f34e4a3f-9ce4-42e1-b418-374a029f733f.png', 'filter': {'category': [800233]}}, {'id': 5129, 'name': 'Edibles', 'imageUrl': 'https://media.sweedpos.com/store/production/1747975595_858d1864-c1d7-42b4-ab87-deee08e467b8.png', 'fi"
+  },
+  {
+    "store_id": 556,
+    "response_sample": "[{'id': 3024, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1756440738_826c951d-caef-4b74-a4cc-b44e49f87ed6.png', 'filter': {'category': [345773]}}, {'id': 5544, 'name': 'Infused Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1756441083_0231f96f-d0d0-4810-9fa4-d443d8b6ee3c.png', 'filter': {'category': [891145]}}, {'id': 3086, 'name': 'Pre-Rolls', 'imageUrl': 'https://media.sweedpos.com/store/production/1718657049_e6c807cc-2e39-4ff8-9644-ddacb4fe5f9"
+  },
+  {
+    "store_id": 560,
+    "response_sample": "[{'id': 5132, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1748352060_9e818172-e460-4fcb-9a52-90e7b214b1f5.png', 'filter': {'category': [801933]}}, {'id': 5138, 'name': 'Vapes', 'imageUrl': 'https://media.sweedpos.com/store/production/1748352086_8773bf38-6ea4-41a8-bdda-7f1c875e229b.png', 'filter': {'category': [801939]}}]"
+  },
+  {
+    "store_id": 564,
+    "response_sample": "[{'id': 5767, 'name': '[BioFL] T-shirt', 'imageUrl': None, 'filter': {'category': [970188]}}, {'id': 5755, 'name': '[BioFL][22] Infused Edible', 'imageUrl': None, 'filter': {'category': [970172]}}, {'id': 5756, 'name': '[BioFL][24] Extract for Inhalation', 'imageUrl': None, 'filter': {'category': [970173]}}, {'id': 5757, 'name': '[BioFL][25] Infused Topicals', 'imageUrl': None, 'filter': {'category': [970174]}}, {'id': 5758, 'name': '[BioFL][34] Capsule/Pill/Tablet', 'imageUrl': None, 'filter': "
+  },
+  {
+    "store_id": 566,
+    "response_sample": "[{'id': 167, 'name': 'Edibles', 'imageUrl': 'https://media.sweedpos.com/store/production/1761924077_600e7c98-e88c-47e8-a18f-2ea5ad588625.png', 'filter': {'category': [35883]}}, {'id': 174, 'name': 'Vaporizers', 'imageUrl': 'https://media.sweedpos.com/store/production/1761924175_be79f0d4-57c4-4149-a346-6f1731bc40e8.png', 'filter': {'category': [35890]}}, {'id': 175, 'name': 'Prerolls', 'imageUrl': 'https://media.sweedpos.com/store/production/1761924213_a262b5b9-e2b6-44c4-98aa-3dc77f7bc5b8.png', '"
+  },
+  {
+    "store_id": 569,
+    "response_sample": "[{'id': 167, 'name': 'Edibles', 'imageUrl': 'https://media.sweedpos.com/store/production/1761924077_600e7c98-e88c-47e8-a18f-2ea5ad588625.png', 'filter': {'category': [35883]}}, {'id': 174, 'name': 'Vaporizers', 'imageUrl': 'https://media.sweedpos.com/store/production/1761924175_be79f0d4-57c4-4149-a346-6f1731bc40e8.png', 'filter': {'category': [35890]}}, {'id': 175, 'name': 'Prerolls', 'imageUrl': 'https://media.sweedpos.com/store/production/1761924213_a262b5b9-e2b6-44c4-98aa-3dc77f7bc5b8.png', '"
+  },
+  {
+    "store_id": 572,
+    "response_sample": "[{'id': 3406, 'name': 'Accessories', 'imageUrl': 'https://media.sweedpos.com/store/production/1721402686_95405b99-647d-4004-8855-e339f0d4878d.png', 'filter': {'category': [414561]}}, {'id': 3408, 'name': 'Concentrate', 'imageUrl': 'https://media.sweedpos.com/store/production/1721402741_5efa7894-ce52-4773-b534-45c2130be633.png', 'filter': {'category': [414563]}}, {'id': 3407, 'name': 'Edible', 'imageUrl': 'https://media.sweedpos.com/store/production/1722973316_81d7a8e8-e9b4-4d1a-a244-210cdaacc811"
+  },
+  {
+    "store_id": 574,
+    "response_sample": "[{'id': 5894, 'name': 'Merchandise', 'imageUrl': None, 'filter': {'category': [1065218]}}, {'id': 5738, 'name': 'Tincture', 'imageUrl': None, 'filter': {'category': [938645]}}]"
+  },
+  {
+    "store_id": 576,
+    "response_sample": "[{'id': 5687, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1759951888_16443bd4-6675-4f15-8b43-810173e13f8b.png', 'filter': {'category': [922388]}}, {'id': 5685, 'name': 'Vapes', 'imageUrl': 'https://media.sweedpos.com/store/production/1759951856_faf2f033-0512-4b61-b4bc-19cd228f8054.png', 'filter': {'category': [922386]}}, {'id': 5686, 'name': 'Edibles', 'imageUrl': 'https://media.sweedpos.com/store/production/1759951871_6c2acb87-312a-46cf-a7a6-1a0ede69ecf2.png', 'fi"
+  },
+  {
+    "store_id": 577,
+    "response_sample": "[{'id': 5687, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1759951888_16443bd4-6675-4f15-8b43-810173e13f8b.png', 'filter': {'category': [922388]}}, {'id': 5685, 'name': 'Vapes', 'imageUrl': 'https://media.sweedpos.com/store/production/1759951856_faf2f033-0512-4b61-b4bc-19cd228f8054.png', 'filter': {'category': [922386]}}, {'id': 5686, 'name': 'Edibles', 'imageUrl': 'https://media.sweedpos.com/store/production/1759951871_6c2acb87-312a-46cf-a7a6-1a0ede69ecf2.png', 'fi"
+  },
+  {
+    "store_id": 578,
+    "response_sample": "[{'id': 5687, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1759951888_16443bd4-6675-4f15-8b43-810173e13f8b.png', 'filter': {'category': [922388]}}, {'id': 5685, 'name': 'Vapes', 'imageUrl': 'https://media.sweedpos.com/store/production/1759951856_faf2f033-0512-4b61-b4bc-19cd228f8054.png', 'filter': {'category': [922386]}}, {'id': 5686, 'name': 'Edibles', 'imageUrl': 'https://media.sweedpos.com/store/production/1759951871_6c2acb87-312a-46cf-a7a6-1a0ede69ecf2.png', 'fi"
+  },
+  {
+    "store_id": 579,
+    "response_sample": "[{'id': 5687, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1759951888_16443bd4-6675-4f15-8b43-810173e13f8b.png', 'filter': {'category': [922388]}}, {'id': 5685, 'name': 'Vapes', 'imageUrl': 'https://media.sweedpos.com/store/production/1759951856_faf2f033-0512-4b61-b4bc-19cd228f8054.png', 'filter': {'category': [922386]}}, {'id': 5686, 'name': 'Edibles', 'imageUrl': 'https://media.sweedpos.com/store/production/1759951871_6c2acb87-312a-46cf-a7a6-1a0ede69ecf2.png', 'fi"
+  },
+  {
+    "store_id": 580,
+    "response_sample": "[{'id': 3950, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1729814987_a7c05d7f-4e53-49c5-8ba7-d658d3fc3f66.png', 'filter': {'category': [565458]}}, {'id': 3957, 'name': 'Deli Style', 'imageUrl': 'https://media.sweedpos.com/store/production/1729815231_5f3825af-74f6-468f-b246-af67194f52cc.png', 'filter': {'category': [565465]}}, {'id': 3949, 'name': 'Vapes', 'imageUrl': 'https://media.sweedpos.com/store/production/1747944816_cee060a6-bc5e-437a-bb05-dd28baa70a17.png', "
+  },
+  {
+    "store_id": 583,
+    "response_sample": "[{'id': 3950, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1729814987_a7c05d7f-4e53-49c5-8ba7-d658d3fc3f66.png', 'filter': {'category': [565458]}}, {'id': 3957, 'name': 'Deli Style', 'imageUrl': 'https://media.sweedpos.com/store/production/1729815231_5f3825af-74f6-468f-b246-af67194f52cc.png', 'filter': {'category': [565465]}}, {'id': 3949, 'name': 'Vapes', 'imageUrl': 'https://media.sweedpos.com/store/production/1747944816_cee060a6-bc5e-437a-bb05-dd28baa70a17.png', "
+  },
+  {
+    "store_id": 584,
+    "response_sample": "[{'id': 3142, 'name': 'Accessories', 'imageUrl': 'https://media.sweedpos.com/store/production/1724676022_fb38a664-7f6a-42a6-b375-fd0738d2a549.png', 'filter': {'category': [371586]}}, {'id': 3143, 'name': 'Concentrates', 'imageUrl': 'https://media.sweedpos.com/store/production/1724676072_33d20418-4fb6-4e31-a5a1-6241cf217f54.png', 'filter': {'category': [371587]}}, {'id': 3144, 'name': 'Edible', 'imageUrl': 'https://media.sweedpos.com/store/production/1724676094_ba426b53-aee4-4412-878b-5fd3628bcc6"
+  },
+  {
+    "store_id": 585,
+    "response_sample": "[{'id': 3406, 'name': 'Accessories', 'imageUrl': 'https://media.sweedpos.com/store/production/1721402686_95405b99-647d-4004-8855-e339f0d4878d.png', 'filter': {'category': [414561]}}, {'id': 3408, 'name': 'Concentrate', 'imageUrl': 'https://media.sweedpos.com/store/production/1721402741_5efa7894-ce52-4773-b534-45c2130be633.png', 'filter': {'category': [414563]}}, {'id': 3407, 'name': 'Edible', 'imageUrl': 'https://media.sweedpos.com/store/production/1722973316_81d7a8e8-e9b4-4d1a-a244-210cdaacc811"
+  },
+  {
+    "store_id": 590,
+    "response_sample": "[{'id': 5811, 'name': 'Accessories', 'imageUrl': 'https://media.sweedpos.com/store/production/1763930511_b8640ae2-f48f-4a3f-88da-2edc59038245.png', 'filter': {'category': [1006315]}}, {'id': 5808, 'name': 'Cartridges', 'imageUrl': 'https://media.sweedpos.com/store/production/1763930500_9ebc05f0-95bd-4485-9d27-082a5093f6b1.png', 'filter': {'category': [1006312]}}, {'id': 5813, 'name': 'Concentrates', 'imageUrl': 'https://media.sweedpos.com/store/production/1763930519_9d779521-4749-4744-a180-523d0"
+  },
+  {
+    "store_id": 591,
+    "response_sample": "[{'id': 5811, 'name': 'Accessories', 'imageUrl': 'https://media.sweedpos.com/store/production/1763930511_b8640ae2-f48f-4a3f-88da-2edc59038245.png', 'filter': {'category': [1006315]}}, {'id': 5808, 'name': 'Cartridges', 'imageUrl': 'https://media.sweedpos.com/store/production/1763930500_9ebc05f0-95bd-4485-9d27-082a5093f6b1.png', 'filter': {'category': [1006312]}}, {'id': 5813, 'name': 'Concentrates', 'imageUrl': 'https://media.sweedpos.com/store/production/1763930519_9d779521-4749-4744-a180-523d0"
+  },
+  {
+    "store_id": 592,
+    "response_sample": "[{'id': 3406, 'name': 'Accessories', 'imageUrl': 'https://media.sweedpos.com/store/production/1721402686_95405b99-647d-4004-8855-e339f0d4878d.png', 'filter': {'category': [414561]}}, {'id': 3408, 'name': 'Concentrate', 'imageUrl': 'https://media.sweedpos.com/store/production/1721402741_5efa7894-ce52-4773-b534-45c2130be633.png', 'filter': {'category': [414563]}}, {'id': 3407, 'name': 'Edible', 'imageUrl': 'https://media.sweedpos.com/store/production/1722973316_81d7a8e8-e9b4-4d1a-a244-210cdaacc811"
+  },
+  {
+    "store_id": 593,
+    "response_sample": "[{'id': 5882, 'name': 'EDI', 'imageUrl': None, 'filter': {'category': [1052052]}}, {'id': 5883, 'name': 'FLO', 'imageUrl': None, 'filter': {'category': [1052053]}}, {'id': 5881, 'name': 'VAPES', 'imageUrl': None, 'filter': {'category': [1052051]}}]"
+  },
+  {
+    "store_id": 598,
+    "response_sample": "[{'id': 5882, 'name': 'EDI', 'imageUrl': None, 'filter': {'category': [1052052]}}, {'id': 5883, 'name': 'FLO', 'imageUrl': None, 'filter': {'category': [1052053]}}, {'id': 5881, 'name': 'VAPES', 'imageUrl': None, 'filter': {'category': [1052051]}}]"
+  },
+  {
+    "store_id": 602,
+    "response_sample": "[{'id': 5811, 'name': 'Accessories', 'imageUrl': 'https://media.sweedpos.com/store/production/1763930511_b8640ae2-f48f-4a3f-88da-2edc59038245.png', 'filter': {'category': [1006315]}}, {'id': 5808, 'name': 'Cartridges', 'imageUrl': 'https://media.sweedpos.com/store/production/1763930500_9ebc05f0-95bd-4485-9d27-082a5093f6b1.png', 'filter': {'category': [1006312]}}, {'id': 5813, 'name': 'Concentrates', 'imageUrl': 'https://media.sweedpos.com/store/production/1763930519_9d779521-4749-4744-a180-523d0"
+  },
+  {
+    "store_id": 603,
+    "response_sample": "[{'id': 611, 'name': 'Flower', 'imageUrl': 'https://media.sweedpos.com/store/production/1733527942_a1335cb4-603c-44eb-adfc-b4e6b9f5a57d.png', 'filter': {'category': [122145]}}, {'id': 616, 'name': 'Vapes', 'imageUrl': 'https://media.sweedpos.com/store/production/1734641229_1fe31306-7f87-4097-a38f-a84fff18e5b1.png', 'filter': {'category': [122150]}}, {'id': 614, 'name': 'Edibles', 'imageUrl': 'https://media.sweedpos.com/store/production/1733527897_63a121aa-0def-4d9b-b4e1-c3ba90262edb.png', 'filte"
+  },
+  {
+    "store_id": 604,
+    "response_sample": "[{'id': 5894, 'name': 'Merchandise', 'imageUrl': None, 'filter': {'category': [1065218]}}, {'id': 5738, 'name': 'Tincture', 'imageUrl': None, 'filter': {'category': [938645]}}]"
+  },
+  {
+    "store_id": 605,
+    "response_sample": "[{'id': 3406, 'name': 'Accessories', 'imageUrl': 'https://media.sweedpos.com/store/production/1721402686_95405b99-647d-4004-8855-e339f0d4878d.png', 'filter': {'category': [414561]}}, {'id': 3408, 'name': 'Concentrate', 'imageUrl': 'https://media.sweedpos.com/store/production/1721402741_5efa7894-ce52-4773-b534-45c2130be633.png', 'filter': {'category': [414563]}}, {'id': 3407, 'name': 'Edible', 'imageUrl': 'https://media.sweedpos.com/store/production/1722973316_81d7a8e8-e9b4-4d1a-a244-210cdaacc811"
+  }
+]
