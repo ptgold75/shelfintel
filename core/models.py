@@ -1,15 +1,20 @@
+# core/models.py
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
-from sqlalchemy import String, DateTime, Integer, Float, Text, ForeignKey, func
+from sqlalchemy import String, DateTime, Integer, Float, Text, ForeignKey, Boolean, func
 import uuid
+
 
 class Base(DeclarativeBase):
     pass
 
+
 def _uuid():
     return str(uuid.uuid4())
 
+
 class Dispensary(Base):
     __tablename__ = "dispensary"
+    
     dispensary_id: Mapped[str] = mapped_column(String, primary_key=True, default=_uuid)
     name: Mapped[str] = mapped_column(String(300), nullable=False)
     state: Mapped[str] = mapped_column(String(2), nullable=False, default="MD")
@@ -20,10 +25,25 @@ class Dispensary(Base):
     email: Mapped[str] = mapped_column(String(200), nullable=True)
     menu_url: Mapped[str] = mapped_column(Text, nullable=True)
     menu_provider: Mapped[str] = mapped_column(String(50), nullable=True)
+    
+    # JSON blob for provider-specific metadata (store_id, tenant_id, api_base, etc.)
+    # Store as TEXT and parse as JSON in application code
+    provider_metadata: Mapped[str] = mapped_column(Text, nullable=True)
+    
+    # Discovery metadata
+    discovery_confidence: Mapped[float] = mapped_column(Float, nullable=True)
+    last_discovered_at: Mapped[str] = mapped_column(DateTime(timezone=True), nullable=True)
+    
+    # Status
+    is_active: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
+    
     created_at: Mapped[str] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    updated_at: Mapped[str] = mapped_column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
+
 
 class ScrapeRun(Base):
     __tablename__ = "scrape_run"
+    
     scrape_run_id: Mapped[str] = mapped_column(String, primary_key=True, default=_uuid)
     dispensary_id: Mapped[str] = mapped_column(String, ForeignKey("dispensary.dispensary_id"), nullable=False)
     started_at: Mapped[str] = mapped_column(DateTime(timezone=True), server_default=func.now())
@@ -33,8 +53,10 @@ class ScrapeRun(Base):
     error_message: Mapped[str] = mapped_column(Text, nullable=True)
     records_found: Mapped[int] = mapped_column(Integer, nullable=True)
 
+
 class RawMenuItem(Base):
     __tablename__ = "raw_menu_item"
+    
     raw_menu_item_id: Mapped[str] = mapped_column(String, primary_key=True, default=_uuid)
     scrape_run_id: Mapped[str] = mapped_column(String, ForeignKey("scrape_run.scrape_run_id"), nullable=False)
     dispensary_id: Mapped[str] = mapped_column(String, ForeignKey("dispensary.dispensary_id"), nullable=False)
@@ -51,17 +73,16 @@ class RawMenuItem(Base):
 
     provider_product_id: Mapped[str] = mapped_column(String(200), nullable=True)
     raw_json: Mapped[str] = mapped_column(Text, nullable=True)
-# --- Availability tracking tables ---
+
 
 class MenuItemState(Base):
+    """Tracks the current availability state of each product at each dispensary."""
     __tablename__ = "menu_item_state"
 
     menu_item_state_id: Mapped[str] = mapped_column(String, primary_key=True, default=_uuid)
-
     dispensary_id: Mapped[str] = mapped_column(String, ForeignKey("dispensary.dispensary_id"), nullable=False)
 
-    # This is the stable identifier for a product coming from the provider.
-    # We can start with provider_product_id from RawMenuItem.
+    # Stable identifier for product from provider
     provider_product_id: Mapped[str] = mapped_column(String(200), nullable=False)
 
     raw_name: Mapped[str] = mapped_column(Text, nullable=True)
@@ -71,17 +92,17 @@ class MenuItemState(Base):
     first_seen_at: Mapped[str] = mapped_column(DateTime(timezone=True), nullable=False, server_default=func.now())
     last_seen_at: Mapped[str] = mapped_column(DateTime(timezone=True), nullable=False, server_default=func.now())
 
-    currently_listed: Mapped[bool] = mapped_column(Integer, nullable=False, default=1)  # 1/0 works fine in PG too
+    currently_listed: Mapped[bool] = mapped_column(Integer, nullable=False, default=1)
     last_missing_at: Mapped[str] = mapped_column(DateTime(timezone=True), nullable=True)
 
     updated_at: Mapped[str] = mapped_column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
 
 
 class MenuItemEvent(Base):
+    """Records appeared/disappeared events for products."""
     __tablename__ = "menu_item_event"
 
     menu_item_event_id: Mapped[str] = mapped_column(String, primary_key=True, default=_uuid)
-
     dispensary_id: Mapped[str] = mapped_column(String, ForeignKey("dispensary.dispensary_id"), nullable=False)
     scrape_run_id: Mapped[str] = mapped_column(String, ForeignKey("scrape_run.scrape_run_id"), nullable=False)
 
@@ -89,7 +110,6 @@ class MenuItemEvent(Base):
 
     # "appeared" or "disappeared"
     event_type: Mapped[str] = mapped_column(String(20), nullable=False)
-
     event_at: Mapped[str] = mapped_column(DateTime(timezone=True), nullable=False, server_default=func.now())
 
     raw_name: Mapped[str] = mapped_column(Text, nullable=True)
