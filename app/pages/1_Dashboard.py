@@ -1,64 +1,33 @@
-import os, sys
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
+# app/pages/1_Dashboard.py
+"""Dashboard - uses pre-computed summaries."""
+
+import sys
+import os
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 import streamlit as st
-import pandas as pd
 from sqlalchemy import text
-from zoneinfo import ZoneInfo
-
 from core.db import get_engine
 
-# -----------------------------
-# Timezone display
-# -----------------------------
-LOCAL_TZ_NAME = "America/New_York"
-LOCAL_TZ = ZoneInfo(LOCAL_TZ_NAME)
+st.set_page_config(page_title="Dashboard", page_icon="📊", layout="wide")
+st.title("📊 Dashboard")
 
-# -----------------------------
-# Page setup
-# -----------------------------
-st.title("Dashboard")
-st.caption(f"Times shown in {LOCAL_TZ_NAME}")
+try:
+    engine = get_engine()
+    with engine.connect() as conn:
+        # Use summary table (fast)
+        totals = conn.execute(text("""
+            SELECT dimension, value_count 
+            FROM analytics_summary 
+            WHERE summary_type = 'total'
+        """)).fetchall()
+        stats = {row[0]: row[1] for row in totals}
 
-engine = get_engine()
+    c1, c2, c3 = st.columns(3)
+    c1.metric("Dispensaries", f"{stats.get('dispensaries', 0):,}")
+    c2.metric("Scrape Runs", f"{stats.get('scrape_runs', 0):,}")
+    c3.metric("Products", f"{stats.get('products', 0):,}")
 
-# -----------------------------
-# Top metrics
-# -----------------------------
-c1, c2, c3 = st.columns(3)
-with engine.connect() as conn:
-    d = conn.execute(text("select count(*) from public.dispensary")).scalar()
-    r = conn.execute(text("select count(*) from public.scrape_run")).scalar()
-    i = conn.execute(text("select count(*) from public.raw_menu_item")).scalar()
-
-c1.metric("Dispensaries", int(d or 0))
-c2.metric("Scrape runs", int(r or 0))
-c3.metric("Raw menu items", int(i or 0))
-
-# -----------------------------
-# Latest raw menu items
-# -----------------------------
-st.subheader("Latest raw menu items")
-
-q = """
-select
-  observed_at,
-  raw_category,
-  raw_brand,
-  raw_name,
-  raw_price,
-  raw_discount_price
-from public.raw_menu_item
-order by observed_at desc
-limit 200
-"""
-df = pd.read_sql(q, engine)
-
-# Convert observed_at from UTC → local time for display
-if not df.empty:
-    df["observed_at"] = (
-        pd.to_datetime(df["observed_at"], utc=True)
-        .dt.tz_convert(LOCAL_TZ_NAME)
-    )
-
-st.dataframe(df, use_container_width=True)
+except Exception as e:
+    st.error(f"Error: {e}")
+    st.info("Make sure analytics summaries have been populated.")
