@@ -16,42 +16,94 @@ st.title("💰 Price Analysis")
 
 engine = get_engine()
 
-@st.cache_data(ttl=600)
-def get_price_stats_by_category():
+# Sidebar - State filter
+st.sidebar.header("🔍 Filters")
+
+@st.cache_data(ttl=300)
+def get_states():
     with engine.connect() as conn:
-        return pd.read_sql(text("""
-            SELECT raw_category as category,
-                   COUNT(*) as products,
-                   ROUND(AVG(raw_price)::numeric, 2) as avg_price,
-                   ROUND(MIN(raw_price)::numeric, 2) as min_price,
-                   ROUND(MAX(raw_price)::numeric, 2) as max_price
-            FROM raw_menu_item
-            WHERE raw_price > 0 AND raw_price < 1000
-            AND observed_at > NOW() - INTERVAL '24 hours'
-            GROUP BY raw_category
-            HAVING COUNT(*) > 100
-            ORDER BY avg_price DESC
+        df = pd.read_sql(text("""
+            SELECT DISTINCT COALESCE(state, 'Unknown') as state
+            FROM dispensary 
+            WHERE state IS NOT NULL
+            ORDER BY state
         """), conn)
+    return ['All States'] + df['state'].tolist()
+
+states = get_states()
+selected_state = st.sidebar.selectbox("State", states, index=0)
+
+# Min price filter (exclude promos)
+min_price_filter = st.sidebar.slider("Minimum Price (exclude promos)", 1, 20, 5)
 
 @st.cache_data(ttl=600)
-def get_cheapest_by_category(category, limit=20):
+def get_price_stats_by_category(state, min_price):
     with engine.connect() as conn:
-        return pd.read_sql(text("""
-            SELECT r.raw_name as product, r.raw_brand as brand, 
-                   r.raw_price as price, d.name as store, d.state
-            FROM raw_menu_item r
-            JOIN dispensary d ON d.dispensary_id = r.dispensary_id
-            WHERE r.raw_category = :cat
-            AND r.raw_price > 0
-            AND r.observed_at > NOW() - INTERVAL '24 hours'
-            ORDER BY r.raw_price ASC
-            LIMIT :lim
-        """), conn, params={"cat": category, "lim": limit})
+        if state == 'All States':
+            return pd.read_sql(text("""
+                SELECT raw_category as category,
+                       COUNT(*) as products,
+                       ROUND(AVG(raw_price)::numeric, 2) as avg_price,
+                       ROUND(MIN(raw_price)::numeric, 2) as min_price,
+                       ROUND(MAX(raw_price)::numeric, 2) as max_price
+                FROM raw_menu_item
+                WHERE raw_price >= :min_price AND raw_price < 1000
+                AND observed_at > NOW() - INTERVAL '24 hours'
+                GROUP BY raw_category
+                HAVING COUNT(*) > 50
+                ORDER BY avg_price DESC
+            """), conn, params={"min_price": min_price})
+        else:
+            return pd.read_sql(text("""
+                SELECT r.raw_category as category,
+                       COUNT(*) as products,
+                       ROUND(AVG(r.raw_price)::numeric, 2) as avg_price,
+                       ROUND(MIN(r.raw_price)::numeric, 2) as min_price,
+                       ROUND(MAX(r.raw_price)::numeric, 2) as max_price
+                FROM raw_menu_item r
+                JOIN dispensary d ON d.dispensary_id = r.dispensary_id
+                WHERE r.raw_price >= :min_price AND r.raw_price < 1000
+                AND r.observed_at > NOW() - INTERVAL '24 hours'
+                AND d.state = :state
+                GROUP BY r.raw_category
+                HAVING COUNT(*) > 10
+                ORDER BY avg_price DESC
+            """), conn, params={"min_price": min_price, "state": state})
 
 @st.cache_data(ttl=600)
-def get_vape_price_analysis():
+def get_cheapest_by_category(category, state, min_price, limit=20):
     with engine.connect() as conn:
-        return pd.read_sql(text("""
+        if state == 'All States':
+            return pd.read_sql(text("""
+                SELECT r.raw_name as product, r.raw_brand as brand, 
+                       r.raw_price as price, d.name as store, d.state
+                FROM raw_menu_item r
+                JOIN dispensary d ON d.dispensary_id = r.dispensary_id
+                WHERE r.raw_category = :cat
+                AND r.raw_price >= :min_price
+                AND r.observed_at > NOW() - INTERVAL '24 hours'
+                ORDER BY r.raw_price ASC
+                LIMIT :lim
+            """), conn, params={"cat": category, "min_price": min_price, "lim": limit})
+        else:
+            return pd.read_sql(text("""
+                SELECT r.raw_name as product, r.raw_brand as brand, 
+                       r.raw_price as price, d.name as store, d.state
+                FROM raw_menu_item r
+                JOIN dispensary d ON d.dispensary_id = r.dispensary_id
+                WHERE r.raw_category = :cat
+                AND r.raw_price >= :min_price
+                AND r.observed_at > NOW() - INTERVAL '24 hours'
+                AND d.state = :state
+                ORDER BY r.raw_price ASC
+                LIMIT :lim
+            """), conn, params={"cat": category, "min_price": min_price, "state": state, "lim": limit})
+
+@st.cache_data(ttl=600)
+def get_vape_price_analysis(state, min_price):
+    with engine.connect() as conn:
+        state_filter = "AND d.state = :state" if state != 'All States' else ""
+        return pd.read_sql(text(f"""
             SELECT r.raw_name as product, r.raw_brand as brand,
                    r.raw_price as price, d.name as store, d.state,
                    CASE 
@@ -64,37 +116,46 @@ def get_vape_price_analysis():
             FROM raw_menu_item r
             JOIN dispensary d ON d.dispensary_id = r.dispensary_id
             WHERE (r.raw_category ILIKE '%vape%' OR r.raw_category ILIKE '%cart%')
-            AND r.raw_price > 0 AND r.raw_price < 200
+            AND r.raw_price >= :min_price AND r.raw_price < 200
             AND r.observed_at > NOW() - INTERVAL '24 hours'
+            {state_filter}
             ORDER BY r.raw_price ASC
             LIMIT 500
-        """), conn)
+        """), conn, params={"min_price": min_price, "state": state} if state != 'All States' else {"min_price": min_price})
 
 @st.cache_data(ttl=600)
-def get_deals():
+def get_deals(state, min_price):
     with engine.connect() as conn:
-        return pd.read_sql(text("""
+        state_filter = "AND d.state = :state" if state != 'All States' else ""
+        params = {"min_price": min_price}
+        if state != 'All States':
+            params["state"] = state
+        return pd.read_sql(text(f"""
             SELECT r.raw_name as product, r.raw_brand as brand, r.raw_category as category,
                    r.raw_price as original_price, r.raw_discount_price as sale_price,
                    ROUND((r.raw_price - r.raw_discount_price)::numeric, 2) as savings,
                    ROUND(((r.raw_price - r.raw_discount_price) / r.raw_price * 100)::numeric, 0) as pct_off,
-                   d.name as store
+                   d.name as store, d.state
             FROM raw_menu_item r
             JOIN dispensary d ON d.dispensary_id = r.dispensary_id
             WHERE r.raw_discount_price IS NOT NULL 
-            AND r.raw_discount_price > 0
+            AND r.raw_discount_price >= :min_price
             AND r.raw_discount_price < r.raw_price
             AND r.observed_at > NOW() - INTERVAL '24 hours'
+            {state_filter}
             ORDER BY (r.raw_price - r.raw_discount_price) DESC
             LIMIT 50
-        """), conn)
+        """), conn, params=params)
+
+# Show selected state
+st.info(f"📍 Showing prices for **{selected_state}** | Min price: **${min_price_filter}** (excludes promos)")
 
 tab1, tab2, tab3, tab4 = st.tabs(["📊 Category Prices", "💨 Vape Analysis", "🏷️ Best Deals", "🔍 Price Search"])
 
 with tab1:
     st.header("Average Prices by Category")
     try:
-        price_df = get_price_stats_by_category()
+        price_df = get_price_stats_by_category(selected_state, min_price_filter)
         if not price_df.empty:
             col1, col2 = st.columns(2)
             with col1:
@@ -111,15 +172,17 @@ with tab1:
             st.subheader("Find Cheapest Products")
             selected_cat = st.selectbox("Select Category", price_df['category'].tolist())
             if selected_cat:
-                cheapest = get_cheapest_by_category(selected_cat)
+                cheapest = get_cheapest_by_category(selected_cat, selected_state, min_price_filter)
                 st.dataframe(cheapest, use_container_width=True)
+        else:
+            st.warning("No price data found for selected filters")
     except Exception as e:
         st.error(f"Error: {e}")
 
 with tab2:
     st.header("💨 Vape/Cartridge Price Analysis")
     try:
-        vape_df = get_vape_price_analysis()
+        vape_df = get_vape_price_analysis(selected_state, min_price_filter)
         if not vape_df.empty:
             # Group by size
             size_stats = vape_df.groupby('size').agg({
@@ -146,13 +209,15 @@ with tab2:
                 display_df = vape_df[vape_df['size'] == size_filter].head(30)
             
             st.dataframe(display_df, use_container_width=True)
+        else:
+            st.warning("No vape data found for selected filters")
     except Exception as e:
         st.error(f"Error: {e}")
 
 with tab3:
     st.header("🏷️ Best Deals (On Sale)")
     try:
-        deals_df = get_deals()
+        deals_df = get_deals(selected_state, min_price_filter)
         if not deals_df.empty:
             st.metric("Products on Sale", len(deals_df))
             
@@ -164,7 +229,7 @@ with tab3:
             
             st.dataframe(deals_df, use_container_width=True, height=500)
         else:
-            st.info("No sale items found in recent data")
+            st.info("No sale items found for selected filters")
     except Exception as e:
         st.error(f"Error: {e}")
 
@@ -175,14 +240,19 @@ with tab4:
     with col1:
         search_term = st.text_input("Product name contains", "")
     with col2:
-        min_price = st.number_input("Min Price", 0, 500, 0)
+        min_price = st.number_input("Min Price", 0, 500, min_price_filter)
     with col3:
         max_price = st.number_input("Max Price", 0, 500, 100)
     
     if st.button("Search") and search_term:
         try:
             with engine.connect() as conn:
-                results = pd.read_sql(text("""
+                state_filter = "AND d.state = :state" if selected_state != 'All States' else ""
+                params = {"search": f"%{search_term}%", "min": min_price, "max": max_price}
+                if selected_state != 'All States':
+                    params["state"] = selected_state
+                    
+                results = pd.read_sql(text(f"""
                     SELECT r.raw_name as product, r.raw_brand as brand, r.raw_category as category,
                            r.raw_price as price, d.name as store, d.state
                     FROM raw_menu_item r
@@ -190,9 +260,10 @@ with tab4:
                     WHERE r.raw_name ILIKE :search
                     AND r.raw_price BETWEEN :min AND :max
                     AND r.observed_at > NOW() - INTERVAL '24 hours'
+                    {state_filter}
                     ORDER BY r.raw_price ASC
                     LIMIT 100
-                """), conn, params={"search": f"%{search_term}%", "min": min_price, "max": max_price})
+                """), conn, params=params)
             
             if not results.empty:
                 st.success(f"Found {len(results)} products")
