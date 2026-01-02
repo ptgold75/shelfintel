@@ -8,11 +8,17 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import streamlit as st
 from sqlalchemy import text
 from core.db import get_engine
+from pathlib import Path
 
 st.set_page_config(page_title="CannaLinx", page_icon="🔍", layout="wide")
 
-# Banner
-st.image("app/static/cannalinx_banner.png", use_container_width=True)
+# Banner - use absolute path
+banner_path = Path(__file__).parent / "static" / "cannalinx_banner.png"
+if banner_path.exists():
+    st.image(str(banner_path), use_container_width=True)
+else:
+    st.title("🔍 CannaLinx")
+    st.subheader("Shelf Space Intelligence for Cannabis")
 
 st.divider()
 
@@ -27,7 +33,7 @@ try:
         stats = {row[0]: row[1] for row in totals}
 
     c1, c2, c3, c4 = st.columns(4)
-    c1.metric("Unique SKUs", f"{stats.get('unique_skus', 194731):,}")
+    c1.metric("Unique SKUs", f"{stats.get('unique_skus', 0):,}")
     c2.metric("Data Points", f"{stats.get('observations', 0):,}")
     c3.metric("Dispensaries", f"{stats.get('dispensaries', 0):,}")
     c4.metric("Scrape Runs", f"{stats.get('scrape_runs', 0):,}")
@@ -56,11 +62,3 @@ with col2:
     - **Retailers:** Competitive intelligence
     - **Investors:** Market demand signals
     """)
-
-st.divider()
-st.markdown("""
-### Quick Links
-- **📊 Analytics** - Brand and category breakdowns
-- **🏪 Dispensaries** - Manage tracked stores  
-- **📈 Dashboard** - Real-time metrics
-""")
