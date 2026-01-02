@@ -1,5 +1,5 @@
 # app/Home.py
-"""Shelf Intel - Home Page"""
+"""CannaLinx - Home Page"""
 
 import sys
 import os
@@ -11,9 +11,10 @@ from core.db import get_engine
 
 st.set_page_config(page_title="CannaLinx", page_icon="🔍", layout="wide")
 
-# Logo/Header
-st.title("🔍 CannaLinx")
-st.subheader("Shelf Space Intelligence for Cannabis")
+# Banner
+st.image("app/static/cannalinx_banner.png", use_container_width=True)
+
+st.divider()
 
 try:
     engine = get_engine()
