@@ -12,8 +12,13 @@ import re
 from sqlalchemy import text
 from core.db import get_engine
 
-st.set_page_config(page_title="Availability", page_icon="📦", layout="wide")
-st.title("📦 Product Availability")
+st.set_page_config(page_title="Availability | CannLinx", page_icon=None, layout="wide", initial_sidebar_state="collapsed")
+
+# Import and render navigation
+from app.components.nav import render_nav
+render_nav()
+
+st.title("Product Availability")
 
 engine = get_engine()
 

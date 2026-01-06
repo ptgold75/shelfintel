@@ -11,30 +11,34 @@ import plotly.express as px
 from sqlalchemy import text
 from core.db import get_engine
 
-st.set_page_config(page_title="Price Analysis", page_icon="💰", layout="wide")
-st.title("💰 Price Analysis")
+st.set_page_config(page_title="Price Analysis | CannLinx", page_icon=None, layout="wide", initial_sidebar_state="collapsed")
+
+# Import and render navigation
+from app.components.nav import render_nav
+render_nav()
+
+st.title("Price Analysis")
 
 engine = get_engine()
-
-# Sidebar - State filter
-st.sidebar.header("🔍 Filters")
 
 @st.cache_data(ttl=300)
 def get_states():
     with engine.connect() as conn:
         df = pd.read_sql(text("""
             SELECT DISTINCT COALESCE(state, 'Unknown') as state
-            FROM dispensary 
+            FROM dispensary
             WHERE state IS NOT NULL
             ORDER BY state
         """), conn)
     return ['All States'] + df['state'].tolist()
 
+# Inline filters
 states = get_states()
-selected_state = st.sidebar.selectbox("State", states, index=0)
-
-# Min price filter (exclude promos)
-min_price_filter = st.sidebar.slider("Minimum Price (exclude promos)", 1, 20, 5)
+filter_col1, filter_col2 = st.columns([2, 2])
+with filter_col1:
+    selected_state = st.selectbox("State", states, index=0)
+with filter_col2:
+    min_price_filter = st.slider("Min Price (exclude promos)", 1, 20, 5)
 
 @st.cache_data(ttl=600)
 def get_price_stats_by_category(state, min_price):
