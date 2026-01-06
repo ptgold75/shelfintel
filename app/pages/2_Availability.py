@@ -97,15 +97,15 @@ def get_stores(state):
     with engine.connect() as conn:
         if state == 'All':
             df = pd.read_sql(text("""
-                SELECT dispensary_id, name, state
-                FROM dispensary WHERE is_active = true
+                SELECT dispensary_id, name, COALESCE(state, 'MD') as state
+                FROM dispensary
                 ORDER BY name
             """), conn)
         else:
             df = pd.read_sql(text("""
-                SELECT dispensary_id, name, state
-                FROM dispensary 
-                WHERE state = :state AND is_active = true
+                SELECT dispensary_id, name, COALESCE(state, 'MD') as state
+                FROM dispensary
+                WHERE COALESCE(state, 'MD') = :state
                 ORDER BY name
             """), conn, params={"state": state})
     return df

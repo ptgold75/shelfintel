@@ -9,10 +9,34 @@ from sqlalchemy.pool import NullPool
 # ---------------------------------
 def get_database_url() -> str:
     """
-    Local + cron: use env var DATABASE_URL
-    Streamlit Cloud: also uses env var via Secrets -> env injection (or you can set env locally).
+    Load DATABASE_URL from:
+    1. Environment variable (for cron/scripts)
+    2. Streamlit secrets (for Streamlit app)
+    3. Local secrets.toml file (fallback)
     """
     url = os.getenv("DATABASE_URL")
+
+    # Try Streamlit secrets if env var not set
+    if not url:
+        try:
+            import streamlit as st
+            url = st.secrets["DATABASE_URL"]
+        except Exception:
+            pass
+
+    # Fallback: read directly from secrets.toml
+    if not url:
+        try:
+            import tomllib
+            from pathlib import Path
+            secrets_path = Path(__file__).parent.parent / ".streamlit" / "secrets.toml"
+            if secrets_path.exists():
+                with open(secrets_path, "rb") as f:
+                    secrets = tomllib.load(f)
+                    url = secrets.get("DATABASE_URL")
+        except Exception:
+            pass
+
     if not url:
         raise RuntimeError("DATABASE_URL not set")
 
