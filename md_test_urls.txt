@@ -1,0 +1,27 @@
+# Maryland Dispensary URLs for Provider Detection
+# Testing to identify Sweed vs Dutchie vs iHeartJane
+
+# Curaleaf (multiple URL patterns)
+https://curaleaf.com/shop/maryland/curaleaf-maryland-reisterstown
+https://md.curaleaf.com/dispensaries/
+https://curaleaf.com/dispensary/maryland
+
+# RISE Cannabis
+https://risecannabis.com/dispensaries/maryland/
+https://risecannabis.com/dispensary-menu/maryland-bethesda/
+https://risecannabis.com/dispensary-menu/maryland-silver-spring/
+
+# Zen Leaf
+https://zenleafdispensaries.com/location/towson-maryland/
+https://zenleafdispensaries.com/location/waldorf-maryland/
+https://zenleafdispensaries.com/location/germantown-maryland/
+
+# gLeaf (known Sweed)
+https://www.gleaf.com/stores/maryland/rockville/shop
+https://www.gleaf.com/stores/maryland/frederick/shop
+
+# Other chains
+https://www.ethoscannabis.com/locations-menus/maryland/
+https://bloommedicinals.com/maryland/
+https://www.greenwaycannabis.com/maryland/
+https://www.thelivingroom.co/maryland/

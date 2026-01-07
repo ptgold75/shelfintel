@@ -1,0 +1,2356 @@
+{
+  "stores": [
+    {
+      "store_id": 1,
+      "name": "WALLI USA TEST",
+      "address": "307 West Kirkpatrick Street, Syracuse, New York",
+      "city": "North Syracuse",
+      "state": "New York",
+      "zip": "13204",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://web-ui-production.sweedpos.com/s1",
+      "lat": 43.0608609,
+      "lng": -76.16142049999999
+    },
+    {
+      "store_id": 3,
+      "name": "Inner-Test Store (s3) Cannabis",
+      "address": "4444 Federal Boulevard, Sheridan, Colorado",
+      "city": "Sheridan",
+      "state": "Colorado",
+      "zip": "80110",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://web-ui-production.sweedpos.com/s3",
+      "lat": 39.6360841,
+      "lng": -105.0249389
+    },
+    {
+      "store_id": 8,
+      "name": "Apothecarium Phillipsburg",
+      "address": "55 South Main Street, Phillipsburg, New Jersey",
+      "city": "Phillipsburg",
+      "state": "New Jersey",
+      "zip": "08865",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://shop.apothecarium.com/phillipsburg",
+      "lat": 40.6908228,
+      "lng": -75.2016967
+    },
+    {
+      "store_id": 9,
+      "name": "Apothecarium Maplewood",
+      "address": "1865 Springfield Avenue, Maplewood, New Jersey",
+      "city": "Maplewood",
+      "state": "New Jersey",
+      "zip": "07040",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://shop.apothecarium.com/maplewood",
+      "lat": 40.7204951,
+      "lng": -74.2695131
+    },
+    {
+      "store_id": 15,
+      "name": "Cannadel Santa Rosa",
+      "address": "4036 Montgomery Drive, Santa Rosa, California",
+      "city": "Santa Rosa",
+      "state": "California",
+      "zip": "95405",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://shop.cannadeldispensary.com",
+      "lat": 38.4533959,
+      "lng": -122.6728187
+    },
+    {
+      "store_id": 17,
+      "name": "Tutorials",
+      "address": "2500 Grand Avenue, Sacramento, California",
+      "city": "Sacramento",
+      "state": "California",
+      "zip": "95838",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://web-ui-production.sweedpos.com/s17/medical",
+      "lat": 38.63625100000001,
+      "lng": -121.4087376
+    },
+    {
+      "store_id": 25,
+      "name": "Inner test delivery",
+      "address": "Joyce Drive, Orlando, Florida, \u0421\u043e\u0435\u0434\u0438\u043d\u0435\u043d\u043d\u044b\u0435 \u0428\u0442\u0430\u0442\u044b \u0410\u043c\u0435\u0440\u0438\u043a\u0438",
+      "city": "Orlando",
+      "state": "Florida",
+      "zip": "32827",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://inner-test3.sweed.app",
+      "lat": 28.4390143,
+      "lng": -81.3417659
+    },
+    {
+      "store_id": 26,
+      "name": "Apothecarium Lodi",
+      "address": "200 NJ-17, Lodi, NJ 07644",
+      "city": "Lodi",
+      "state": "New Jersey",
+      "zip": "07644",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://shop.apothecarium.com/lodi",
+      "lat": 40.8828229,
+      "lng": -74.0673268
+    },
+    {
+      "store_id": 27,
+      "name": "Terrascend CA",
+      "address": "1850 41st Avenue, Capitola, California",
+      "city": "Capitola",
+      "state": "California",
+      "zip": "95010",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://shop.apothecarium.com",
+      "lat": 36.9766066,
+      "lng": -121.9645751
+    },
+    {
+      "store_id": 29,
+      "name": "CO",
+      "address": "310 Saint Paul Street, Denver, Colorado",
+      "city": "Denver",
+      "state": "Colorado",
+      "zip": "80206",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://shop.greendragon.com",
+      "lat": 39.7212457,
+      "lng": -104.950684
+    },
+    {
+      "store_id": 31,
+      "name": "Apothecarium SoMa",
+      "address": "527 Howard St, San Francisco, CA 94105",
+      "city": "San Francisco",
+      "state": "California",
+      "zip": "94105",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://shop.apothecarium.com/soma",
+      "lat": 37.7878287,
+      "lng": -122.3965293
+    },
+    {
+      "store_id": 32,
+      "name": "Apothecarium Castro",
+      "address": "2029 Market Street, San Francisco, California",
+      "city": "San Francisco",
+      "state": "California",
+      "zip": "94114",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://shop.apothecarium.com/castro",
+      "lat": 37.7683932,
+      "lng": -122.4274806
+    },
+    {
+      "store_id": 33,
+      "name": "Apothecarium Berkeley",
+      "address": "2312 Telegraph Ave, Berkeley, CA 94704",
+      "city": "Berkeley",
+      "state": "California",
+      "zip": "94704",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://shop.apothecarium.com/berkeley",
+      "lat": 37.8682559,
+      "lng": -122.2593336
+    },
+    {
+      "store_id": 35,
+      "name": "Apothecarium Marina",
+      "address": "2414 Lombard St, San Francisco, CA 94123",
+      "city": "San Francisco",
+      "state": "California",
+      "zip": "94123",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://shop.apothecarium.com/marina",
+      "lat": 37.7993292,
+      "lng": -122.4413761
+    },
+    {
+      "store_id": 37,
+      "name": "Fort Collins Recreational",
+      "address": "813 Smithfield Drive, Fort Collins, Colorado",
+      "city": "Fort Collins",
+      "state": "Colorado",
+      "zip": "80524",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://shop.greendragon.com/ft-collins-rec",
+      "lat": 40.5779872,
+      "lng": -105.0036022
+    },
+    {
+      "store_id": 45,
+      "name": "Aspen",
+      "address": "409 East Hyman Avenue, Aspen, Colorado",
+      "city": "Aspen",
+      "state": "Colorado",
+      "zip": "81611",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://shop.greendragon.com/aspen",
+      "lat": 39.1887744,
+      "lng": -106.8195021
+    },
+    {
+      "store_id": 48,
+      "name": "Telluride",
+      "address": "119 W Colorado Ave, Telluride, CO 81435",
+      "city": "Telluride",
+      "state": "Colorado",
+      "zip": "81435",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://shop.greendragon.com/telluride",
+      "lat": 37.9374587,
+      "lng": -107.8111619
+    },
+    {
+      "store_id": 51,
+      "name": "Orange County",
+      "address": "1625 East Saint Gertrude Place, Santa Ana, California",
+      "city": "Santa Ana",
+      "state": "California",
+      "zip": "92705",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://shop.eazedispensary.com/orange-county",
+      "lat": 33.7201457,
+      "lng": -117.8467571
+    },
+    {
+      "store_id": 62,
+      "name": "Edgewater",
+      "address": "2467 Sheridan Boulevard, Edgewater, Colorado",
+      "city": "Edgewater",
+      "state": "Colorado",
+      "zip": "80214",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://shop.greendragon.com/edgewater",
+      "lat": 39.7522828,
+      "lng": -105.0536866
+    },
+    {
+      "store_id": 63,
+      "name": "Sheridan",
+      "address": "4103 Sheridan Boulevard, Denver, Colorado",
+      "city": "Denver",
+      "state": "Colorado",
+      "zip": "80212",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://shop.greendragon.com/sheridan",
+      "lat": 39.7731312,
+      "lng": -105.0536181
+    },
+    {
+      "store_id": 64,
+      "name": "Quincy",
+      "address": "19151 E Quincy Ave, Aurora, CO 80015",
+      "city": "Aurora",
+      "state": "Colorado",
+      "zip": "80015",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://shop.greendragon.com/quincy",
+      "lat": 39.6389718,
+      "lng": -104.7647191
+    },
+    {
+      "store_id": 66,
+      "name": "Thornton",
+      "address": "5823 E 128th Ave, Thornton, CO 80602",
+      "city": "Thornton",
+      "state": "Colorado",
+      "zip": "80602",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://shop.greendragon.com/thornton",
+      "lat": 39.9288158,
+      "lng": -104.9198586
+    },
+    {
+      "store_id": 67,
+      "name": "Boulder",
+      "address": "1750 30th Street, Boulder, Colorado",
+      "city": "Boulder",
+      "state": "Colorado",
+      "zip": "80301",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://shop.greendragon.com/boulder",
+      "lat": 40.0173096,
+      "lng": -105.2526539
+    },
+    {
+      "store_id": 68,
+      "name": "Colfax",
+      "address": "5130 E Colfax Ave, Denver, CO 80220",
+      "city": "Denver",
+      "state": "Colorado",
+      "zip": "80220",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://shop.greendragon.com/colfax",
+      "lat": 39.7399424,
+      "lng": -104.927136
+    },
+    {
+      "store_id": 69,
+      "name": "6th Ave",
+      "address": "15225 East 6th Avenue, Aurora, Colorado",
+      "city": "Aurora",
+      "state": "Colorado",
+      "zip": "80011",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://shop.greendragon.com/6th-ave",
+      "lat": 39.7262049,
+      "lng": -104.8115822
+    },
+    {
+      "store_id": 70,
+      "name": "Capitol Hill",
+      "address": "1250 Grant Street, Denver, Colorado",
+      "city": "Denver",
+      "state": "Colorado",
+      "zip": "80203",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://shop.greendragon.com/cap-hill/",
+      "lat": 39.7361517,
+      "lng": -104.9829808
+    },
+    {
+      "store_id": 71,
+      "name": "Byers",
+      "address": "930 W Byers Pl, Denver, CO 80223",
+      "city": "Denver",
+      "state": "Colorado",
+      "zip": "80223",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://shop.greendragon.com/byers",
+      "lat": 39.7117108,
+      "lng": -104.9982614
+    },
+    {
+      "store_id": 72,
+      "name": "Breckenridge",
+      "address": "1795 Airport Rd Unit A3, Breckenridge, CO 80424",
+      "city": "Breckenridge",
+      "state": "Colorado",
+      "zip": "80424",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://shop.greendragon.com/breckenridge",
+      "lat": 39.5075349,
+      "lng": -106.052222
+    },
+    {
+      "store_id": 73,
+      "name": "San Diego",
+      "address": "3455 Camino del Rio South, San Diego, California",
+      "city": "San Diego",
+      "state": "California",
+      "zip": "92108",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://shop.eazedispensary.com/san-diego",
+      "lat": 32.7770623,
+      "lng": -117.1191729
+    },
+    {
+      "store_id": 84,
+      "name": "Sweed test US",
+      "address": "Joyce Drive, Orlando, Florida, \u0421\u043e\u0435\u0434\u0438\u043d\u0435\u043d\u043d\u044b\u0435 \u0428\u0442\u0430\u0442\u044b \u0410\u043c\u0435\u0440\u0438\u043a\u0438",
+      "city": "Orlando",
+      "state": "Florida",
+      "zip": "32827",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://web-ui-production.sweedpos.com/s84",
+      "lat": 28.4390076,
+      "lng": -81.3417542
+    },
+    {
+      "store_id": 85,
+      "name": "Sweed test CA",
+      "address": "136 West 1st Street, Los Angeles, California",
+      "city": "Los Angeles",
+      "state": "California",
+      "zip": "90012",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://web-ui-production.sweedpos.com/s85",
+      "lat": 34.0526092,
+      "lng": -118.2442624
+    },
+    {
+      "store_id": 86,
+      "name": "Sweed Test CA Store #1",
+      "address": "222 South Copeland Street, Tallahassee, Florida",
+      "city": "Tallahassee",
+      "state": "Florida",
+      "zip": "32306",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://web-ui-production.sweedpos.com/s86",
+      "lat": 30.442087,
+      "lng": -84.2979579
+    },
+    {
+      "store_id": 87,
+      "name": "Sweed test CA Store #2",
+      "address": "722 Jackson Street, Salisbury, Maryland",
+      "city": "Salisbury",
+      "state": "Maryland",
+      "zip": "21804",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": null,
+      "lat": 38.35606,
+      "lng": -75.59347199999999
+    },
+    {
+      "store_id": 91,
+      "name": "Review Store",
+      "address": "372 Jersey Street, San Francisco, California",
+      "city": "San Francisco",
+      "state": "California",
+      "zip": "94114",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://apreview.sweed.app/",
+      "lat": 37.7507222,
+      "lng": -122.4333781
+    },
+    {
+      "store_id": 93,
+      "name": "College Ave Recreational",
+      "address": "804 S College Ave C, Fort Collins, CO 80524",
+      "city": "Fort Collins",
+      "state": "Colorado",
+      "zip": "80524",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://shop.greendragon.com/college-ave-rec",
+      "lat": 40.5763368,
+      "lng": -105.0767251
+    },
+    {
+      "store_id": 103,
+      "name": "Ivy Hall IL",
+      "address": "1036 W Higgins RdPark Ridge, IL 60068",
+      "city": "Park Ridge",
+      "state": "Illinois",
+      "zip": "60068",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://ivyhalldispensary.com/locations/bucktown/menu/store-redirect/",
+      "lat": 41.9871977,
+      "lng": -87.8400486
+    },
+    {
+      "store_id": 104,
+      "name": "Ivy Hall Bucktown",
+      "address": "1720 North Damen Avenue, Chicago, Illinois",
+      "city": "Chicago",
+      "state": "Illinois",
+      "zip": "60647",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://ivyhalldispensary.com/locations/bucktown/menu",
+      "lat": 41.9129726,
+      "lng": -87.67779379999999
+    },
+    {
+      "store_id": 111,
+      "name": "Green Rose IL",
+      "address": "612 North Wells Street, Chicago, Illinois",
+      "city": "Chicago",
+      "state": "Illinois",
+      "zip": "60654",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://shop.greenroseil.com",
+      "lat": 41.8927698,
+      "lng": -87.634486
+    },
+    {
+      "store_id": 112,
+      "name": "Green Rose River North",
+      "address": "612 North Wells Street, Chicago, Illinois",
+      "city": "Chicago",
+      "state": "Illinois",
+      "zip": "60654",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://shop.greenroseil.com",
+      "lat": 41.8927698,
+      "lng": -87.634486
+    },
+    {
+      "store_id": 134,
+      "name": "Brooksville",
+      "address": "1170 S Broad St, Brooksville, FL 34601",
+      "city": "Brooksville",
+      "state": "Florida",
+      "zip": "34601",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://shop.greendragon.com/brooksville",
+      "lat": 28.5436101,
+      "lng": -82.4023297
+    },
+    {
+      "store_id": 140,
+      "name": "Ivy Hall Crystal Lake",
+      "address": "501 N Pingree Rd, Crystal Lake, IL 60014",
+      "city": "Crystal Lake",
+      "state": "Illinois",
+      "zip": "60014",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://ivyhalldispensary.com/locations/crystal-lake/menu",
+      "lat": 42.2274619,
+      "lng": -88.29708459999999
+    },
+    {
+      "store_id": 142,
+      "name": "Ivy Hall Waukegan",
+      "address": "996 S Waukegan Rd, Waukegan, IL 60085",
+      "city": "Waukegan",
+      "state": "Illinois",
+      "zip": "60085",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://ivyhalldispensary.com/locations/waukegan/menu",
+      "lat": 42.3409637,
+      "lng": -87.8958971
+    },
+    {
+      "store_id": 144,
+      "name": "Ivy Hall Montgomery",
+      "address": "1970 Caterpillar Dr. Montgomery, IL 60538",
+      "city": "Montgomery",
+      "state": "Illinois",
+      "zip": "60538",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://ivyhalldispensary.com/locations/montgomery/menu",
+      "lat": 41.718972,
+      "lng": -88.3738326
+    },
+    {
+      "store_id": 166,
+      "name": "Ivy Hall Bolingbrook",
+      "address": "361 S Bolingbrook Dr. Bolingbrook, IL 60440",
+      "city": "Bolingbrook",
+      "state": "Illinois",
+      "zip": "60440",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://ivyhalldispensary.com/locations/bolingbrook/menu",
+      "lat": 41.6895233,
+      "lng": -88.0689665
+    },
+    {
+      "store_id": 168,
+      "name": "Ivy Hall Glendale Heights",
+      "address": "2130 Bloomingdale Rd. Glendale Heights, IL 60139",
+      "city": "Glendale Heights",
+      "state": "Illinois",
+      "zip": "60139",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://ivyhalldispensary.com/locations/glendaleheights/menu",
+      "lat": 41.9367171,
+      "lng": -88.0808013
+    },
+    {
+      "store_id": 169,
+      "name": "Ivy Hall Peoria",
+      "address": "3929 W. War Memorial Dr. Peoria, IL 61615",
+      "city": "Peoria Hts",
+      "state": "Illinois",
+      "zip": "61615",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://ivyhalldispensary.com/locations/peoria/menu",
+      "lat": 40.7714503,
+      "lng": -89.65497889999999
+    },
+    {
+      "store_id": 173,
+      "name": "Revolution Schaumburg",
+      "address": "820 E. Golf Road, Schaumburg, IL 60173\t\t\t\t\t",
+      "city": "Schaumburg",
+      "state": "Illinois",
+      "zip": "60173",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://shop.revcanna.com/schaumburg/",
+      "lat": 42.0508062,
+      "lng": -88.0585662
+    },
+    {
+      "store_id": 176,
+      "name": "High Haven Darien",
+      "address": "8131 Cass Ave, Darien, IL 60561",
+      "city": "Darien",
+      "state": "Illinois",
+      "zip": "60561",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://highhavencannabis.com/darien",
+      "lat": 41.740287,
+      "lng": -87.9720305
+    },
+    {
+      "store_id": 179,
+      "name": "Zen Leaf Gilbert",
+      "address": "5409 S Power Rd. Mesa, AZ 85212",
+      "city": "Mesa",
+      "state": "Arizona",
+      "zip": "85212",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://zenleafdispensaries.com/locations/gilbert/menu",
+      "lat": 33.3178034,
+      "lng": -111.6861073
+    },
+    {
+      "store_id": 180,
+      "name": "Zen Leaf Phoenix - Cave Creek",
+      "address": "12401 N Cave Creek Rd. Phoenix, AZ 85022",
+      "city": "Phoenix",
+      "state": "Arizona",
+      "zip": "85022",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://zenleafdispensaries.com/locations/phoenix-n-cave-creek/menu",
+      "lat": 33.5988528,
+      "lng": -112.0366918
+    },
+    {
+      "store_id": 181,
+      "name": "Zen Leaf Mesa",
+      "address": "550 W McKellips Rd. Mesa, AZ 85201",
+      "city": "Mesa",
+      "state": "Arizona",
+      "zip": "85201",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://zenleafdispensaries.com/locations/mesa/menu",
+      "lat": 33.4516188,
+      "lng": -111.8432811
+    },
+    {
+      "store_id": 182,
+      "name": "Zen Leaf Phoenix - Dunlap",
+      "address": "4244 W Dunlap Ave. Phoenix, AZ 85051",
+      "city": "Phoenix",
+      "state": "Arizona",
+      "zip": "85051",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://zenleafdispensaries.com/locations/phoenix-w-dunlap/menu",
+      "lat": 33.5679037,
+      "lng": -112.1499143
+    },
+    {
+      "store_id": 183,
+      "name": "Zen Leaf Arcadia",
+      "address": "2710 East Indian School Road, Phoenix, Arizona",
+      "city": "Phoenix",
+      "state": "Arizona",
+      "zip": "85016",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://zenleafdispensaries.com/locations/arcadia/menu",
+      "lat": 33.4954022,
+      "lng": -112.0229986
+    },
+    {
+      "store_id": 184,
+      "name": "Zen Leaf Chandler",
+      "address": "7200 West Chandler Boulevard, Chandler, Arizona",
+      "city": "Chandler",
+      "state": "Arizona",
+      "zip": "85226",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://zenleafdispensaries.com/locations/chandler/menu",
+      "lat": 33.3060806,
+      "lng": -111.9662856
+    },
+    {
+      "store_id": 185,
+      "name": "Revolution Mount Prospect",
+      "address": "2015 East Euclid Avenue, Mount Prospect, Illinois",
+      "city": "Mount Prospect",
+      "state": "Illinois",
+      "zip": "60056",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://shop.revcanna.com/mount-prospect/",
+      "lat": 42.0873547,
+      "lng": -87.8935972
+    },
+    {
+      "store_id": 187,
+      "name": "Terrascend MD",
+      "address": "9413 Harford Road, Parkville, Maryland",
+      "city": "Parkville",
+      "state": "Maryland",
+      "zip": "21234",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://shop.apothecarium.com",
+      "lat": 39.3927164,
+      "lng": -76.52607379999999
+    },
+    {
+      "store_id": 188,
+      "name": "Apothecarium Cumberland",
+      "address": "100 Beall Street, Cumberland, Maryland",
+      "city": "Cumberland",
+      "state": "Maryland",
+      "zip": "21502",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://shop.apothecarium.com/cumberland",
+      "lat": 39.6476103,
+      "lng": -78.7689457
+    },
+    {
+      "store_id": 189,
+      "name": "Apothecarium Salisbury",
+      "address": "1003 Mount Hermon Road, Salisbury, Maryland",
+      "city": "Salisbury",
+      "state": "Maryland",
+      "zip": "21804",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://shop.apothecarium.com/salisbury",
+      "lat": 38.3684764,
+      "lng": -75.5769914
+    },
+    {
+      "store_id": 190,
+      "name": "Apothecarium Burtonsville",
+      "address": "4009 Sandy Spring Road, Burtonsville, Maryland",
+      "city": "Burtonsville",
+      "state": "Maryland",
+      "zip": "20866",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://shop.apothecarium.com/burtonsville",
+      "lat": 39.1109574,
+      "lng": -76.9277995
+    },
+    {
+      "store_id": 191,
+      "name": "Apothecarium Nottingham",
+      "address": "8241 Perry Hall Boulevard, Nottingham, Maryland",
+      "city": "Nottingham",
+      "state": "Maryland",
+      "zip": "21236",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://shop.apothecarium.com/nottingham",
+      "lat": 39.3771646,
+      "lng": -76.4715365
+    },
+    {
+      "store_id": 193,
+      "name": "Aroma Hill IL",
+      "address": "1237 North Barrington Road, Hoffman Estates, Illinois",
+      "city": "Hoffman Estates",
+      "state": "Illinois",
+      "zip": "60169",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://shop.aromahillcannabis.com",
+      "lat": 42.0461559,
+      "lng": -88.1439367
+    },
+    {
+      "store_id": 194,
+      "name": "Aroma Hill Hoffman",
+      "address": "1237 North Barrington Road, Hoffman Estates, Illinois",
+      "city": "Hoffman Estates",
+      "state": "Illinois",
+      "zip": "60169",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://shop.aromahillcannabis.com/hoffman",
+      "lat": 42.0461559,
+      "lng": -88.1439367
+    },
+    {
+      "store_id": 195,
+      "name": "Aroma Hill Belvidere",
+      "address": "1874 Crystal Parkway, Belvidere, Illinois",
+      "city": "Belvidere",
+      "state": "Illinois",
+      "zip": "61008",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://shop.aromahillcannabis.com/belvidere",
+      "lat": 42.2397485,
+      "lng": -88.8319203
+    },
+    {
+      "store_id": 196,
+      "name": "Aroma Hill Kankakee",
+      "address": "2255 East Court Street, Kankakee, Illinois",
+      "city": "Kankakee",
+      "state": "Illinois",
+      "zip": "60901",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://shop.aromahillcannabis.com/kankakee",
+      "lat": 41.120025,
+      "lng": -87.83242299999999
+    },
+    {
+      "store_id": 199,
+      "name": "JoyLeaf Roselle",
+      "address": "711 East 1st Avenue, Roselle, New Jersey",
+      "city": "Roselle",
+      "state": "New Jersey",
+      "zip": "07203",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://shop.joyleaf.com/",
+      "lat": 40.6628803,
+      "lng": -74.2459022
+    },
+    {
+      "store_id": 201,
+      "name": "Terrascend MI",
+      "address": "450 South Glaspie Street, Michigan",
+      "city": "Oxford",
+      "state": "Michigan",
+      "zip": "48371",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://shop.gagecannabis.com",
+      "lat": 42.81765559999999,
+      "lng": -83.25285889999999
+    },
+    {
+      "store_id": 202,
+      "name": "Pinnacle - Morenci",
+      "address": "850 East Main Street, Morenci, Michigan",
+      "city": "Morenci",
+      "state": "Michigan",
+      "zip": "49256",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://shop.gagecannabis.com/pinnaclemorenci",
+      "lat": 41.7177622,
+      "lng": -84.2052756
+    },
+    {
+      "store_id": 203,
+      "name": "Pinnacle - Edmore",
+      "address": "413 E Main St, Edmore, MI 48829",
+      "city": "Edmore",
+      "state": "Michigan",
+      "zip": "48829",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://shop.gagecannabis.com/",
+      "lat": 43.4082514,
+      "lng": -85.04033539999999
+    },
+    {
+      "store_id": 204,
+      "name": "Pinnacle - Camden",
+      "address": "421 South Main Street, Camden, Michigan",
+      "city": "Camden",
+      "state": "Michigan",
+      "zip": "49232",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://shop.gagecannabis.com/pinnaclecamden",
+      "lat": 41.7487884,
+      "lng": -84.75671009999999
+    },
+    {
+      "store_id": 205,
+      "name": "Pinnacle - Buchanan",
+      "address": "221 East Front Street, Buchanan, Michigan",
+      "city": "Buchanan",
+      "state": "Michigan",
+      "zip": "49107",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://shop.gagecannabis.com/pinnaclebuchanan",
+      "lat": 41.827564,
+      "lng": -86.359349
+    },
+    {
+      "store_id": 208,
+      "name": "Gage - Grand Rapids",
+      "address": "3075 Peregrine Drive Northeast, Grand Rapids, Michigan",
+      "city": "Grand Rapids",
+      "state": "Michigan",
+      "zip": "49505",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://shop.gagecannabis.com/gagegrandrapids",
+      "lat": 43.0039484,
+      "lng": -85.5934851
+    },
+    {
+      "store_id": 209,
+      "name": "Gage - Ferndale",
+      "address": "1551 Academy Street, Ferndale, Michigan",
+      "city": "Ferndale",
+      "state": "Michigan",
+      "zip": "48220",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://shop.gagecannabis.com/gageferndale",
+      "lat": 42.4589498,
+      "lng": -83.1141222
+    },
+    {
+      "store_id": 213,
+      "name": "Cookies - Kalamazoo",
+      "address": "2712 Portage Street, Kalamazoo, Michigan",
+      "city": "Kalamazoo",
+      "state": "Michigan",
+      "zip": "49001",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://shop.gagecannabis.com/cookieskalamazoo",
+      "lat": 42.263618,
+      "lng": -85.5692102
+    },
+    {
+      "store_id": 214,
+      "name": "Cookies - Jackson",
+      "address": "118 North Columbus Street, Jackson, Michigan",
+      "city": "Jackson",
+      "state": "Michigan",
+      "zip": "49201",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://shop.gagecannabis.com/cookiesjackson",
+      "lat": 42.2487247,
+      "lng": -84.40246959999999
+    },
+    {
+      "store_id": 215,
+      "name": "Cookies - Oxford",
+      "address": "450 South Glaspie Street, Michigan",
+      "city": "Oxford",
+      "state": "Michigan",
+      "zip": "48371",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://shop.gagecannabis.com/",
+      "lat": 42.81765559999999,
+      "lng": -83.25285889999999
+    },
+    {
+      "store_id": 217,
+      "name": "Gage - Traverse City",
+      "address": "1025 Hannah Ave, Traverse City, MI 49686",
+      "city": "Traverse City",
+      "state": "Michigan",
+      "zip": "49686",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://shop.gagecannabis.com/",
+      "lat": 44.7553632,
+      "lng": -85.5966727
+    },
+    {
+      "store_id": 218,
+      "name": "Revolution Maryville",
+      "address": "2533 Vandalia St Suite A Maryville, IL 62234",
+      "city": "Maryville",
+      "state": "Illinois",
+      "zip": "62234",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://shop.revcanna.com/maryville/",
+      "lat": 38.7051406,
+      "lng": -89.9588146
+    },
+    {
+      "store_id": 219,
+      "name": "Revolution Moline",
+      "address": "4301 44th Avenue, Moline, Illinois",
+      "city": "Moline",
+      "state": "Illinois",
+      "zip": "61265",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://shop.revcanna.com/moline/",
+      "lat": 41.4698084,
+      "lng": -90.4740188
+    },
+    {
+      "store_id": 220,
+      "name": "Pinnacle - Addison",
+      "address": "100 S Steer St, Addison, MI 49220",
+      "city": "Addison",
+      "state": "Michigan",
+      "zip": "49220",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://shop.gagecannabis.com/pinnacleaddison",
+      "lat": 41.9863967,
+      "lng": -84.34964509999999
+    },
+    {
+      "store_id": 221,
+      "name": "Cookies - Detroit",
+      "address": "6030 8 Mile Road, Detroit, Michigan",
+      "city": "Detroit",
+      "state": "Michigan",
+      "zip": "48234",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://shop.gagecannabis.com/cookiesdetroit",
+      "lat": 42.4474707,
+      "lng": -83.0423888
+    },
+    {
+      "store_id": 222,
+      "name": "Cookies - Ann Arbor",
+      "address": "2460 W Stadium Blvd, Ann Arbor, MI 48103",
+      "city": "Ann Arbor",
+      "state": "Michigan",
+      "zip": "48103",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://shop.gagecannabis.com/cookiesannarbor",
+      "lat": 42.2790278,
+      "lng": -83.7795349
+    },
+    {
+      "store_id": 224,
+      "name": "Be. Blue Island",
+      "address": "12720 South Western Avenue, Blue Island, Illinois",
+      "city": "Blue Island",
+      "state": "Illinois",
+      "zip": "60406",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://bestoresil.com/blueisland",
+      "lat": 41.6620271,
+      "lng": -87.68025089999999
+    },
+    {
+      "store_id": 225,
+      "name": "Ivy Hall Logan Square",
+      "address": "3115 West Armitage Avenue, Chicago, Illinois",
+      "city": "Chicago",
+      "state": "Illinois",
+      "zip": "60647",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://ivyhalldispensary.com/locations/logan-square/menu",
+      "lat": 41.9171014,
+      "lng": -87.7060954
+    },
+    {
+      "store_id": 228,
+      "name": "Grasshopper Club | Logan Square",
+      "address": "2551 N. Milwaukee Avenue Chicago, IL 60647",
+      "city": "Chicago",
+      "state": "Illinois",
+      "zip": "60647",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://grasshopperclub.com/shop/logan-square/",
+      "lat": 41.9278453,
+      "lng": -87.7049601
+    },
+    {
+      "store_id": 229,
+      "name": "Grasshopper Club | South Loop",
+      "address": "58 East Roosevelt Road, Chicago, Illinois",
+      "city": "Chicago",
+      "state": "Illinois",
+      "zip": "60605",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://grasshopperclub.com/shop/south-loop/",
+      "lat": 41.8676438,
+      "lng": -87.62521339999999
+    },
+    {
+      "store_id": 231,
+      "name": "Natural Apothecary NJ",
+      "address": "27 Washington Avenue, Belleville, New Jersey",
+      "city": "Belleville",
+      "state": "New Jersey",
+      "zip": "07109",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://shop.natural-apothecary.com/",
+      "lat": 40.7822028,
+      "lng": -74.1545031
+    },
+    {
+      "store_id": 232,
+      "name": "Natural Apothecary ",
+      "address": "27 Washington Avenue, Belleville, New Jersey",
+      "city": "Belleville",
+      "state": "New Jersey",
+      "zip": "07109",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://shop.natural-apothecary.com/belleville",
+      "lat": 40.7822028,
+      "lng": -74.1545031
+    },
+    {
+      "store_id": 235,
+      "name": "Enlightened Abingdon",
+      "address": "3111 Emmorton Road, Abingdon, Maryland",
+      "city": "Abingdon",
+      "state": "Maryland",
+      "zip": "21009",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://shop.revcanna.com/abingdon",
+      "lat": 39.4755986,
+      "lng": -76.3089035
+    },
+    {
+      "store_id": 240,
+      "name": "Green Rose Lincolnwood",
+      "address": "4656 West Touhy Avenue, Lincolnwood, Illinois",
+      "city": "Lincolnwood",
+      "state": "Illinois",
+      "zip": "60712",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://shop.greenroseil.com/lincolnwood/",
+      "lat": 42.012078,
+      "lng": -87.7450865
+    },
+    {
+      "store_id": 243,
+      "name": "Bisa Lina - Carol Stream",
+      "address": "720 East North Avenue, Carol Stream, Illinois",
+      "city": "Carol Stream",
+      "state": "Illinois",
+      "zip": "60188",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://shop.bisalina.com/bisalina",
+      "lat": 41.9022401,
+      "lng": -88.0967245
+    },
+    {
+      "store_id": 246,
+      "name": "The Green Standard Starkville",
+      "address": "612 Mississippi 12, Starkville, Mississippi",
+      "city": "Starkville",
+      "state": "Mississippi",
+      "zip": "39759",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://shop.thegreenstandarddispensary.com/starkville",
+      "lat": 33.4532484,
+      "lng": -88.80744519999999
+    },
+    {
+      "store_id": 258,
+      "name": "Be. Oak Forest",
+      "address": "5940 West 159th Street, Oak Forest, Illinois",
+      "city": "Oak Forest",
+      "state": "Illinois",
+      "zip": "60452",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://bestoresil.com/oakforest",
+      "lat": 41.6032546,
+      "lng": -87.7637566
+    },
+    {
+      "store_id": 260,
+      "name": "The Green Standard Carthage",
+      "address": "310 Mississippi 16, Carthage, Mississippi",
+      "city": "Carthage",
+      "state": "Mississippi",
+      "zip": "39051",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://shop.thegreenstandarddispensary.com/carthage",
+      "lat": 32.7320809,
+      "lng": -89.5373345
+    },
+    {
+      "store_id": 261,
+      "name": "The Green Standard Grenada",
+      "address": "1223 Sunset Dr, Grenada, MS 38901, USA",
+      "city": "Grenada",
+      "state": "Mississippi",
+      "zip": "38901",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://shop.thegreenstandarddispensary.com/grenada",
+      "lat": 33.7733417,
+      "lng": -89.8233283
+    },
+    {
+      "store_id": 262,
+      "name": "Aroma Hill Fox Lake",
+      "address": "1298 U.S. 12, Fox Lake, Illinois",
+      "city": "Fox Lake",
+      "state": "Illinois",
+      "zip": "60020",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://shop.aromahillcannabis.com/fox-lake/",
+      "lat": 42.3694521,
+      "lng": -88.1705133
+    },
+    {
+      "store_id": 263,
+      "name": "Aroma Hill Peoria",
+      "address": "1204 West Glen Avenue, Peoria, Illinois",
+      "city": "Peoria",
+      "state": "Illinois",
+      "zip": "61614",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://shop.aromahillcannabis.com/peoria",
+      "lat": 40.746708,
+      "lng": -89.6110628
+    },
+    {
+      "store_id": 264,
+      "name": "Ivy Hall Streamwood",
+      "address": "630 S. Sutton Rd.",
+      "city": "Streamwood",
+      "state": "Illinois",
+      "zip": "60107",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://ivyhalldispensary.com/locations/streamwood/menu",
+      "lat": 42.0208612,
+      "lng": -88.2037701
+    },
+    {
+      "store_id": 273,
+      "name": "Revolution Normal",
+      "address": "1609 Northbrook Drive, Normal, Illinois",
+      "city": "Normal",
+      "state": "Illinois",
+      "zip": "61761",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://shop.revcanna.com/normal",
+      "lat": 40.5314316,
+      "lng": -88.9993715
+    },
+    {
+      "store_id": 360,
+      "name": "Fired Cannabis - Peoria",
+      "address": "12075 East 40th Avenue, Denver, Colorado",
+      "city": "Denver",
+      "state": "Colorado",
+      "zip": "80239",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://shop.firedcannabis.com/peoria/",
+      "lat": 39.773135,
+      "lng": -104.8485063
+    },
+    {
+      "store_id": 361,
+      "name": "Fired Cannabis - Federal",
+      "address": "445 Federal Boulevard, Denver, Colorado",
+      "city": "Denver",
+      "state": "Colorado",
+      "zip": "80204",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://shop.firedcannabis.com/barnum/",
+      "lat": 39.7237414,
+      "lng": -105.0255264
+    },
+    {
+      "store_id": 362,
+      "name": "Fired Cannabis - 6th Ave",
+      "address": "745 East 6th Avenue, Denver, Colorado",
+      "city": "Denver",
+      "state": "Colorado",
+      "zip": "80203",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://shop.firedcannabis.com/6th-ave/",
+      "lat": 39.7258849,
+      "lng": -104.977999
+    },
+    {
+      "store_id": 363,
+      "name": "Fired Cannabis - Aurora",
+      "address": "10455 East Colfax Avenue, Aurora, Colorado",
+      "city": "Aurora",
+      "state": "Colorado",
+      "zip": "80010",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://shop.firedcannabis.com/aurora/",
+      "lat": 39.7404452,
+      "lng": -104.8662129
+    },
+    {
+      "store_id": 364,
+      "name": "Fired Cannabis - Evans",
+      "address": "6858 East Evans Avenue, Denver, Colorado",
+      "city": "Denver",
+      "state": "Colorado",
+      "zip": "80224",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://shop.firedcannabis.com/evans-ave/",
+      "lat": 39.67821199999999,
+      "lng": -104.9090379
+    },
+    {
+      "store_id": 365,
+      "name": "Fired Cannabis - South Federal Blvd",
+      "address": "1568 South Federal Boulevard, Denver, Colorado",
+      "city": "Denver",
+      "state": "Colorado",
+      "zip": "80219",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://shop.firedcannabis.com/federal-blvr/",
+      "lat": 39.68835809999999,
+      "lng": -105.0246248
+    },
+    {
+      "store_id": 366,
+      "name": "Green Rose Harwood Heights",
+      "address": "4660 North Harlem Avenue, Harwood Heights, Illinois",
+      "city": "Harwood Heights",
+      "state": "Illinois",
+      "zip": "60706",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://shop.greenroseil.com/harwoodheights",
+      "lat": 41.9652963,
+      "lng": -87.8074858
+    },
+    {
+      "store_id": 367,
+      "name": "Eaze x Venice Fest",
+      "address": "5818 West Pico Boulevard, Los Angeles, California",
+      "city": "Los Angeles",
+      "state": "California",
+      "zip": "90019",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://shop.eazedispensary.com/event",
+      "lat": 34.0509584,
+      "lng": -118.3653301
+    },
+    {
+      "store_id": 373,
+      "name": "Smokehouse Dispensary",
+      "address": "44 S US Highway 12, Fox Lake, Illinois",
+      "city": "Fox Lake",
+      "state": "Illinois",
+      "zip": "60020",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://smokehouse.shop/foxlake/",
+      "lat": 42.3935645,
+      "lng": -88.1843695
+    },
+    {
+      "store_id": 375,
+      "name": "gLeaf - Frederick",
+      "address": "4606 Wedgewood Boulevard, Frederick, Maryland",
+      "city": "Frederick",
+      "state": "Maryland",
+      "zip": "21703",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://www.gleaf.com/stores/maryland/frederick/shop",
+      "lat": 39.3621968,
+      "lng": -77.4242549
+    },
+    {
+      "store_id": 376,
+      "name": "gLeaf - Rockville",
+      "address": "808 Hungerford Drive, Rockville, Maryland",
+      "city": "Rockville",
+      "state": "Maryland",
+      "zip": "20850",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://www.gleaf.com/stores/maryland/rockville/shop",
+      "lat": 39.0948128,
+      "lng": -77.15386389999999
+    },
+    {
+      "store_id": 377,
+      "name": "Columbia Care - Chevy Chase",
+      "address": "4609 Willow Lane, Chevy Chase, Maryland",
+      "city": "Chevy Chase",
+      "state": "Maryland",
+      "zip": "20815",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://www.columbia.care/stores/maryland/chevy-chase/shop",
+      "lat": 38.9816384,
+      "lng": -77.09199219999999
+    },
+    {
+      "store_id": 378,
+      "name": "Fired Cannabis - Sheridan",
+      "address": "1126 South Sheridan Boulevard, Denver, Colorado",
+      "city": "Denver",
+      "state": "Colorado",
+      "zip": "80219",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://shop.firedcannabis.com/sheridan",
+      "lat": 39.6960061,
+      "lng": -105.0528604
+    },
+    {
+      "store_id": 382,
+      "name": "Zen Leaf North Las Vegas",
+      "address": "4444 West Craig Road, North Las Vegas, Nevada",
+      "city": "North Las Vegas",
+      "state": "Nevada",
+      "zip": "89032",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://zenleafdispensaries.com/locations/north-las-vegas/menu/",
+      "lat": 36.2394487,
+      "lng": -115.2021422
+    },
+    {
+      "store_id": 383,
+      "name": "Zen Leaf Flamingo",
+      "address": "5940 West Flamingo Road, Las Vegas, Nevada",
+      "city": "Las Vegas",
+      "state": "Nevada",
+      "zip": "89103",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://zenleafdispensaries.com/locations/flamingo/menu/",
+      "lat": 36.1149375,
+      "lng": -115.2224808
+    },
+    {
+      "store_id": 384,
+      "name": "Zen Leaf Carson City",
+      "address": "2765 U.S. 50, Carson City, Nevada",
+      "city": "Carson City Mall",
+      "state": "Nevada",
+      "zip": "89701",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://zenleafdispensaries.com/locations/carson-city/menu/",
+      "lat": 39.1751091,
+      "lng": -119.736858
+    },
+    {
+      "store_id": 385,
+      "name": "Zen Leaf Las Vegas",
+      "address": "5335 South Fort Apache Road, Las Vegas, Nevada",
+      "city": "Las Vegas",
+      "state": "Nevada",
+      "zip": "89148",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://zenleafdispensaries.com/locations/las-vegas/menu/",
+      "lat": 36.09194980000001,
+      "lng": -115.2982591
+    },
+    {
+      "store_id": 387,
+      "name": "JARS MI",
+      "address": "420 West Railroad, Caspian, Michigan",
+      "city": "Caspian",
+      "state": "Michigan",
+      "zip": "49915",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": null,
+      "lat": 46.0683269,
+      "lng": -88.641971
+    },
+    {
+      "store_id": 388,
+      "name": "JARS Iron River",
+      "address": "420 West Railroad, Caspian, Michigan",
+      "city": "Caspian",
+      "state": "Michigan",
+      "zip": "49915",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://jarscannabis.com/locations/mi/caspian/shop/",
+      "lat": 46.0683269,
+      "lng": -88.641971
+    },
+    {
+      "store_id": 389,
+      "name": "Zen Leaf Reno",
+      "address": "1605 East 2nd Street, Reno, Nevada",
+      "city": "Reno",
+      "state": "Nevada",
+      "zip": "89502",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://zenleafdispensaries.com/locations/reno/menu/",
+      "lat": 39.5276237,
+      "lng": -119.7914787
+    },
+    {
+      "store_id": 393,
+      "name": "Supergood Detroit",
+      "address": "10 Eight Mile Road, Detroit, Michigan",
+      "city": "Detroit",
+      "state": "Michigan",
+      "zip": "48203",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://supergoodstore.com/stores/detroit",
+      "lat": 42.4467472,
+      "lng": -83.102417
+    },
+    {
+      "store_id": 400,
+      "name": "Cannabist New Jersey",
+      "address": "1692 Clements Bridge Road, Deptford, New Jersey",
+      "city": "Deptford",
+      "state": "New Jersey",
+      "zip": "08096",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": null,
+      "lat": 39.8338912,
+      "lng": -75.1020987
+    },
+    {
+      "store_id": 457,
+      "name": "Cannabist - Vineland",
+      "address": "1062 North Delsea Drive, Vineland, New Jersey",
+      "city": "Vineland",
+      "state": "New Jersey",
+      "zip": "08360",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://www.gocannabist.com/stores/new-jersey/vineland/shop",
+      "lat": 39.502573,
+      "lng": -75.0425489
+    },
+    {
+      "store_id": 458,
+      "name": "Cannabist - Deptford",
+      "address": "1692 Clements Bridge Road, Deptford, New Jersey",
+      "city": "Deptford",
+      "state": "New Jersey",
+      "zip": "08096",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://www.gocannabist.com/stores/new-jersey/deptford/shop",
+      "lat": 39.8338912,
+      "lng": -75.1020987
+    },
+    {
+      "store_id": 506,
+      "name": "Ivy Hall Edwardsville",
+      "address": "6197 Old Alton Edwardsville Road, Edwardsville, Illinois",
+      "city": "Edwardsville",
+      "state": "Illinois",
+      "zip": "62025",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://ivyhalldispensary.com/locations/edwardsville/menu",
+      "lat": 38.8236678,
+      "lng": -89.9734532
+    },
+    {
+      "store_id": 535,
+      "name": "Zen Leaf Evanston",
+      "address": "1804 Maple Avenue, Evanston, Illinois",
+      "city": "Evanston",
+      "state": "Illinois",
+      "zip": "60201",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://zenleafdispensaries.com/locations/evanston/menu",
+      "lat": 42.0501631,
+      "lng": -87.685028
+    },
+    {
+      "store_id": 536,
+      "name": "Zen Leaf Pilsen",
+      "address": "1301 South Western Avenue, Chicago, Illinois",
+      "city": "Chicago",
+      "state": "Illinois",
+      "zip": "60608",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://zenleafdispensaries.com/locations/chicago-pilsen/menu",
+      "lat": 41.8645274,
+      "lng": -87.6856579
+    },
+    {
+      "store_id": 537,
+      "name": "Zen Leaf St. Charles",
+      "address": "3691 East Main Street, St. Charles, Illinois",
+      "city": "St. Charles",
+      "state": "Illinois",
+      "zip": "60174",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://zenleafdispensaries.com/locations/st-charles/menu",
+      "lat": 41.92077130000001,
+      "lng": -88.2714892
+    },
+    {
+      "store_id": 538,
+      "name": "Zen Leaf Highland Park",
+      "address": "2030 Skokie Valley Road, Highland Park, Illinois",
+      "city": "Highland Park",
+      "state": "Illinois",
+      "zip": "60035",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://zenleafdispensaries.com/locations/highland-park/menu",
+      "lat": 42.1903389,
+      "lng": -87.8272283
+    },
+    {
+      "store_id": 539,
+      "name": "Zen Leaf Aurora",
+      "address": "740 Illinois Route 59, Aurora, Illinois",
+      "city": "Aurora",
+      "state": "Illinois",
+      "zip": "60504",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://zenleafdispensaries.com/locations/aurora/menu",
+      "lat": 41.7657414,
+      "lng": -88.20632239999999
+    },
+    {
+      "store_id": 540,
+      "name": "Zen Leaf Lombard",
+      "address": "783 Butterfield Road, Lombard, Illinois",
+      "city": "Lombard",
+      "state": "Illinois",
+      "zip": "60148",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://zenleafdispensaries.com/locations/lombard/menu",
+      "lat": 41.8396153,
+      "lng": -87.99743169999999
+    },
+    {
+      "store_id": 541,
+      "name": "Zen Leaf Naperville",
+      "address": "1516 North Naper Boulevard, Naperville, Illinois",
+      "city": "Naperville",
+      "state": "Illinois",
+      "zip": "60563",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://zenleafdispensaries.com/locations/naperville/menu",
+      "lat": 41.7974015,
+      "lng": -88.1186719
+    },
+    {
+      "store_id": 542,
+      "name": "Zen Leaf West Loop",
+      "address": "222 South Halsted Street, Chicago, Illinois",
+      "city": "Chicago",
+      "state": "Illinois",
+      "zip": "60661",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://zenleafdispensaries.com/locations/chicago-west-loop/menu",
+      "lat": 41.8785039,
+      "lng": -87.6474252
+    },
+    {
+      "store_id": 543,
+      "name": "Zen Leaf Prospect Heights",
+      "address": "1434 East Rand Road, Prospect Heights, Illinois",
+      "city": "Prospect Heights",
+      "state": "Illinois",
+      "zip": "60070",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://zenleafdispensaries.com/locations/prospect-heights/menu",
+      "lat": 42.1022984,
+      "lng": -87.96606489999999
+    },
+    {
+      "store_id": 545,
+      "name": "Zen Leaf Rogers Park",
+      "address": "7305 North Rogers Avenue, Chicago, Illinois",
+      "city": "Chicago",
+      "state": "Illinois",
+      "zip": "60626",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://zenleafdispensaries.com/locations/chicago-rogers-park/menu",
+      "lat": 42.0138633,
+      "lng": -87.6794039
+    },
+    {
+      "store_id": 546,
+      "name": "Cannabist - Mays Landing",
+      "address": "4476 Black Horse Pike, Hamilton, Mays Landing, New Jersey",
+      "city": "Hamilton",
+      "state": "New Jersey",
+      "zip": "08330",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://www.gocannabist.com/stores/new-jersey/mays-landing/shop",
+      "lat": 39.4516779,
+      "lng": -74.6500157
+    },
+    {
+      "store_id": 547,
+      "name": "Cannabist Tempe by Zen Leaf",
+      "address": "520 South Price Road, Tempe, Arizona",
+      "city": "Tempe",
+      "state": "Arizona",
+      "zip": "85288",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://zenleafdispensaries.com/locations/tempe/menu",
+      "lat": 33.4254239,
+      "lng": -111.8922408
+    },
+    {
+      "store_id": 548,
+      "name": "SWC Prescott by Zen Leaf",
+      "address": "123 East Merritt Street, Prescott, Arizona",
+      "city": "Prescott",
+      "state": "Arizona",
+      "zip": "86301",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://zenleafdispensaries.com/locations/prescott/menu",
+      "lat": 34.55478710000001,
+      "lng": -112.4687731
+    },
+    {
+      "store_id": 550,
+      "name": "Ratio Cannabis",
+      "address": "1145 West High Avenue, New Philadelphia, Ohio",
+      "city": "New Philadelphia",
+      "state": "Ohio",
+      "zip": "44663",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": null,
+      "lat": 40.493513,
+      "lng": -81.4684767
+    },
+    {
+      "store_id": 552,
+      "name": "Zen Leaf Elizabeth",
+      "address": "117 Spring Street, Elizabeth, New Jersey",
+      "city": "Elizabeth",
+      "state": "New Jersey",
+      "zip": "07201",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://zenleafdispensaries.com/locations/elizabeth/menu/",
+      "lat": 40.66299,
+      "lng": -74.205648
+    },
+    {
+      "store_id": 553,
+      "name": "Zen Leaf Neptune",
+      "address": "2100 New Jersey 66, Neptune City, New Jersey",
+      "city": "Neptune City",
+      "state": "New Jersey",
+      "zip": "07753",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://zenleafdispensaries.com/locations/neptune/menu/",
+      "lat": 40.2261412,
+      "lng": -74.0405767
+    },
+    {
+      "store_id": 554,
+      "name": "Zen Leaf Lawrence",
+      "address": "3256 Brunswick Pike, Lawrence Township, New Jersey",
+      "city": "Lawrence Township",
+      "state": "New Jersey",
+      "zip": "08648",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://zenleafdispensaries.com/locations/lawrence/menu/",
+      "lat": 40.290276,
+      "lng": -74.686855
+    },
+    {
+      "store_id": 555,
+      "name": "Zen Leaf Mt. Holly",
+      "address": "600 High Street, Mount Holly, New Jersey",
+      "city": "Mount Holly",
+      "state": "New Jersey",
+      "zip": "08060",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://zenleafdispensaries.com/locations/mt-holly/menu/",
+      "lat": 40.0071503,
+      "lng": -74.7982394
+    },
+    {
+      "store_id": 556,
+      "name": "The Green Standard Tupelo",
+      "address": "3128 Old Belden Circle, Tupelo, Mississippi",
+      "city": "Tupelo",
+      "state": "Mississippi",
+      "zip": "38801",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://shop.thegreenstandarddispensary.com/tupelo",
+      "lat": 34.3020959,
+      "lng": -88.76814979999999
+    },
+    {
+      "store_id": 560,
+      "name": "Sweed test IL #1",
+      "address": "301 George Street, New Haven, Connecticut",
+      "city": "New Haven",
+      "state": "Connecticut",
+      "zip": "06511",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": null,
+      "lat": 41.305798,
+      "lng": -72.93081029999999
+    },
+    {
+      "store_id": 564,
+      "name": "Sweed test FL #1",
+      "address": "2527 Jackson Street, Hollywood, Florida",
+      "city": "Hollywood",
+      "state": "Florida",
+      "zip": "33020",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": null,
+      "lat": 26.008902,
+      "lng": -80.1580467
+    },
+    {
+      "store_id": 566,
+      "name": "Los Angeles",
+      "address": "5818 West Pico Boulevard, Los Angeles, California",
+      "city": "Los Angeles",
+      "state": "California",
+      "zip": "90019",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://shop.eazedispensary.com/los-angeles",
+      "lat": 34.0509584,
+      "lng": -118.3653301
+    },
+    {
+      "store_id": 569,
+      "name": "San Francisco",
+      "address": "1685 Haight Street, San Francisco, California",
+      "city": "San Francisco",
+      "state": "California",
+      "zip": "94117",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://shop.eazedispensary.com/san-francisco",
+      "lat": 37.7694223,
+      "lng": -122.4502572
+    },
+    {
+      "store_id": 572,
+      "name": "Fired Cannabis - Alameda",
+      "address": "2601 West Alameda Avenue, Denver, Colorado",
+      "city": "Denver",
+      "state": "Colorado",
+      "zip": "80219",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://shop.firedcannabis.com/alameda",
+      "lat": 39.7113855,
+      "lng": -105.0182442
+    },
+    {
+      "store_id": 574,
+      "name": "Sweed test METRC #1Sweed test METRC #2",
+      "address": "1104 Linwood Avenue, Haddon Township, New Jersey",
+      "city": "Haddon Township",
+      "state": "New Jersey",
+      "zip": "08108",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": null,
+      "lat": 39.9086239,
+      "lng": -75.061201
+    },
+    {
+      "store_id": 576,
+      "name": "Zen Leaf Towson",
+      "address": "1608 East Joppa Road, Towson, Maryland",
+      "city": "Towson",
+      "state": "Maryland",
+      "zip": "21286",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://zenleafdispensaries.com/locations/towson/menu/recreational",
+      "lat": 39.3970449,
+      "lng": -76.56676019999999
+    },
+    {
+      "store_id": 577,
+      "name": "Zen Leaf Elkridge",
+      "address": "6000 Marshalee Drive, suite 150, Elkridge, Maryland",
+      "city": "Elkridge",
+      "state": "Maryland",
+      "zip": "21075",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://zenleafdispensaries.com/locations/elkridge/menu/recreational",
+      "lat": 39.2111641,
+      "lng": -76.7781127
+    },
+    {
+      "store_id": 578,
+      "name": "Zen Leaf Pasadena",
+      "address": "16 Magothy Beach Road, Pasadena, Maryland",
+      "city": "Pasadena",
+      "state": "Maryland",
+      "zip": "21122",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://zenleafdispensaries.com/locations/pasadena/menu/recreational",
+      "lat": 39.1213956,
+      "lng": -76.5177832
+    },
+    {
+      "store_id": 579,
+      "name": "Zen Leaf Germantown",
+      "address": "13007 Wisteria Drive, suite 28 29, Germantown, Maryland",
+      "city": "Germantown",
+      "state": "Maryland",
+      "zip": "20874",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://zenleafdispensaries.com/locations/germantown/menu/recreational",
+      "lat": 39.1786757,
+      "lng": -77.27040459999999
+    },
+    {
+      "store_id": 580,
+      "name": "Zen Leaf North Las Vegas",
+      "address": "4444 West Craig Road, North Las Vegas, Nevada",
+      "city": "North Las Vegas",
+      "state": "Nevada",
+      "zip": "89032",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://zenleafdispensaries.com/locations/north-las-vegas/menu/",
+      "lat": 36.2394487,
+      "lng": -115.2021422
+    },
+    {
+      "store_id": 583,
+      "name": "Zen Leaf North Las Vegas",
+      "address": "4444 West Craig Road, North Las Vegas, Nevada",
+      "city": "North Las Vegas",
+      "state": "Nevada",
+      "zip": "89032",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://web-ui-kiosk-production.sweedpos.com/s583/welcome",
+      "lat": 36.2394487,
+      "lng": -115.2021422
+    },
+    {
+      "store_id": 585,
+      "name": "Fired Cannabis - Glenwood Springs",
+      "address": "2922 South Glen Avenue, Glenwood Springs, Colorado",
+      "city": "Glenwood Springs",
+      "state": "Colorado",
+      "zip": "81601",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://shop.firedcannabis.com/glenwood-springs",
+      "lat": 39.5218488,
+      "lng": -107.3208585
+    },
+    {
+      "store_id": 591,
+      "name": "Sweed Autotests 1",
+      "address": "100 Bortons Mill Road, Cherry Hill Township, New Jersey",
+      "city": "Cherry Hill Township",
+      "state": "New Jersey",
+      "zip": "08034",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://web-ui-production.sweedpos.com/s591",
+      "lat": 39.9001512,
+      "lng": -75.0199835
+    },
+    {
+      "store_id": 592,
+      "name": "Fired Cannabis - Lakewood",
+      "address": "389 Wadsworth Boulevard, Lakewood, Colorado",
+      "city": "Lakewood",
+      "state": "Colorado",
+      "zip": "80226",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://shop.firedcannabis.com/lakewood",
+      "lat": 39.72158830000001,
+      "lng": -105.0820381
+    },
+    {
+      "store_id": 593,
+      "name": "Zen Leaf CT",
+      "address": "2903 Berlin Turnpike, Newington, Connecticut",
+      "city": "Newington",
+      "state": "Connecticut",
+      "zip": "06111",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": null,
+      "lat": 41.6712527,
+      "lng": -72.7179651
+    },
+    {
+      "store_id": 598,
+      "name": "Zen Leaf Newington",
+      "address": "2903 Berlin Turnpike, Newington, Connecticut",
+      "city": "Newington",
+      "state": "Connecticut",
+      "zip": "06111",
+      "sale_types": [
+        "Medical",
+        "Recreational"
+      ],
+      "url": "https://zenleafdispensaries.com/locations/newington/menu",
+      "lat": 41.6712527,
+      "lng": -72.7179651
+    },
+    {
+      "store_id": 605,
+      "name": "Fired Cannabis - Cherry Creek",
+      "address": "6858 East Evans Avenue, Denver, Colorado",
+      "city": "Denver",
+      "state": "Colorado",
+      "zip": "80224",
+      "sale_types": [
+        "Recreational"
+      ],
+      "url": "https://shop.firedcannabis.com/cherry-creek",
+      "lat": 39.67821199999999,
+      "lng": -104.9090379
+    }
+  ],
+  "errors": [
+    {
+      "store_id": 584,
+      "error": "'NoneType' object has no attribute 'get'"
+    },
+    {
+      "store_id": 590,
+      "error": "'NoneType' object has no attribute 'get'"
+    },
+    {
+      "store_id": 602,
+      "error": "'NoneType' object has no attribute 'get'"
+    },
+    {
+      "store_id": 603,
+      "error": "'NoneType' object has no attribute 'get'"
+    },
+    {
+      "store_id": 604,
+      "error": "'NoneType' object has no attribute 'get'"
+    }
+  ],
+  "total_discovered": 165,
+  "total_fetched": 160
+}

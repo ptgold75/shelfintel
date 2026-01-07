@@ -1,0 +1,22 @@
+{
+  "total_raw_products": 3681,
+  "total_clusters": 704,
+  "estimated_unique_products": 704,
+  "estimated_duplicates": 2977,
+  "duplicate_rate": 80.87476229285521,
+  "clusters_with_name_variations": 1,
+  "top_duplicate_clusters": [
+    {
+      "canonical_name": "Gelato Cake",
+      "brand": "District Cannabis",
+      "category": "Vaporizer",
+      "size": null,
+      "dispensary_count": 1,
+      "name_variations": [
+        "Gelato Cake ",
+        "Gelato Cake"
+      ],
+      "avg_price": 35.0
+    }
+  ]
+}

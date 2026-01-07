@@ -142,18 +142,22 @@ def main():
     parser = argparse.ArgumentParser(description="Run menu scrapes")
     parser.add_argument("--disp-id", help="Specific dispensary ID to scrape")
     parser.add_argument("--all", action="store_true", help="Scrape all active dispensaries")
+    parser.add_argument("--state", help="Filter by state (e.g., NJ, MD)")
     args = parser.parse_args()
-    
+
     db = get_session()
-    
+
     # Build query
     query = db.query(Dispensary).filter(
         Dispensary.menu_url.isnot(None),
         Dispensary.is_active == True,
     )
-    
+
     if args.disp_id:
         query = query.filter(Dispensary.dispensary_id == args.disp_id)
+
+    if args.state:
+        query = query.filter(Dispensary.state == args.state.upper())
     
     dispensaries = query.all()
     

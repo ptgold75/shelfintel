@@ -1,0 +1,26 @@
+# New Jersey Dispensary Discovery URLs
+# Provider: Sweed (Zen Leaf)
+https://zenleafdispensaries.com/locations/neptune/menu/recreational
+https://zenleafdispensaries.com/locations/lawrence/menu/recreational
+https://zenleafdispensaries.com/locations/elizabeth/menu/recreational
+https://zenleafdispensaries.com/locations/mt-holly/menu
+
+# Provider: Dutchie (Curaleaf)
+https://curaleaf.com/shop/new-jersey/curaleaf-nj-bordentown/menu
+https://curaleaf.com/shop/new-jersey/curaleaf-nj-bellmawr/menu
+https://curaleaf.com/shop/new-jersey/curaleaf-nj-edgewater-park/menu
+
+# Provider: Dutchie (Ascend)
+https://letsascend.com/menu/nj-fort-lee-menu/
+https://letsascend.com/menu/nj-rochelle-park-menu/
+https://letsascend.com/menu/nj-wharton-menu/
+
+# Provider: Jane (The Botanist)
+https://shopbotanist.com/locations/egg-harbor-township-dispensary/shop-adult-use/
+https://shopbotanist.com/locations/collingswood-dispensary/
+https://shopbotanist.com/locations/williamstown-dispensary/shop-adult-use/
+
+# Provider: Jane (RISE)
+https://risecannabis.com/dispensaries/new-jersey/paterson/
+https://risecannabis.com/dispensaries/new-jersey/bloomfield/
+https://risecannabis.com/dispensaries/new-jersey/paramus/

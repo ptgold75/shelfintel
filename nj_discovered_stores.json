@@ -1,0 +1,81 @@
+{
+  "discovery_date": "2025-01-07",
+  "state": "NJ",
+  "stores": [
+    {
+      "name": "Zen Leaf Neptune",
+      "provider": "sweed",
+      "store_id": "553",
+      "api_base": "https://web-ui-production.sweedpos.com",
+      "url": "https://zenleafdispensaries.com/locations/neptune/menu/recreational",
+      "city": "Neptune City",
+      "address": "2100 NJ-66, Neptune City, NJ 07753",
+      "confidence": 1.0
+    },
+    {
+      "name": "Zen Leaf Lawrence",
+      "provider": "sweed",
+      "store_id": "554",
+      "api_base": "https://web-ui-production.sweedpos.com",
+      "url": "https://zenleafdispensaries.com/locations/lawrence/menu/recreational",
+      "city": "Lawrence Township",
+      "address": "3256 Brunswick Pike, Lawrence Township, NJ",
+      "confidence": 1.0
+    },
+    {
+      "name": "Zen Leaf Elizabeth",
+      "provider": "sweed",
+      "store_id": "552",
+      "api_base": "https://web-ui-production.sweedpos.com",
+      "url": "https://zenleafdispensaries.com/locations/elizabeth/menu/recreational",
+      "city": "Elizabeth",
+      "address": "117 Spring Street, Elizabeth, NJ",
+      "confidence": 1.0
+    },
+    {
+      "name": "Zen Leaf Mt. Holly",
+      "provider": "sweed",
+      "store_id": "555",
+      "api_base": "https://web-ui-production.sweedpos.com",
+      "url": "https://zenleafdispensaries.com/locations/mt-holly/menu",
+      "city": "Mount Holly",
+      "address": "600 High Street, Mount Holly, NJ",
+      "confidence": 1.0
+    },
+    {
+      "name": "Curaleaf Bordentown",
+      "provider": "sweed",
+      "store_id": "129",
+      "api_base": "https://web-ui-curaleaf.sweedpos.com",
+      "url": "https://curaleaf.com/shop/new-jersey/curaleaf-nj-bordentown/menu",
+      "city": "Bordentown",
+      "address": "191 U.S. 130, Bordentown, NJ",
+      "confidence": 0.95
+    },
+    {
+      "name": "The Botanist Egg Harbor",
+      "provider": "jane",
+      "store_id": null,
+      "url": "https://shopbotanist.com/locations/egg-harbor-township-dispensary/shop-adult-use/",
+      "city": "Egg Harbor Township",
+      "address": "100 Century Dr, Egg Harbor Township, NJ 08234",
+      "confidence": 1.0,
+      "notes": "Need to extract Jane store ID from API calls"
+    },
+    {
+      "name": "Ascend Fort Lee",
+      "provider": "dutchie",
+      "store_id": null,
+      "url": "https://letsascend.com/menu/nj-fort-lee-menu/",
+      "city": "Fort Lee",
+      "confidence": 0.0,
+      "notes": "Uses Dutchie iframe embed, needs different discovery approach"
+    }
+  ],
+  "summary": {
+    "total_discovered": 7,
+    "sweed_ready": 5,
+    "jane_needs_id": 1,
+    "dutchie_needs_work": 1
+  }
+}

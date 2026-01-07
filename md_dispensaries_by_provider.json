@@ -1,0 +1,87 @@
+{
+  "sweed": [
+    {"name": "gLeaf Rockville", "url": "https://www.gleaf.com/stores/maryland/rockville/shop", "store_id": "376", "state": "MD", "county": "Montgomery County"},
+    {"name": "gLeaf Frederick", "url": "https://www.gleaf.com/stores/maryland/frederick/shop", "store_id": "375", "state": "MD", "county": "Frederick County"},
+    {"name": "Zen Leaf Towson", "url": "https://zenleafdispensaries.com/locations/towson/menu/recreational", "store_id": "576", "state": "MD", "county": "Baltimore County"},
+    {"name": "Zen Leaf Elkridge", "url": "https://zenleafdispensaries.com/locations/elkridge/menu/recreational", "store_id": "577", "state": "MD", "county": "Howard County"},
+    {"name": "Zen Leaf Pasadena", "url": "https://zenleafdispensaries.com/locations/pasadena/menu/recreational", "store_id": "578", "state": "MD", "county": "Anne Arundel County"},
+    {"name": "Zen Leaf Germantown", "url": "https://zenleafdispensaries.com/locations/germantown/menu/recreational", "store_id": "579", "state": "MD", "county": "Montgomery County"},
+    {"name": "Apothecarium Burtonsville", "url": "https://shop.apothecarium.com/burtonsville", "store_id": "190", "state": "MD", "county": "Montgomery County", "notes": "Formerly Herbiculture"}
+  ],
+  "dutchie": [
+    {"name": "Trulieve Rockville", "url": "https://dutchie.com/dispensary/harvest-of-rockville", "retailer_id": "5ee8036e53f88300d399c90d", "state": "MD", "county": "Montgomery County"},
+    {"name": "Trulieve Lutherville", "url": "https://www.trulieve.com/dispensaries/lutherville-md", "retailer_id": "5ee803db705f7000b483a1df", "state": "MD", "county": "Baltimore County"},
+    {"name": "Trulieve Halethorpe", "url": "https://www.trulieve.com/dispensaries/halethorpe-md", "retailer_id": "5ee8039d8a056d0109b34ca4", "state": "MD", "county": "Baltimore County"},
+    {"name": "The Dispensary MD", "url": "https://dutchie.com/dispensary/the-dispensary-md", "retailer_id": "645e69d1d65961010d473677", "state": "MD", "county": "Frederick County"},
+    {"name": "Thrive Upper Marlboro", "url": "https://dutchie.com/dispensary/thrive-maryland-upper-marlboro", "retailer_id": "662ab25622e23a878d9628cf", "state": "MD", "county": "Prince George's County"},
+    {"name": "Thrive Annapolis", "url": "https://dutchie.com/dispensary/thrive-maryland-annapolis", "retailer_id": "6243f2482169cf00889e2790", "state": "MD", "county": "Anne Arundel County"},
+    {"name": "Ascend Ellicott City", "url": "https://dutchie.com/dispensary/ellicott-city-maryland", "retailer_id": "684990e1f61c0368fc238e5b", "state": "MD", "county": "Howard County"},
+    {"name": "Ascend Laurel", "url": "https://dutchie.com/dispensary/laurel-maryland", "retailer_id": "6849910c3e9b16cfc2f71271", "state": "MD", "county": "Prince George's County"},
+    {"name": "Ascend Crofton", "url": "https://dutchie.com/dispensary/crofton-maryland", "retailer_id": "6849908a5e99bd1b44b0451d", "state": "MD", "county": "Anne Arundel County"},
+    {"name": "Waave Greenbelt", "url": "https://dutchie.com/dispensary/waave", "retailer_id": "605bbcd80922a900cb6bed9d", "state": "MD", "county": "Prince George's County"},
+    {"name": "Health for Life Baltimore", "url": "https://dutchie.com/dispensary/health-for-life-baltimore", "retailer_id": "5f5136e9f7f4fb00d5593a3b", "state": "MD", "county": "Baltimore City"},
+    {"name": "Gold Leaf Annapolis", "url": "https://goldleafmd.com/", "retailer_id": "5400", "medical_retailer_id": "839", "state": "MD", "county": "Anne Arundel County", "notes": "5400 for adult use, 839 for medical"},
+    {"name": "Chesacanna", "url": "https://menu.chesacanna.com/stores/chesacanna1", "retailer_id": "chesacanna1", "state": "MD", "notes": "Custom Dutchie subdomain"},
+    {"name": "Liberty Cannabis Rockville", "url": "https://libertycannabis.com/shop/rockville/", "state": "MD", "county": "Montgomery County", "notes": "Dutchie confirmed via Surfside"},
+    {"name": "Far & Dotter Timonium", "url": "https://fardotter.com/", "retailer_id": "3350", "state": "MD", "county": "Baltimore County"}
+  ],
+  "jane": [
+    {"name": "RISE Bethesda", "url": "https://risecannabis.com/dispensaries/maryland/bethesda/5476/recreational-menu/", "jane_store_id": "5476", "state": "MD", "county": "Montgomery County"},
+    {"name": "RISE Silver Spring", "url": "https://risecannabis.com/dispensaries/maryland/silver-spring/5486/recreational-menu/", "jane_store_id": "5486", "state": "MD", "county": "Montgomery County"},
+    {"name": "RISE Joppa", "url": "https://risecannabis.com/dispensaries/maryland/joppa/5478/recreational-menu/", "jane_store_id": "5478", "state": "MD", "county": "Harford County"},
+    {"name": "RISE Hagerstown", "url": "https://risecannabis.com/dispensaries/maryland/hagerstown/5477/recreational-menu/", "jane_store_id": "5477", "state": "MD", "county": "Washington County"},
+    {"name": "Peake ReLeaf Rockville", "url": "https://www.peakereleaf.com/", "state": "MD", "county": "Montgomery County", "notes": "iHeartJane via Surfside integration"}
+  ],
+  "leafbridge": [
+    {"name": "Health for Life Bethesda", "url": "https://healthforlifedispensaries.com/maryland/bethesda/", "retailer_id": "e5467751-d970-46c6-9a27-cf6b73c2968e", "state": "MD", "county": "Montgomery County"},
+    {"name": "Health for Life White Marsh", "url": "https://healthforlifedispensaries.com/maryland/white-marsh-med/", "retailer_id": "058e83de-a7c4-4004-9fb3-fc8f633fd874", "state": "MD", "county": "Baltimore County"},
+    {"name": "Remedy Columbia", "url": "https://remedymaryland.com/", "state": "MD", "county": "Howard County"},
+    {"name": "Remedy Baltimore", "url": "https://remedymaryland.com/", "state": "MD", "county": "Baltimore County", "notes": "Windsor Mill location"},
+    {"name": "Story Cannabis Hyattsville", "url": "https://storycannabis.com/", "state": "MD", "county": "Prince George's County"},
+    {"name": "Ethos Rockville", "url": "https://ethoscannabis.com/dispensary-locations/md/rockville/", "retailer_id": "3de666a0-20a4-46b3-84e8-43ec1041b0f7", "state": "MD", "county": "Montgomery County"},
+    {"name": "Ethos Catonsville", "url": "https://www.ethoscannabis.com/locations-menus/catonsville/", "state": "MD", "county": "Baltimore County"}
+  ],
+  "curaleaf_private": [
+    {"name": "Curaleaf Reisterstown", "url": "https://curaleaf.com/shop/maryland/curaleaf-md-reisterstown-au", "state": "MD", "county": "Baltimore County", "notes": "Uses Dutchie backend but requires age gate bypass"},
+    {"name": "Curaleaf Montgomery Village", "url": "https://curaleaf.com/shop/maryland/curaleaf-md-gaithersburg-montgomery-village-au", "state": "MD", "county": "Montgomery County", "notes": "Uses Dutchie backend"},
+    {"name": "Curaleaf Columbia", "url": "https://curaleaf.com/shop/maryland/curaleaf-md-columbia", "state": "MD", "county": "Howard County", "notes": "Uses Dutchie backend"},
+    {"name": "Curaleaf Frederick", "url": "https://curaleaf.com/shop/maryland/curaleaf-dispensary-md-frederick", "state": "MD", "county": "Frederick County", "notes": "Uses Dutchie backend"}
+  ],
+  "proprietary": [
+    {"name": "Bloom Germantown", "url": "https://bloommarijuana.com/", "state": "MD", "county": "Montgomery County", "platform": "Storyblok CMS", "notes": "Custom proprietary system"},
+    {"name": "Verilife Westminster", "url": "https://www.verilife.com/md/locations/westminster", "state": "MD", "county": "Carroll County", "platform": "PharmaCann", "notes": "PharmaCann proprietary e-commerce"},
+    {"name": "Nirvana Cannabis Baltimore", "url": "https://nirvanacannabis.com/", "joint_business_id": "3730", "state": "MD", "county": "Baltimore City", "notes": "Custom system, uses Weedmaps/Leafly for orders"},
+    {"name": "Nirvana Cannabis Rosedale", "url": "https://nirvanacannabis.com/", "joint_business_id": "5931", "state": "MD", "county": "Baltimore County", "notes": "Custom system"}
+  ],
+  "unknown": [
+    {"name": "Green Goods Baltimore", "url": "https://visitgreengoods.com/locations/baltimore-md/", "state": "MD", "county": "Baltimore City", "notes": "Vireo Health - needs investigation"},
+    {"name": "Green Goods Frederick", "url": "https://visitgreengoods.com/locations/frederick-md/", "state": "MD", "county": "Frederick County", "notes": "Vireo Health chain"},
+    {"name": "Green Goods Rockville", "url": "https://visitgreengoods.com/locations/rockville-md/", "state": "MD", "county": "Montgomery County", "notes": "Vireo Health chain"},
+    {"name": "Cookies Baltimore", "url": "https://noxx.com/location/cookies-baltimore/", "state": "MD", "county": "Baltimore City", "notes": "Site blocked, needs investigation"},
+    {"name": "Revolution Releaf Laurel", "url": "https://revolutionreleaf.com/", "state": "MD", "county": "Prince George's County", "notes": "No provider found"},
+    {"name": "Mana Supply Edgewater", "url": "https://manasupply.com/shop/edgewater-maryland/", "state": "MD", "county": "Anne Arundel County", "notes": "Uses Dutchie images - needs ID"},
+    {"name": "Columbia Care Chevy Chase", "url": "https://columbia.care/", "state": "MD", "county": "Montgomery County", "notes": "Columbia Care chain"},
+    {"name": "Green Care Medical", "url": "https://greencaremedical.com/", "state": "MD", "county": "Montgomery County", "notes": "SSL issues"},
+    {"name": "Sweetspot Olney", "url": "https://sweetspotfarms.com/", "state": "MD", "county": "Montgomery County", "notes": "No provider found"},
+    {"name": "Potomac Holistics Rockville", "url": "https://potomacholistics.com/", "state": "MD", "county": "Montgomery County", "notes": "Internal menu pages"},
+    {"name": "HerbaFi Silver Spring", "url": "https://www.herbafi.com/", "state": "MD", "county": "Montgomery County", "notes": "Has mobile app"},
+    {"name": "Peninsula Alternative Health", "url": "https://peninsulamd.com/", "state": "MD", "county": "Montgomery County", "notes": "Needs investigation"},
+    {"name": "Greenlight Therapeutics", "url": "https://greenlighttherapeutics.com/", "state": "MD", "county": "Anne Arundel County", "notes": "Gambrills location"},
+    {"name": "Ritual Glen Burnie", "url": "https://ritualdispensary.com/", "state": "MD", "county": "Anne Arundel County", "notes": "No provider found"},
+    {"name": "GreenLabs Baltimore", "url": "https://greenlabs.com/", "state": "MD", "county": "Baltimore City", "notes": "Needs investigation"},
+    {"name": "Green Point Wellness Millersville", "url": "https://greenpointwellness.com/", "state": "MD", "county": "Anne Arundel County", "notes": "Redirects to tracking"},
+    {"name": "Green Point Wellness Linthicum", "url": "https://greenpointwellness.com/", "state": "MD", "county": "Anne Arundel County", "notes": "Green Point chain"},
+    {"name": "Green Point Wellness Laurel", "url": "https://greenpointwellness.com/", "state": "MD", "county": "Prince George's County", "notes": "Green Point chain"},
+    {"name": "The Edge Edgewater", "url": "https://theedgemd.com/", "state": "MD", "county": "Anne Arundel County", "notes": "Green Point collaboration"},
+    {"name": "Mary & Main Capitol Heights", "url": "https://maryandmain.com/", "state": "MD", "county": "Prince George's County", "notes": "Needs investigation"},
+    {"name": "The Forest Dispensary Baltimore", "url": "https://theforestmd.com/", "state": "MD", "county": "Baltimore City", "notes": "Needs investigation"},
+    {"name": "ReLeaf Shop Baltimore", "url": "https://releafshop.com/", "state": "MD", "county": "Baltimore City", "notes": "Needs investigation"},
+    {"name": "The Living Room", "url": "https://thelivingroommd.com/", "state": "MD", "notes": "Site down"},
+    {"name": "Kip Dispensary", "url": "https://kipdispensary.com/", "state": "MD", "notes": "Site down"},
+    {"name": "Elevated Releaf", "url": "https://elevatedreleaf.com/", "state": "MD", "notes": "Needs investigation"},
+    {"name": "Blair Wellness Center", "url": "https://blairwellness.com/", "state": "MD", "county": "Baltimore City", "notes": "Needs investigation"},
+    {"name": "Ascend Aberdeen", "url": "https://ascendwellness.com/", "state": "MD", "county": "Harford County", "notes": "URL not found - verify location"},
+    {"name": "Far & Dotter Elkton", "url": "https://fardotter.com/", "retailer_id": "5686", "state": "MD", "county": "Cecil County"},
+    {"name": "Far & Dotter Pikesville", "url": "https://fardotter.com/", "retailer_id": "497636", "state": "MD", "county": "Baltimore County"}
+  ]
+}

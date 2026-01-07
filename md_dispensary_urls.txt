@@ -1,0 +1,17 @@
+# Maryland Dispensary URLs for Discovery
+# gLeaf locations (known Sweed)
+https://www.gleaf.com/stores/maryland/rockville/shop
+https://www.gleaf.com/stores/maryland/frederick/shop
+https://www.gleaf.com/stores/maryland/silver-spring/shop
+
+# Zen Leaf locations
+https://zenleafdispensaries.com/location/towson-maryland/
+https://zenleafdispensaries.com/location/waldorf-maryland/
+https://zenleafdispensaries.com/location/jessup-maryland/
+
+# Curaleaf locations (try embedded menu directly)
+https://curaleaf.com/shop/maryland/curaleaf-maryland-reisterstown
+
+# Other chains
+https://www.cannabist.co/locations/maryland/
+https://www.sunnyside.shop/dispensaries/maryland/

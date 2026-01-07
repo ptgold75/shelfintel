@@ -1,0 +1,131 @@
+{
+  "ownership_groups": {
+    "curaleaf": {
+      "name": "Curaleaf Holdings",
+      "ticker": "CURLF",
+      "headquarters": "New York, NY",
+      "md_locations": [
+        {"name": "Curaleaf Reisterstown", "county": "Baltimore County"},
+        {"name": "Curaleaf Montgomery Village", "county": "Montgomery County"},
+        {"name": "Curaleaf Columbia", "county": "Howard County"},
+        {"name": "Curaleaf Frederick", "county": "Frederick County"}
+      ]
+    },
+    "trulieve": {
+      "name": "Trulieve Cannabis Corp",
+      "ticker": "TCNNF",
+      "headquarters": "Tallahassee, FL",
+      "notes": "Acquired Harvest Health in 2021",
+      "md_locations": [
+        {"name": "Trulieve Rockville", "county": "Montgomery County", "former_name": "Harvest of Rockville"},
+        {"name": "Trulieve Lutherville", "county": "Baltimore County", "former_name": "Harvest of Lutherville"}
+      ]
+    },
+    "verano": {
+      "name": "Verano Holdings",
+      "ticker": "VRNOF",
+      "headquarters": "Chicago, IL",
+      "brands": ["Zen Leaf"],
+      "md_locations": [
+        {"name": "Zen Leaf Towson", "county": "Baltimore County"},
+        {"name": "Zen Leaf Elkridge", "county": "Howard County"},
+        {"name": "Zen Leaf Pasadena", "county": "Anne Arundel County"},
+        {"name": "Zen Leaf Germantown", "county": "Montgomery County"}
+      ]
+    },
+    "green_thumb": {
+      "name": "Green Thumb Industries",
+      "ticker": "GTBIF",
+      "headquarters": "Chicago, IL",
+      "brands": ["RISE", "Dogwalkers", "Beboe", "incredibles"],
+      "md_locations": [
+        {"name": "RISE Bethesda", "county": "Montgomery County"},
+        {"name": "RISE Silver Spring", "county": "Montgomery County"},
+        {"name": "RISE Joppa", "county": "Harford County"},
+        {"name": "RISE Hagerstown", "county": "Washington County"}
+      ]
+    },
+    "gleaf": {
+      "name": "Columbia Care / gLeaf",
+      "ticker": "CCHWF",
+      "headquarters": "New York, NY",
+      "notes": "Acquired by Cresco Labs in 2022",
+      "md_locations": [
+        {"name": "gLeaf Rockville", "county": "Montgomery County"},
+        {"name": "gLeaf Frederick", "county": "Frederick County"}
+      ]
+    },
+    "ascend": {
+      "name": "Ascend Wellness Holdings",
+      "ticker": "AAWH",
+      "headquarters": "New York, NY",
+      "md_locations": [
+        {"name": "Ascend Ellicott City", "county": "Howard County"},
+        {"name": "Ascend Laurel", "county": "Prince George's County"},
+        {"name": "Ascend Crofton", "county": "Anne Arundel County"}
+      ]
+    },
+    "thrive": {
+      "name": "Thrive Cannabis Marketplace",
+      "headquarters": "Nevada",
+      "md_locations": [
+        {"name": "Thrive Upper Marlboro", "county": "Prince George's County"},
+        {"name": "Thrive Annapolis", "county": "Anne Arundel County"}
+      ]
+    },
+    "health_for_life": {
+      "name": "Health for Life / Terrabis",
+      "notes": "Part of Terrabis Holdings",
+      "md_locations": [
+        {"name": "Health for Life Baltimore", "county": "Baltimore City"},
+        {"name": "Health for Life White Marsh", "county": "Baltimore County"}
+      ]
+    },
+    "culta": {
+      "name": "Culta LLC",
+      "headquarters": "Cambridge, MD",
+      "notes": "Maryland-based cultivator and retailer",
+      "md_locations": [
+        {"name": "Culta Urbana", "county": "Frederick County"}
+      ]
+    }
+  },
+  "independent_operators": [
+    {"name": "The Dispensary MD", "county": "Frederick County", "owner": "Independent"},
+    {"name": "Waave Greenbelt", "county": "Prince George's County", "owner": "Independent"},
+    {"name": "Gold Leaf Annapolis", "county": "Anne Arundel County", "owner": "Independent"},
+    {"name": "Bloom Germantown", "county": "Montgomery County", "owner": "Bloom Medicinals"},
+    {"name": "Revolution Releaf", "county": "Anne Arundel County", "owner": "Independent"},
+    {"name": "Ethos Catonsville", "county": "Baltimore County", "owner": "Ethos Cannabis"},
+    {"name": "Cookies Baltimore", "county": "Baltimore City", "owner": "Cookies / Noxx"},
+    {"name": "Green Goods Baltimore", "county": "Baltimore City", "owner": "Vireo Health"},
+    {"name": "Verilife Westminster", "county": "Carroll County", "owner": "PharmaCann"},
+    {"name": "Mana Supply Edgewater", "county": "Anne Arundel County", "owner": "Independent"}
+  ],
+  "md_counties": [
+    "Allegany County",
+    "Anne Arundel County",
+    "Baltimore City",
+    "Baltimore County",
+    "Calvert County",
+    "Caroline County",
+    "Carroll County",
+    "Cecil County",
+    "Charles County",
+    "Dorchester County",
+    "Frederick County",
+    "Garrett County",
+    "Harford County",
+    "Howard County",
+    "Kent County",
+    "Montgomery County",
+    "Prince George's County",
+    "Queen Anne's County",
+    "Somerset County",
+    "St. Mary's County",
+    "Talbot County",
+    "Washington County",
+    "Wicomico County",
+    "Worcester County"
+  ]
+}

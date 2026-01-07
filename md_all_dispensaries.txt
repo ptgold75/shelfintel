@@ -1,0 +1,72 @@
+# Maryland Dispensary Menu URLs - Comprehensive List
+# For provider detection (Sweed, Dutchie, iHeartJane)
+
+# ============================================
+# GLEAF (Known Sweed - verified working)
+# ============================================
+https://www.gleaf.com/stores/maryland/rockville/shop
+https://www.gleaf.com/stores/maryland/frederick/shop
+https://www.gleaf.com/stores/maryland/silver-spring/shop
+
+# ============================================
+# ZEN LEAF (Detected Sweed)
+# ============================================
+https://zenleafdispensaries.com/locations/towson/menu/recreational
+https://zenleafdispensaries.com/locations/elkridge/menu/recreational
+https://zenleafdispensaries.com/locations/germantown/menu/recreational
+https://zenleafdispensaries.com/locations/pasadena/menu/recreational
+
+# ============================================
+# RISE CANNABIS (Detected iHeartJane)
+# ============================================
+https://risecannabis.com/dispensaries/maryland/bethesda/5476/recreational-menu/
+https://risecannabis.com/dispensaries/maryland/silver-spring/5486/recreational-menu/
+https://risecannabis.com/dispensaries/maryland/joppa/5478/recreational-menu/
+https://risecannabis.com/dispensaries/maryland/hagerstown/5477/recreational-menu/
+
+# ============================================
+# CURALEAF (Unknown platform)
+# ============================================
+https://curaleaf.com/shop/maryland/curaleaf-md-reisterstown-au
+https://curaleaf.com/shop/maryland/curaleaf-md-gaithersburg-montgomery-village-au
+https://curaleaf.com/shop/maryland/curaleaf-md-columbia
+https://curaleaf.com/shop/maryland/curaleaf-dispensary-md-frederick
+
+# ============================================
+# ETHOS (Detected Dutchie)
+# ============================================
+https://www.ethoscannabis.com/locations-menus/catonsville/
+https://www.ethoscannabis.com/locations-menus/maryland/
+
+# ============================================
+# HEALTH FOR LIFE
+# ============================================
+https://healthforlifedispensaries.com/maryland/
+https://healthforlifedispensaries.com/maryland/white-marsh-med/
+https://healthforlifedispensaries.com/maryland/baltimore/
+
+# ============================================
+# TRULIEVE (formerly Harvest)
+# ============================================
+https://www.trulieve.com/dispensaries/maryland
+https://www.trulieve.com/dispensaries/maryland/lutherville
+https://www.trulieve.com/dispensaries/maryland/rockville
+
+# ============================================
+# OTHER CHAINS (Need URLs)
+# ============================================
+# Verilife - need menu URLs
+# Green Goods - need menu URLs
+# Cookies Baltimore - need menu URLs
+# Remedy - need menu URLs
+# Bloom Medicinals - need menu URLs
+# Kannavis - need menu URLs
+# Gold Leaf - need menu URLs
+# Nature's Medicines - need menu URLs
+# Greenhouse Wellness - need menu URLs
+# The Dispensary - need menu URLs
+# Living Room - need menu URLs
+# Revolution Releaf - need menu URLs
+# Green Point Wellness - need menu URLs
+# Mana Supply - need menu URLs
+# Story Cannabis - need menu URLs
