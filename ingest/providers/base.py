@@ -17,6 +17,7 @@ class MenuItem:
     raw_discount_text: Optional[str] = None
     raw_description: Optional[str] = None
     raw_json: dict = field(default_factory=dict)
+    menu_type: str = "recreational"  # "recreational" or "medical"
 
 class BaseProvider(ABC):
     """Abstract base class for dispensary menu providers."""

@@ -11,6 +11,7 @@ import plotly.express as px
 import re
 from sqlalchemy import text
 from core.db import get_engine
+from core.category_utils import get_normalized_category_sql
 
 st.set_page_config(page_title="Availability | CannLinx", page_icon=None, layout="wide", initial_sidebar_state="collapsed")
 
@@ -117,18 +118,19 @@ def get_stores(state):
 
 @st.cache_data(ttl=300)
 def get_store_summary(dispensary_id):
+    cat_sql = get_normalized_category_sql()
     with engine.connect() as conn:
-        # Categories
-        categories = pd.read_sql(text("""
-            SELECT raw_category as category, COUNT(*) as cnt
+        # Categories (normalized)
+        categories = pd.read_sql(text(f"""
+            SELECT {cat_sql} as category, COUNT(*) as cnt
             FROM raw_menu_item
             WHERE dispensary_id = :disp_id
             AND scrape_run_id = (
-                SELECT scrape_run_id FROM scrape_run 
+                SELECT scrape_run_id FROM scrape_run
                 WHERE dispensary_id = :disp_id AND status = 'success'
                 ORDER BY started_at DESC LIMIT 1
             )
-            GROUP BY raw_category
+            GROUP BY {cat_sql}
             ORDER BY cnt DESC
         """), conn, params={"disp_id": dispensary_id})
         
@@ -151,43 +153,44 @@ def get_store_summary(dispensary_id):
 
 @st.cache_data(ttl=300)
 def get_products_with_sizes(dispensary_id, category=None):
+    cat_sql = get_normalized_category_sql()
     with engine.connect() as conn:
-        cat_filter = "AND raw_category = :cat" if category and category != 'All Categories' else ""
+        cat_filter = f"AND ({cat_sql}) = :cat" if category and category != 'All Categories' else ""
         params = {"disp_id": dispensary_id}
         if category and category != 'All Categories':
             params["cat"] = category
-            
+
         df = pd.read_sql(text(f"""
-            SELECT raw_name as product, raw_brand as brand, raw_category as category,
+            SELECT raw_name as product, raw_brand as brand, {cat_sql} as category,
                    raw_price as price, raw_discount_price as sale_price
             FROM raw_menu_item
             WHERE dispensary_id = :disp_id
             {cat_filter}
             AND scrape_run_id = (
-                SELECT scrape_run_id FROM scrape_run 
+                SELECT scrape_run_id FROM scrape_run
                 WHERE dispensary_id = :disp_id AND status = 'success'
                 ORDER BY started_at DESC LIMIT 1
             )
-            ORDER BY raw_category, raw_brand, raw_name
+            ORDER BY {cat_sql}, raw_brand, raw_name
         """), conn, params=params)
     
-    # Parse sizes based on category
+    # Parse sizes based on normalized category
     if not df.empty:
         def get_size(row):
             cat = (row['category'] or '').lower()
             name = row['product'] or ''
-            
-            if any(x in cat for x in ['vape', 'cart', 'vaporizer']):
+
+            if cat == 'vapes':
                 return parse_vape_size(name)
-            elif 'flower' in cat:
+            elif cat == 'flower':
                 return parse_flower_size(name)
-            elif any(x in cat for x in ['pre-roll', 'preroll', 'pre roll']):
+            elif cat == 'pre-rolls':
                 return parse_preroll_size(name)
             else:
                 return 'N/A'
-        
+
         df['size'] = df.apply(get_size, axis=1)
-    
+
     return df
 
 # Sidebar filters
@@ -269,9 +272,9 @@ else:
                 products_df = get_products_with_sizes(disp_id, selected_cat)
                 
                 if not products_df.empty:
-                    # Size breakdown for relevant categories
+                    # Size breakdown for relevant categories (normalized names)
                     cat_lower = (selected_cat or '').lower()
-                    show_size_chart = any(x in cat_lower for x in ['vape', 'cart', 'flower', 'pre-roll', 'preroll', 'vaporizer'])
+                    show_size_chart = cat_lower in ['vapes', 'flower', 'pre-rolls']
                     
                     if show_size_chart or selected_cat == 'All Categories':
                         # Filter to sizeable categories

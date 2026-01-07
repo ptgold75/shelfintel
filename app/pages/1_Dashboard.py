@@ -11,6 +11,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 from sqlalchemy import text
 from core.db import get_engine
+from core.category_utils import get_normalized_category_sql
 
 st.set_page_config(page_title="Dashboard | CannLinx", page_icon=None, layout="wide", initial_sidebar_state="collapsed")
 
@@ -35,35 +36,40 @@ def load_dashboard_data():
                 "SELECT COUNT(*) FROM dispensary"
             )).scalar() or 0,
             "brands": conn.execute(text(
-                "SELECT COUNT(DISTINCT raw_brand) FROM raw_menu_item WHERE raw_brand IS NOT NULL"
+                """SELECT COUNT(DISTINCT raw_brand) FROM raw_menu_item
+                   WHERE raw_brand IS NOT NULL AND raw_brand != ''
+                   AND raw_brand NOT IN ('ADD TO CART', 'SALE', 'None', 'null', 'N/A')
+                   AND LENGTH(raw_brand) > 1"""
             )).scalar() or 0,
-            "categories": conn.execute(text(
-                "SELECT COUNT(DISTINCT raw_category) FROM raw_menu_item WHERE raw_category IS NOT NULL"
-            )).scalar() or 0,
+            "categories": 8,  # Fixed count of normalized categories
         }
 
-        # Category breakdown
-        categories_df = pd.read_sql(text("""
-            SELECT raw_category as category, COUNT(DISTINCT raw_name) as products
+        # Category breakdown (normalized)
+        cat_sql = get_normalized_category_sql()
+        categories_df = pd.read_sql(text(f"""
+            SELECT {cat_sql} as category, COUNT(DISTINCT raw_name) as products
             FROM raw_menu_item
             WHERE raw_category IS NOT NULL
-            GROUP BY raw_category
+            GROUP BY {cat_sql}
             ORDER BY products DESC
         """), conn)
 
-        # Top brands
+        # Top brands (filter out scraping artifacts)
         brands_df = pd.read_sql(text("""
             SELECT raw_brand as brand, COUNT(DISTINCT raw_name) as products
             FROM raw_menu_item
             WHERE raw_brand IS NOT NULL AND raw_brand != ''
+            AND raw_brand NOT IN ('ADD TO CART', 'SALE', 'None', 'null', 'N/A', '')
+            AND LENGTH(raw_brand) > 1
+            AND raw_brand !~ '^[0-9]+$'
             GROUP BY raw_brand
             ORDER BY products DESC
             LIMIT 15
         """), conn)
 
-        # Price distribution by category
-        prices_df = pd.read_sql(text("""
-            SELECT raw_category as category,
+        # Price distribution by category (normalized)
+        prices_df = pd.read_sql(text(f"""
+            SELECT {cat_sql} as category,
                    AVG(raw_price) as avg_price,
                    MIN(raw_price) as min_price,
                    MAX(raw_price) as max_price,
@@ -71,7 +77,7 @@ def load_dashboard_data():
             FROM raw_menu_item
             WHERE raw_price IS NOT NULL AND raw_price > 0 AND raw_price < 500
             AND raw_category IS NOT NULL
-            GROUP BY raw_category
+            GROUP BY {cat_sql}
             HAVING COUNT(*) > 10
             ORDER BY avg_price DESC
         """), conn)
@@ -94,10 +100,36 @@ def load_dashboard_data():
             LIMIT 10
         """), conn)
 
-    return stats, categories_df, brands_df, prices_df, providers_df, stores_df
+        # Top 3 brands per category by store penetration
+        top_brands_by_cat = pd.read_sql(text(f"""
+            WITH brand_store_counts AS (
+                SELECT
+                    {cat_sql} as category,
+                    r.raw_brand as brand,
+                    COUNT(DISTINCT sr.dispensary_id) as store_count,
+                    COUNT(DISTINCT r.raw_name) as product_count
+                FROM raw_menu_item r
+                JOIN scrape_run sr ON r.scrape_run_id = sr.scrape_run_id
+                WHERE r.raw_brand IS NOT NULL AND r.raw_brand != ''
+                AND sr.status = 'success'
+                GROUP BY {cat_sql}, r.raw_brand
+            ),
+            ranked AS (
+                SELECT *,
+                    ROW_NUMBER() OVER (PARTITION BY category ORDER BY store_count DESC, product_count DESC) as rank
+                FROM brand_store_counts
+                WHERE category IS NOT NULL
+            )
+            SELECT category, brand, store_count, product_count
+            FROM ranked
+            WHERE rank <= 3
+            ORDER BY category, rank
+        """), conn)
+
+    return stats, categories_df, brands_df, prices_df, providers_df, stores_df, top_brands_by_cat
 
 try:
-    stats, categories_df, brands_df, prices_df, providers_df, stores_df = load_dashboard_data()
+    stats, categories_df, brands_df, prices_df, providers_df, stores_df, top_brands_by_cat = load_dashboard_data()
 
     # Key metrics row
     c1, c2, c3, c4 = st.columns(4)
@@ -175,6 +207,37 @@ try:
         st.plotly_chart(fig, use_container_width=True)
     else:
         st.info("No store inventory data available")
+
+    # Top 3 Brands per Category by Store Penetration
+    st.divider()
+    st.subheader("Top Brands by Store Penetration")
+    st.markdown("Most widely stocked brands in each category (by number of stores carrying)")
+
+    if not top_brands_by_cat.empty:
+        # Focus on main categories
+        main_categories = ['Flower', 'Vapes', 'Concentrates', 'Edibles', 'Pre-Rolls']
+        filtered = top_brands_by_cat[top_brands_by_cat['category'].isin(main_categories)]
+
+        # Display in columns
+        cols = st.columns(len(main_categories))
+        for i, cat in enumerate(main_categories):
+            with cols[i]:
+                st.markdown(f"**{cat}**")
+                cat_brands = filtered[filtered['category'] == cat]
+                if not cat_brands.empty:
+                    for _, row in cat_brands.iterrows():
+                        st.markdown(f"""
+                        <div style="background:#f8f9fa; border-radius:6px; padding:8px; margin-bottom:6px;">
+                            <div style="font-weight:600; font-size:0.9rem;">{row['brand'][:25]}</div>
+                            <div style="font-size:0.75rem; color:#666;">
+                                {row['store_count']} stores | {row['product_count']} SKUs
+                            </div>
+                        </div>
+                        """, unsafe_allow_html=True)
+                else:
+                    st.caption("No data")
+    else:
+        st.info("No brand penetration data available")
 
 except Exception as e:
     st.error(f"Error loading dashboard: {e}")

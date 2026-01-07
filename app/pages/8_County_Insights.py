@@ -11,6 +11,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 from sqlalchemy import text
 from core.db import get_engine
+from core.category_utils import get_normalized_category_sql
 
 st.set_page_config(page_title="County Insights | CannLinx", page_icon=None, layout="wide", initial_sidebar_state="collapsed")
 
@@ -42,16 +43,17 @@ def get_county_data():
             ORDER BY store_count DESC
         """), conn)
 
-        # Category distribution by county
-        county_categories = pd.read_sql(text("""
+        # Category distribution by county (normalized)
+        cat_sql = get_normalized_category_sql()
+        county_categories = pd.read_sql(text(f"""
             SELECT
                 COALESCE(d.provider_metadata::json->>'county', 'Unknown') as county,
-                r.raw_category as category,
+                {cat_sql} as category,
                 COUNT(*) as products
             FROM dispensary d
             JOIN raw_menu_item r ON d.dispensary_id = r.dispensary_id
             WHERE r.raw_category IS NOT NULL
-            GROUP BY d.provider_metadata::json->>'county', r.raw_category
+            GROUP BY d.provider_metadata::json->>'county', {cat_sql}
         """), conn)
 
         # Top brands by county

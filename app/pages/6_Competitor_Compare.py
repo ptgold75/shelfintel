@@ -9,8 +9,11 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 import json
+import re
 from sqlalchemy import text
 from core.db import get_engine
+from core.category_utils import get_normalized_category_sql
+from core.size_utils import get_normalized_size
 
 st.set_page_config(page_title="Competitor Compare | CannLinx", page_icon=None, layout="wide", initial_sidebar_state="collapsed")
 
@@ -22,6 +25,40 @@ st.title("Competitor Comparison")
 st.markdown("Compare your inventory and pricing against nearby competitors")
 
 engine = get_engine()
+
+def extract_base_product_name(name: str) -> str:
+    """Extract base product name without size info for matching."""
+    if not name:
+        return ""
+    # Remove common size patterns
+    cleaned = re.sub(r'\s*[-|]\s*\d+\.?\d*\s*(?:g|mg|gram|oz|ounce)s?\b', '', name, flags=re.IGNORECASE)
+    cleaned = re.sub(r'\s*\d+\.?\d*\s*(?:g|mg|gram)s?\b', '', cleaned, flags=re.IGNORECASE)
+    cleaned = re.sub(r'\s*(?:1/8|1/4|1/2|eighth|quarter|half|ounce)\s*(?:oz)?\b', '', cleaned, flags=re.IGNORECASE)
+    cleaned = re.sub(r'\s*\(\d+(?:pk|ct|pc|pack)\)\s*', '', cleaned, flags=re.IGNORECASE)
+    cleaned = re.sub(r'\s*\d+\s*(?:pk|ct|pc|pack)\b', '', cleaned, flags=re.IGNORECASE)
+    # Clean up extra whitespace and trailing punctuation
+    cleaned = re.sub(r'\s+', ' ', cleaned).strip()
+    cleaned = re.sub(r'[-|]+$', '', cleaned).strip()
+    return cleaned
+
+def add_size_info(df: pd.DataFrame) -> pd.DataFrame:
+    """Add normalized size info to dataframe."""
+    if df.empty:
+        return df
+
+    def get_size(row):
+        _, display = get_normalized_size(row['product'], row.get('category', ''))
+        return display
+
+    def get_size_value(row):
+        value, _ = get_normalized_size(row['product'], row.get('category', ''))
+        return value
+
+    df = df.copy()
+    df['size'] = df.apply(get_size, axis=1)
+    df['size_value'] = df.apply(get_size_value, axis=1)
+    df['base_product'] = df['product'].apply(extract_base_product_name)
+    return df
 
 @st.cache_data(ttl=300)
 def get_stores_with_data():
@@ -41,9 +78,10 @@ def get_stores_with_data():
 @st.cache_data(ttl=300)
 def get_store_products(dispensary_id):
     """Get all products for a store from most recent scrape."""
+    cat_sql = get_normalized_category_sql()
     with engine.connect() as conn:
-        df = pd.read_sql(text("""
-            SELECT raw_name as product, raw_brand as brand, raw_category as category,
+        df = pd.read_sql(text(f"""
+            SELECT raw_name as product, raw_brand as brand, {cat_sql} as category,
                    raw_price as price, raw_discount_price as sale_price
             FROM raw_menu_item
             WHERE dispensary_id = :disp_id
@@ -166,50 +204,67 @@ tab1, tab2, tab3 = st.tabs(["Price Comparison", "Missing Products", "Category Mi
 
 with tab1:
     st.markdown("### Price Differences")
-    st.markdown("Products you both carry - sorted by largest price difference")
+    st.markdown("Comparing same products at same sizes - sorted by largest price difference")
 
-    # Find matching products and compare prices
-    your_products = store_products[['product', 'brand', 'category', 'price']].copy()
+    # Add size info to your products
+    your_products = add_size_info(store_products[['product', 'brand', 'category', 'price']].copy())
     your_products = your_products.rename(columns={'price': 'your_price'})
 
     all_comparisons = []
 
     for comp_name, comp_df in competitor_data.items():
-        comp_products = comp_df[['product', 'price']].copy()
-        comp_products = comp_products.rename(columns={'price': f'{comp_name[:15]}_price'})
+        comp_products = add_size_info(comp_df[['product', 'category', 'price']].copy())
+        comp_products = comp_products.rename(columns={'price': 'comp_price'})
 
-        # Merge on product name
-        merged = your_products.merge(comp_products, on='product', how='inner')
+        # Merge on base product name AND size (to compare apples to apples)
+        merged = your_products.merge(
+            comp_products[['base_product', 'size', 'size_value', 'comp_price', 'product']],
+            on=['base_product', 'size'],
+            how='inner',
+            suffixes=('', '_comp')
+        )
+
         if not merged.empty:
             merged['competitor'] = comp_name
-            merged['comp_price'] = merged[f'{comp_name[:15]}_price']
             merged['price_diff'] = merged['your_price'] - merged['comp_price']
             merged['price_diff_pct'] = ((merged['your_price'] - merged['comp_price']) / merged['comp_price'] * 100).round(1)
-            all_comparisons.append(merged[['product', 'brand', 'category', 'your_price', 'competitor', 'comp_price', 'price_diff', 'price_diff_pct']])
+            all_comparisons.append(merged[['product', 'brand', 'category', 'size', 'your_price', 'competitor', 'comp_price', 'price_diff', 'price_diff_pct']])
 
     if all_comparisons:
         comparison_df = pd.concat(all_comparisons, ignore_index=True)
         comparison_df = comparison_df.dropna(subset=['your_price', 'comp_price'])
         comparison_df = comparison_df[(comparison_df['your_price'] > 0) & (comparison_df['comp_price'] > 0)]
 
+        # Filter out extreme differences that are likely size mismatches
+        comparison_df = comparison_df[abs(comparison_df['price_diff_pct']) < 200]
+
         if not comparison_df.empty:
             # Summary metrics
-            c1, c2, c3 = st.columns(3)
+            c1, c2, c3, c4 = st.columns(4)
             avg_diff = comparison_df['price_diff'].mean()
             higher_count = (comparison_df['price_diff'] > 0).sum()
             lower_count = (comparison_df['price_diff'] < 0).sum()
+            match_count = len(comparison_df)
 
-            c1.metric("Avg Price Difference", f"${avg_diff:+.2f}")
-            c2.metric("You're Higher", f"{higher_count} products")
-            c3.metric("You're Lower", f"{lower_count} products")
+            c1.metric("Products Compared", match_count)
+            c2.metric("Avg Price Difference", f"${avg_diff:+.2f}")
+            c3.metric("You're Higher", f"{higher_count}")
+            c4.metric("You're Lower", f"{lower_count}")
 
             st.markdown("---")
 
+            # Size filter
+            size_options = ['All Sizes'] + sorted(comparison_df['size'].dropna().unique().tolist())
+            selected_size = st.selectbox("Filter by Size", size_options)
+
+            if selected_size != 'All Sizes':
+                comparison_df = comparison_df[comparison_df['size'] == selected_size]
+
             # Show biggest differences (where you're higher)
             st.markdown("**Products where you're priced higher:**")
-            higher_priced = comparison_df[comparison_df['price_diff'] > 2].sort_values('price_diff', ascending=False).head(10)
+            higher_priced = comparison_df[comparison_df['price_diff'] > 2].sort_values('price_diff', ascending=False).head(15)
             if not higher_priced.empty:
-                display_higher = higher_priced[['product', 'category', 'your_price', 'competitor', 'comp_price', 'price_diff']].copy()
+                display_higher = higher_priced[['product', 'category', 'size', 'your_price', 'competitor', 'comp_price', 'price_diff']].copy()
                 display_higher['your_price'] = display_higher['your_price'].apply(lambda x: f"${x:.2f}")
                 display_higher['comp_price'] = display_higher['comp_price'].apply(lambda x: f"${x:.2f}")
                 display_higher['price_diff'] = display_higher['price_diff'].apply(lambda x: f"+${x:.2f}")
@@ -218,9 +273,9 @@ with tab1:
                 st.success("No significant price gaps where you're higher!")
 
             st.markdown("**Products where you're priced lower:**")
-            lower_priced = comparison_df[comparison_df['price_diff'] < -2].sort_values('price_diff').head(10)
+            lower_priced = comparison_df[comparison_df['price_diff'] < -2].sort_values('price_diff').head(15)
             if not lower_priced.empty:
-                display_lower = lower_priced[['product', 'category', 'your_price', 'competitor', 'comp_price', 'price_diff']].copy()
+                display_lower = lower_priced[['product', 'category', 'size', 'your_price', 'competitor', 'comp_price', 'price_diff']].copy()
                 display_lower['your_price'] = display_lower['your_price'].apply(lambda x: f"${x:.2f}")
                 display_lower['comp_price'] = display_lower['comp_price'].apply(lambda x: f"${x:.2f}")
                 display_lower['price_diff'] = display_lower['price_diff'].apply(lambda x: f"${x:.2f}")

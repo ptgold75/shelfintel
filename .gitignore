@@ -4,11 +4,12 @@ __pycache__/
 .env
 .streamlit/secrets.toml
 .DS_Store
-
-
 logs/
-.streamlit/secrets.toml
-.venv/
-__pycache__/
-*.pyc
-.DS_Store
+
+# Data files (large)
+data/offline.db
+*.db
+
+# Temporary files
+*.png
+!app/static/*.png

@@ -37,8 +37,15 @@ class SweedProvider(BaseProvider):
             print(f"Error fetching categories: {e}")
         return []
     
-    def _get_products(self, category: str, page: int = 1, page_size: int = 100) -> dict:
-        """Fetch products for a specific category."""
+    def _get_products(self, category: str, page: int = 1, page_size: int = 100, sale_type: str = "Recreational") -> dict:
+        """Fetch products for a specific category.
+
+        Args:
+            category: Product category name
+            page: Page number (1-indexed)
+            page_size: Number of products per page
+            sale_type: "Recreational" or "Medical"
+        """
         url = f"{self.BASE_URL}/Products/GetProductList"
         payload = {
             "categoryName": category,
@@ -48,35 +55,42 @@ class SweedProvider(BaseProvider):
             "sortExpression": "Name"
         }
         try:
-            resp = requests.post(url, headers=self._get_headers(), json=payload, timeout=30)
+            resp = requests.post(url, headers=self._get_headers(sale_type), json=payload, timeout=30)
             if resp.status_code == 200:
                 return resp.json()
         except Exception as e:
             print(f"Error fetching products: {e}")
         return {}
     
-    def scrape(self) -> Generator[MenuItem, None, None]:
-        """Scrape all products from this dispensary."""
+    def scrape(self, menu_type: str = "recreational") -> Generator[MenuItem, None, None]:
+        """Scrape all products from this dispensary.
+
+        Args:
+            menu_type: "recreational" or "medical"
+        """
+        # Map menu_type to Sweed's sale_type format
+        sale_type = "Medical" if menu_type == "medical" else "Recreational"
+
         categories = self._get_categories()
-        
+
         for category in categories:
             cat_name = category.get("categoryName", "Unknown")
             page = 1
-            
+
             while True:
-                data = self._get_products(cat_name, page=page)
+                data = self._get_products(cat_name, page=page, sale_type=sale_type)
                 products = data.get("productList", [])
-                
+
                 if not products:
                     break
-                
+
                 for product in products:
                     # Extract price info
                     price = None
                     weights = product.get("weightPriceList", [])
                     if weights:
                         price = weights[0].get("price")
-                    
+
                     # Get discount/sale price if available
                     discount_price = None
                     discount_text = None
@@ -84,10 +98,10 @@ class SweedProvider(BaseProvider):
                         discount_price = weights[0].get("discountPrice")
                     if product.get("discountText"):
                         discount_text = product.get("discountText")
-                    
+
                     # Get description
                     description = product.get("description", "")
-                    
+
                     # Build raw JSON with all useful fields
                     raw_json = {
                         "productId": product.get("productId"),
@@ -103,8 +117,9 @@ class SweedProvider(BaseProvider):
                         "weights": weights,
                         "imageUrl": product.get("imageUrl"),
                         "labResults": product.get("labResults"),
+                        "menuType": menu_type,
                     }
-                    
+
                     yield MenuItem(
                         provider_product_id=str(product.get("productId", "")),
                         raw_name=product.get("productName", "Unknown"),
@@ -113,11 +128,17 @@ class SweedProvider(BaseProvider):
                         raw_price=price,
                         raw_discount_price=discount_price,
                         raw_discount_text=discount_text,
-                        raw_json=raw_json
+                        raw_json=raw_json,
+                        menu_type=menu_type
                     )
-                
+
                 # Check for more pages
                 total_count = data.get("totalCount", 0)
                 if page * 100 >= total_count:
                     break
                 page += 1
+
+    def scrape_both_menus(self) -> Generator[MenuItem, None, None]:
+        """Scrape both recreational and medical menus."""
+        yield from self.scrape(menu_type="recreational")
+        yield from self.scrape(menu_type="medical")

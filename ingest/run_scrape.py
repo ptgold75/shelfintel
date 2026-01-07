@@ -24,6 +24,8 @@ from ingest.availability import update_availability
 from ingest.providers.generic_html import fetch_menu_items as fetch_generic
 from ingest.providers.gleaf_playwright import fetch_menu_items as fetch_gleaf
 from ingest.providers.sweed_provider import fetch_menu_items as fetch_sweed
+from ingest.providers.dutchie_provider import fetch_menu_items as fetch_dutchie
+from ingest.providers.jane_provider import fetch_menu_items as fetch_jane
 
 
 def _parse_provider_metadata(disp: Dispensary) -> dict:
@@ -40,19 +42,31 @@ def fetch_items(disp: Dispensary) -> list:
     """Route to appropriate provider based on dispensary config."""
     provider = (disp.menu_provider or "").lower()
     metadata = _parse_provider_metadata(disp)
-    
+
     print(f"  Provider: {provider}")
     print(f"  Metadata: {metadata}")
-    
+
     if provider in ["sweed", "sweed_api"]:
         return fetch_sweed(
             menu_url=disp.menu_url,
             provider_metadata=metadata,
         )
-    
+
+    if provider == "dutchie":
+        return fetch_dutchie(
+            menu_url=disp.menu_url,
+            provider_metadata=metadata,
+        )
+
+    if provider in ["jane", "iheartjane"]:
+        return fetch_jane(
+            menu_url=disp.menu_url,
+            provider_metadata=metadata,
+        )
+
     if provider == "gleaf":
         return fetch_gleaf(disp.menu_url)
-    
+
     # Fallback to generic HTML scraper
     return fetch_generic(disp.menu_url)
 

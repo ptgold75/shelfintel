@@ -191,6 +191,13 @@ with col2:
     </div>
     """, unsafe_allow_html=True)
 
+    st.markdown("""
+    <div class="use-case-card">
+        <h4>Brand Integrity & Image Audit</h4>
+        <p>See exactly how your products are displayed at each dispensary. Audit product images for quality, consistency, and brand compliance. Identify retailers using poor or incorrect product photos.</p>
+    </div>
+    """, unsafe_allow_html=True)
+
 # Example insights section
 st.markdown('<p class="section-title">Sample Insights</p>', unsafe_allow_html=True)
 
@@ -223,6 +230,26 @@ with st.expander("Pricing Intelligence"):
     - 7 dispensaries price below $40
 
     **Recommendation:** Work with high-price retailers on promotional opportunities. Investigate why some retailers are discounting below MSRP.
+    """)
+
+with st.expander("Brand Integrity Audit"):
+    st.markdown("""
+    **Product:** Your "Sunset Sherbet" 3.5g flower
+
+    **Image Audit Results:**
+    - Carried by 45 dispensaries
+    - 38 dispensaries using approved product image
+    - 4 dispensaries using generic/stock photos
+    - 3 dispensaries with no product image
+
+    **Issues Found:**
+    | Dispensary | Issue |
+    |------------|-------|
+    | Store A | Using outdated packaging photo |
+    | Store B | Low resolution image |
+    | Store C | No image uploaded |
+
+    **Recommendation:** Contact stores with image issues and provide approved marketing assets. Consider requiring image compliance in distribution agreements.
     """)
 
 # CTA section

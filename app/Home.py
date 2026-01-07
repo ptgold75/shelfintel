@@ -1,5 +1,5 @@
 # app/Home.py
-"""CannLinx - Home Page with Horizontal Navigation"""
+"""CannLinx - Clean Professional Homepage"""
 
 import sys
 import os
@@ -11,6 +11,7 @@ from core.db import get_engine
 from pathlib import Path
 import re
 import json
+from app.components.nav import render_nav
 
 st.set_page_config(
     page_title="CannLinx - Marketplace Intelligence",
@@ -19,358 +20,346 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# Hide sidebar and style
+# Render shared header with banner and navigation
+render_nav()
+
+# Page-specific styling
 st.markdown("""
 <style>
-    [data-testid="stSidebar"] {display: none;}
-    .block-container {padding-top: 0.5rem; padding-bottom: 1rem; max-width: 1200px;}
-    header {visibility: hidden;}
-
-    /* Horizontal nav with dropdowns */
-    .nav-container {
-        display: flex;
-        justify-content: center;
-        gap: 0.5rem;
-        padding: 0.5rem 1rem;
-        background: #5a7fa8;
-        margin: 0 auto 1rem auto;
-        max-width: 1200px;
-        border-radius: 4px;
-    }
-    .nav-link {
-        color: white !important;
-        text-decoration: none !important;
-        padding: 0.5rem 1rem;
-        border-radius: 4px;
-        font-size: 0.9rem;
-        transition: background 0.2s;
-    }
-    .nav-link:hover {background: rgba(255,255,255,0.2); text-decoration: none !important;}
-    .nav-link:visited {color: white !important; text-decoration: none !important;}
-    .nav-link:active {color: white !important; text-decoration: none !important;}
-
-    /* Dropdown styles */
-    .nav-dropdown {
-        position: relative;
-        display: inline-block;
-    }
-    .nav-dropdown-btn {
-        color: white;
-        padding: 0.5rem 1rem;
-        font-size: 0.9rem;
-        border: none;
-        background: transparent;
-        cursor: pointer;
-        border-radius: 4px;
-        transition: background 0.2s;
-    }
-    .nav-dropdown-btn:hover {background: rgba(255,255,255,0.2);}
-    .nav-dropdown-content {
-        display: none;
-        position: absolute;
-        background: white;
-        min-width: 180px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        border-radius: 6px;
-        z-index: 1000;
-        top: 100%;
-        left: 50%;
-        transform: translateX(-50%);
-        padding: 0.5rem 0;
-    }
-    .nav-dropdown:hover .nav-dropdown-content {display: block;}
-    .nav-dropdown-content a {
-        color: #1e3a5f !important;
-        padding: 0.5rem 1rem;
-        text-decoration: none !important;
-        display: block;
-        font-size: 0.85rem;
-        transition: background 0.2s;
-    }
-    .nav-dropdown-content a:hover {background: #f0f2f5;}
-
-    /* Stats bar - single unified bar */
+    /* Stats bar */
     .stats-bar {
         display: flex;
-        justify-content: space-around;
-        align-items: center;
-        background: linear-gradient(135deg, #1e3a5f 0%, #2d5a87 100%);
+        justify-content: center;
+        gap: 3rem;
+        padding: 1rem;
+        background: #f8f9fa;
         border-radius: 8px;
-        padding: 0.8rem 1rem;
-        color: white;
-        margin-bottom: 1rem;
+        margin-bottom: 2rem;
     }
-    .stat-item {
-        text-align: center;
-        padding: 0 1rem;
-        border-right: 1px solid rgba(255,255,255,0.2);
-    }
-    .stat-item:last-child {border-right: none;}
-    .stat-value {font-size: 1.4rem; font-weight: bold; margin: 0;}
-    .stat-label {font-size: 0.65rem; text-transform: uppercase; opacity: 0.85; margin: 0;}
+    .stat-item {text-align: center;}
+    .stat-value {font-size: 1.8rem; font-weight: 700; color: #1e3a5f; margin: 0;}
+    .stat-label {font-size: 0.75rem; color: #6c757d; text-transform: uppercase; margin: 0;}
 
-    /* Feature boxes */
-    .feature-box {
-        background: #f4f6f8;
+    /* Segment cards */
+    .segment-card {
+        background: white;
+        border: 1px solid #e9ecef;
         border-radius: 8px;
-        padding: 0.8rem 1rem;
-        border: 1px solid #e1e5e9;
+        padding: 1.5rem;
         height: 100%;
-        margin-bottom: 0.75rem;
+        transition: box-shadow 0.2s, border-color 0.2s;
     }
-    .feature-box h4 {margin: 0 0 0.4rem 0; color: #1e3a5f; font-size: 1.1rem; font-weight: 600;}
-    .feature-box ul {margin: 0 0 0.5rem 0; padding-left: 1.1rem; font-size: 0.95rem; color: #495057;}
-    .feature-box li {margin-bottom: 0.15rem;}
-    .feature-box .learn-more {
-        display: inline-block;
+    .segment-card:hover {
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        border-color: #1e3a5f;
+    }
+    .segment-card h3 {
         color: #1e3a5f;
-        font-size: 0.85rem;
-        text-decoration: none;
-        font-weight: 500;
-        margin-top: 0.3rem;
+        font-size: 1.2rem;
+        margin: 0 0 0.75rem 0;
+        font-weight: 600;
     }
-    .feature-box .learn-more:hover {text-decoration: underline;}
+    .segment-card p {
+        color: #495057;
+        font-size: 0.9rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.5;
+    }
+    .segment-card ul {
+        margin: 0;
+        padding-left: 1.2rem;
+        color: #6c757d;
+        font-size: 0.85rem;
+    }
+    .segment-card li {margin-bottom: 0.3rem;}
+    .segment-link {
+        display: inline-block;
+        margin-top: 1rem;
+        color: #1e3a5f;
+        font-weight: 500;
+        text-decoration: none;
+        font-size: 0.9rem;
+    }
+    .segment-link:hover {text-decoration: underline;}
 
-    /* Centered section header */
-    .section-header-centered {
-        font-size: 1.5rem !important;
+    /* Section headers */
+    .section-title {
+        font-size: 1.5rem;
         font-weight: 600;
         color: #1e3a5f;
-        margin-bottom: 0.8rem;
+        margin: 2rem 0 1rem 0;
         text-align: center;
-    }
-
-    /* Form */
-    div[data-testid="stForm"] {
-        background: #f4f6f8;
-        padding: 1rem;
-        border-radius: 8px;
-        border: 1px solid #e1e5e9;
     }
 
     /* Tagline */
-    .tagline {font-size: 0.95rem; color: #6c757d; margin: 0.3rem 0 0.8rem 0; text-align: center;}
+    .tagline {
+        font-size: 1.1rem;
+        color: #495057;
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
 
-    /* Section header - larger */
-    .section-header {font-size: 1.4rem !important; font-weight: 600; color: #1e3a5f; margin-bottom: 0.8rem;}
+    /* How it works */
+    .how-step {
+        text-align: center;
+        padding: 1rem;
+    }
+    .how-step-num {
+        display: inline-block;
+        width: 32px;
+        height: 32px;
+        background: #1e3a5f;
+        color: white;
+        border-radius: 50%;
+        line-height: 32px;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+    .how-step-title {font-weight: 600; color: #1e3a5f; margin-bottom: 0.25rem;}
+    .how-step-desc {font-size: 0.85rem; color: #6c757d;}
 </style>
 """, unsafe_allow_html=True)
 
-# Hero Banner
-banner_path = Path(__file__).parent / "static" / "cannalinx_banner.png"
-if banner_path.exists():
-    st.image(str(banner_path), width="stretch")
+st.markdown('<p class="tagline">Real-time shelf intelligence for Maryland\'s cannabis industry</p>', unsafe_allow_html=True)
 
-# Horizontal Navigation - no underlines
-st.markdown("""
-<div class="nav-container">
-    <a href="/" target="_self" class="nav-link">Home</a>
-    <div class="nav-dropdown">
-        <span class="nav-dropdown-btn">Analytics ▾</span>
-        <div class="nav-dropdown-content">
-            <a href="/Dashboard" target="_self">Dashboard</a>
-            <a href="/Availability" target="_self">Availability</a>
-            <a href="/Competitive_Intel" target="_self">Competitive Intel</a>
-            <a href="/Price_Analysis" target="_self">Price Analysis</a>
-        </div>
-    </div>
-    <div class="nav-dropdown">
-        <span class="nav-dropdown-btn">Solutions ▾</span>
-        <div class="nav-dropdown-content">
-            <a href="/For_Manufacturers" target="_self">Manufacturers</a>
-            <a href="/For_Brands" target="_self">Brands</a>
-            <a href="/For_Dispensaries" target="_self">Dispensaries</a>
-            <a href="/For_Investors" target="_self">Investors</a>
-            <a href="/For_Consumers" target="_self">Consumers</a>
-            <a href="/For_MA" target="_self">M&A Due Diligence</a>
-        </div>
-    </div>
-</div>
-""", unsafe_allow_html=True)
-
-st.markdown('<p class="tagline">Real-time shelf intelligence for the cannabis industry. Track products, monitor competitors, make data-driven decisions.</p>', unsafe_allow_html=True)
-
-# Load stats combining DB data with local dispensary count
+# Load stats
 @st.cache_data(ttl=300)
 def load_stats():
-    # Get dispensary count from local JSON (includes all tracked dispensaries)
     try:
         json_path = Path(__file__).parent.parent / "md_dispensaries_by_provider.json"
         with open(json_path) as f:
             data = json.load(f)
         json_dispensaries = sum(len(v) for v in data.values())
     except:
-        json_dispensaries = 72
+        json_dispensaries = 96
 
-    # Get scraped data from database
     try:
         engine = get_engine()
         with engine.connect() as conn:
-            unique_products = conn.execute(text("""
-                SELECT COUNT(DISTINCT raw_name) FROM raw_menu_item WHERE raw_name IS NOT NULL
-            """)).scalar() or 0
-            total_observations = conn.execute(text("SELECT COUNT(*) FROM raw_menu_item")).scalar() or 0
-            brands = conn.execute(text("SELECT COUNT(DISTINCT raw_brand) FROM raw_menu_item WHERE raw_brand IS NOT NULL")).scalar() or 0
-
-            # Count states from JSON file - currently only MD
-            states = {"MD": json_dispensaries}
-
-            return {"unique_skus": unique_products, "observations": total_observations}, brands, states, json_dispensaries
+            unique_products = conn.execute(text(
+                "SELECT COUNT(DISTINCT raw_name) FROM raw_menu_item WHERE raw_name IS NOT NULL"
+            )).scalar() or 0
+            brands = conn.execute(text(
+                "SELECT COUNT(DISTINCT raw_brand) FROM raw_menu_item WHERE raw_brand IS NOT NULL"
+            )).scalar() or 0
+            return unique_products, brands, json_dispensaries
     except:
-        return {"unique_skus": 0, "observations": 0}, 0, {"MD": json_dispensaries}, json_dispensaries
+        return 0, 0, json_dispensaries
 
-stats, brands_count, state_counts, total_dispensaries = load_stats()
+products, brands, stores = load_stats()
 
-# Stats bar - unified single bar
-states_str = ", ".join(state_counts.keys()) if state_counts else "MD"
+# Stats bar
 st.markdown(f"""
 <div class="stats-bar">
     <div class="stat-item">
-        <p class="stat-value">{stats.get("unique_skus", 0):,}</p>
+        <p class="stat-value">{products:,}</p>
         <p class="stat-label">Products Tracked</p>
     </div>
     <div class="stat-item">
-        <p class="stat-value">{total_dispensaries}</p>
+        <p class="stat-value">{stores}</p>
         <p class="stat-label">Dispensaries</p>
     </div>
     <div class="stat-item">
-        <p class="stat-value">{brands_count if brands_count else 500}+</p>
+        <p class="stat-value">{brands}+</p>
         <p class="stat-label">Brands</p>
-    </div>
-    <div class="stat-item">
-        <p class="stat-value">{stats.get("observations", 0):,}</p>
-        <p class="stat-label">Data Points</p>
-    </div>
-    <div class="stat-item">
-        <p class="stat-value">{len(state_counts)}</p>
-        <p class="stat-label">States ({states_str})</p>
     </div>
 </div>
 """, unsafe_allow_html=True)
 
-# Who We Serve - centered header
-st.markdown('<p class="section-header-centered">Who We Serve</p>', unsafe_allow_html=True)
+# Customer Segments
+st.markdown('<p class="section-title">Choose Your Dashboard</p>', unsafe_allow_html=True)
 
-# First row of boxes
-f1, f2, f3 = st.columns(3)
+col1, col2, col3 = st.columns(3)
 
-with f1:
+with col1:
     st.markdown("""
-    <div class="feature-box">
-        <h4>Manufacturers</h4>
+    <div class="segment-card">
+        <h3>For Brands</h3>
+        <p>Track your market presence and ensure brand consistency across retail partners.</p>
         <ul>
-            <li>Track distribution coverage</li>
-            <li>Monitor retail pricing</li>
-            <li>Market share insights</li>
-            <li>Sales territory intel</li>
+            <li>Store coverage & distribution gaps</li>
+            <li>Retail pricing compliance</li>
+            <li>Product image consistency</li>
+            <li>Naming standardization</li>
         </ul>
-        <a href="/For_Manufacturers" target="_self" class="learn-more">Learn More →</a>
+        <a href="/Brand_Intelligence" target="_self" class="segment-link">Open Brand Dashboard →</a>
     </div>
     """, unsafe_allow_html=True)
 
-with f2:
+with col2:
     st.markdown("""
-    <div class="feature-box">
-        <h4>Brands</h4>
+    <div class="segment-card">
+        <h3>For Dispensaries</h3>
+        <p>Competitive intelligence to optimize your pricing and product mix.</p>
         <ul>
-            <li>Brand visibility tracking</li>
-            <li>SKU performance metrics</li>
-            <li>Competitive positioning</li>
-            <li>New launch tracking</li>
+            <li>Price comparison vs competitors</li>
+            <li>Assortment gap analysis</li>
+            <li>Category mix optimization</li>
+            <li>Inventory insights</li>
         </ul>
-        <a href="/For_Brands" target="_self" class="learn-more">Learn More →</a>
+        <a href="/Retail_Intelligence" target="_self" class="segment-link">Open Retail Dashboard →</a>
     </div>
     """, unsafe_allow_html=True)
 
-with f3:
+with col3:
     st.markdown("""
-    <div class="feature-box">
-        <h4>Dispensaries</h4>
+    <div class="segment-card">
+        <h3>For Growers</h3>
+        <p>Market trends and distribution insights for cultivators and processors.</p>
         <ul>
-            <li>Competitor comparison</li>
-            <li>Product gap analysis</li>
-            <li>Price positioning</li>
-            <li>Category mix insights</li>
+            <li>Strain popularity rankings</li>
+            <li>Category trends</li>
+            <li>Brand distribution metrics</li>
+            <li>Price benchmarking</li>
         </ul>
-        <a href="/For_Dispensaries" target="_self" class="learn-more">Learn More →</a>
+        <a href="/Grower_Intelligence" target="_self" class="segment-link">Open Grower Dashboard →</a>
     </div>
     """, unsafe_allow_html=True)
 
-# Spacer between rows
-st.markdown("<div style='margin-top: 0.5rem;'></div>", unsafe_allow_html=True)
+# How It Works
+st.markdown('<p class="section-title">How It Works</p>', unsafe_allow_html=True)
 
-# Second row of boxes
-f4, f5, f6 = st.columns(3)
+h1, h2, h3, h4 = st.columns(4)
 
-with f4:
+with h1:
     st.markdown("""
-    <div class="feature-box">
-        <h4>Investors</h4>
-        <ul>
-            <li>Market sizing data</li>
-            <li>Brand performance metrics</li>
-            <li>Competitive landscape</li>
-            <li>Growth trend analysis</li>
-        </ul>
-        <a href="/For_Investors" target="_self" class="learn-more">Learn More →</a>
+    <div class="how-step">
+        <div class="how-step-num">1</div>
+        <div class="how-step-title">Collect</div>
+        <div class="how-step-desc">Daily scans from 96+ dispensary menus</div>
     </div>
     """, unsafe_allow_html=True)
 
-with f5:
+with h2:
     st.markdown("""
-    <div class="feature-box">
-        <h4>Consumers</h4>
-        <ul>
-            <li>Find products near you</li>
-            <li>Compare prices across stores</li>
-            <li>Track product availability</li>
-            <li>Discover new brands</li>
-        </ul>
-        <a href="/For_Consumers" target="_self" class="learn-more">Learn More →</a>
+    <div class="how-step">
+        <div class="how-step-num">2</div>
+        <div class="how-step-title">Normalize</div>
+        <div class="how-step-desc">Match & dedupe products across stores</div>
     </div>
     """, unsafe_allow_html=True)
 
-with f6:
+with h3:
     st.markdown("""
-    <div class="feature-box">
-        <h4>M&A Due Diligence</h4>
-        <ul>
-            <li>Target company analysis</li>
-            <li>Market position assessment</li>
-            <li>Competitive benchmarking</li>
-            <li>Distribution footprint</li>
-        </ul>
-        <a href="/For_MA" target="_self" class="learn-more">Learn More →</a>
+    <div class="how-step">
+        <div class="how-step-num">3</div>
+        <div class="how-step-title">Analyze</div>
+        <div class="how-step-desc">Identify trends & opportunities</div>
     </div>
     """, unsafe_allow_html=True)
 
-# Registration form
+with h4:
+    st.markdown("""
+    <div class="how-step">
+        <div class="how-step-num">4</div>
+        <div class="how-step-title">Act</div>
+        <div class="how-step-desc">Make data-driven decisions</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+# Registration
 st.markdown("---")
+st.markdown('<p class="section-title">Get Started</p>', unsafe_allow_html=True)
+
+# Load dispensary and grower lists for dropdowns
+@st.cache_data(ttl=300)
+def load_dispensary_list():
+    """Load all dispensaries for the dropdown."""
+    try:
+        engine = get_engine()
+        with engine.connect() as conn:
+            result = conn.execute(text("""
+                SELECT id, name, city, county
+                FROM dispensary
+                ORDER BY name
+            """))
+            return [{"id": r[0], "name": r[1], "city": r[2], "county": r[3]} for r in result]
+    except:
+        return []
+
+@st.cache_data(ttl=300)
+def load_grower_list():
+    """Load unique growers/processors from brand data."""
+    try:
+        engine = get_engine()
+        with engine.connect() as conn:
+            result = conn.execute(text("""
+                SELECT DISTINCT raw_brand
+                FROM raw_menu_item
+                WHERE raw_brand IS NOT NULL
+                ORDER BY raw_brand
+            """))
+            return [r[0] for r in result]
+    except:
+        return []
+
+dispensary_list = load_dispensary_list()
+grower_list = load_grower_list()
+
 reg_left, reg_center, reg_right = st.columns([1, 2, 1])
 with reg_center:
-    st.markdown('<p class="section-header-centered">Get Started</p>', unsafe_allow_html=True)
+    # User type selector outside form for dynamic behavior
+    user_type = st.selectbox(
+        "I am a...",
+        ["Brand / Manufacturer", "Dispensary / Retailer", "Grower / Processor", "Investor / Analyst", "Other"],
+        key="user_type_select"
+    )
+
+    # Show conditional dropdown based on user type
+    selected_location = None
+    if user_type == "Dispensary / Retailer" and dispensary_list:
+        disp_options = ["-- Select your dispensary --"] + [
+            f"{d['name']} ({d['city'] or d['county'] or 'MD'})" for d in dispensary_list
+        ]
+        selected_disp = st.selectbox(
+            "Select your dispensary location",
+            disp_options,
+            key="dispensary_select",
+            label_visibility="collapsed"
+        )
+        if selected_disp != "-- Select your dispensary --":
+            # Find the dispensary ID
+            idx = disp_options.index(selected_disp) - 1
+            selected_location = {"type": "dispensary", "id": dispensary_list[idx]["id"], "name": dispensary_list[idx]["name"]}
+
+    elif user_type == "Grower / Processor" and grower_list:
+        grower_options = ["-- Select your brand/company --"] + grower_list
+        selected_grower = st.selectbox(
+            "Select your brand/company",
+            grower_options,
+            key="grower_select",
+            label_visibility="collapsed"
+        )
+        if selected_grower != "-- Select your brand/company --":
+            selected_location = {"type": "grower", "name": selected_grower}
+
     with st.form("registration_form", clear_on_submit=True):
-        user_type = st.selectbox("User Type", ["I am a Dispensary", "I am a Manufacturer/Grower", "I am a Brand", "Other"], label_visibility="collapsed")
         company = st.text_input("Company", placeholder="Company Name *", label_visibility="collapsed")
 
         col1, col2 = st.columns(2)
         with col1:
-            name = st.text_input("Name", placeholder="Contact Name *", label_visibility="collapsed")
+            name = st.text_input("Name", placeholder="Your Name *", label_visibility="collapsed")
         with col2:
-            title = st.text_input("Title", placeholder="Title", label_visibility="collapsed")
+            email = st.text_input("Email", placeholder="Email *", label_visibility="collapsed")
 
-        email = st.text_input("Email", placeholder="Email *", label_visibility="collapsed")
-        phone = st.text_input("Phone", placeholder="Phone", label_visibility="collapsed")
-
-        submitted = st.form_submit_button("Register for Access", use_container_width=True, type="primary")
+        submitted = st.form_submit_button("Request Access", use_container_width=True, type="primary")
 
         if submitted:
-            user_type_clean = user_type.replace("I am a ", "").replace("I am an ", "")
             errors = []
-            if not company: errors.append("Company required")
-            if not name: errors.append("Name required")
-            if not email: errors.append("Email required")
-            elif not re.match(r"[^@]+@[^@]+\.[^@]+", email): errors.append("Invalid email")
+            if not company:
+                errors.append("Company required")
+            if not name:
+                errors.append("Name required")
+            if not email:
+                errors.append("Email required")
+            elif not re.match(r"[^@]+@[^@]+\.[^@]+", email):
+                errors.append("Invalid email")
+
+            # Validate location selection for dispensary/grower
+            if user_type == "Dispensary / Retailer" and not selected_location:
+                errors.append("Please select your dispensary")
+            elif user_type == "Grower / Processor" and not selected_location:
+                errors.append("Please select your brand/company")
 
             if errors:
                 st.error(" | ".join(errors))
@@ -378,36 +367,32 @@ with reg_center:
                 try:
                     engine = get_engine()
                     with engine.connect() as conn:
+                        # Store with location info
+                        location_id = selected_location.get("id") if selected_location else None
+                        location_name = selected_location.get("name") if selected_location else None
+
                         conn.execute(text("""
-                            CREATE TABLE IF NOT EXISTS registrations (
-                                id SERIAL PRIMARY KEY, user_type VARCHAR(50), company_name VARCHAR(255),
-                                contact_name VARCHAR(255), email VARCHAR(255), phone VARCHAR(50), title VARCHAR(100),
-                                created_at TIMESTAMP DEFAULT NOW(), status VARCHAR(50) DEFAULT 'pending'
-                            )
-                        """))
-                        conn.execute(text("""
-                            INSERT INTO registrations (user_type, company_name, contact_name, email, phone, title)
-                            VALUES (:ut, :co, :nm, :em, :ph, :ti)
-                        """), {"ut": user_type_clean, "co": company, "nm": name, "em": email, "ph": phone or None, "ti": title or None})
+                            INSERT INTO registrations (user_type, company_name, contact_name, email, location_id, location_name)
+                            VALUES (:ut, :co, :nm, :em, :lid, :lnm)
+                            ON CONFLICT DO NOTHING
+                        """), {
+                            "ut": user_type,
+                            "co": company,
+                            "nm": name,
+                            "em": email,
+                            "lid": location_id,
+                            "lnm": location_name
+                        })
                         conn.commit()
-                    st.success("Registered! We'll contact you within 24 hours.")
+                    st.success("Thanks! We'll contact you within 24 hours.")
                 except Exception as e:
                     st.error(f"Error: {e}")
 
-st.markdown("---")
-
-# How it works
-st.markdown('<p class="section-header">How It Works</p>', unsafe_allow_html=True)
-h1, h2, h3, h4 = st.columns(4)
-with h1:
-    st.markdown("**Collect**<br><small>Daily menu scans from dispensaries</small>", unsafe_allow_html=True)
-with h2:
-    st.markdown("**Normalize**<br><small>Match & dedupe across platforms</small>", unsafe_allow_html=True)
-with h3:
-    st.markdown("**Analyze**<br><small>Identify trends & opportunities</small>", unsafe_allow_html=True)
-with h4:
-    st.markdown("**Deliver**<br><small>Custom dashboards & alerts</small>", unsafe_allow_html=True)
-
 # Footer
 st.markdown("---")
-st.markdown("<div style='text-align:center;color:#6c757d;font-size:0.8rem;'><strong>CannLinx</strong> · Marketplace Intelligence · support@cannlinx.com</div>", unsafe_allow_html=True)
+st.markdown(
+    "<div style='text-align:center;color:#6c757d;font-size:0.8rem;'>"
+    "<strong>CannLinx</strong> · Maryland Cannabis Market Intelligence · support@cannlinx.com"
+    "</div>",
+    unsafe_allow_html=True
+)

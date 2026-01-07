@@ -10,12 +10,27 @@ import pandas as pd
 import plotly.express as px
 from sqlalchemy import text
 from core.db import get_engine
+from core.category_utils import get_normalized_category_sql
 
 st.set_page_config(page_title="Product Search | CannLinx", page_icon=None, layout="wide", initial_sidebar_state="collapsed")
 
 # Import and render navigation
-from app.components.nav import render_nav
+from app.components.nav import render_nav, get_section_from_params
 render_nav()
+
+# Handle section parameter for tab navigation
+section = get_section_from_params()
+TAB_MAP = {"prices": 0, "compare": 1}
+if section and section in TAB_MAP:
+    tab_index = TAB_MAP[section]
+    st.markdown(f"""
+    <script>
+        setTimeout(function() {{
+            const tabs = document.querySelectorAll('[data-baseweb="tab"]');
+            if (tabs && tabs[{tab_index}]) {{ tabs[{tab_index}].click(); }}
+        }}, 100);
+    </script>
+    """, unsafe_allow_html=True)
 
 st.title("Product Search")
 st.markdown("Find any product across all Maryland dispensaries")
@@ -24,12 +39,14 @@ engine = get_engine()
 
 @st.cache_data(ttl=300)
 def get_categories():
+    """Get normalized categories for filtering."""
+    cat_sql = get_normalized_category_sql()
     with engine.connect() as conn:
-        df = pd.read_sql(text("""
-            SELECT DISTINCT raw_category as category
+        df = pd.read_sql(text(f"""
+            SELECT DISTINCT {cat_sql} as category
             FROM raw_menu_item
             WHERE raw_category IS NOT NULL
-            ORDER BY raw_category
+            ORDER BY category
         """), conn)
     return ['All Categories'] + df['category'].tolist()
 
@@ -46,6 +63,7 @@ def get_brands():
 
 @st.cache_data(ttl=60)
 def search_products(search_term, category, brand, min_price, max_price, limit=100):
+    cat_sql = get_normalized_category_sql()
     with engine.connect() as conn:
         conditions = ["r.raw_price BETWEEN :min_price AND :max_price"]
         params = {"min_price": min_price, "max_price": max_price, "lim": limit}
@@ -55,7 +73,8 @@ def search_products(search_term, category, brand, min_price, max_price, limit=10
             params["search"] = f"%{search_term}%"
 
         if category != 'All Categories':
-            conditions.append("r.raw_category = :category")
+            # Filter by normalized category
+            conditions.append(f"({cat_sql}) = :category")
             params["category"] = category
 
         if brand != 'All Brands':
@@ -65,7 +84,7 @@ def search_products(search_term, category, brand, min_price, max_price, limit=10
         where_clause = " AND ".join(conditions)
 
         df = pd.read_sql(text(f"""
-            SELECT r.raw_name as product, r.raw_brand as brand, r.raw_category as category,
+            SELECT r.raw_name as product, r.raw_brand as brand, {cat_sql} as category,
                    r.raw_price as price, r.raw_discount_price as sale_price,
                    d.name as store,
                    COALESCE(d.provider_metadata::json->>'county', 'Unknown') as county
@@ -167,13 +186,14 @@ else:
     # Show popular categories when no search
     st.subheader("Browse by Category")
 
+    cat_sql = get_normalized_category_sql()
     with engine.connect() as conn:
-        cat_counts = pd.read_sql(text("""
-            SELECT raw_category as category, COUNT(*) as products,
+        cat_counts = pd.read_sql(text(f"""
+            SELECT {cat_sql} as category, COUNT(*) as products,
                    COUNT(DISTINCT r.dispensary_id) as stores
             FROM raw_menu_item r
             WHERE raw_category IS NOT NULL
-            GROUP BY raw_category
+            GROUP BY {cat_sql}
             ORDER BY products DESC
             LIMIT 10
         """), conn)

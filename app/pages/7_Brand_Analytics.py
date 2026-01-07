@@ -11,6 +11,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 from sqlalchemy import text
 from core.db import get_engine
+from core.category_utils import get_normalized_category_sql
 
 st.set_page_config(page_title="Brand Analytics | CannLinx", page_icon=None, layout="wide", initial_sidebar_state="collapsed")
 
@@ -40,19 +41,20 @@ def get_brand_data():
             ORDER BY store_count DESC, product_count DESC
         """), conn)
 
-        # Brand category breakdown
-        brand_categories = pd.read_sql(text("""
-            SELECT raw_brand as brand, raw_category as category,
+        # Brand category breakdown (normalized)
+        cat_sql = get_normalized_category_sql()
+        brand_categories = pd.read_sql(text(f"""
+            SELECT raw_brand as brand, {cat_sql} as category,
                    COUNT(DISTINCT raw_name) as products
             FROM raw_menu_item
             WHERE raw_brand IS NOT NULL AND raw_brand != ''
             AND raw_category IS NOT NULL
-            GROUP BY raw_brand, raw_category
+            GROUP BY raw_brand, {cat_sql}
         """), conn)
 
-        # Brand pricing by category
-        brand_pricing = pd.read_sql(text("""
-            SELECT raw_brand as brand, raw_category as category,
+        # Brand pricing by category (normalized)
+        brand_pricing = pd.read_sql(text(f"""
+            SELECT raw_brand as brand, {cat_sql} as category,
                    AVG(raw_price) as avg_price,
                    MIN(raw_price) as min_price,
                    MAX(raw_price) as max_price,
@@ -60,7 +62,7 @@ def get_brand_data():
             FROM raw_menu_item
             WHERE raw_brand IS NOT NULL AND raw_brand != ''
             AND raw_price > 0 AND raw_price < 500
-            GROUP BY raw_brand, raw_category
+            GROUP BY raw_brand, {cat_sql}
             HAVING COUNT(*) >= 3
         """), conn)
 
