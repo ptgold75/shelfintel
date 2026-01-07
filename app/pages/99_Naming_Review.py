@@ -5,19 +5,15 @@ import streamlit as st
 import pandas as pd
 import re
 from collections import defaultdict
-from sqlalchemy import create_engine, text
+from sqlalchemy import text
 from components.nav import render_nav
+from core.db import get_engine
 
 st.set_page_config(page_title="Naming Review - ShelfIntel", layout="wide")
 render_nav()
 
 st.title("Product Naming Review")
 st.caption("Identify products with inconsistent naming and standardize to canonical names")
-
-
-@st.cache_resource
-def get_engine():
-    return create_engine(st.secrets["DATABASE_URL"])
 
 
 def clean_name_for_grouping(name: str, brand: str = None) -> str:

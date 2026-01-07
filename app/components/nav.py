@@ -153,6 +153,7 @@ def render_header():
             <a href="/Grower_Intelligence?section=strains" target="_self">Top Strains</a>
             <a href="/Grower_Intelligence?section=distribution" target="_self">Brand Distribution</a>
             <a href="/Grower_Intelligence?section=prices" target="_self">Price Benchmarks</a>
+            <a href="/Grower_Intelligence?section=sizes" target="_self">Size Distribution</a>
         </div>
     </div>
     <div class="nav-dropdown">

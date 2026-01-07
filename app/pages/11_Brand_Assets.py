@@ -3,8 +3,9 @@
 
 import streamlit as st
 import pandas as pd
-from sqlalchemy import create_engine, text
+from sqlalchemy import text
 from components.nav import render_nav
+from core.db import get_engine
 from collections import defaultdict
 
 st.set_page_config(page_title="Brand Assets - CannLinx", layout="wide")
@@ -12,11 +13,6 @@ render_nav()
 
 st.title("Brand Asset Compliance")
 st.caption("Review how your products appear across dispensaries and identify image issues")
-
-
-@st.cache_resource
-def get_engine():
-    return create_engine(st.secrets["DATABASE_URL"])
 
 
 @st.cache_data(ttl=300)

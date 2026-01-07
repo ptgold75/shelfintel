@@ -4,8 +4,9 @@
 import streamlit as st
 import pandas as pd
 import re
-from sqlalchemy import create_engine, text
+from sqlalchemy import text
 from components.nav import render_nav, get_section_from_params
+from core.db import get_engine
 
 
 def extract_size_from_name(name: str) -> str:
@@ -63,11 +64,6 @@ if section and section in TAB_MAP:
 
 st.title("Retail Intelligence")
 st.caption("Competitive pricing, assortment gaps, and category optimization for dispensaries")
-
-
-@st.cache_resource
-def get_engine():
-    return create_engine(st.secrets["DATABASE_URL"])
 
 
 @st.cache_data(ttl=300)
@@ -168,9 +164,12 @@ def compare_pricing(store_id: str, competitor_id: str):
         """), {"comp_store": competitor_id}).fetchall()
 
         # Build competitor product lookup by brand + name + size
+        # Skip "std" (unknown) sizes - can't accurately compare
         comp_lookup = {}
         for brand, name, price in comp_products:
             size = extract_size_from_name(name)
+            if size == "std":  # Skip unknown sizes
+                continue
             key = (brand, name, size)
             comp_lookup[key] = price
 
@@ -179,6 +178,8 @@ def compare_pricing(store_id: str, competitor_id: str):
         seen = set()
         for brand, name, my_price, category in my_products:
             size = extract_size_from_name(name)
+            if size == "std":  # Skip unknown sizes
+                continue
             key = (brand, name, size)
             if key in comp_lookup and key not in seen:
                 comp_price = comp_lookup[key]
@@ -282,10 +283,13 @@ def get_retail_insights(store_id: str):
         """), {"county": county}).fetchall()
 
         # Build market averages by brand + name + size
+        # Skip "std" (unknown) sizes - can't accurately compare
         from collections import defaultdict
         market_prices = defaultdict(list)
         for brand, name, price in market_products_raw:
             size = extract_size_from_name(name)
+            if size == "std":  # Skip unknown sizes
+                continue
             key = (brand, name, size)
             market_prices[key].append(price)
 
@@ -297,6 +301,8 @@ def get_retail_insights(store_id: str):
         seen = set()  # Avoid duplicates
         for brand, name, your_price in my_products_raw:
             size = extract_size_from_name(name)
+            if size == "std":  # Skip unknown sizes
+                continue
             key = (brand, name, size)
             if key in market_avg and key not in seen:
                 avg_price = market_avg[key]

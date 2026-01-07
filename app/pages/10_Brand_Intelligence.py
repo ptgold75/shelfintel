@@ -5,8 +5,9 @@ import streamlit as st
 import pandas as pd
 import re
 from collections import defaultdict
-from sqlalchemy import create_engine, text
+from sqlalchemy import text
 from components.nav import render_nav, get_section_from_params
+from core.db import get_engine
 
 st.set_page_config(page_title="Brand Intelligence - CannLinx", layout="wide")
 render_nav()
@@ -86,11 +87,6 @@ st.markdown("""
     }
 </style>
 """, unsafe_allow_html=True)
-
-
-@st.cache_resource
-def get_engine():
-    return create_engine(st.secrets["DATABASE_URL"])
 
 
 def extract_size_from_name(name: str) -> str:

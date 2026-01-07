@@ -4,8 +4,9 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
-from sqlalchemy import create_engine, text
+from sqlalchemy import text
 from components.nav import render_nav, get_section_from_params
+from core.db import get_engine
 
 st.set_page_config(page_title="Grower Intelligence - CannLinx", layout="wide")
 render_nav()
@@ -29,11 +30,6 @@ if section and section in TAB_MAP:
 
 st.title("Grower & Processor Intelligence")
 st.caption("Market trends, strain popularity, and retail distribution insights")
-
-
-@st.cache_resource
-def get_engine():
-    return create_engine(st.secrets["DATABASE_URL"])
 
 
 @st.cache_data(ttl=300)
@@ -172,7 +168,7 @@ with col4:
 
 # Tabs
 st.markdown("---")
-tab1, tab2, tab3, tab4 = st.tabs(["Category Analysis", "Top Strains", "Brand Distribution", "Price Benchmarks"])
+tab1, tab2, tab3, tab4, tab5 = st.tabs(["Category Analysis", "Top Strains", "Brand Distribution", "Price Benchmarks", "Size Distribution"])
 
 with tab1:
     st.subheader("Category Distribution")
@@ -300,6 +296,179 @@ with tab4:
             height=400
         )
         st.plotly_chart(fig, use_container_width=True)
+
+with tab5:
+    st.subheader("Size Distribution by Category")
+    st.caption("Product counts by unit size at store, county, and state levels")
+
+    import re
+
+    def extract_size(name: str) -> str:
+        """Extract size from product name."""
+        if not name:
+            return "Unknown"
+        name_lower = name.lower()
+
+        # Grams
+        match = re.search(r'(\d+\.?\d*)\s*(g|gram|grams)\b', name_lower)
+        if match:
+            val = float(match.group(1))
+            if val <= 1.5:
+                return "1g"
+            elif val <= 4:
+                return "3.5g"
+            elif val <= 8:
+                return "7g"
+            elif val <= 16:
+                return "14g"
+            else:
+                return "28g"
+
+        # Fractions
+        if '1/8' in name_lower or 'eighth' in name_lower:
+            return "3.5g"
+        if '1/4' in name_lower or 'quarter' in name_lower:
+            return "7g"
+        if '1/2' in name_lower or 'half' in name_lower:
+            return "14g"
+        if '1oz' in name_lower or 'ounce' in name_lower:
+            return "28g"
+
+        return "Unknown"
+
+    # Get size distribution data
+    @st.cache_data(ttl=300)
+    def get_size_distribution(level: str, filter_id: str = None):
+        """Get product counts by category and size."""
+        engine = get_engine()
+        with engine.connect() as conn:
+            if level == "state":
+                result = conn.execute(text("""
+                    SELECT raw_category, raw_name, COUNT(*) as cnt
+                    FROM raw_menu_item
+                    WHERE raw_category ILIKE '%flower%' OR raw_category ILIKE '%bud%'
+                       OR raw_category ILIKE '%pre-roll%' OR raw_category ILIKE '%preroll%'
+                    GROUP BY raw_category, raw_name
+                """)).fetchall()
+            elif level == "county":
+                result = conn.execute(text("""
+                    SELECT r.raw_category, r.raw_name, COUNT(*) as cnt
+                    FROM raw_menu_item r
+                    JOIN dispensary d ON r.dispensary_id = d.dispensary_id
+                    WHERE d.county = :county
+                      AND (r.raw_category ILIKE '%flower%' OR r.raw_category ILIKE '%bud%'
+                           OR r.raw_category ILIKE '%pre-roll%' OR r.raw_category ILIKE '%preroll%')
+                    GROUP BY r.raw_category, r.raw_name
+                """), {"county": filter_id}).fetchall()
+            else:  # store
+                result = conn.execute(text("""
+                    SELECT raw_category, raw_name, COUNT(*) as cnt
+                    FROM raw_menu_item
+                    WHERE dispensary_id = :store_id
+                      AND (raw_category ILIKE '%flower%' OR raw_category ILIKE '%bud%'
+                           OR raw_category ILIKE '%pre-roll%' OR raw_category ILIKE '%preroll%')
+                    GROUP BY raw_category, raw_name
+                """), {"store_id": filter_id}).fetchall()
+
+            # Aggregate by size
+            from collections import defaultdict
+            size_counts = defaultdict(lambda: defaultdict(int))
+            for cat, name, cnt in result:
+                size = extract_size(name)
+                cat_norm = "Flower" if "flower" in cat.lower() or "bud" in cat.lower() else "Pre-Rolls"
+                size_counts[cat_norm][size] += cnt
+
+            return dict(size_counts)
+
+    @st.cache_data(ttl=300)
+    def get_counties():
+        engine = get_engine()
+        with engine.connect() as conn:
+            result = conn.execute(text("""
+                SELECT DISTINCT county FROM dispensary
+                WHERE county IS NOT NULL ORDER BY county
+            """)).fetchall()
+            return [r[0] for r in result]
+
+    @st.cache_data(ttl=300)
+    def get_stores():
+        engine = get_engine()
+        with engine.connect() as conn:
+            result = conn.execute(text("""
+                SELECT dispensary_id, name, city FROM dispensary
+                WHERE is_active = true ORDER BY name
+            """)).fetchall()
+            return [(r[0], f"{r[1]} ({r[2]})") for r in result]
+
+    # Level selector
+    col1, col2 = st.columns([1, 2])
+    with col1:
+        level = st.selectbox("View Level", ["State (All MD)", "By County", "By Store"])
+
+    filter_id = None
+    if level == "By County":
+        counties = get_counties()
+        with col2:
+            selected_county = st.selectbox("Select County", counties)
+            filter_id = selected_county
+        level_key = "county"
+    elif level == "By Store":
+        stores = get_stores()
+        with col2:
+            store_options = {name: sid for sid, name in stores}
+            selected_store = st.selectbox("Select Store", list(store_options.keys()))
+            filter_id = store_options[selected_store]
+        level_key = "store"
+    else:
+        level_key = "state"
+
+    # Get and display data
+    size_data = get_size_distribution(level_key, filter_id)
+
+    if size_data:
+        # Flower sizes
+        st.markdown("#### Flower by Size")
+        if "Flower" in size_data:
+            flower_sizes = size_data["Flower"]
+            size_order = ["1g", "3.5g", "7g", "14g", "28g", "Unknown"]
+            df_flower = pd.DataFrame([
+                {"Size": s, "Products": flower_sizes.get(s, 0)}
+                for s in size_order if flower_sizes.get(s, 0) > 0
+            ])
+
+            if not df_flower.empty:
+                col1, col2 = st.columns([2, 1])
+                with col1:
+                    fig = px.bar(df_flower, x="Size", y="Products",
+                                 title="Flower Products by Size",
+                                 color="Size",
+                                 color_discrete_sequence=px.colors.qualitative.Set2)
+                    fig.update_layout(showlegend=False, height=350)
+                    st.plotly_chart(fig, use_container_width=True)
+                with col2:
+                    st.dataframe(df_flower, hide_index=True, use_container_width=True)
+
+                    total = df_flower["Products"].sum()
+                    known = total - flower_sizes.get("Unknown", 0)
+                    st.metric("Total Flower", f"{total:,}")
+                    st.metric("Known Sizes", f"{known:,} ({100*known/total:.0f}%)" if total > 0 else "0")
+        else:
+            st.info("No flower data available for this selection")
+
+        # Pre-roll sizes (could expand this)
+        st.markdown("#### Pre-Rolls by Size")
+        if "Pre-Rolls" in size_data:
+            preroll_sizes = size_data["Pre-Rolls"]
+            df_preroll = pd.DataFrame([
+                {"Size": s, "Products": c}
+                for s, c in sorted(preroll_sizes.items(), key=lambda x: -x[1])
+            ])
+            if not df_preroll.empty:
+                st.dataframe(df_preroll.head(10), hide_index=True, use_container_width=True)
+        else:
+            st.info("No pre-roll data available for this selection")
+    else:
+        st.warning("No data available for this selection")
 
 # Value proposition
 st.markdown("---")
