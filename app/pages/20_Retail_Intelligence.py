@@ -66,7 +66,7 @@ st.title("Retail Intelligence")
 st.caption("Competitive pricing, assortment gaps, and category optimization for dispensaries")
 
 
-@st.cache_data(ttl=300)
+@st.cache_data(ttl=3600)  # Cache for 1 hour - store list rarely changes
 def get_dispensaries():
     """Get list of dispensaries with products."""
     engine = get_engine()
@@ -83,43 +83,31 @@ def get_dispensaries():
         return [(row[0], f"{row[1]} ({row[2]})") for row in result]
 
 
-@st.cache_data(ttl=300)
+@st.cache_data(ttl=600)  # Cache for 10 minutes
 def get_store_metrics(store_id: str):
-    """Get key metrics for a store."""
+    """Get all key metrics for a store in a single optimized query."""
     engine = get_engine()
     with engine.connect() as conn:
-        # Product count
-        product_count = conn.execute(text("""
-            SELECT COUNT(*) FROM raw_menu_item WHERE dispensary_id = :sid
-        """), {"sid": store_id}).scalar() or 0
-
-        # Brand count
-        brand_count = conn.execute(text("""
-            SELECT COUNT(DISTINCT raw_brand) FROM raw_menu_item
-            WHERE dispensary_id = :sid AND raw_brand IS NOT NULL
-        """), {"sid": store_id}).scalar() or 0
-
-        # Avg price
-        avg_price = conn.execute(text("""
-            SELECT AVG(raw_price) FROM raw_menu_item
-            WHERE dispensary_id = :sid AND raw_price > 0 AND raw_price < 500
-        """), {"sid": store_id}).scalar() or 0
-
-        # Category count
-        cat_count = conn.execute(text("""
-            SELECT COUNT(DISTINCT raw_category) FROM raw_menu_item
+        # Combined query for all metrics
+        result = conn.execute(text("""
+            SELECT
+                COUNT(*) as product_count,
+                COUNT(DISTINCT raw_brand) FILTER (WHERE raw_brand IS NOT NULL) as brand_count,
+                AVG(raw_price) FILTER (WHERE raw_price > 0 AND raw_price < 500) as avg_price,
+                COUNT(DISTINCT raw_category) as cat_count
+            FROM raw_menu_item
             WHERE dispensary_id = :sid
-        """), {"sid": store_id}).scalar() or 0
+        """), {"sid": store_id}).fetchone()
 
         return {
-            "products": product_count,
-            "brands": brand_count,
-            "avg_price": avg_price,
-            "categories": cat_count
+            "products": result[0] or 0,
+            "brands": result[1] or 0,
+            "avg_price": result[2] or 0,
+            "categories": result[3] or 0
         }
 
 
-@st.cache_data(ttl=300)
+@st.cache_data(ttl=3600)  # Cache for 1 hour - competitors don't change often
 def get_nearby_competitors(store_id: str):
     """Get competitors in same county."""
     engine = get_engine()
@@ -145,7 +133,7 @@ def get_nearby_competitors(store_id: str):
         return result
 
 
-@st.cache_data(ttl=300)
+@st.cache_data(ttl=600)  # Cache for 10 minutes
 def compare_pricing(store_id: str, competitor_id: str):
     """Compare product pricing between two stores with size matching."""
     engine = get_engine()
@@ -192,7 +180,7 @@ def compare_pricing(store_id: str, competitor_id: str):
         return results
 
 
-@st.cache_data(ttl=300)
+@st.cache_data(ttl=600)  # Cache for 10 minutes
 def find_assortment_gaps(store_id: str, competitor_id: str):
     """Find products competitor has that store doesn't."""
     engine = get_engine()
@@ -219,7 +207,7 @@ def find_assortment_gaps(store_id: str, competitor_id: str):
         return result
 
 
-@st.cache_data(ttl=300)
+@st.cache_data(ttl=600)  # Cache for 10 minutes
 def get_retail_insights(store_id: str):
     """Generate actionable insights for a dispensary."""
     engine = get_engine()
@@ -393,7 +381,7 @@ def get_retail_insights(store_id: str):
     return insights
 
 
-@st.cache_data(ttl=300)
+@st.cache_data(ttl=600)  # Cache for 10 minutes
 def get_category_comparison(store_id: str, competitor_id: str):
     """Compare category mix between stores."""
     engine = get_engine()

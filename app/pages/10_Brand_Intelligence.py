@@ -114,7 +114,7 @@ def extract_size_from_name(name: str) -> str:
     return "unknown"
 
 
-@st.cache_data(ttl=300)
+@st.cache_data(ttl=3600)  # Cache for 1 hour - brand list rarely changes
 def get_brands():
     engine = get_engine()
     with engine.connect() as conn:
@@ -129,7 +129,7 @@ def get_brands():
         return [row[0] for row in result]
 
 
-@st.cache_data(ttl=300)
+@st.cache_data(ttl=3600)  # Cache for 1 hour
 def get_categories_for_brand(brand: str):
     """Get list of categories for a brand."""
     engine = get_engine()
@@ -143,8 +143,9 @@ def get_categories_for_brand(brand: str):
         return [row[0] for row in result]
 
 
-@st.cache_data(ttl=300)
+@st.cache_data(ttl=600)  # Cache for 10 minutes
 def get_brand_metrics(brand: str, category: str = None):
+    """Get all brand metrics in a single optimized query."""
     engine = get_engine()
     with engine.connect() as conn:
         params = {"brand": brand}
@@ -153,47 +154,51 @@ def get_brand_metrics(brand: str, category: str = None):
             cat_filter = "AND raw_category = :category"
             params["category"] = category
 
-        # Stores with data
-        total_stores_with_data = conn.execute(text("""
-            SELECT COUNT(DISTINCT dispensary_id) FROM raw_menu_item
-        """)).scalar() or 1
-
-        stores_carrying = conn.execute(text(f"""
-            SELECT COUNT(DISTINCT r.dispensary_id)
-            FROM raw_menu_item r
-            WHERE UPPER(r.raw_brand) = :brand {cat_filter}
-        """), params).scalar() or 0
-
-        sku_count = conn.execute(text(f"""
-            SELECT COUNT(DISTINCT raw_name)
-            FROM raw_menu_item WHERE UPPER(raw_brand) = :brand {cat_filter}
-        """), params).scalar() or 0
-
-        price_stats = conn.execute(text(f"""
-            SELECT MIN(raw_price), MAX(raw_price), AVG(raw_price), SUM(raw_price)
-            FROM raw_menu_item
-            WHERE UPPER(raw_brand) = :brand AND raw_price > 0 AND raw_price < 500 {cat_filter}
+        # Combined query to get all metrics in one database round-trip
+        result = conn.execute(text(f"""
+            WITH total_stores AS (
+                SELECT COUNT(DISTINCT dispensary_id) as cnt FROM raw_menu_item
+            ),
+            brand_data AS (
+                SELECT
+                    COUNT(DISTINCT dispensary_id) as stores_carrying,
+                    COUNT(DISTINCT raw_name) as sku_count,
+                    MIN(CASE WHEN raw_price > 0 AND raw_price < 500 THEN raw_price END) as min_price,
+                    MAX(CASE WHEN raw_price > 0 AND raw_price < 500 THEN raw_price END) as max_price,
+                    AVG(CASE WHEN raw_price > 0 AND raw_price < 500 THEN raw_price END) as avg_price,
+                    SUM(CASE WHEN raw_price > 0 AND raw_price < 500 THEN raw_price ELSE 0 END) as total_retail
+                FROM raw_menu_item
+                WHERE UPPER(raw_brand) = :brand {cat_filter}
+            )
+            SELECT
+                ts.cnt as total_stores,
+                bd.stores_carrying,
+                bd.sku_count,
+                bd.min_price,
+                bd.max_price,
+                bd.avg_price,
+                bd.total_retail
+            FROM total_stores ts, brand_data bd
         """), params).fetchone()
 
-        # Total retail value (sum of all prices = proxy for market presence)
-        total_retail = price_stats[3] if price_stats[3] else 0
-        # Estimated wholesale (50% keystone)
-        estimated_wholesale = total_retail * 0.5
+        total_stores = result[0] or 1
+        stores_carrying = result[1] or 0
+        total_retail = result[6] or 0
 
         return {
             "stores_carrying": stores_carrying,
-            "total_stores": total_stores_with_data,
-            "coverage_pct": round(stores_carrying / total_stores_with_data * 100, 1),
-            "sku_count": sku_count,
-            "min_price": price_stats[0] if price_stats else 0,
-            "max_price": price_stats[1] if price_stats else 0,
-            "avg_price": price_stats[2] if price_stats else 0,
+            "total_stores": total_stores,
+            "coverage_pct": round(stores_carrying / total_stores * 100, 1),
+            "sku_count": result[2] or 0,
+            "min_price": result[3] or 0,
+            "max_price": result[4] or 0,
+            "avg_price": result[5] or 0,
             "total_retail": total_retail,
-            "estimated_wholesale": estimated_wholesale,
+            "estimated_wholesale": total_retail * 0.5,
         }
 
 
-@st.cache_data(ttl=300)
+@st.cache_data(ttl=600)  # Cache for 10 minutes
 def get_competitive_comparison(brand: str):
     """Compare brand's distribution to similar brands in same categories."""
     engine = get_engine()
@@ -237,7 +242,7 @@ def get_competitive_comparison(brand: str):
         return None
 
 
-@st.cache_data(ttl=300)
+@st.cache_data(ttl=600)  # Cache for 10 minutes
 def get_distribution_gaps(brand: str, category: str = None):
     """Get stores with data that don't carry the brand (optionally in a category)."""
     engine = get_engine()
@@ -265,7 +270,7 @@ def get_distribution_gaps(brand: str, category: str = None):
         return result
 
 
-@st.cache_data(ttl=300)
+@st.cache_data(ttl=600)  # Cache for 10 minutes
 def get_county_coverage(brand: str, category: str = None):
     """Get coverage by county."""
     engine = get_engine()
@@ -301,7 +306,7 @@ def get_county_coverage(brand: str, category: str = None):
         return result
 
 
-@st.cache_data(ttl=300)
+@st.cache_data(ttl=600)  # Cache for 10 minutes
 def get_pricing_issues(brand: str, category: str = None):
     """Get products with pricing variance (same size only)."""
     engine = get_engine()

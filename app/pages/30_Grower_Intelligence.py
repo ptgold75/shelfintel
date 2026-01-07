@@ -32,36 +32,40 @@ st.title("Grower & Processor Intelligence")
 st.caption("Market trends, strain popularity, and retail distribution insights")
 
 
-@st.cache_data(ttl=300)
+@st.cache_data(ttl=600)  # Cache for 10 minutes
 def get_market_overview():
-    """Get high-level market stats."""
+    """Get high-level market stats in a single optimized query."""
     engine = get_engine()
     with engine.connect() as conn:
-        total_products = conn.execute(text(
-            "SELECT COUNT(*) FROM raw_menu_item"
-        )).scalar() or 0
-
-        unique_products = conn.execute(text(
-            "SELECT COUNT(DISTINCT raw_name) FROM raw_menu_item"
-        )).scalar() or 0
-
-        total_brands = conn.execute(text(
-            "SELECT COUNT(DISTINCT raw_brand) FROM raw_menu_item WHERE raw_brand IS NOT NULL"
-        )).scalar() or 0
-
-        active_stores = conn.execute(text(
-            "SELECT COUNT(*) FROM dispensary WHERE is_active = true"
-        )).scalar() or 0
+        # Combined query for all market overview stats
+        result = conn.execute(text("""
+            WITH menu_stats AS (
+                SELECT
+                    COUNT(*) as total_products,
+                    COUNT(DISTINCT raw_name) as unique_products,
+                    COUNT(DISTINCT raw_brand) FILTER (WHERE raw_brand IS NOT NULL) as total_brands
+                FROM raw_menu_item
+            ),
+            store_stats AS (
+                SELECT COUNT(*) as active_stores FROM dispensary WHERE is_active = true
+            )
+            SELECT
+                m.total_products,
+                m.unique_products,
+                m.total_brands,
+                s.active_stores
+            FROM menu_stats m, store_stats s
+        """)).fetchone()
 
         return {
-            "total_products": total_products,
-            "unique_products": unique_products,
-            "brands": total_brands,
-            "stores": active_stores
+            "total_products": result[0] or 0,
+            "unique_products": result[1] or 0,
+            "brands": result[2] or 0,
+            "stores": result[3] or 0
         }
 
 
-@st.cache_data(ttl=300)
+@st.cache_data(ttl=600)  # Cache for 10 minutes
 def get_category_distribution():
     """Get product distribution by category."""
     engine = get_engine()
@@ -82,7 +86,7 @@ def get_category_distribution():
         return result.fetchall()
 
 
-@st.cache_data(ttl=300)
+@st.cache_data(ttl=600)  # Cache for 10 minutes
 def get_top_strains():
     """Get most distributed strains/products."""
     engine = get_engine()
@@ -107,7 +111,7 @@ def get_top_strains():
         return result.fetchall()
 
 
-@st.cache_data(ttl=300)
+@st.cache_data(ttl=600)  # Cache for 10 minutes
 def get_brand_distribution():
     """Get brand distribution metrics."""
     engine = get_engine()
@@ -129,7 +133,7 @@ def get_brand_distribution():
         return result.fetchall()
 
 
-@st.cache_data(ttl=300)
+@st.cache_data(ttl=600)  # Cache for 10 minutes
 def get_price_trends_by_category():
     """Get pricing data by category."""
     engine = get_engine()
@@ -337,7 +341,7 @@ with tab5:
         return "Unknown"
 
     # Get size distribution data
-    @st.cache_data(ttl=300)
+    @st.cache_data(ttl=600)  # Cache for 10 minutes
     def get_size_distribution(level: str, filter_id: str = None):
         """Get product counts by category and size."""
         engine = get_engine()
@@ -380,7 +384,7 @@ with tab5:
 
             return dict(size_counts)
 
-    @st.cache_data(ttl=300)
+    @st.cache_data(ttl=600)  # Cache for 10 minutes
     def get_counties():
         engine = get_engine()
         with engine.connect() as conn:
@@ -390,7 +394,7 @@ with tab5:
             """)).fetchall()
             return [r[0] for r in result]
 
-    @st.cache_data(ttl=300)
+    @st.cache_data(ttl=600)  # Cache for 10 minutes
     def get_stores():
         engine = get_engine()
         with engine.connect() as conn:
