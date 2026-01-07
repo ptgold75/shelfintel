@@ -5,7 +5,7 @@ import streamlit as st
 import pandas as pd
 import re
 from sqlalchemy import text
-from components.nav import render_nav, get_section_from_params
+from components.nav import render_nav, get_section_from_params, render_state_filter, get_selected_state
 from core.db import get_engine
 
 
@@ -67,19 +67,19 @@ st.caption("Competitive pricing, assortment gaps, and category optimization for 
 
 
 @st.cache_data(ttl=3600)  # Cache for 1 hour - store list rarely changes
-def get_dispensaries():
-    """Get list of dispensaries with products."""
+def get_dispensaries(state: str = "MD"):
+    """Get list of dispensaries with products in a state."""
     engine = get_engine()
     with engine.connect() as conn:
         result = conn.execute(text("""
             SELECT d.dispensary_id, d.name, d.city, d.county, COUNT(r.raw_menu_item_id) as products
             FROM dispensary d
             LEFT JOIN raw_menu_item r ON d.dispensary_id = r.dispensary_id
-            WHERE d.is_active = true
+            WHERE d.is_active = true AND d.state = :state
             GROUP BY d.dispensary_id, d.name, d.city, d.county
             HAVING COUNT(r.raw_menu_item_id) > 0
             ORDER BY d.name
-        """))
+        """), {"state": state})
         return [(row[0], f"{row[1]} ({row[2]})") for row in result]
 
 
@@ -409,15 +409,20 @@ def get_category_comparison(store_id: str, competitor_id: str):
         return result
 
 
-# Store selector
-dispensaries = get_dispensaries()
+# State and Store selector
+col_state, col_store = st.columns([1, 3])
+with col_state:
+    selected_state = render_state_filter()
+
+dispensaries = get_dispensaries(selected_state)
 if not dispensaries:
-    st.warning("No dispensary data available")
+    st.warning(f"No dispensary data available for {selected_state}")
     st.stop()
 
-store_options = {name: id for id, name in dispensaries}
-selected_store_name = st.selectbox("Select Your Store", list(store_options.keys()))
-selected_store_id = store_options[selected_store_name]
+with col_store:
+    store_options = {name: id for id, name in dispensaries}
+    selected_store_name = st.selectbox("Select Your Store", list(store_options.keys()))
+    selected_store_id = store_options[selected_store_name]
 
 if selected_store_id:
     metrics = get_store_metrics(selected_store_id)

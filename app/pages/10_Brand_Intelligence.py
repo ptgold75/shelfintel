@@ -6,7 +6,7 @@ import pandas as pd
 import re
 from collections import defaultdict
 from sqlalchemy import text
-from components.nav import render_nav, get_section_from_params
+from components.nav import render_nav, get_section_from_params, render_state_filter, get_selected_state
 from core.db import get_engine
 
 st.set_page_config(page_title="Brand Intelligence - CannLinx", layout="wide")
@@ -115,60 +115,68 @@ def extract_size_from_name(name: str) -> str:
 
 
 @st.cache_data(ttl=3600)  # Cache for 1 hour - brand list rarely changes
-def get_brands():
+def get_brands(state: str = "MD"):
     engine = get_engine()
     with engine.connect() as conn:
         result = conn.execute(text("""
-            SELECT UPPER(raw_brand) as brand, COUNT(*) as cnt
-            FROM raw_menu_item
-            WHERE raw_brand IS NOT NULL AND raw_brand <> ''
-            GROUP BY UPPER(raw_brand)
+            SELECT UPPER(r.raw_brand) as brand, COUNT(*) as cnt
+            FROM raw_menu_item r
+            JOIN dispensary d ON r.dispensary_id = d.dispensary_id
+            WHERE r.raw_brand IS NOT NULL AND r.raw_brand <> ''
+              AND d.state = :state
+            GROUP BY UPPER(r.raw_brand)
             HAVING COUNT(*) >= 5
             ORDER BY cnt DESC
-        """))
+        """), {"state": state})
         return [row[0] for row in result]
 
 
 @st.cache_data(ttl=3600)  # Cache for 1 hour
-def get_categories_for_brand(brand: str):
-    """Get list of categories for a brand."""
+def get_categories_for_brand(brand: str, state: str = "MD"):
+    """Get list of categories for a brand in a state."""
     engine = get_engine()
     with engine.connect() as conn:
         result = conn.execute(text("""
-            SELECT DISTINCT raw_category
-            FROM raw_menu_item
-            WHERE UPPER(raw_brand) = :brand AND raw_category IS NOT NULL
-            ORDER BY raw_category
-        """), {"brand": brand})
+            SELECT DISTINCT r.raw_category
+            FROM raw_menu_item r
+            JOIN dispensary d ON r.dispensary_id = d.dispensary_id
+            WHERE UPPER(r.raw_brand) = :brand AND r.raw_category IS NOT NULL
+              AND d.state = :state
+            ORDER BY r.raw_category
+        """), {"brand": brand, "state": state})
         return [row[0] for row in result]
 
 
 @st.cache_data(ttl=600)  # Cache for 10 minutes
-def get_brand_metrics(brand: str, category: str = None):
+def get_brand_metrics(brand: str, category: str = None, state: str = "MD"):
     """Get all brand metrics in a single optimized query."""
     engine = get_engine()
     with engine.connect() as conn:
-        params = {"brand": brand}
+        params = {"brand": brand, "state": state}
         cat_filter = ""
         if category:
-            cat_filter = "AND raw_category = :category"
+            cat_filter = "AND r.raw_category = :category"
             params["category"] = category
 
         # Combined query to get all metrics in one database round-trip
         result = conn.execute(text(f"""
             WITH total_stores AS (
-                SELECT COUNT(DISTINCT dispensary_id) as cnt FROM raw_menu_item
+                SELECT COUNT(DISTINCT r.dispensary_id) as cnt
+                FROM raw_menu_item r
+                JOIN dispensary d ON r.dispensary_id = d.dispensary_id
+                WHERE d.state = :state
             ),
             brand_data AS (
                 SELECT
-                    COUNT(DISTINCT dispensary_id) as stores_carrying,
-                    COUNT(DISTINCT raw_name) as sku_count,
-                    MIN(CASE WHEN raw_price > 0 AND raw_price < 500 THEN raw_price END) as min_price,
-                    MAX(CASE WHEN raw_price > 0 AND raw_price < 500 THEN raw_price END) as max_price,
-                    AVG(CASE WHEN raw_price > 0 AND raw_price < 500 THEN raw_price END) as avg_price,
-                    SUM(CASE WHEN raw_price > 0 AND raw_price < 500 THEN raw_price ELSE 0 END) as total_retail
-                FROM raw_menu_item
-                WHERE UPPER(raw_brand) = :brand {cat_filter}
+                    COUNT(DISTINCT r.dispensary_id) as stores_carrying,
+                    COUNT(DISTINCT r.raw_name) as sku_count,
+                    MIN(CASE WHEN r.raw_price > 0 AND r.raw_price < 500 THEN r.raw_price END) as min_price,
+                    MAX(CASE WHEN r.raw_price > 0 AND r.raw_price < 500 THEN r.raw_price END) as max_price,
+                    AVG(CASE WHEN r.raw_price > 0 AND r.raw_price < 500 THEN r.raw_price END) as avg_price,
+                    SUM(CASE WHEN r.raw_price > 0 AND r.raw_price < 500 THEN r.raw_price ELSE 0 END) as total_retail
+                FROM raw_menu_item r
+                JOIN dispensary d ON r.dispensary_id = d.dispensary_id
+                WHERE UPPER(r.raw_brand) = :brand AND d.state = :state {cat_filter}
             )
             SELECT
                 ts.cnt as total_stores,
@@ -199,16 +207,18 @@ def get_brand_metrics(brand: str, category: str = None):
 
 
 @st.cache_data(ttl=600)  # Cache for 10 minutes
-def get_competitive_comparison(brand: str):
+def get_competitive_comparison(brand: str, state: str = "MD"):
     """Compare brand's distribution to similar brands in same categories."""
     engine = get_engine()
     with engine.connect() as conn:
         # Get brand's main categories
         categories = conn.execute(text("""
-            SELECT raw_category, COUNT(*) as cnt
-            FROM raw_menu_item WHERE UPPER(raw_brand) = :brand
-            GROUP BY raw_category ORDER BY cnt DESC LIMIT 3
-        """), {"brand": brand}).fetchall()
+            SELECT r.raw_category, COUNT(*) as cnt
+            FROM raw_menu_item r
+            JOIN dispensary d ON r.dispensary_id = d.dispensary_id
+            WHERE UPPER(r.raw_brand) = :brand AND d.state = :state
+            GROUP BY r.raw_category ORDER BY cnt DESC LIMIT 3
+        """), {"brand": brand, "state": state}).fetchall()
 
         if not categories:
             return None
@@ -219,16 +229,18 @@ def get_competitive_comparison(brand: str):
 
         # Get competitor brands in same categories
         competitors = conn.execute(text("""
-            SELECT UPPER(raw_brand) as brand, COUNT(DISTINCT dispensary_id) as stores
-            FROM raw_menu_item
-            WHERE raw_category = ANY(:cats)
-              AND raw_brand IS NOT NULL
-              AND UPPER(raw_brand) <> :brand
-            GROUP BY UPPER(raw_brand)
-            HAVING COUNT(DISTINCT dispensary_id) >= 5
+            SELECT UPPER(r.raw_brand) as brand, COUNT(DISTINCT r.dispensary_id) as stores
+            FROM raw_menu_item r
+            JOIN dispensary d ON r.dispensary_id = d.dispensary_id
+            WHERE r.raw_category = ANY(:cats)
+              AND r.raw_brand IS NOT NULL
+              AND UPPER(r.raw_brand) <> :brand
+              AND d.state = :state
+            GROUP BY UPPER(r.raw_brand)
+            HAVING COUNT(DISTINCT r.dispensary_id) >= 5
             ORDER BY stores DESC
             LIMIT 10
-        """), {"cats": main_cats, "brand": brand}).fetchall()
+        """), {"cats": main_cats, "brand": brand, "state": state}).fetchall()
 
         if competitors:
             avg_competitor_stores = sum(c[1] for c in competitors) / len(competitors)
@@ -243,27 +255,32 @@ def get_competitive_comparison(brand: str):
 
 
 @st.cache_data(ttl=600)  # Cache for 10 minutes
-def get_distribution_gaps(brand: str, category: str = None):
+def get_distribution_gaps(brand: str, category: str = None, state: str = "MD"):
     """Get stores with data that don't carry the brand (optionally in a category)."""
     engine = get_engine()
     with engine.connect() as conn:
-        params = {"brand": brand}
+        params = {"brand": brand, "state": state}
         cat_filter = ""
         if category:
-            cat_filter = "AND raw_category = :category"
+            cat_filter = "AND r.raw_category = :category"
             params["category"] = category
 
         result = conn.execute(text(f"""
             WITH stores_with_data AS (
-                SELECT DISTINCT dispensary_id FROM raw_menu_item
+                SELECT DISTINCT r.dispensary_id
+                FROM raw_menu_item r
+                JOIN dispensary d ON r.dispensary_id = d.dispensary_id
+                WHERE d.state = :state
             )
             SELECT d.name, d.city, d.county
             FROM dispensary d
             JOIN stores_with_data swd ON d.dispensary_id = swd.dispensary_id
-            WHERE d.is_active = true
+            WHERE d.is_active = true AND d.state = :state
               AND d.dispensary_id NOT IN (
-                  SELECT DISTINCT dispensary_id FROM raw_menu_item
-                  WHERE UPPER(raw_brand) = :brand {cat_filter}
+                  SELECT DISTINCT r.dispensary_id
+                  FROM raw_menu_item r
+                  JOIN dispensary d2 ON r.dispensary_id = d2.dispensary_id
+                  WHERE UPPER(r.raw_brand) = :brand AND d2.state = :state {cat_filter}
               )
             ORDER BY d.county, d.name
         """), params).fetchall()
@@ -271,11 +288,11 @@ def get_distribution_gaps(brand: str, category: str = None):
 
 
 @st.cache_data(ttl=600)  # Cache for 10 minutes
-def get_county_coverage(brand: str, category: str = None):
+def get_county_coverage(brand: str, category: str = None, state: str = "MD"):
     """Get coverage by county."""
     engine = get_engine()
     with engine.connect() as conn:
-        params = {"brand": brand}
+        params = {"brand": brand, "state": state}
         cat_filter = ""
         if category:
             cat_filter = "AND r.raw_category = :category"
@@ -286,13 +303,13 @@ def get_county_coverage(brand: str, category: str = None):
                 SELECT DISTINCT r.dispensary_id, d.county
                 FROM raw_menu_item r
                 JOIN dispensary d ON r.dispensary_id = d.dispensary_id
-                WHERE d.county IS NOT NULL
+                WHERE d.county IS NOT NULL AND d.state = :state
             ),
             brand_stores AS (
                 SELECT DISTINCT r.dispensary_id, d.county
                 FROM raw_menu_item r
                 JOIN dispensary d ON r.dispensary_id = d.dispensary_id
-                WHERE UPPER(r.raw_brand) = :brand AND d.county IS NOT NULL {cat_filter}
+                WHERE UPPER(r.raw_brand) = :brand AND d.county IS NOT NULL AND d.state = :state {cat_filter}
             )
             SELECT
                 swd.county,
@@ -307,20 +324,22 @@ def get_county_coverage(brand: str, category: str = None):
 
 
 @st.cache_data(ttl=600)  # Cache for 10 minutes
-def get_pricing_issues(brand: str, category: str = None):
+def get_pricing_issues(brand: str, category: str = None, state: str = "MD"):
     """Get products with pricing variance (same size only)."""
     engine = get_engine()
     with engine.connect() as conn:
-        params = {"brand": brand}
+        params = {"brand": brand, "state": state}
         cat_filter = ""
         if category:
-            cat_filter = "AND raw_category = :category"
+            cat_filter = "AND r.raw_category = :category"
             params["category"] = category
 
         all_products = conn.execute(text(f"""
-            SELECT raw_name, raw_price
-            FROM raw_menu_item
-            WHERE UPPER(raw_brand) = :brand AND raw_price > 0 AND raw_price < 500 {cat_filter}
+            SELECT r.raw_name, r.raw_price
+            FROM raw_menu_item r
+            JOIN dispensary d ON r.dispensary_id = d.dispensary_id
+            WHERE UPPER(r.raw_brand) = :brand AND r.raw_price > 0 AND r.raw_price < 500
+              AND d.state = :state {cat_filter}
         """), params).fetchall()
 
         price_by_product_size = defaultdict(list)
@@ -351,26 +370,31 @@ def get_pricing_issues(brand: str, category: str = None):
 # Page Header
 st.title("Brand Intelligence")
 
+# State and Brand selector row
+col_state, col_brand, col_cat = st.columns([1, 2, 1])
+
+with col_state:
+    selected_state = render_state_filter()
+
 # Brand selector
-brands = get_brands()
+brands = get_brands(selected_state)
 if not brands:
-    st.warning("No brand data available")
+    st.warning(f"No brand data available for {selected_state}")
     st.stop()
 
-col_brand, col_cat = st.columns([2, 1])
 with col_brand:
     selected_brand = st.selectbox("Select Your Brand", brands, index=0)
 
 # Get categories for selected brand
-categories = get_categories_for_brand(selected_brand) if selected_brand else []
+categories = get_categories_for_brand(selected_brand, selected_state) if selected_brand else []
 with col_cat:
     cat_options = ["All Categories"] + categories
     selected_cat_display = st.selectbox("Filter by Category", cat_options, index=0)
     selected_category = None if selected_cat_display == "All Categories" else selected_cat_display
 
 if selected_brand:
-    metrics = get_brand_metrics(selected_brand, selected_category)
-    competitive = get_competitive_comparison(selected_brand)
+    metrics = get_brand_metrics(selected_brand, selected_category, selected_state)
+    competitive = get_competitive_comparison(selected_brand, selected_state)
 
     # Show active filter
     if selected_category:
@@ -488,7 +512,7 @@ if selected_brand:
         st.markdown('<p class="section-header">Actionable Insights</p>', unsafe_allow_html=True)
 
         # Distribution Gaps
-        gaps = get_distribution_gaps(selected_brand, selected_category)
+        gaps = get_distribution_gaps(selected_brand, selected_category, selected_state)
         if gaps:
             st.markdown(f"""
             <div class="insight-card">
@@ -502,7 +526,7 @@ if selected_brand:
                 st.dataframe(df, use_container_width=True, hide_index=True, height=300)
 
         # Pricing Issues
-        pricing_issues = get_pricing_issues(selected_brand, selected_category)
+        pricing_issues = get_pricing_issues(selected_brand, selected_category, selected_state)
         if pricing_issues:
             st.markdown(f"""
             <div class="insight-card warning">
@@ -539,10 +563,10 @@ if selected_brand:
                 SELECT d.name, d.city, d.county, COUNT(DISTINCT r.raw_name) as products
                 FROM dispensary d
                 JOIN raw_menu_item r ON d.dispensary_id = r.dispensary_id
-                WHERE UPPER(r.raw_brand) = :brand AND d.is_active = true
+                WHERE UPPER(r.raw_brand) = :brand AND d.is_active = true AND d.state = :state
                 GROUP BY d.dispensary_id, d.name, d.city, d.county
                 ORDER BY products DESC
-            """), {"brand": selected_brand}).fetchall()
+            """), {"brand": selected_brand, "state": selected_state}).fetchall()
 
         col1, col2 = st.columns(2)
 
@@ -562,7 +586,7 @@ if selected_brand:
         st.markdown('<p class="section-header">Coverage by County</p>', unsafe_allow_html=True)
         st.markdown('<p class="chart-description">Shows what percentage of stores in each county carry your products. Low percentages indicate expansion opportunities.</p>', unsafe_allow_html=True)
 
-        county_data = get_county_coverage(selected_brand, selected_category)
+        county_data = get_county_coverage(selected_brand, selected_category, selected_state)
 
         if county_data:
             df = pd.DataFrame(county_data, columns=["County", "Total Stores", "Carrying"])

@@ -5,7 +5,7 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 from sqlalchemy import text
-from components.nav import render_nav, get_section_from_params
+from components.nav import render_nav, get_section_from_params, render_state_filter, get_selected_state
 from core.db import get_engine
 
 st.set_page_config(page_title="Grower Intelligence - CannLinx", layout="wide")
@@ -33,7 +33,7 @@ st.caption("Market trends, strain popularity, and retail distribution insights")
 
 
 @st.cache_data(ttl=600)  # Cache for 10 minutes
-def get_market_overview():
+def get_market_overview(state: str = "MD"):
     """Get high-level market stats in a single optimized query."""
     engine = get_engine()
     with engine.connect() as conn:
@@ -42,12 +42,14 @@ def get_market_overview():
             WITH menu_stats AS (
                 SELECT
                     COUNT(*) as total_products,
-                    COUNT(DISTINCT raw_name) as unique_products,
-                    COUNT(DISTINCT raw_brand) FILTER (WHERE raw_brand IS NOT NULL) as total_brands
-                FROM raw_menu_item
+                    COUNT(DISTINCT r.raw_name) as unique_products,
+                    COUNT(DISTINCT r.raw_brand) FILTER (WHERE r.raw_brand IS NOT NULL) as total_brands
+                FROM raw_menu_item r
+                JOIN dispensary d ON r.dispensary_id = d.dispensary_id
+                WHERE d.state = :state
             ),
             store_stats AS (
-                SELECT COUNT(*) as active_stores FROM dispensary WHERE is_active = true
+                SELECT COUNT(*) as active_stores FROM dispensary WHERE is_active = true AND state = :state
             )
             SELECT
                 m.total_products,
@@ -55,7 +57,7 @@ def get_market_overview():
                 m.total_brands,
                 s.active_stores
             FROM menu_stats m, store_stats s
-        """)).fetchone()
+        """), {"state": state}).fetchone()
 
         return {
             "total_products": result[0] or 0,
@@ -66,97 +68,108 @@ def get_market_overview():
 
 
 @st.cache_data(ttl=600)  # Cache for 10 minutes
-def get_category_distribution():
+def get_category_distribution(state: str = "MD"):
     """Get product distribution by category."""
     engine = get_engine()
     with engine.connect() as conn:
         result = conn.execute(text("""
             SELECT
-                raw_category,
+                r.raw_category,
                 COUNT(*) as product_count,
-                COUNT(DISTINCT raw_brand) as brand_count,
-                AVG(raw_price) as avg_price
-            FROM raw_menu_item
-            WHERE raw_category IS NOT NULL
-              AND raw_price > 0 AND raw_price < 500
-            GROUP BY raw_category
+                COUNT(DISTINCT r.raw_brand) as brand_count,
+                AVG(r.raw_price) as avg_price
+            FROM raw_menu_item r
+            JOIN dispensary d ON r.dispensary_id = d.dispensary_id
+            WHERE r.raw_category IS NOT NULL
+              AND r.raw_price > 0 AND r.raw_price < 500
+              AND d.state = :state
+            GROUP BY r.raw_category
             ORDER BY product_count DESC
             LIMIT 15
-        """))
+        """), {"state": state})
         return result.fetchall()
 
 
 @st.cache_data(ttl=600)  # Cache for 10 minutes
-def get_top_strains():
+def get_top_strains(state: str = "MD"):
     """Get most distributed strains/products."""
     engine = get_engine()
     with engine.connect() as conn:
         result = conn.execute(text("""
             SELECT
-                UPPER(raw_brand) as brand,
-                raw_name,
-                COUNT(DISTINCT dispensary_id) as store_count,
-                AVG(raw_price) as avg_price,
-                MIN(raw_price) as min_price,
-                MAX(raw_price) as max_price
-            FROM raw_menu_item
-            WHERE raw_brand IS NOT NULL
-              AND raw_price > 0 AND raw_price < 500
-              AND LOWER(raw_category) IN ('flower', 'buds', 'indica', 'sativa', 'hybrid')
-            GROUP BY UPPER(raw_brand), raw_name
-            HAVING COUNT(DISTINCT dispensary_id) >= 3
+                UPPER(r.raw_brand) as brand,
+                r.raw_name,
+                COUNT(DISTINCT r.dispensary_id) as store_count,
+                AVG(r.raw_price) as avg_price,
+                MIN(r.raw_price) as min_price,
+                MAX(r.raw_price) as max_price
+            FROM raw_menu_item r
+            JOIN dispensary d ON r.dispensary_id = d.dispensary_id
+            WHERE r.raw_brand IS NOT NULL
+              AND r.raw_price > 0 AND r.raw_price < 500
+              AND LOWER(r.raw_category) IN ('flower', 'buds', 'indica', 'sativa', 'hybrid')
+              AND d.state = :state
+            GROUP BY UPPER(r.raw_brand), r.raw_name
+            HAVING COUNT(DISTINCT r.dispensary_id) >= 3
             ORDER BY store_count DESC
             LIMIT 50
-        """))
+        """), {"state": state})
         return result.fetchall()
 
 
 @st.cache_data(ttl=600)  # Cache for 10 minutes
-def get_brand_distribution():
+def get_brand_distribution(state: str = "MD"):
     """Get brand distribution metrics."""
     engine = get_engine()
     with engine.connect() as conn:
         result = conn.execute(text("""
             SELECT
-                UPPER(raw_brand) as brand,
-                COUNT(DISTINCT dispensary_id) as store_count,
-                COUNT(DISTINCT raw_name) as sku_count,
+                UPPER(r.raw_brand) as brand,
+                COUNT(DISTINCT r.dispensary_id) as store_count,
+                COUNT(DISTINCT r.raw_name) as sku_count,
                 COUNT(*) as total_listings,
-                AVG(raw_price) as avg_price
-            FROM raw_menu_item
-            WHERE raw_brand IS NOT NULL AND raw_brand <> ''
-              AND raw_price > 0
-            GROUP BY UPPER(raw_brand)
+                AVG(r.raw_price) as avg_price
+            FROM raw_menu_item r
+            JOIN dispensary d ON r.dispensary_id = d.dispensary_id
+            WHERE r.raw_brand IS NOT NULL AND r.raw_brand <> ''
+              AND r.raw_price > 0
+              AND d.state = :state
+            GROUP BY UPPER(r.raw_brand)
             ORDER BY store_count DESC
             LIMIT 50
-        """))
+        """), {"state": state})
         return result.fetchall()
 
 
 @st.cache_data(ttl=600)  # Cache for 10 minutes
-def get_price_trends_by_category():
+def get_price_trends_by_category(state: str = "MD"):
     """Get pricing data by category."""
     engine = get_engine()
     with engine.connect() as conn:
         result = conn.execute(text("""
             SELECT
-                raw_category,
-                percentile_cont(0.25) WITHIN GROUP (ORDER BY raw_price) as p25,
-                percentile_cont(0.50) WITHIN GROUP (ORDER BY raw_price) as median,
-                percentile_cont(0.75) WITHIN GROUP (ORDER BY raw_price) as p75,
-                AVG(raw_price) as avg_price
-            FROM raw_menu_item
-            WHERE raw_category IS NOT NULL
-              AND raw_price > 0 AND raw_price < 500
-            GROUP BY raw_category
+                r.raw_category,
+                percentile_cont(0.25) WITHIN GROUP (ORDER BY r.raw_price) as p25,
+                percentile_cont(0.50) WITHIN GROUP (ORDER BY r.raw_price) as median,
+                percentile_cont(0.75) WITHIN GROUP (ORDER BY r.raw_price) as p75,
+                AVG(r.raw_price) as avg_price
+            FROM raw_menu_item r
+            JOIN dispensary d ON r.dispensary_id = d.dispensary_id
+            WHERE r.raw_category IS NOT NULL
+              AND r.raw_price > 0 AND r.raw_price < 500
+              AND d.state = :state
+            GROUP BY r.raw_category
             HAVING COUNT(*) >= 10
             ORDER BY median DESC
-        """))
+        """), {"state": state})
         return result.fetchall()
 
 
+# State filter
+selected_state = render_state_filter()
+
 # Market Overview
-overview = get_market_overview()
+overview = get_market_overview(selected_state)
 
 st.markdown("---")
 col1, col2, col3, col4 = st.columns(4)
@@ -178,7 +191,7 @@ with tab1:
     st.subheader("Category Distribution")
     st.caption("Product volume and pricing by category")
 
-    cat_data = get_category_distribution()
+    cat_data = get_category_distribution(selected_state)
     if cat_data:
         df = pd.DataFrame(cat_data, columns=["Category", "Products", "Brands", "Avg Price"])
         df["Avg Price"] = df["Avg Price"].round(2)
@@ -210,7 +223,7 @@ with tab2:
     st.subheader("Most Distributed Flower Products")
     st.caption("Strains available at the most stores")
 
-    strains = get_top_strains()
+    strains = get_top_strains(selected_state)
     if strains:
         df = pd.DataFrame(strains, columns=["Brand", "Product", "Stores", "Avg Price", "Min", "Max"])
         df["Avg Price"] = df["Avg Price"].round(2)
@@ -238,7 +251,7 @@ with tab3:
     st.subheader("Brand Distribution Rankings")
     st.caption("Which brands have the widest retail presence")
 
-    brands = get_brand_distribution()
+    brands = get_brand_distribution(selected_state)
     if brands:
         df = pd.DataFrame(brands, columns=["Brand", "Stores", "SKUs", "Total Listings", "Avg Price"])
         df["Avg Price"] = df["Avg Price"].round(2)
@@ -271,7 +284,7 @@ with tab4:
     st.subheader("Price Benchmarks by Category")
     st.caption("Understand market pricing for each category")
 
-    prices = get_price_trends_by_category()
+    prices = get_price_trends_by_category(selected_state)
     if prices:
         df = pd.DataFrame(prices, columns=["Category", "25th %ile", "Median", "75th %ile", "Average"])
         df = df.round(2)
@@ -342,28 +355,30 @@ with tab5:
 
     # Get size distribution data
     @st.cache_data(ttl=600)  # Cache for 10 minutes
-    def get_size_distribution(level: str, filter_id: str = None):
+    def get_size_distribution(level: str, filter_id: str = None, state: str = "MD"):
         """Get product counts by category and size."""
         engine = get_engine()
         with engine.connect() as conn:
             if level == "state":
                 result = conn.execute(text("""
-                    SELECT raw_category, raw_name, COUNT(*) as cnt
-                    FROM raw_menu_item
-                    WHERE raw_category ILIKE '%flower%' OR raw_category ILIKE '%bud%'
-                       OR raw_category ILIKE '%pre-roll%' OR raw_category ILIKE '%preroll%'
-                    GROUP BY raw_category, raw_name
-                """)).fetchall()
+                    SELECT r.raw_category, r.raw_name, COUNT(*) as cnt
+                    FROM raw_menu_item r
+                    JOIN dispensary d ON r.dispensary_id = d.dispensary_id
+                    WHERE d.state = :state
+                      AND (r.raw_category ILIKE '%flower%' OR r.raw_category ILIKE '%bud%'
+                           OR r.raw_category ILIKE '%pre-roll%' OR r.raw_category ILIKE '%preroll%')
+                    GROUP BY r.raw_category, r.raw_name
+                """), {"state": state}).fetchall()
             elif level == "county":
                 result = conn.execute(text("""
                     SELECT r.raw_category, r.raw_name, COUNT(*) as cnt
                     FROM raw_menu_item r
                     JOIN dispensary d ON r.dispensary_id = d.dispensary_id
-                    WHERE d.county = :county
+                    WHERE d.county = :county AND d.state = :state
                       AND (r.raw_category ILIKE '%flower%' OR r.raw_category ILIKE '%bud%'
                            OR r.raw_category ILIKE '%pre-roll%' OR r.raw_category ILIKE '%preroll%')
                     GROUP BY r.raw_category, r.raw_name
-                """), {"county": filter_id}).fetchall()
+                """), {"county": filter_id, "state": state}).fetchall()
             else:  # store
                 result = conn.execute(text("""
                     SELECT raw_category, raw_name, COUNT(*) as cnt
@@ -385,39 +400,39 @@ with tab5:
             return dict(size_counts)
 
     @st.cache_data(ttl=600)  # Cache for 10 minutes
-    def get_counties():
+    def get_counties(state: str = "MD"):
         engine = get_engine()
         with engine.connect() as conn:
             result = conn.execute(text("""
                 SELECT DISTINCT county FROM dispensary
-                WHERE county IS NOT NULL ORDER BY county
-            """)).fetchall()
+                WHERE county IS NOT NULL AND state = :state ORDER BY county
+            """), {"state": state}).fetchall()
             return [r[0] for r in result]
 
     @st.cache_data(ttl=600)  # Cache for 10 minutes
-    def get_stores():
+    def get_stores(state: str = "MD"):
         engine = get_engine()
         with engine.connect() as conn:
             result = conn.execute(text("""
                 SELECT dispensary_id, name, city FROM dispensary
-                WHERE is_active = true ORDER BY name
-            """)).fetchall()
+                WHERE is_active = true AND state = :state ORDER BY name
+            """), {"state": state}).fetchall()
             return [(r[0], f"{r[1]} ({r[2]})") for r in result]
 
     # Level selector
     col1, col2 = st.columns([1, 2])
     with col1:
-        level = st.selectbox("View Level", ["State (All MD)", "By County", "By Store"])
+        level = st.selectbox("View Level", [f"State (All {selected_state})", "By County", "By Store"])
 
     filter_id = None
     if level == "By County":
-        counties = get_counties()
+        counties = get_counties(selected_state)
         with col2:
             selected_county = st.selectbox("Select County", counties)
             filter_id = selected_county
         level_key = "county"
     elif level == "By Store":
-        stores = get_stores()
+        stores = get_stores(selected_state)
         with col2:
             store_options = {name: sid for sid, name in stores}
             selected_store = st.selectbox("Select Store", list(store_options.keys()))
@@ -427,7 +442,7 @@ with tab5:
         level_key = "state"
 
     # Get and display data
-    size_data = get_size_distribution(level_key, filter_id)
+    size_data = get_size_distribution(level_key, filter_id, selected_state)
 
     if size_data:
         # Flower sizes

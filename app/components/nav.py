@@ -3,6 +3,55 @@
 
 import streamlit as st
 from pathlib import Path
+from sqlalchemy import text
+
+
+def get_available_states():
+    """Get list of states that have dispensary data."""
+    from core.db import get_engine
+    engine = get_engine()
+    with engine.connect() as conn:
+        result = conn.execute(text("""
+            SELECT DISTINCT d.state
+            FROM dispensary d
+            JOIN raw_menu_item r ON d.dispensary_id = r.dispensary_id
+            WHERE d.is_active = true
+            ORDER BY d.state
+        """))
+        return [row[0] for row in result]
+
+
+def render_state_filter():
+    """Render a state filter dropdown and return the selected state."""
+    states = get_available_states()
+
+    if not states:
+        return None
+
+    # Initialize session state
+    if "selected_state" not in st.session_state:
+        st.session_state.selected_state = states[0] if states else None
+
+    # If only one state, don't show filter
+    if len(states) == 1:
+        st.session_state.selected_state = states[0]
+        return states[0]
+
+    # Create state selector
+    options = states  # Could add "All States" option later for admins
+    selected = st.selectbox(
+        "🗺️ State",
+        options,
+        index=options.index(st.session_state.selected_state) if st.session_state.selected_state in options else 0,
+        key="state_filter_select"
+    )
+    st.session_state.selected_state = selected
+    return selected
+
+
+def get_selected_state():
+    """Get the currently selected state from session state."""
+    return st.session_state.get("selected_state", "MD")
 
 
 def render_header():

@@ -15,7 +15,7 @@ from core.category_utils import get_normalized_category_sql
 st.set_page_config(page_title="Product Search | CannLinx", page_icon=None, layout="wide", initial_sidebar_state="collapsed")
 
 # Import and render navigation
-from app.components.nav import render_nav, get_section_from_params
+from app.components.nav import render_nav, get_section_from_params, render_state_filter, get_selected_state
 render_nav()
 
 # Handle section parameter for tab navigation
@@ -33,40 +33,45 @@ if section and section in TAB_MAP:
     """, unsafe_allow_html=True)
 
 st.title("Product Search")
-st.markdown("Find any product across all Maryland dispensaries")
+
+# State filter
+selected_state = render_state_filter()
+st.markdown(f"Find any product across all {selected_state} dispensaries")
 
 engine = get_engine()
 
 @st.cache_data(ttl=300)
-def get_categories():
+def get_categories(state: str = "MD"):
     """Get normalized categories for filtering."""
     cat_sql = get_normalized_category_sql()
     with engine.connect() as conn:
         df = pd.read_sql(text(f"""
             SELECT DISTINCT {cat_sql} as category
-            FROM raw_menu_item
-            WHERE raw_category IS NOT NULL
+            FROM raw_menu_item r
+            JOIN dispensary d ON r.dispensary_id = d.dispensary_id
+            WHERE r.raw_category IS NOT NULL AND d.state = :state
             ORDER BY category
-        """), conn)
+        """), conn, params={"state": state})
     return ['All Categories'] + df['category'].tolist()
 
 @st.cache_data(ttl=300)
-def get_brands():
+def get_brands(state: str = "MD"):
     with engine.connect() as conn:
         df = pd.read_sql(text("""
-            SELECT DISTINCT raw_brand as brand
-            FROM raw_menu_item
-            WHERE raw_brand IS NOT NULL AND raw_brand != ''
-            ORDER BY raw_brand
-        """), conn)
+            SELECT DISTINCT r.raw_brand as brand
+            FROM raw_menu_item r
+            JOIN dispensary d ON r.dispensary_id = d.dispensary_id
+            WHERE r.raw_brand IS NOT NULL AND r.raw_brand != '' AND d.state = :state
+            ORDER BY r.raw_brand
+        """), conn, params={"state": state})
     return ['All Brands'] + df['brand'].tolist()
 
 @st.cache_data(ttl=60)
-def search_products(search_term, category, brand, min_price, max_price, limit=100):
+def search_products(search_term, category, brand, min_price, max_price, state: str = "MD", limit=100):
     cat_sql = get_normalized_category_sql()
     with engine.connect() as conn:
-        conditions = ["r.raw_price BETWEEN :min_price AND :max_price"]
-        params = {"min_price": min_price, "max_price": max_price, "lim": limit}
+        conditions = ["r.raw_price BETWEEN :min_price AND :max_price", "d.state = :state"]
+        params = {"min_price": min_price, "max_price": max_price, "state": state, "lim": limit}
 
         if search_term:
             conditions.append("r.raw_name ILIKE :search")
@@ -87,7 +92,7 @@ def search_products(search_term, category, brand, min_price, max_price, limit=10
             SELECT r.raw_name as product, r.raw_brand as brand, {cat_sql} as category,
                    r.raw_price as price, r.raw_discount_price as sale_price,
                    d.name as store,
-                   COALESCE(d.provider_metadata::json->>'county', 'Unknown') as county
+                   COALESCE(d.county, 'Unknown') as county
             FROM raw_menu_item r
             JOIN dispensary d ON d.dispensary_id = r.dispensary_id
             WHERE {where_clause}
@@ -107,10 +112,10 @@ with col2:
 # Filters
 filter_col1, filter_col2, filter_col3, filter_col4 = st.columns(4)
 with filter_col1:
-    categories = get_categories()
+    categories = get_categories(selected_state)
     selected_category = st.selectbox("Category", categories)
 with filter_col2:
-    brands = get_brands()
+    brands = get_brands(selected_state)
     selected_brand = st.selectbox("Brand", brands)
 with filter_col3:
     min_price = st.number_input("Min Price", 0, 500, 0)
@@ -122,7 +127,7 @@ st.divider()
 # Search results
 if search_button or search_term:
     with st.spinner("Searching..."):
-        results = search_products(search_term, selected_category, selected_brand, min_price, max_price)
+        results = search_products(search_term, selected_category, selected_brand, min_price, max_price, selected_state)
 
     if not results.empty:
         # Summary metrics
@@ -192,11 +197,12 @@ else:
             SELECT {cat_sql} as category, COUNT(*) as products,
                    COUNT(DISTINCT r.dispensary_id) as stores
             FROM raw_menu_item r
-            WHERE raw_category IS NOT NULL
+            JOIN dispensary d ON r.dispensary_id = d.dispensary_id
+            WHERE r.raw_category IS NOT NULL AND d.state = :state
             GROUP BY {cat_sql}
             ORDER BY products DESC
             LIMIT 10
-        """), conn)
+        """), conn, params={"state": selected_state})
 
     if not cat_counts.empty:
         fig = px.bar(
@@ -214,14 +220,15 @@ else:
     st.subheader("Top Brands")
     with engine.connect() as conn:
         brand_counts = pd.read_sql(text("""
-            SELECT raw_brand as brand, COUNT(*) as products,
+            SELECT r.raw_brand as brand, COUNT(*) as products,
                    COUNT(DISTINCT r.dispensary_id) as stores
             FROM raw_menu_item r
-            WHERE raw_brand IS NOT NULL AND raw_brand != ''
-            GROUP BY raw_brand
+            JOIN dispensary d ON r.dispensary_id = d.dispensary_id
+            WHERE r.raw_brand IS NOT NULL AND r.raw_brand != '' AND d.state = :state
+            GROUP BY r.raw_brand
             ORDER BY stores DESC, products DESC
             LIMIT 15
-        """), conn)
+        """), conn, params={"state": selected_state})
 
     if not brand_counts.empty:
         fig2 = px.bar(
@@ -237,4 +244,4 @@ else:
         st.plotly_chart(fig2, use_container_width=True)
 
 st.divider()
-st.caption("Search across all tracked Maryland dispensary menus")
+st.caption(f"Search across all tracked {selected_state} dispensary menus")
