@@ -31,7 +31,7 @@ def load_companies():
             SELECT
                 c.company_id, c.name, c.ticker_us, c.ticker_ca,
                 c.exchange_us, c.exchange_ca, c.company_type,
-                c.market_cap_millions, c.headquarters_state, c.headquarters_country,
+                c.market_cap_millions, c.headquarters,
                 c.website,
                 sp.close_price as latest_price,
                 sp.price_date as price_date,
@@ -542,8 +542,8 @@ with tab5:
                 st.markdown(f"**US Ticker:** {company_data['ticker_us']} ({company_data['exchange_us']})")
             if company_data['ticker_ca']:
                 st.markdown(f"**CA Ticker:** {company_data['ticker_ca']} ({company_data['exchange_ca']})")
-            if company_data['headquarters_state']:
-                st.markdown(f"**Headquarters:** {company_data['headquarters_state']}, {company_data['headquarters_country']}")
+            if company_data.get('headquarters'):
+                st.markdown(f"**Headquarters:** {company_data['headquarters']}")
             if company_data['website']:
                 st.markdown(f"**Website:** [{company_data['website']}]({company_data['website']})")
 
