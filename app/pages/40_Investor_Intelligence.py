@@ -34,23 +34,17 @@ def load_companies():
     """Load all public companies with latest prices."""
     engine = get_engine()
     with engine.connect() as conn:
+        # Use subquery instead of LATERAL for broader compatibility
         result = conn.execute(text("""
             SELECT
                 c.company_id, c.name, c.ticker_us, c.ticker_ca,
                 c.exchange_us, c.exchange_ca, c.company_type,
                 c.market_cap_millions, c.headquarters,
                 c.website,
-                sp.close_price as latest_price,
-                sp.price_date as price_date,
-                sp.volume as latest_volume
+                (SELECT close_price FROM stock_price WHERE company_id = c.company_id ORDER BY price_date DESC LIMIT 1) as latest_price,
+                (SELECT price_date FROM stock_price WHERE company_id = c.company_id ORDER BY price_date DESC LIMIT 1) as price_date,
+                (SELECT volume FROM stock_price WHERE company_id = c.company_id ORDER BY price_date DESC LIMIT 1) as latest_volume
             FROM public_company c
-            LEFT JOIN LATERAL (
-                SELECT close_price, price_date, volume
-                FROM stock_price
-                WHERE company_id = c.company_id
-                ORDER BY price_date DESC
-                LIMIT 1
-            ) sp ON true
             WHERE c.is_active = true
             ORDER BY c.market_cap_millions DESC NULLS LAST
         """))
