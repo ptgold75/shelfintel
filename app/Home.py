@@ -135,29 +135,27 @@ st.markdown("""
 
 st.markdown('<p class="tagline">Real-time shelf intelligence for the cannabis industry</p>', unsafe_allow_html=True)
 
-# Load stats from database - optimized with pg_stats for fast approximate counts
+# Load stats from database
 @st.cache_data(ttl=3600)  # Cache for 1 hour since stats don't change frequently
 def load_stats():
     try:
         engine = get_engine()
         with engine.connect() as conn:
-            # Use PostgreSQL statistics for fast approximate counts
+            # Get accurate counts by store type
             result = conn.execute(text("""
                 SELECT
-                    (SELECT reltuples::bigint FROM pg_class WHERE relname = 'raw_menu_item'),
-                    (SELECT CASE WHEN n_distinct > 0 THEN n_distinct::bigint
-                                ELSE (reltuples * ABS(n_distinct))::bigint END
-                     FROM pg_stats s JOIN pg_class c ON s.tablename = c.relname
-                     WHERE s.tablename = 'raw_menu_item' AND s.attname = 'raw_brand'),
-                    (SELECT COUNT(*) FROM dispensary WHERE is_active = true),
-                    (SELECT COUNT(DISTINCT state) FROM dispensary WHERE is_active = true)
+                    (SELECT COUNT(*) FROM raw_menu_item) as products,
+                    (SELECT COUNT(DISTINCT raw_brand) FROM raw_menu_item WHERE raw_brand IS NOT NULL) as brands,
+                    (SELECT COUNT(*) FROM dispensary WHERE is_active = true AND store_type = 'dispensary') as dispensaries,
+                    (SELECT COUNT(*) FROM dispensary WHERE is_active = true AND store_type = 'smoke_shop') as smoke_shops,
+                    (SELECT COUNT(DISTINCT state) FROM dispensary WHERE is_active = true) as states
             """)).fetchone()
 
-            return result[0] or 0, result[1] or 0, result[2] or 0, result[3] or 0
+            return result[0] or 0, result[1] or 0, result[2] or 0, result[3] or 0, result[4] or 0
     except:
-        return 0, 0, 0, 0
+        return 0, 0, 0, 0, 0
 
-products, brands, stores, states = load_stats()
+products, brands, dispensaries, smoke_shops, states = load_stats()
 
 # Stats bar
 st.markdown(f"""
@@ -167,8 +165,12 @@ st.markdown(f"""
         <p class="stat-label">Products Tracked</p>
     </div>
     <div class="stat-item">
-        <p class="stat-value">{stores:,}</p>
+        <p class="stat-value">{dispensaries:,}</p>
         <p class="stat-label">Dispensaries</p>
+    </div>
+    <div class="stat-item">
+        <p class="stat-value">{smoke_shops:,}</p>
+        <p class="stat-label">Smoke Shops</p>
     </div>
     <div class="stat-item">
         <p class="stat-value">{brands:,}</p>
@@ -257,11 +259,11 @@ st.markdown('<p class="section-title">How It Works</p>', unsafe_allow_html=True)
 h1, h2, h3, h4 = st.columns(4)
 
 with h1:
-    st.markdown("""
+    st.markdown(f"""
     <div class="how-step">
         <div class="how-step-num">1</div>
         <div class="how-step-title">Collect</div>
-        <div class="how-step-desc">Daily scans from 96+ dispensary menus</div>
+        <div class="how-step-desc">Daily scans from {dispensaries:,}+ dispensary menus</div>
     </div>
     """, unsafe_allow_html=True)
 
@@ -426,8 +428,8 @@ with reg_center:
 # Footer
 st.markdown("---")
 st.markdown(
-    "<div style='text-align:center;color:#6c757d;font-size:0.8rem;'>"
-    "<strong>CannLinx</strong> · Maryland Cannabis Market Intelligence · support@cannlinx.com"
+    f"<div style='text-align:center;color:#6c757d;font-size:0.8rem;'>"
+    f"<strong>CannLinx</strong> · Cannabis Market Intelligence · {states} States · support@cannlinx.com"
     "</div>",
     unsafe_allow_html=True
 )
