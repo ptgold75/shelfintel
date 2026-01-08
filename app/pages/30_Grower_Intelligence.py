@@ -6,10 +6,14 @@ import pandas as pd
 import plotly.express as px
 from sqlalchemy import text
 from components.nav import render_nav, get_section_from_params, render_state_filter, get_selected_state
+from components.auth import is_authenticated
 from core.db import get_engine
 
 st.set_page_config(page_title="Grower Intelligence - CannLinx", layout="wide")
-render_nav()
+render_nav(require_login=False)  # Allow demo access
+
+# Check if user is authenticated for real data vs demo
+DEMO_MODE = not is_authenticated()
 
 # Handle section parameter for tab navigation
 section = get_section_from_params()
@@ -165,11 +169,58 @@ def get_price_trends_by_category(state: str = "MD"):
         return result.fetchall()
 
 
-# State filter
-selected_state = render_state_filter()
+# Demo data for unauthenticated users
+def get_grower_demo_data():
+    """Return demo data for grower intelligence."""
+    return {
+        "overview": {
+            "total_products": 48532,
+            "unique_products": 8724,
+            "brands": 187,
+            "stores": 96
+        },
+        "categories": [
+            ("Flower", 18542, 89, 45.50),
+            ("Vapes", 12361, 67, 42.25),
+            ("Concentrates", 8234, 45, 55.00),
+            ("Edibles", 5892, 52, 28.50),
+            ("Pre-Rolls", 3503, 41, 15.00),
+        ],
+        "strains": [
+            ("CURIO", "Blue Dream 3.5g", 47, 45.00, 42.00, 55.00),
+            ("EVERMORE", "Purple Obeah #3 3.5g", 44, 52.00, 48.00, 58.00),
+            ("GRASSROOTS", "Birthday Cake 3.5g", 42, 48.00, 45.00, 52.00),
+            ("RYTHM", "Dosidos 3.5g", 38, 50.00, 47.00, 55.00),
+            ("VERANO", "G Purps 3.5g", 35, 52.00, 48.00, 58.00),
+        ],
+        "brands": [
+            ("CURIO", 47, 128, 1842, 42.50),
+            ("EVERMORE", 44, 96, 1634, 48.25),
+            ("GRASSROOTS", 42, 85, 1521, 46.00),
+            ("RYTHM", 38, 72, 1298, 50.00),
+            ("VERANO", 35, 64, 1156, 52.25),
+        ],
+        "prices": [
+            ("Flower", 35.00, 45.00, 55.00, 45.50),
+            ("Vapes", 28.00, 40.00, 52.00, 42.25),
+            ("Concentrates", 35.00, 50.00, 72.00, 55.00),
+            ("Edibles", 18.00, 25.00, 38.00, 28.50),
+            ("Pre-Rolls", 10.00, 14.00, 22.00, 15.00),
+        ]
+    }
 
-# Market Overview
-overview = get_market_overview(selected_state)
+
+if DEMO_MODE:
+    st.info("**Demo Mode** - Showing sample data. [Login](/Login) to access real market data.")
+    demo_data = get_grower_demo_data()
+    st.selectbox("🗺️ State", ["MD"], disabled=True)
+    selected_state = "MD"
+    overview = demo_data["overview"]
+else:
+    # State filter
+    selected_state = render_state_filter()
+    # Market Overview
+    overview = get_market_overview(selected_state)
 
 st.markdown("---")
 col1, col2, col3, col4 = st.columns(4)
@@ -191,7 +242,10 @@ with tab1:
     st.subheader("Category Distribution")
     st.caption("Product volume and pricing by category")
 
-    cat_data = get_category_distribution(selected_state)
+    if DEMO_MODE:
+        cat_data = demo_data["categories"]
+    else:
+        cat_data = get_category_distribution(selected_state)
     if cat_data:
         df = pd.DataFrame(cat_data, columns=["Category", "Products", "Brands", "Avg Price"])
         df["Avg Price"] = df["Avg Price"].round(2)
@@ -223,7 +277,10 @@ with tab2:
     st.subheader("Most Distributed Flower Products")
     st.caption("Strains available at the most stores")
 
-    strains = get_top_strains(selected_state)
+    if DEMO_MODE:
+        strains = demo_data["strains"]
+    else:
+        strains = get_top_strains(selected_state)
     if strains:
         df = pd.DataFrame(strains, columns=["Brand", "Product", "Stores", "Avg Price", "Min", "Max"])
         df["Avg Price"] = df["Avg Price"].round(2)
@@ -251,7 +308,10 @@ with tab3:
     st.subheader("Brand Distribution Rankings")
     st.caption("Which brands have the widest retail presence")
 
-    brands = get_brand_distribution(selected_state)
+    if DEMO_MODE:
+        brands = demo_data["brands"]
+    else:
+        brands = get_brand_distribution(selected_state)
     if brands:
         df = pd.DataFrame(brands, columns=["Brand", "Stores", "SKUs", "Total Listings", "Avg Price"])
         df["Avg Price"] = df["Avg Price"].round(2)
@@ -284,7 +344,10 @@ with tab4:
     st.subheader("Price Benchmarks by Category")
     st.caption("Understand market pricing for each category")
 
-    prices = get_price_trends_by_category(selected_state)
+    if DEMO_MODE:
+        prices = demo_data["prices"]
+    else:
+        prices = get_price_trends_by_category(selected_state)
     if prices:
         df = pd.DataFrame(prices, columns=["Category", "25th %ile", "Median", "75th %ile", "Average"])
         df = df.round(2)

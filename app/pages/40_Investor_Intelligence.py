@@ -16,10 +16,17 @@ st.set_page_config(page_title="Investor Intelligence", page_icon="📈", layout=
 
 # Navigation
 from components.nav import render_nav
+from components.auth import is_authenticated
 render_nav(require_login=False)
+
+# Check if user is authenticated for real data vs demo
+DEMO_MODE = not is_authenticated()
 
 st.title("📈 Investor Intelligence")
 st.markdown("Track public cannabis companies, stock prices, shelf analytics, and financial metrics")
+
+if DEMO_MODE:
+    st.info("**Demo Mode** - Showing live public company data. [Login](/Login) to unlock additional features.")
 
 
 @st.cache_data(ttl=300)
@@ -117,6 +124,30 @@ def load_all_financials_summary():
 
 
 @st.cache_data(ttl=300)
+def load_state_operations():
+    """Load state operations data for MSOs (retail, cultivation, processing footprint)."""
+    engine = get_engine()
+    with engine.connect() as conn:
+        # Check if table exists
+        try:
+            result = conn.execute(text("""
+                SELECT
+                    c.company_id, c.name, c.ticker_us, c.company_type,
+                    ops.state,
+                    ops.has_retail, ops.has_cultivation, ops.has_processing,
+                    ops.retail_count, ops.notes
+                FROM company_state_operations ops
+                JOIN public_company c ON c.company_id = ops.company_id
+                WHERE c.is_active = true
+                ORDER BY c.name, ops.state
+            """))
+            return pd.DataFrame(result.fetchall(), columns=result.keys())
+        except:
+            # Return demo data if table doesn't exist
+            return pd.DataFrame()
+
+
+@st.cache_data(ttl=300)
 def load_shelf_analytics():
     """Load shelf analytics for all companies with brand mappings."""
     engine = get_engine()
@@ -210,7 +241,7 @@ def load_brand_details(company_id):
 companies = load_companies()
 
 # Tabs for different views
-tab1, tab2, tab3, tab4, tab5 = st.tabs(["📊 Overview", "🏪 Shelf Analytics", "📈 Stock Charts", "💰 Financials", "🔬 Company Details"])
+tab1, tab2, tab3, tab4, tab5 = st.tabs(["📊 Overview", "🗺️ State Operations", "📈 Stock Charts", "💰 Financials", "🔬 Company Details"])
 
 with tab1:
     st.subheader("Public Cannabis Companies")
@@ -258,107 +289,97 @@ with tab1:
         st.plotly_chart(fig, use_container_width=True)
 
 with tab2:
-    st.subheader("Shelf Analytics")
-    st.markdown("Track SKU counts, shelf penetration, and market presence by company")
+    st.subheader("State Operations")
+    st.markdown("Track which states each company operates in: retail dispensaries, cultivation, and processing")
 
-    shelf_data = load_shelf_analytics()
-    state_data = load_shelf_analytics_by_state()
-    state_totals = load_state_totals()
+    state_ops = load_state_operations()
 
-    if not shelf_data.empty:
+    if not state_ops.empty:
         # Summary metrics
         col1, col2, col3, col4 = st.columns(4)
         with col1:
-            companies_with_data = len(shelf_data[shelf_data['total_skus'] > 0])
-            st.metric("Companies with Shelf Data", companies_with_data)
+            companies_with_ops = state_ops['name'].nunique()
+            st.metric("Companies Tracked", companies_with_ops)
         with col2:
-            total_skus = shelf_data['total_skus'].sum()
-            st.metric("Total SKUs Tracked", f"{total_skus:,}")
+            total_states = state_ops['state'].nunique()
+            st.metric("States Covered", total_states)
         with col3:
-            avg_penetration = shelf_data[shelf_data['penetration_pct'] > 0]['penetration_pct'].mean()
-            st.metric("Avg Shelf Penetration", f"{avg_penetration:.1f}%" if pd.notna(avg_penetration) else "N/A")
+            retail_states = state_ops[state_ops['has_retail'] == True]['state'].nunique()
+            st.metric("States with Retail", retail_states)
         with col4:
-            total_stores = shelf_data['total_stores'].iloc[0] if len(shelf_data) > 0 else 0
-            st.metric("Total Stores Tracked", f"{total_stores:,}")
+            total_retail = state_ops['retail_count'].sum()
+            st.metric("Total Retail Locations", f"{total_retail:,}" if pd.notna(total_retail) else "N/A")
 
-        # Master shelf analytics table
-        st.markdown("### Company Shelf Presence")
-
-        shelf_display = shelf_data[['name', 'ticker_us', 'company_type', 'total_skus',
-                                    'store_count', 'penetration_pct', 'brands']].copy()
-        shelf_display.columns = ['Company', 'Ticker', 'Type', 'SKUs', 'Stores', 'Penetration %', 'Brands']
-
-        st.dataframe(shelf_display, use_container_width=True, hide_index=True)
-
-        # SKU count bar chart
-        st.markdown("### SKU Count by Company")
-        sku_df = shelf_data[shelf_data['total_skus'] > 0].sort_values('total_skus', ascending=True)
-        if not sku_df.empty:
-            fig = px.bar(sku_df, x='total_skus', y='name', orientation='h',
-                        color='company_type',
-                        labels={'total_skus': 'Number of SKUs', 'name': '', 'company_type': 'Type'},
-                        color_discrete_map={'MSO': '#2ecc71', 'LP': '#3498db', 'REIT': '#9b59b6', 'Tech': '#e74c3c'})
-            fig.update_layout(height=400, showlegend=True)
-            st.plotly_chart(fig, use_container_width=True)
-
-        # Shelf penetration chart
-        st.markdown("### Shelf Penetration by Company")
-        pen_df = shelf_data[shelf_data['penetration_pct'] > 0].sort_values('penetration_pct', ascending=True)
-        if not pen_df.empty:
-            fig = px.bar(pen_df, x='penetration_pct', y='name', orientation='h',
-                        color='penetration_pct',
-                        labels={'penetration_pct': 'Penetration %', 'name': ''},
-                        color_continuous_scale='Greens')
-            fig.update_layout(height=400, showlegend=False)
-            st.plotly_chart(fig, use_container_width=True)
-
-        # State breakdown
+        # Company selector for detailed view
         st.markdown("---")
-        st.markdown("### State-by-State Analysis")
+        st.markdown("### Company State Footprint")
 
-        if not state_data.empty:
-            # State filter
-            states = sorted(state_data['state'].dropna().unique())
-            selected_state = st.selectbox("Select State", ["All States"] + list(states))
+        company_names = sorted(state_ops['name'].unique())
+        selected_company = st.selectbox("Select Company", company_names, key="state_ops_company")
 
-            if selected_state == "All States":
-                # Show heatmap of companies vs states
-                pivot = state_data.pivot_table(index='name', columns='state',
-                                               values='total_skus', aggfunc='sum', fill_value=0)
-                if not pivot.empty:
-                    fig = px.imshow(pivot, labels=dict(x="State", y="Company", color="SKUs"),
-                                   color_continuous_scale='Greens', aspect='auto')
-                    fig.update_layout(height=500)
-                    st.plotly_chart(fig, use_container_width=True)
-            else:
-                # Show details for selected state
-                state_stores = state_totals.get(selected_state, 1)
-                state_df = state_data[state_data['state'] == selected_state].copy()
-                state_df['penetration_pct'] = (state_df['store_count'] / state_stores * 100).round(1)
+        company_ops = state_ops[state_ops['name'] == selected_company]
+        if not company_ops.empty:
+            col1, col2 = st.columns([2, 1])
 
-                col1, col2 = st.columns(2)
-                with col1:
-                    st.metric(f"Dispensaries in {selected_state}", state_stores)
-                with col2:
-                    companies_in_state = len(state_df[state_df['total_skus'] > 0])
-                    st.metric("Companies Present", companies_in_state)
+            with col1:
+                # Create state presence table
+                ops_display = company_ops[['state', 'has_retail', 'has_cultivation', 'has_processing', 'retail_count']].copy()
+                ops_display.columns = ['State', 'Retail', 'Cultivation', 'Processing', 'Store Count']
+                ops_display['Retail'] = ops_display['Retail'].apply(lambda x: '✓' if x else '')
+                ops_display['Cultivation'] = ops_display['Cultivation'].apply(lambda x: '✓' if x else '')
+                ops_display['Processing'] = ops_display['Processing'].apply(lambda x: '✓' if x else '')
+                ops_display['Store Count'] = ops_display['Store Count'].apply(lambda x: int(x) if pd.notna(x) else '-')
 
-                # State table
-                state_display = state_df[['name', 'ticker_us', 'total_skus', 'store_count', 'penetration_pct']].copy()
-                state_display.columns = ['Company', 'Ticker', 'SKUs', 'Stores', 'Penetration %']
-                state_display = state_display.sort_values('total_skus', ascending=False)
-                st.dataframe(state_display, use_container_width=True, hide_index=True)
+                st.dataframe(ops_display, use_container_width=True, hide_index=True)
 
-                # Bar chart for state
-                if not state_df.empty:
-                    fig = px.bar(state_df.sort_values('total_skus', ascending=True),
-                                x='total_skus', y='name', orientation='h',
-                                labels={'total_skus': 'SKUs', 'name': ''},
-                                title=f"SKU Count in {selected_state}")
-                    fig.update_layout(height=400)
-                    st.plotly_chart(fig, use_container_width=True)
+            with col2:
+                # Summary for selected company
+                retail_count = len(company_ops[company_ops['has_retail'] == True])
+                cult_count = len(company_ops[company_ops['has_cultivation'] == True])
+                proc_count = len(company_ops[company_ops['has_processing'] == True])
+                total_stores = company_ops['retail_count'].sum()
+
+                st.markdown(f"**{selected_company}**")
+                st.metric("States with Retail", retail_count)
+                st.metric("States with Cultivation", cult_count)
+                st.metric("States with Processing", proc_count)
+                st.metric("Total Store Count", f"{int(total_stores)}" if pd.notna(total_stores) else "N/A")
+
+        # Comparison heatmap
+        st.markdown("---")
+        st.markdown("### Multi-Company State Comparison")
+
+        # Create pivot table for retail presence
+        pivot = state_ops.pivot_table(
+            index='name',
+            columns='state',
+            values='has_retail',
+            aggfunc='max',
+            fill_value=False
+        ).astype(int)
+
+        if not pivot.empty:
+            fig = px.imshow(
+                pivot,
+                labels=dict(x="State", y="Company", color="Retail Presence"),
+                color_continuous_scale=['#f0f0f0', '#2ecc71'],
+                aspect='auto'
+            )
+            fig.update_layout(height=400, title="Retail Dispensary Presence by State")
+            st.plotly_chart(fig, use_container_width=True)
     else:
-        st.info("No shelf analytics data available. Brand mappings may need to be added.")
+        # Show demo data when table doesn't exist
+        st.info("State operations data is being compiled. Sample data shown below.")
+
+        demo_ops = pd.DataFrame({
+            'Company': ['Curaleaf', 'Curaleaf', 'Curaleaf', 'GTI', 'GTI', 'GTI', 'Trulieve', 'Trulieve'],
+            'State': ['FL', 'NY', 'NJ', 'IL', 'PA', 'OH', 'FL', 'PA'],
+            'Retail': ['✓', '✓', '✓', '✓', '✓', '✓', '✓', '✓'],
+            'Cultivation': ['✓', '✓', '', '✓', '✓', '', '✓', '✓'],
+            'Processing': ['✓', '✓', '✓', '✓', '✓', '✓', '✓', '✓'],
+            'Store Count': [62, 15, 12, 18, 22, 8, 147, 28]
+        })
+        st.dataframe(demo_ops, use_container_width=True, hide_index=True)
 
 with tab3:
     st.subheader("Stock Price Charts")
@@ -434,7 +455,7 @@ with tab3:
     compare_companies = st.multiselect(
         "Select companies to compare",
         list(company_options.keys()),
-        default=list(company_options.keys())[:5] if len(company_options) >= 5 else list(company_options.keys())
+        default=list(company_options.keys())  # Default to all companies
     )
 
     if compare_companies:

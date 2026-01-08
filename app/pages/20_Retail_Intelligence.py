@@ -6,6 +6,7 @@ import pandas as pd
 import re
 from sqlalchemy import text
 from components.nav import render_nav, get_section_from_params, render_state_filter, get_selected_state
+from components.auth import is_authenticated
 from core.db import get_engine
 
 
@@ -46,7 +47,10 @@ def extract_size_from_name(name: str) -> str:
     return "std"
 
 st.set_page_config(page_title="Retail Intelligence - CannLinx", layout="wide")
-render_nav()
+render_nav(require_login=False)  # Allow demo access
+
+# Check if user is authenticated for real data vs demo
+DEMO_MODE = not is_authenticated()
 
 # Handle section parameter for tab navigation
 section = get_section_from_params()
@@ -409,23 +413,120 @@ def get_category_comparison(store_id: str, competitor_id: str):
         return result
 
 
+# Demo data for unauthenticated users
+def get_retail_demo_data():
+    """Return demo data for retail intelligence."""
+    return {
+        "stores": [
+            ("demo-001", "Starbuds Baltimore (Baltimore)"),
+            ("demo-002", "Herbiculture (Towson)"),
+            ("demo-003", "Greenhouse Wellness (Ellicott City)"),
+            ("demo-004", "Gold Leaf (Annapolis)"),
+            ("demo-005", "Curio Wellness (Timonium)"),
+        ],
+        "competitors": [
+            ("comp-001", "Harvest Baltimore", "Baltimore", 186),
+            ("comp-002", "Culta Baltimore", "Baltimore", 212),
+            ("comp-003", "Rise Towson", "Towson", 195),
+        ],
+        "metrics": {
+            "products": 324,
+            "brands": 47,
+            "avg_price": 42.50,
+            "categories": 12
+        },
+        "insights": [
+            {
+                "type": "assortment",
+                "priority": "high",
+                "title": "8 popular products you don't carry",
+                "detail": "These products are carried by 3+ competitors in your county.",
+                "data": [
+                    ("EVERMORE", "Purple Obeah #3 3.5g", 5),
+                    ("GRASSROOTS", "Birthday Cake 3.5g", 4),
+                    ("CURIO", "Blue Dream Pre-Roll 5pk", 4),
+                ]
+            },
+            {
+                "type": "pricing_high",
+                "priority": "medium",
+                "title": "5 products priced above market average",
+                "detail": "You may be losing sales to competitors on these items.",
+                "data": [
+                    ("VERANO", "G Purps 3.5g", "3.5g", 55.00, 48.50, 6.50),
+                    ("RYTHM", "Black Afghan 3.5g", "3.5g", 52.00, 47.00, 5.00),
+                ]
+            },
+            {
+                "type": "unique",
+                "priority": "positive",
+                "title": "12+ exclusive products no local competitor carries",
+                "detail": "These products give you a competitive advantage - promote them!",
+                "data": [
+                    ("STRANE", "MAC 1 Reserve 3.5g", "Flower", 58.00),
+                    ("SELECT", "Pax Era Pod Indica", "Vapes", 45.00),
+                ]
+            }
+        ],
+        "pricing_comparison": [
+            ("CURIO", "Blue Dream 3.5g", "3.5g", "Flower", 45.00, 48.00, -3.00),
+            ("EVERMORE", "Purple Obeah #3 3.5g", "3.5g", "Flower", 52.00, 50.00, 2.00),
+            ("GRASSROOTS", "Ray Charles 3.5g", "3.5g", "Flower", 48.00, 45.00, 3.00),
+        ],
+        "assortment_gaps": [
+            ("RYTHM", "Dosidos 3.5g", "Flower", 52.00),
+            ("VERANO", "G6 Gelato 3.5g", "Flower", 55.00),
+            ("CRESCO", "Bio Jesus LLR Cart", "Vapes", 45.00),
+        ],
+        "category_comparison": [
+            ("Flower", 145, 162),
+            ("Vapes", 68, 75),
+            ("Concentrates", 42, 38),
+            ("Edibles", 35, 42),
+            ("Pre-Rolls", 24, 28),
+        ]
+    }
+
+
+if DEMO_MODE:
+    st.info("**Demo Mode** - Showing sample data. [Login](/Login) to access your store's real data.")
+
 # State and Store selector
 col_state, col_store = st.columns([1, 3])
-with col_state:
-    selected_state = render_state_filter()
 
-dispensaries = get_dispensaries(selected_state)
-if not dispensaries:
-    st.warning(f"No dispensary data available for {selected_state}")
-    st.stop()
+if DEMO_MODE:
+    demo_data = get_retail_demo_data()
+    with col_state:
+        st.selectbox("🗺️ State", ["MD"], disabled=True)
+        selected_state = "MD"
 
-with col_store:
-    store_options = {name: id for id, name in dispensaries}
-    selected_store_name = st.selectbox("Select Your Store", list(store_options.keys()))
-    selected_store_id = store_options[selected_store_name]
+    with col_store:
+        store_options = {name: id for id, name in demo_data["stores"]}
+        selected_store_name = st.selectbox("Select Your Store", list(store_options.keys()))
+        selected_store_id = store_options[selected_store_name]
+
+    metrics = demo_data["metrics"]
+    insights = demo_data["insights"]
+    competitors = demo_data["competitors"]
+else:
+    with col_state:
+        selected_state = render_state_filter()
+
+    dispensaries = get_dispensaries(selected_state)
+    if not dispensaries:
+        st.warning(f"No dispensary data available for {selected_state}")
+        st.stop()
+
+    with col_store:
+        store_options = {name: id for id, name in dispensaries}
+        selected_store_name = st.selectbox("Select Your Store", list(store_options.keys()))
+        selected_store_id = store_options[selected_store_name]
+
+    metrics = get_store_metrics(selected_store_id) if selected_store_id else {}
+    insights = get_retail_insights(selected_store_id) if selected_store_id else []
+    competitors = get_nearby_competitors(selected_store_id) if selected_store_id else []
 
 if selected_store_id:
-    metrics = get_store_metrics(selected_store_id)
 
     # Key Metrics
     st.markdown("---")
@@ -444,8 +545,7 @@ if selected_store_id:
     st.markdown("---")
     st.subheader("Actionable Insights")
 
-    insights = get_retail_insights(selected_store_id)
-
+    # insights already loaded above (demo or real)
     if insights:
         for insight in insights:
             # Choose icon based on priority
@@ -489,8 +589,7 @@ if selected_store_id:
     st.markdown("---")
     st.subheader("Detailed Competitive Analysis")
 
-    competitors = get_nearby_competitors(selected_store_id)
-
+    # competitors already loaded above (demo or real)
     if competitors:
         # Build options with city for clarity
         comp_options = {}
@@ -514,7 +613,10 @@ if selected_store_id:
             st.subheader(f"Price Comparison vs {selected_comp_name}")
             st.caption("Products you both carry - see where you're higher or lower")
 
-            pricing = compare_pricing(selected_store_id, selected_comp_id)
+            if DEMO_MODE:
+                pricing = demo_data["pricing_comparison"]
+            else:
+                pricing = compare_pricing(selected_store_id, selected_comp_id)
 
             if pricing:
                 # Use competitor name in column header
@@ -561,7 +663,10 @@ if selected_store_id:
             st.subheader(f"Assortment Gaps vs {selected_comp_name}")
             st.caption(f"Products that {selected_comp_name} carries that you don't")
 
-            gaps = find_assortment_gaps(selected_store_id, selected_comp_id)
+            if DEMO_MODE:
+                gaps = demo_data["assortment_gaps"]
+            else:
+                gaps = find_assortment_gaps(selected_store_id, selected_comp_id)
 
             if gaps:
                 df = pd.DataFrame(gaps, columns=["Brand", "Product", "Category", "Price"])
@@ -580,7 +685,10 @@ if selected_store_id:
         with tab3:
             st.subheader(f"Category Mix: You vs {selected_comp_name}")
 
-            cat_data = get_category_comparison(selected_store_id, selected_comp_id)
+            if DEMO_MODE:
+                cat_data = demo_data["category_comparison"]
+            else:
+                cat_data = get_category_comparison(selected_store_id, selected_comp_id)
 
             if cat_data:
                 comp_col_name = selected_comp_name.split(" (")[0]  # Just store name for column

@@ -7,10 +7,14 @@ import re
 from collections import defaultdict
 from sqlalchemy import text
 from components.nav import render_nav, get_section_from_params, render_state_filter, get_selected_state
+from components.auth import is_authenticated
 from core.db import get_engine
 
 st.set_page_config(page_title="Brand Intelligence - CannLinx", layout="wide")
-render_nav()
+render_nav(require_login=False)  # Allow demo access
+
+# Check if user is authenticated for real data vs demo
+DEMO_MODE = not is_authenticated()
 
 # Handle section parameter for tab navigation
 section = get_section_from_params()
@@ -367,35 +371,115 @@ def get_pricing_issues(brand: str, category: str = None, state: str = "MD"):
         return issues[:10]
 
 
+# Demo data for unauthenticated users
+def get_demo_data():
+    """Return demo data to showcase features."""
+    return {
+        "brands": ["CURIO WELLNESS", "EVERMORE CANNABIS", "GRASSROOTS", "VERANO", "CULTA",
+                   "STRANE", "RYTHM", "CRESCO", "SELECT", "KIVA CONFECTIONS"],
+        "categories": ["Flower", "Vapes", "Concentrates", "Edibles", "Pre-Rolls"],
+        "metrics": {
+            "stores_carrying": 47,
+            "total_stores": 96,
+            "coverage_pct": 49.0,
+            "sku_count": 128,
+            "min_price": 25,
+            "max_price": 65,
+            "avg_price": 42,
+            "total_retail": 5376,
+            "estimated_wholesale": 2688
+        },
+        "competitive": {
+            "avg_competitor_coverage": 52,
+            "top_competitor": "EVERMORE CANNABIS",
+            "top_competitor_stores": 61,
+            "competitors": [
+                ("EVERMORE CANNABIS", 61),
+                ("GRASSROOTS", 58),
+                ("VERANO", 55),
+                ("CULTA", 51),
+                ("STRANE", 48)
+            ]
+        },
+        "gaps": [
+            ("Green Health Docs", "Baltimore", "Baltimore City"),
+            ("Remedy Columbia", "Columbia", "Howard"),
+            ("Harvest of Rockville", "Rockville", "Montgomery"),
+            ("The Living Room", "Ellicott City", "Howard"),
+            ("Blair Wellness Center", "Silver Spring", "Montgomery"),
+        ],
+        "pricing_issues": [
+            {"product": "Blue Dream (3.5g)", "min": 45.00, "max": 55.00, "spread": 10.00},
+            {"product": "OG Kush (3.5g)", "min": 50.00, "max": 58.00, "spread": 8.00},
+            {"product": "Sour Diesel (7g)", "min": 85.00, "max": 95.00, "spread": 10.00},
+        ],
+        "county_coverage": [
+            ("Baltimore City", 18, 12),
+            ("Montgomery", 14, 6),
+            ("Howard", 8, 5),
+            ("Anne Arundel", 10, 4),
+            ("Prince George's", 7, 3),
+            ("Baltimore County", 12, 8),
+        ]
+    }
+
+
 # Page Header
 st.title("Brand Intelligence")
+
+if DEMO_MODE:
+    st.info("**Demo Mode** - Showing sample data. [Login](/Login) to access your brand's real data.")
 
 # State and Brand selector row
 col_state, col_brand, col_cat = st.columns([1, 2, 1])
 
-with col_state:
-    selected_state = render_state_filter()
+if DEMO_MODE:
+    # Demo mode - use sample data
+    demo_data = get_demo_data()
+    with col_state:
+        st.selectbox("🗺️ State", ["MD"], disabled=True)
+        selected_state = "MD"
 
-# Brand selector
-brands = get_brands(selected_state)
-if not brands:
-    st.warning(f"No brand data available for {selected_state}")
-    st.stop()
+    with col_brand:
+        selected_brand = st.selectbox("Select Your Brand", demo_data["brands"], index=0)
 
-with col_brand:
-    selected_brand = st.selectbox("Select Your Brand", brands, index=0)
+    with col_cat:
+        cat_options = ["All Categories"] + demo_data["categories"]
+        selected_cat_display = st.selectbox("Filter by Category", cat_options, index=0)
+        selected_category = None if selected_cat_display == "All Categories" else selected_cat_display
 
-# Get categories for selected brand
-categories = get_categories_for_brand(selected_brand, selected_state) if selected_brand else []
-with col_cat:
-    cat_options = ["All Categories"] + categories
-    selected_cat_display = st.selectbox("Filter by Category", cat_options, index=0)
-    selected_category = None if selected_cat_display == "All Categories" else selected_cat_display
+    metrics = demo_data["metrics"]
+    competitive = demo_data["competitive"]
+    gaps = demo_data["gaps"]
+    pricing_issues = demo_data["pricing_issues"]
 
-if selected_brand:
+else:
+    # Real data mode
+    with col_state:
+        selected_state = render_state_filter()
+
+    # Brand selector
+    brands = get_brands(selected_state)
+    if not brands:
+        st.warning(f"No brand data available for {selected_state}")
+        st.stop()
+
+    with col_brand:
+        selected_brand = st.selectbox("Select Your Brand", brands, index=0)
+
+    # Get categories for selected brand
+    categories = get_categories_for_brand(selected_brand, selected_state) if selected_brand else []
+    with col_cat:
+        cat_options = ["All Categories"] + categories
+        selected_cat_display = st.selectbox("Filter by Category", cat_options, index=0)
+        selected_category = None if selected_cat_display == "All Categories" else selected_cat_display
+
     metrics = get_brand_metrics(selected_brand, selected_category, selected_state)
     competitive = get_competitive_comparison(selected_brand, selected_state)
+    gaps = get_distribution_gaps(selected_brand, selected_category, selected_state)
+    pricing_issues = get_pricing_issues(selected_brand, selected_category, selected_state)
 
+if selected_brand:
     # Show active filter
     if selected_category:
         st.info(f"📁 Filtered by category: **{selected_category}**")
@@ -511,8 +595,7 @@ if selected_brand:
     with tab1:
         st.markdown('<p class="section-header">Actionable Insights</p>', unsafe_allow_html=True)
 
-        # Distribution Gaps
-        gaps = get_distribution_gaps(selected_brand, selected_category, selected_state)
+        # Distribution Gaps - use pre-loaded data
         if gaps:
             st.markdown(f"""
             <div class="insight-card">
@@ -525,8 +608,7 @@ if selected_brand:
                 df = pd.DataFrame(gaps, columns=["Store", "City", "County"])
                 st.dataframe(df, use_container_width=True, hide_index=True, height=300)
 
-        # Pricing Issues
-        pricing_issues = get_pricing_issues(selected_brand, selected_category, selected_state)
+        # Pricing Issues - use pre-loaded data
         if pricing_issues:
             st.markdown(f"""
             <div class="insight-card warning">
@@ -556,17 +638,27 @@ if selected_brand:
         st.markdown('<p class="section-header">Store Distribution</p>', unsafe_allow_html=True)
         st.markdown('<p class="chart-description">Stores currently stocking your products vs. stores that could be carrying them.</p>', unsafe_allow_html=True)
 
-        # Get carrying/not carrying
-        engine = get_engine()
-        with engine.connect() as conn:
-            carrying = conn.execute(text("""
-                SELECT d.name, d.city, d.county, COUNT(DISTINCT r.raw_name) as products
-                FROM dispensary d
-                JOIN raw_menu_item r ON d.dispensary_id = r.dispensary_id
-                WHERE UPPER(r.raw_brand) = :brand AND d.is_active = true AND d.state = :state
-                GROUP BY d.dispensary_id, d.name, d.city, d.county
-                ORDER BY products DESC
-            """), {"brand": selected_brand, "state": selected_state}).fetchall()
+        if DEMO_MODE:
+            # Demo data for carrying stores
+            carrying = [
+                ("Starbuds Baltimore", "Baltimore", "Baltimore City", 24),
+                ("Herbiculture", "Towson", "Baltimore County", 18),
+                ("Greenhouse Wellness", "Ellicott City", "Howard", 16),
+                ("Curio Wellness", "Timonium", "Baltimore County", 14),
+                ("Gold Leaf", "Annapolis", "Anne Arundel", 12),
+            ]
+        else:
+            # Get carrying/not carrying from database
+            engine = get_engine()
+            with engine.connect() as conn:
+                carrying = conn.execute(text("""
+                    SELECT d.name, d.city, d.county, COUNT(DISTINCT r.raw_name) as products
+                    FROM dispensary d
+                    JOIN raw_menu_item r ON d.dispensary_id = r.dispensary_id
+                    WHERE UPPER(r.raw_brand) = :brand AND d.is_active = true AND d.state = :state
+                    GROUP BY d.dispensary_id, d.name, d.city, d.county
+                    ORDER BY products DESC
+                """), {"brand": selected_brand, "state": selected_state}).fetchall()
 
         col1, col2 = st.columns(2)
 
@@ -586,7 +678,10 @@ if selected_brand:
         st.markdown('<p class="section-header">Coverage by County</p>', unsafe_allow_html=True)
         st.markdown('<p class="chart-description">Shows what percentage of stores in each county carry your products. Low percentages indicate expansion opportunities.</p>', unsafe_allow_html=True)
 
-        county_data = get_county_coverage(selected_brand, selected_category, selected_state)
+        if DEMO_MODE:
+            county_data = get_demo_data()["county_coverage"]
+        else:
+            county_data = get_county_coverage(selected_brand, selected_category, selected_state)
 
         if county_data:
             df = pd.DataFrame(county_data, columns=["County", "Total Stores", "Carrying"])
