@@ -515,8 +515,12 @@ with tab4:
                 st.markdown("### Revenue vs Profitability")
                 scatter_df = fin_df[fin_df['net_income_millions'].notna()].copy()
                 if not scatter_df.empty:
+                    # Handle None values in market_cap_millions for size parameter
+                    scatter_df['bubble_size'] = scatter_df['market_cap_millions'].fillna(100)
+                    scatter_df['bubble_size'] = scatter_df['bubble_size'].apply(lambda x: max(float(x), 10))
+
                     fig = px.scatter(scatter_df, x='revenue_millions', y='net_income_millions',
-                                    size='market_cap_millions', hover_name='name',
+                                    size='bubble_size', hover_name='name',
                                     labels={'revenue_millions': 'Revenue ($M)',
                                            'net_income_millions': 'Net Income ($M)'},
                                     color='net_income_millions',

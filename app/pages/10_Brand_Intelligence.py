@@ -18,7 +18,7 @@ DEMO_MODE = not is_authenticated()
 
 # Handle section parameter for tab navigation
 section = get_section_from_params()
-TAB_MAP = {"insights": 0, "distribution": 1, "coverage": 2}
+TAB_MAP = {"insights": 0, "distribution": 1, "coverage": 2, "competitors": 3, "roles": 4}
 if section and section in TAB_MAP:
     tab_index = TAB_MAP[section]
     st.markdown(f"""
@@ -420,8 +420,154 @@ def get_demo_data():
             ("Anne Arundel", 10, 4),
             ("Prince George's", 7, 3),
             ("Baltimore County", 12, 8),
+        ],
+        # Enhanced data for charts
+        "category_breakdown": {
+            "Flower": 45,
+            "Vapes": 28,
+            "Concentrates": 12,
+            "Edibles": 10,
+            "Pre-Rolls": 5
+        },
+        "price_distribution": [
+            {"range": "$0-20", "count": 8},
+            {"range": "$20-35", "count": 24},
+            {"range": "$35-50", "count": 52},
+            {"range": "$50-65", "count": 32},
+            {"range": "$65+", "count": 12}
+        ],
+        "market_share": {
+            "CURIO WELLNESS": 12.4,
+            "EVERMORE CANNABIS": 14.2,
+            "GRASSROOTS": 11.8,
+            "VERANO": 10.5,
+            "CULTA": 9.2,
+            "STRANE": 8.1,
+            "Other": 33.8
+        },
+        "price_comparison": {
+            "Your Avg": 42.00,
+            "Category Avg": 45.50,
+            "Market Leader": 48.00,
+            "Market Low": 38.00
+        },
+        "weekly_velocity": [
+            {"week": "Week 1", "stores": 42},
+            {"week": "Week 2", "stores": 44},
+            {"week": "Week 3", "stores": 43},
+            {"week": "Week 4", "stores": 47}
         ]
     }
+
+
+@st.cache_data(ttl=600)
+def get_category_breakdown(brand: str, state: str = "MD"):
+    """Get product count by category for a brand."""
+    engine = get_engine()
+    with engine.connect() as conn:
+        result = conn.execute(text("""
+            SELECT r.raw_category, COUNT(*) as cnt
+            FROM raw_menu_item r
+            JOIN dispensary d ON r.dispensary_id = d.dispensary_id
+            WHERE UPPER(r.raw_brand) = :brand AND d.state = :state
+              AND r.raw_category IS NOT NULL
+            GROUP BY r.raw_category
+            ORDER BY cnt DESC
+        """), {"brand": brand, "state": state}).fetchall()
+        return {row[0]: row[1] for row in result}
+
+
+@st.cache_data(ttl=600)
+def get_price_distribution(brand: str, state: str = "MD"):
+    """Get price distribution for a brand."""
+    engine = get_engine()
+    with engine.connect() as conn:
+        result = conn.execute(text("""
+            SELECT
+                CASE
+                    WHEN r.raw_price < 20 THEN '$0-20'
+                    WHEN r.raw_price < 35 THEN '$20-35'
+                    WHEN r.raw_price < 50 THEN '$35-50'
+                    WHEN r.raw_price < 65 THEN '$50-65'
+                    ELSE '$65+'
+                END as price_range,
+                COUNT(*) as cnt
+            FROM raw_menu_item r
+            JOIN dispensary d ON r.dispensary_id = d.dispensary_id
+            WHERE UPPER(r.raw_brand) = :brand AND d.state = :state
+              AND r.raw_price > 0 AND r.raw_price < 500
+            GROUP BY price_range
+            ORDER BY MIN(r.raw_price)
+        """), {"brand": brand, "state": state}).fetchall()
+        return [{"range": row[0], "count": row[1]} for row in result]
+
+
+@st.cache_data(ttl=600)
+def get_market_share(state: str = "MD", limit: int = 6):
+    """Get market share by brand (based on SKU count across stores)."""
+    engine = get_engine()
+    with engine.connect() as conn:
+        result = conn.execute(text("""
+            WITH brand_counts AS (
+                SELECT UPPER(r.raw_brand) as brand, COUNT(*) as cnt
+                FROM raw_menu_item r
+                JOIN dispensary d ON r.dispensary_id = d.dispensary_id
+                WHERE r.raw_brand IS NOT NULL AND d.state = :state
+                GROUP BY UPPER(r.raw_brand)
+            ),
+            total AS (SELECT SUM(cnt) as total FROM brand_counts)
+            SELECT bc.brand, ROUND(bc.cnt * 100.0 / t.total, 1) as pct
+            FROM brand_counts bc, total t
+            ORDER BY bc.cnt DESC
+            LIMIT :limit
+        """), {"state": state, "limit": limit}).fetchall()
+        shares = {row[0]: float(row[1]) for row in result}
+        other = 100 - sum(shares.values())
+        if other > 0:
+            shares["Other"] = round(other, 1)
+        return shares
+
+
+@st.cache_data(ttl=600)
+def get_price_vs_category(brand: str, state: str = "MD"):
+    """Get brand's average price vs category average."""
+    engine = get_engine()
+    with engine.connect() as conn:
+        result = conn.execute(text("""
+            WITH brand_prices AS (
+                SELECT AVG(r.raw_price) as brand_avg
+                FROM raw_menu_item r
+                JOIN dispensary d ON r.dispensary_id = d.dispensary_id
+                WHERE UPPER(r.raw_brand) = :brand AND d.state = :state
+                  AND r.raw_price > 0 AND r.raw_price < 500
+            ),
+            brand_categories AS (
+                SELECT DISTINCT r.raw_category
+                FROM raw_menu_item r
+                JOIN dispensary d ON r.dispensary_id = d.dispensary_id
+                WHERE UPPER(r.raw_brand) = :brand AND d.state = :state
+            ),
+            category_prices AS (
+                SELECT AVG(r.raw_price) as cat_avg,
+                       MAX(r.raw_price) as cat_high,
+                       MIN(r.raw_price) as cat_low
+                FROM raw_menu_item r
+                JOIN dispensary d ON r.dispensary_id = d.dispensary_id
+                WHERE r.raw_category IN (SELECT raw_category FROM brand_categories)
+                  AND d.state = :state
+                  AND r.raw_price > 0 AND r.raw_price < 500
+            )
+            SELECT bp.brand_avg, cp.cat_avg, cp.cat_high, cp.cat_low
+            FROM brand_prices bp, category_prices cp
+        """), {"brand": brand, "state": state}).fetchone()
+        if result:
+            return {
+                "Your Avg": round(result[0] or 0, 2),
+                "Category Avg": round(result[1] or 0, 2),
+                "Market High": round(result[2] or 0, 2),
+                "Market Low": round(result[3] or 0, 2)
+            }
+        return None
 
 
 # Page Header
@@ -482,7 +628,7 @@ else:
 if selected_brand:
     # Show active filter
     if selected_category:
-        st.info(f"📁 Filtered by category: **{selected_category}**")
+        st.info(f"Filtered by category: **{selected_category}**")
 
     # Key Metrics - Premium Cards
     st.markdown("---")
@@ -588,9 +734,88 @@ if selected_brand:
                 pct = (comp[1] / metrics['total_stores']) * 100
                 st.caption(f"{comp[0]}: {comp[1]} stores ({pct:.0f}%)")
 
+    # Load chart data
+    if DEMO_MODE:
+        category_data = demo_data.get("category_breakdown", {})
+        price_dist = demo_data.get("price_distribution", [])
+        market_share = demo_data.get("market_share", {})
+        price_comparison = demo_data.get("price_comparison", {})
+    else:
+        category_data = get_category_breakdown(selected_brand, selected_state)
+        price_dist = get_price_distribution(selected_brand, selected_state)
+        market_share = get_market_share(selected_state)
+        price_comparison = get_price_vs_category(selected_brand, selected_state)
+
+    # Charts Section - Visual Analysis
+    st.markdown("---")
+    st.markdown('<p class="section-header">Market Analysis</p>', unsafe_allow_html=True)
+
+    chart_col1, chart_col2, chart_col3 = st.columns(3)
+
+    with chart_col1:
+        st.markdown("**Your Product Mix by Category**")
+        if category_data:
+            cat_df = pd.DataFrame(list(category_data.items()), columns=["Category", "Products"])
+            st.bar_chart(cat_df.set_index("Category"), height=250)
+        else:
+            st.info("No category data available")
+
+    with chart_col2:
+        st.markdown("**Price Distribution**")
+        if price_dist:
+            price_df = pd.DataFrame(price_dist)
+            price_df = price_df.rename(columns={"range": "Price Range", "count": "SKUs"})
+            st.bar_chart(price_df.set_index("Price Range"), height=250)
+        else:
+            st.info("No pricing data available")
+
+    with chart_col3:
+        st.markdown("**Market Share (All Brands)**")
+        if market_share:
+            share_df = pd.DataFrame(list(market_share.items()), columns=["Brand", "Share %"])
+            st.bar_chart(share_df.set_index("Brand"), height=250)
+        else:
+            st.info("No market share data available")
+
+    # Price Positioning
+    if price_comparison:
+        st.markdown("---")
+        st.markdown('<p class="section-header">Price Positioning</p>', unsafe_allow_html=True)
+
+        price_cols = st.columns(4)
+        price_labels = [
+            ("Your Avg", "Your average price", "#1e3a5f"),
+            ("Category Avg", "Category average", "#6c757d"),
+            ("Market High", "Highest in category", "#dc3545"),
+            ("Market Low", "Lowest in category", "#28a745")
+        ]
+
+        for i, (key, label, color) in enumerate(price_labels):
+            if key in price_comparison:
+                with price_cols[i]:
+                    val = price_comparison[key]
+                    st.markdown(f"""
+                    <div style="text-align:center; padding:0.75rem; background:#f8f9fa; border-radius:6px;">
+                        <p style="margin:0; font-size:1.5rem; font-weight:700; color:{color};">${val:.2f}</p>
+                        <p style="margin:0; font-size:0.75rem; color:#6c757d;">{label}</p>
+                    </div>
+                    """, unsafe_allow_html=True)
+
+        # Price insight
+        your_avg = price_comparison.get("Your Avg", 0)
+        cat_avg = price_comparison.get("Category Avg", 0)
+        if your_avg and cat_avg:
+            diff = ((your_avg - cat_avg) / cat_avg) * 100
+            if diff < -5:
+                st.success(f"Your products are priced **{abs(diff):.1f}% below** the category average - competitive positioning for value-conscious buyers.")
+            elif diff > 5:
+                st.warning(f"Your products are priced **{diff:.1f}% above** the category average - premium positioning that may limit distribution.")
+            else:
+                st.info(f"Your products are priced **at market** (within 5% of category average).")
+
     # Tabs for detailed analysis
     st.markdown("---")
-    tab1, tab2, tab3 = st.tabs(["Actionable Insights", "Store Distribution", "County Coverage"])
+    tab1, tab2, tab3, tab4, tab5 = st.tabs(["Actionable Insights", "Store Distribution", "County Coverage", "Competitor Deep-Dive", "Role-Based Insights"])
 
     with tab1:
         st.markdown('<p class="section-header">Actionable Insights</p>', unsafe_allow_html=True)
@@ -705,6 +930,272 @@ if selected_brand:
                 # Create horizontal bar chart data
                 chart_df = df[["County", "Coverage %"]].set_index("County").head(15)
                 st.bar_chart(chart_df, horizontal=True, height=350)
+
+    with tab4:
+        st.markdown('<p class="section-header">Competitor Deep-Dive</p>', unsafe_allow_html=True)
+        st.markdown('<p class="chart-description">Compare your brand head-to-head against competitors in your categories.</p>', unsafe_allow_html=True)
+
+        if competitive and competitive.get("competitors"):
+            # Competitor comparison chart
+            comp_data = []
+            comp_data.append({"Brand": selected_brand, "Stores": metrics["stores_carrying"], "Type": "You"})
+            for comp_name, comp_stores in competitive["competitors"][:5]:
+                comp_data.append({"Brand": comp_name[:20], "Stores": comp_stores, "Type": "Competitor"})
+
+            comp_df = pd.DataFrame(comp_data)
+
+            col1, col2 = st.columns([2, 1])
+
+            with col1:
+                st.markdown("**Distribution Reach Comparison**")
+                chart_data = comp_df.set_index("Brand")[["Stores"]]
+                st.bar_chart(chart_data, height=300, horizontal=True)
+
+            with col2:
+                st.markdown("**Your Position**")
+                your_rank = 1
+                for comp_name, comp_stores in competitive["competitors"]:
+                    if comp_stores > metrics["stores_carrying"]:
+                        your_rank += 1
+
+                st.markdown(f"""
+                <div style="background:#f8f9fa; padding:1rem; border-radius:8px; text-align:center;">
+                    <p style="margin:0; font-size:2.5rem; font-weight:700; color:#1e3a5f;">#{your_rank}</p>
+                    <p style="margin:0; font-size:0.85rem; color:#6c757d;">in your category</p>
+                </div>
+                """, unsafe_allow_html=True)
+
+                gap_to_leader = competitive["top_competitor_stores"] - metrics["stores_carrying"]
+                if gap_to_leader > 0:
+                    st.markdown(f"""
+                    <div style="margin-top:1rem; padding:0.75rem; background:#fff3cd; border-radius:6px;">
+                        <p style="margin:0; font-size:0.85rem;"><strong>{gap_to_leader} stores</strong> behind category leader ({competitive['top_competitor'][:15]})</p>
+                    </div>
+                    """, unsafe_allow_html=True)
+                else:
+                    st.markdown(f"""
+                    <div style="margin-top:1rem; padding:0.75rem; background:#d4edda; border-radius:6px;">
+                        <p style="margin:0; font-size:0.85rem;"><strong>You're the category leader!</strong></p>
+                    </div>
+                    """, unsafe_allow_html=True)
+
+            # Competitive insights
+            st.markdown("---")
+            st.markdown("**Competitive Insights**")
+
+            insight_cols = st.columns(3)
+            with insight_cols[0]:
+                st.markdown("""
+                <div style="background:#e3f2fd; padding:1rem; border-radius:8px;">
+                    <p style="margin:0 0 0.5rem 0; font-weight:600; color:#1565c0;">Distribution Gap</p>
+                    <p style="margin:0; font-size:0.85rem; color:#424242;">Focus sales efforts on counties where competitors have presence but you don't.</p>
+                </div>
+                """, unsafe_allow_html=True)
+
+            with insight_cols[1]:
+                st.markdown("""
+                <div style="background:#fce4ec; padding:1rem; border-radius:8px;">
+                    <p style="margin:0 0 0.5rem 0; font-weight:600; color:#c2185b;">Price Position</p>
+                    <p style="margin:0; font-size:0.85rem; color:#424242;">Evaluate if your pricing allows retailers to maintain healthy margins vs. competitors.</p>
+                </div>
+                """, unsafe_allow_html=True)
+
+            with insight_cols[2]:
+                st.markdown("""
+                <div style="background:#e8f5e9; padding:1rem; border-radius:8px;">
+                    <p style="margin:0 0 0.5rem 0; font-weight:600; color:#2e7d32;">SKU Strategy</p>
+                    <p style="margin:0; font-size:0.85rem; color:#424242;">Compare your SKU count to competitors - too few limits shelf presence, too many confuses buyers.</p>
+                </div>
+                """, unsafe_allow_html=True)
+        else:
+            st.info("Competitor data not available for this selection.")
+
+    with tab5:
+        st.markdown('<p class="section-header">Role-Based Insights</p>', unsafe_allow_html=True)
+        st.markdown('<p class="chart-description">Tailored analysis based on your business role in the cannabis industry.</p>', unsafe_allow_html=True)
+
+        role = st.radio(
+            "Select your role for customized insights:",
+            ["Brand / Manufacturer", "Dispensary / Retailer", "Investor / Analyst"],
+            horizontal=True
+        )
+
+        st.markdown("---")
+
+        if role == "Brand / Manufacturer":
+            st.markdown("### Insights for Brands & Manufacturers")
+
+            insight_data = [
+                {
+                    "title": "Distribution Expansion Priority",
+                    "metric": f"{len(gaps)} stores" if gaps else "0 stores",
+                    "insight": "Stores actively selling in your categories but not carrying your products. These are warm leads - they already buy similar products.",
+                    "action": "Export the gap list and prioritize by county population density.",
+                    "type": "opportunity"
+                },
+                {
+                    "title": "Pricing Consistency",
+                    "metric": f"{len(pricing_issues)} issues" if pricing_issues else "No issues",
+                    "insight": "Products with >$5 price variance across retailers may indicate MAP violations or unauthorized discounting.",
+                    "action": "Review retailer agreements and communicate pricing expectations.",
+                    "type": "warning" if pricing_issues else "success"
+                },
+                {
+                    "title": "Market Coverage Rate",
+                    "metric": f"{metrics['coverage_pct']}%",
+                    "insight": f"You're in {metrics['stores_carrying']} of {metrics['total_stores']} active dispensaries. " +
+                              ("Strong coverage - focus on deepening SKU penetration." if metrics['coverage_pct'] > 60 else "Growth opportunity - prioritize new store placements."),
+                    "action": "Target 70%+ coverage for market leadership.",
+                    "type": "success" if metrics['coverage_pct'] > 50 else "warning"
+                }
+            ]
+
+            for item in insight_data:
+                border_color = "#28a745" if item["type"] == "success" else "#ffc107" if item["type"] == "warning" else "#17a2b8"
+                st.markdown(f"""
+                <div style="background:#fff; border:1px solid #e9ecef; border-left:4px solid {border_color}; border-radius:4px; padding:1rem; margin-bottom:1rem;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
+                        <h4 style="margin:0; color:#1e3a5f;">{item['title']}</h4>
+                        <span style="background:{border_color}; color:white; padding:0.25rem 0.75rem; border-radius:12px; font-size:0.8rem; font-weight:600;">{item['metric']}</span>
+                    </div>
+                    <p style="margin:0 0 0.5rem 0; font-size:0.9rem; color:#495057;">{item['insight']}</p>
+                    <p style="margin:0; font-size:0.8rem; color:#6c757d;"><strong>Action:</strong> {item['action']}</p>
+                </div>
+                """, unsafe_allow_html=True)
+
+        elif role == "Dispensary / Retailer":
+            st.markdown("### Insights for Dispensaries & Retailers")
+
+            # For retailers viewing brand data
+            retailer_insights = [
+                {
+                    "title": "Brand Popularity Score",
+                    "metric": f"{metrics['stores_carrying']}/{metrics['total_stores']} stores",
+                    "insight": f"This brand is carried by {metrics['coverage_pct']}% of dispensaries. " +
+                              ("High demand - customers expect to find it." if metrics['coverage_pct'] > 50 else "Niche brand - can differentiate your store if you carry it."),
+                    "action": "Stock popular brands to meet customer expectations, add niche brands for differentiation.",
+                    "type": "info"
+                },
+                {
+                    "title": "Price Competitiveness",
+                    "metric": f"${metrics['avg_price']:.0f} avg",
+                    "insight": f"Market average is ${metrics['avg_price']:.0f}. Pricing below attracts price-sensitive customers; pricing above positions as premium.",
+                    "action": "Compare your shelf price to the market range shown above.",
+                    "type": "info"
+                },
+                {
+                    "title": "SKU Depth Opportunity",
+                    "metric": f"{metrics['sku_count']} SKUs available",
+                    "insight": "This brand offers multiple products. Carrying variety can increase basket size and customer satisfaction.",
+                    "action": "Review which SKUs perform best and ensure adequate inventory depth.",
+                    "type": "opportunity"
+                }
+            ]
+
+            for item in retailer_insights:
+                border_color = "#17a2b8" if item["type"] == "info" else "#28a745"
+                st.markdown(f"""
+                <div style="background:#fff; border:1px solid #e9ecef; border-left:4px solid {border_color}; border-radius:4px; padding:1rem; margin-bottom:1rem;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
+                        <h4 style="margin:0; color:#1e3a5f;">{item['title']}</h4>
+                        <span style="background:{border_color}; color:white; padding:0.25rem 0.75rem; border-radius:12px; font-size:0.8rem; font-weight:600;">{item['metric']}</span>
+                    </div>
+                    <p style="margin:0 0 0.5rem 0; font-size:0.9rem; color:#495057;">{item['insight']}</p>
+                    <p style="margin:0; font-size:0.8rem; color:#6c757d;"><strong>Action:</strong> {item['action']}</p>
+                </div>
+                """, unsafe_allow_html=True)
+
+            # What retailers should stock
+            st.markdown("---")
+            st.markdown("**Should You Carry This Brand?**")
+            score = 0
+            reasons = []
+            if metrics['coverage_pct'] > 50:
+                score += 2
+                reasons.append("High market penetration - customers expect it")
+            elif metrics['coverage_pct'] > 30:
+                score += 1
+                reasons.append("Moderate market presence")
+            if metrics['sku_count'] > 50:
+                score += 1
+                reasons.append("Wide product selection available")
+            if not pricing_issues:
+                score += 1
+                reasons.append("Consistent pricing across market")
+
+            rec_color = "#28a745" if score >= 3 else "#ffc107" if score >= 2 else "#6c757d"
+            rec_text = "Recommended" if score >= 3 else "Consider" if score >= 2 else "Optional"
+
+            st.markdown(f"""
+            <div style="background:#f8f9fa; padding:1rem; border-radius:8px; border-left:4px solid {rec_color};">
+                <p style="margin:0 0 0.5rem 0; font-size:1.2rem; font-weight:600; color:{rec_color};">{rec_text}</p>
+                <ul style="margin:0; padding-left:1.5rem; color:#495057;">
+                    {''.join(f'<li>{r}</li>' for r in reasons)}
+                </ul>
+            </div>
+            """, unsafe_allow_html=True)
+
+        else:  # Investor / Analyst
+            st.markdown("### Insights for Investors & Analysts")
+
+            investor_insights = [
+                {
+                    "title": "Market Penetration",
+                    "metric": f"{metrics['coverage_pct']}%",
+                    "insight": f"Brand reaches {metrics['coverage_pct']}% of tracked dispensaries. " +
+                              ("Strong distribution moat." if metrics['coverage_pct'] > 60 else "Growth runway available." if metrics['coverage_pct'] > 30 else "Early stage or niche positioning."),
+                    "benchmark": "Top brands typically achieve 60-80% coverage."
+                },
+                {
+                    "title": "Estimated Retail Footprint",
+                    "metric": f"${metrics['total_retail']:,.0f}",
+                    "insight": "Total retail value of products currently on shelves across all stores. Indicates brand's shelf presence investment by retailers.",
+                    "benchmark": "Compare quarter-over-quarter for growth trends."
+                },
+                {
+                    "title": "SKU Portfolio",
+                    "metric": f"{metrics['sku_count']} products",
+                    "insight": f"Active SKU count indicates product line breadth. " +
+                              ("Diversified portfolio reduces single-product risk." if metrics['sku_count'] > 50 else "Focused portfolio - monitor for category concentration risk."),
+                    "benchmark": "Leading brands typically maintain 75-150 active SKUs."
+                }
+            ]
+
+            for item in investor_insights:
+                st.markdown(f"""
+                <div style="background:#fff; border:1px solid #e9ecef; border-radius:8px; padding:1rem; margin-bottom:1rem;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
+                        <h4 style="margin:0; color:#1e3a5f;">{item['title']}</h4>
+                        <span style="background:#1e3a5f; color:white; padding:0.25rem 0.75rem; border-radius:12px; font-size:0.9rem; font-weight:600;">{item['metric']}</span>
+                    </div>
+                    <p style="margin:0 0 0.5rem 0; font-size:0.9rem; color:#495057;">{item['insight']}</p>
+                    <p style="margin:0; font-size:0.8rem; color:#6c757d; font-style:italic;">Benchmark: {item['benchmark']}</p>
+                </div>
+                """, unsafe_allow_html=True)
+
+            # Competitive landscape summary
+            if competitive:
+                st.markdown("---")
+                st.markdown("**Competitive Landscape Summary**")
+
+                col1, col2 = st.columns(2)
+                with col1:
+                    st.markdown(f"""
+                    <div style="background:#f8f9fa; padding:1rem; border-radius:8px;">
+                        <p style="margin:0; font-size:0.8rem; color:#6c757d;">CATEGORY LEADER</p>
+                        <p style="margin:0.25rem 0; font-size:1.1rem; font-weight:600; color:#1e3a5f;">{competitive['top_competitor']}</p>
+                        <p style="margin:0; font-size:0.85rem; color:#495057;">{competitive['top_competitor_stores']} stores ({competitive['top_competitor_stores']/metrics['total_stores']*100:.0f}% coverage)</p>
+                    </div>
+                    """, unsafe_allow_html=True)
+
+                with col2:
+                    st.markdown(f"""
+                    <div style="background:#f8f9fa; padding:1rem; border-radius:8px;">
+                        <p style="margin:0; font-size:0.8rem; color:#6c757d;">CATEGORY AVERAGE</p>
+                        <p style="margin:0.25rem 0; font-size:1.1rem; font-weight:600; color:#1e3a5f;">{competitive['avg_competitor_coverage']:.0f} stores</p>
+                        <p style="margin:0; font-size:0.85rem; color:#495057;">Average distribution for top competitors</p>
+                    </div>
+                    """, unsafe_allow_html=True)
 
     # Value Proposition Footer
     st.markdown("---")

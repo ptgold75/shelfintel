@@ -171,17 +171,6 @@ def render_header():
         color: #1e3a5f !important;
     }
 
-    /* Dropdown section headers */
-    .dropdown-header {
-        color: #6c757d !important;
-        padding: 0.5rem 1rem 0.3rem;
-        font-size: 0.7rem;
-        text-transform: uppercase;
-        font-weight: 600;
-        letter-spacing: 0.5px;
-        background: #f8f9fa;
-    }
-
     /* Nav divider */
     .nav-divider {
         color: rgba(255,255,255,0.3);
@@ -205,11 +194,9 @@ def render_header():
         <a href="/Brand_Intelligence" target="_self" class="nav-link has-dropdown">Brands</a>
         <div class="dropdown-content">
             <a href="/Brand_Intelligence" target="_self">Brand Dashboard</a>
-            <div class="dropdown-header">Analysis</div>
             <a href="/Brand_Intelligence?section=insights" target="_self">Actionable Insights</a>
             <a href="/Brand_Intelligence?section=distribution" target="_self">Store Distribution</a>
             <a href="/Brand_Intelligence?section=coverage" target="_self">County Coverage</a>
-            <div class="dropdown-header">Related</div>
             <a href="/Brand_Assets" target="_self">Brand Assets</a>
         </div>
     </div>
@@ -217,13 +204,10 @@ def render_header():
         <a href="/Retail_Intelligence" target="_self" class="nav-link has-dropdown">Retail</a>
         <div class="dropdown-content">
             <a href="/Retail_Intelligence" target="_self">Retail Dashboard</a>
-            <div class="dropdown-header">Insights</div>
             <a href="/Retail_Intelligence?section=insights" target="_self">Actionable Insights</a>
-            <div class="dropdown-header">Competitive Analysis</div>
             <a href="/Retail_Intelligence?section=prices" target="_self">Price Comparison</a>
             <a href="/Retail_Intelligence?section=gaps" target="_self">Assortment Gaps</a>
             <a href="/Retail_Intelligence?section=category" target="_self">Category Mix</a>
-            <div class="dropdown-header">Related</div>
             <a href="/Availability" target="_self">Availability Tracker</a>
         </div>
     </div>
@@ -231,7 +215,6 @@ def render_header():
         <a href="/Grower_Intelligence" target="_self" class="nav-link has-dropdown">Growers</a>
         <div class="dropdown-content">
             <a href="/Grower_Intelligence" target="_self">Grower Dashboard</a>
-            <div class="dropdown-header">Market Analysis</div>
             <a href="/Grower_Intelligence?section=category" target="_self">Category Analysis</a>
             <a href="/Grower_Intelligence?section=strains" target="_self">Top Strains</a>
             <a href="/Grower_Intelligence?section=distribution" target="_self">Brand Distribution</a>
@@ -245,13 +228,11 @@ def render_header():
             <a href="/Product_Search" target="_self">Product Search</a>
             <a href="/Product_Search?section=prices" target="_self">Price List</a>
             <a href="/Product_Search?section=compare" target="_self">Store Comparison</a>
-            <div class="dropdown-header">Price Analysis</div>
             <a href="/Price_Analysis" target="_self">Price Overview</a>
             <a href="/Price_Analysis?section=category" target="_self">Category Prices</a>
             <a href="/Price_Analysis?section=vapes" target="_self">Vape Analysis</a>
             <a href="/Price_Analysis?section=deals" target="_self">Best Deals</a>
             <a href="/Price_Analysis?section=search" target="_self">Price Search</a>
-            <div class="dropdown-header">Other</div>
             <a href="/Availability" target="_self">Availability Tracker</a>
         </div>
     </div>'''

@@ -413,78 +413,128 @@ def get_category_comparison(store_id: str, competitor_id: str):
         return result
 
 
-# Demo data for unauthenticated users
-def get_retail_demo_data():
-    """Return demo data for retail intelligence."""
-    return {
-        "stores": [
-            ("demo-001", "Starbuds Baltimore (Baltimore)"),
-            ("demo-002", "Herbiculture (Towson)"),
-            ("demo-003", "Greenhouse Wellness (Ellicott City)"),
-            ("demo-004", "Gold Leaf (Annapolis)"),
-            ("demo-005", "Curio Wellness (Timonium)"),
-        ],
+# Demo data for unauthenticated users - store-specific data
+DEMO_STORES = [
+    ("demo-001", "Starbuds Baltimore (Baltimore)"),
+    ("demo-002", "Herbiculture (Towson)"),
+    ("demo-003", "Greenhouse Wellness (Ellicott City)"),
+    ("demo-004", "Gold Leaf (Annapolis)"),
+    ("demo-005", "Curio Wellness (Timonium)"),
+]
+
+DEMO_STORE_DATA = {
+    "demo-001": {  # Starbuds Baltimore
         "competitors": [
             ("comp-001", "Harvest Baltimore", "Baltimore", 186),
             ("comp-002", "Culta Baltimore", "Baltimore", 212),
-            ("comp-003", "Rise Towson", "Towson", 195),
+            ("comp-003", "Health for Life", "Baltimore", 178),
         ],
-        "metrics": {
-            "products": 324,
-            "brands": 47,
-            "avg_price": 42.50,
-            "categories": 12
-        },
+        "metrics": {"products": 324, "brands": 47, "avg_price": 42.50, "categories": 12},
         "insights": [
-            {
-                "type": "assortment",
-                "priority": "high",
-                "title": "8 popular products you don't carry",
-                "detail": "These products are carried by 3+ competitors in your county.",
-                "data": [
-                    ("EVERMORE", "Purple Obeah #3 3.5g", 5),
-                    ("GRASSROOTS", "Birthday Cake 3.5g", 4),
-                    ("CURIO", "Blue Dream Pre-Roll 5pk", 4),
-                ]
-            },
-            {
-                "type": "pricing_high",
-                "priority": "medium",
-                "title": "5 products priced above market average",
-                "detail": "You may be losing sales to competitors on these items.",
-                "data": [
-                    ("VERANO", "G Purps 3.5g", "3.5g", 55.00, 48.50, 6.50),
-                    ("RYTHM", "Black Afghan 3.5g", "3.5g", 52.00, 47.00, 5.00),
-                ]
-            },
-            {
-                "type": "unique",
-                "priority": "positive",
-                "title": "12+ exclusive products no local competitor carries",
-                "detail": "These products give you a competitive advantage - promote them!",
-                "data": [
-                    ("STRANE", "MAC 1 Reserve 3.5g", "Flower", 58.00),
-                    ("SELECT", "Pax Era Pod Indica", "Vapes", 45.00),
-                ]
-            }
+            {"type": "assortment", "priority": "high", "title": "8 popular products you don't carry",
+             "detail": "These products are carried by 3+ competitors in your county.",
+             "data": [("EVERMORE", "Purple Obeah #3 3.5g", 5), ("GRASSROOTS", "Birthday Cake 3.5g", 4), ("CURIO", "Blue Dream Pre-Roll 5pk", 4)]},
+            {"type": "pricing_high", "priority": "medium", "title": "5 products priced above market average",
+             "detail": "You may be losing sales to competitors on these items.",
+             "data": [("VERANO", "G Purps 3.5g", "3.5g", 55.00, 48.50, 6.50), ("RYTHM", "Black Afghan 3.5g", "3.5g", 52.00, 47.00, 5.00)]},
+            {"type": "unique", "priority": "positive", "title": "12+ exclusive products no local competitor carries",
+             "detail": "These products give you a competitive advantage - promote them!",
+             "data": [("STRANE", "MAC 1 Reserve 3.5g", "Flower", 58.00), ("SELECT", "Pax Era Pod Indica", "Vapes", 45.00)]}
         ],
-        "pricing_comparison": [
-            ("CURIO", "Blue Dream 3.5g", "3.5g", "Flower", 45.00, 48.00, -3.00),
-            ("EVERMORE", "Purple Obeah #3 3.5g", "3.5g", "Flower", 52.00, 50.00, 2.00),
-            ("GRASSROOTS", "Ray Charles 3.5g", "3.5g", "Flower", 48.00, 45.00, 3.00),
+        "pricing_comparison": [("CURIO", "Blue Dream 3.5g", "3.5g", "Flower", 45.00, 48.00, -3.00), ("EVERMORE", "Purple Obeah #3 3.5g", "3.5g", "Flower", 52.00, 50.00, 2.00), ("GRASSROOTS", "Ray Charles 3.5g", "3.5g", "Flower", 48.00, 45.00, 3.00)],
+        "assortment_gaps": [("RYTHM", "Dosidos 3.5g", "Flower", 52.00), ("VERANO", "G6 Gelato 3.5g", "Flower", 55.00), ("CRESCO", "Bio Jesus LLR Cart", "Vapes", 45.00)],
+        "category_comparison": [("Flower", 145, 162), ("Vapes", 68, 75), ("Concentrates", 42, 38), ("Edibles", 35, 42), ("Pre-Rolls", 24, 28)],
+    },
+    "demo-002": {  # Herbiculture
+        "competitors": [
+            ("comp-004", "Rise Towson", "Towson", 195),
+            ("comp-005", "Greenhouse Wellness", "Ellicott City", 168),
+            ("comp-006", "Living Room", "Lutherville", 142),
         ],
-        "assortment_gaps": [
-            ("RYTHM", "Dosidos 3.5g", "Flower", 52.00),
-            ("VERANO", "G6 Gelato 3.5g", "Flower", 55.00),
-            ("CRESCO", "Bio Jesus LLR Cart", "Vapes", 45.00),
+        "metrics": {"products": 287, "brands": 42, "avg_price": 45.25, "categories": 11},
+        "insights": [
+            {"type": "assortment", "priority": "high", "title": "6 popular products you don't carry",
+             "detail": "These products are carried by 3+ competitors in your county.",
+             "data": [("RYTHM", "Dosidos 3.5g", 4), ("CRESCO", "Outer Space 3.5g", 3), ("VERANO", "Mag Landrace 3.5g", 3)]},
+            {"type": "pricing_high", "priority": "medium", "title": "3 products priced above market average",
+             "detail": "You may be losing sales to competitors on these items.",
+             "data": [("CURIO", "Sour Jack 3.5g", "3.5g", 58.00, 52.00, 6.00)]},
+            {"type": "unique", "priority": "positive", "title": "18+ exclusive products no local competitor carries",
+             "detail": "These products give you a competitive advantage - promote them!",
+             "data": [("GRASSROOTS", "Motor Breath 3.5g", "Flower", 52.00), ("EVERMORE", "Sunset Octane 3.5g", "Flower", 55.00)]}
         ],
-        "category_comparison": [
-            ("Flower", 145, 162),
-            ("Vapes", 68, 75),
-            ("Concentrates", 42, 38),
-            ("Edibles", 35, 42),
-            ("Pre-Rolls", 24, 28),
-        ]
+        "pricing_comparison": [("RYTHM", "Black Afghan 3.5g", "3.5g", "Flower", 50.00, 52.00, -2.00), ("CURIO", "Sour Jack 3.5g", "3.5g", "Flower", 58.00, 52.00, 6.00), ("STRANE", "Grape Lime Ricky 3.5g", "3.5g", "Flower", 42.00, 40.00, 2.00)],
+        "assortment_gaps": [("CRESCO", "Outer Space 3.5g", "Flower", 48.00), ("VERANO", "Mag Landrace 3.5g", "Flower", 52.00)],
+        "category_comparison": [("Flower", 132, 148), ("Vapes", 58, 62), ("Concentrates", 38, 35), ("Edibles", 32, 38), ("Pre-Rolls", 27, 25)],
+    },
+    "demo-003": {  # Greenhouse Wellness
+        "competitors": [
+            ("comp-007", "Herbiculture", "Towson", 287),
+            ("comp-008", "Remedy Columbia", "Columbia", 156),
+            ("comp-009", "Rise Bethesda", "Bethesda", 178),
+        ],
+        "metrics": {"products": 412, "brands": 56, "avg_price": 44.00, "categories": 14},
+        "insights": [
+            {"type": "assortment", "priority": "high", "title": "4 popular products you don't carry",
+             "detail": "These products are carried by 3+ competitors in your county.",
+             "data": [("STRANE", "Biscotti 3.5g", 4), ("SELECT", "Elite Cart Sativa", 3)]},
+            {"type": "unique", "priority": "positive", "title": "24+ exclusive products no local competitor carries",
+             "detail": "These products give you a competitive advantage - promote them!",
+             "data": [("EVERMORE", "Strawberry Cookies 3.5g", "Flower", 55.00), ("RYTHM", "L'Orange 3.5g", "Flower", 52.00), ("CURIO", "Blissful Wizard 3.5g", "Flower", 58.00)]}
+        ],
+        "pricing_comparison": [("EVERMORE", "Strawberry Cookies 3.5g", "3.5g", "Flower", 55.00, 58.00, -3.00), ("GRASSROOTS", "GSC 3.5g", "3.5g", "Flower", 48.00, 46.00, 2.00)],
+        "assortment_gaps": [("STRANE", "Biscotti 3.5g", "Flower", 45.00), ("SELECT", "Elite Cart Sativa", "Vapes", 42.00)],
+        "category_comparison": [("Flower", 178, 165), ("Vapes", 82, 78), ("Concentrates", 56, 52), ("Edibles", 48, 45), ("Pre-Rolls", 48, 42)],
+    },
+    "demo-004": {  # Gold Leaf
+        "competitors": [
+            ("comp-010", "Chesapeake Apothecary", "Severna Park", 134),
+            ("comp-011", "Trilogy Wellness", "Ellicott City", 198),
+            ("comp-012", "Oceanside Dispensary", "Glen Burnie", 167),
+        ],
+        "metrics": {"products": 256, "brands": 38, "avg_price": 48.50, "categories": 10},
+        "insights": [
+            {"type": "assortment", "priority": "high", "title": "11 popular products you don't carry",
+             "detail": "These products are carried by 3+ competitors in your county.",
+             "data": [("CURIO", "Blue Dream 3.5g", 5), ("RYTHM", "Animal Face 3.5g", 4), ("GRASSROOTS", "Garlic Cookies 3.5g", 4), ("VERANO", "Wedding Cake 3.5g", 3)]},
+            {"type": "pricing_high", "priority": "medium", "title": "7 products priced above market average",
+             "detail": "You may be losing sales to competitors on these items.",
+             "data": [("EVERMORE", "Purple Obeah 3.5g", "3.5g", 60.00, 52.00, 8.00), ("STRANE", "White MAC 3.5g", "3.5g", 55.00, 48.00, 7.00), ("CRESCO", "Sugar Plum 3.5g", "3.5g", 52.00, 46.00, 6.00)]},
+            {"type": "unique", "priority": "positive", "title": "8+ exclusive products no local competitor carries",
+             "detail": "These products give you a competitive advantage - promote them!",
+             "data": [("CULTA", "Poochie Love 3.5g", "Flower", 62.00)]}
+        ],
+        "pricing_comparison": [("EVERMORE", "Purple Obeah 3.5g", "3.5g", "Flower", 60.00, 52.00, 8.00), ("STRANE", "White MAC 3.5g", "3.5g", "Flower", 55.00, 48.00, 7.00), ("CRESCO", "Sugar Plum 3.5g", "3.5g", "Flower", 52.00, 46.00, 6.00), ("CURIO", "Sour Gorilla 3.5g", "3.5g", "Flower", 50.00, 52.00, -2.00)],
+        "assortment_gaps": [("CURIO", "Blue Dream 3.5g", "Flower", 48.00), ("RYTHM", "Animal Face 3.5g", "Flower", 52.00), ("GRASSROOTS", "Garlic Cookies 3.5g", "Flower", 50.00), ("VERANO", "Wedding Cake 3.5g", "Flower", 55.00)],
+        "category_comparison": [("Flower", 108, 142), ("Vapes", 52, 68), ("Concentrates", 35, 42), ("Edibles", 38, 45), ("Pre-Rolls", 23, 32)],
+    },
+    "demo-005": {  # Curio Wellness
+        "competitors": [
+            ("comp-013", "Blair Wellness", "Silver Spring", 145),
+            ("comp-014", "Herbiculture", "Towson", 287),
+            ("comp-015", "Starbuds Timonium", "Timonium", 178),
+        ],
+        "metrics": {"products": 378, "brands": 52, "avg_price": 46.75, "categories": 13},
+        "insights": [
+            {"type": "assortment", "priority": "high", "title": "5 popular products you don't carry",
+             "detail": "These products are carried by 3+ competitors in your county.",
+             "data": [("GRASSROOTS", "Ray Charles 3.5g", 4), ("VERANO", "Sonny G 3.5g", 3)]},
+            {"type": "unique", "priority": "positive", "title": "32+ exclusive products no local competitor carries",
+             "detail": "These products give you a competitive advantage - promote them!",
+             "data": [("CURIO", "Blissful Wizard 3.5g", "Flower", 58.00), ("CURIO", "Blue Dream 3.5g", "Flower", 48.00), ("CURIO", "Sour Jack 3.5g", "Flower", 55.00)]}
+        ],
+        "pricing_comparison": [("EVERMORE", "Sunset Octane 3.5g", "3.5g", "Flower", 52.00, 55.00, -3.00), ("RYTHM", "Black Afghan 3.5g", "3.5g", "Flower", 48.00, 50.00, -2.00), ("STRANE", "OG Story 3.5g", "3.5g", "Flower", 44.00, 42.00, 2.00)],
+        "assortment_gaps": [("GRASSROOTS", "Ray Charles 3.5g", "Flower", 48.00), ("VERANO", "Sonny G 3.5g", "Flower", 52.00)],
+        "category_comparison": [("Flower", 162, 155), ("Vapes", 72, 68), ("Concentrates", 48, 45), ("Edibles", 52, 48), ("Pre-Rolls", 44, 38)],
+    },
+}
+
+def get_retail_demo_data(store_id="demo-001"):
+    """Return demo data for retail intelligence based on selected store."""
+    store_data = DEMO_STORE_DATA.get(store_id, DEMO_STORE_DATA["demo-001"])
+    return {
+        "stores": DEMO_STORES,
+        **store_data
     }
 
 
@@ -495,16 +545,17 @@ if DEMO_MODE:
 col_state, col_store = st.columns([1, 3])
 
 if DEMO_MODE:
-    demo_data = get_retail_demo_data()
     with col_state:
         st.selectbox("State", ["MD"], disabled=True)
         selected_state = "MD"
 
     with col_store:
-        store_options = {name: id for id, name in demo_data["stores"]}
+        store_options = {name: id for id, name in DEMO_STORES}
         selected_store_name = st.selectbox("Select Your Store", list(store_options.keys()))
         selected_store_id = store_options[selected_store_name]
 
+    # Get store-specific demo data based on selection
+    demo_data = get_retail_demo_data(selected_store_id)
     metrics = demo_data["metrics"]
     insights = demo_data["insights"]
     competitors = demo_data["competitors"]
