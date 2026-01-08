@@ -497,7 +497,7 @@ col_state, col_store = st.columns([1, 3])
 if DEMO_MODE:
     demo_data = get_retail_demo_data()
     with col_state:
-        st.selectbox("🗺️ State", ["MD"], disabled=True)
+        st.selectbox("State", ["MD"], disabled=True)
         selected_state = "MD"
 
     with col_store:
@@ -550,11 +550,11 @@ if selected_store_id:
         for insight in insights:
             # Choose icon based on priority
             if insight['priority'] == 'high':
-                icon = '🔴'
+                icon = '[!]'
             elif insight['priority'] == 'positive':
-                icon = '🟢'
+                icon = '[+]'
             else:
-                icon = '🟡'
+                icon = '[-]'
 
             with st.expander(f"{icon} {insight['title']}", expanded=True):
                 st.caption(insight["detail"])

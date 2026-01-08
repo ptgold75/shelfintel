@@ -13,3 +13,4 @@ data/offline.db
 # Temporary files
 *.png
 !app/static/*.png
+venv/

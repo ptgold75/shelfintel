@@ -437,7 +437,7 @@ if DEMO_MODE:
     # Demo mode - use sample data
     demo_data = get_demo_data()
     with col_state:
-        st.selectbox("🗺️ State", ["MD"], disabled=True)
+        st.selectbox("State", ["MD"], disabled=True)
         selected_state = "MD"
 
     with col_brand:
@@ -599,7 +599,7 @@ if selected_brand:
         if gaps:
             st.markdown(f"""
             <div class="insight-card">
-                <h4>🎯 {len(gaps)} Stores Don't Carry Your Products</h4>
+                <h4>{len(gaps)} Stores Don't Carry Your Products</h4>
                 <p>These stores have menu data but don't stock your brand. Priority sales targets.</p>
             </div>
             """, unsafe_allow_html=True)
@@ -612,7 +612,7 @@ if selected_brand:
         if pricing_issues:
             st.markdown(f"""
             <div class="insight-card warning">
-                <h4>💰 {len(pricing_issues)} Products with Price Variance</h4>
+                <h4>{len(pricing_issues)} Products with Price Variance</h4>
                 <p>Same-size products priced differently across stores. May indicate MAP violations.</p>
             </div>
             """, unsafe_allow_html=True)
@@ -629,7 +629,7 @@ if selected_brand:
         if not gaps and not pricing_issues:
             st.markdown("""
             <div class="insight-card opportunity">
-                <h4>✅ No Critical Issues Found</h4>
+                <h4>No Critical Issues Found</h4>
                 <p>Your brand has strong distribution and consistent pricing across the market.</p>
             </div>
             """, unsafe_allow_html=True)

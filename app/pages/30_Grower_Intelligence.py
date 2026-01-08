@@ -213,7 +213,7 @@ def get_grower_demo_data():
 if DEMO_MODE:
     st.info("**Demo Mode** - Showing sample data. [Login](/Login) to access real market data.")
     demo_data = get_grower_demo_data()
-    st.selectbox("🗺️ State", ["MD"], disabled=True)
+    st.selectbox("State", ["MD"], disabled=True)
     selected_state = "MD"
     overview = demo_data["overview"]
 else:

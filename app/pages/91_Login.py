@@ -19,7 +19,7 @@ render_nav(require_login=False)
 
 if is_authenticated():
     st.success("You are already logged in!")
-    st.page_link("pages/10_Brand_Intelligence.py", label="Go to Brand Dashboard", icon="📊")
+    st.page_link("pages/10_Brand_Intelligence.py", label="Go to Brand Dashboard")
 else:
     st.markdown("### Login to CannLinx")
     st.markdown("Access your market intelligence dashboard.")

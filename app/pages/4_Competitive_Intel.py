@@ -11,7 +11,7 @@ from core.db import get_engine
 from collections import defaultdict
 import math
 
-st.set_page_config(page_title="Competitive Intelligence | CannaLinx", page_icon="🎯", layout="wide")
+st.set_page_config(page_title="Competitive Intelligence | CannaLinx", page_icon=None, layout="wide")
 
 st.markdown("""
 <style>
@@ -37,7 +37,7 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-st.title("🎯 Competitive Intelligence")
+st.title("Competitive Intelligence")
 
 # Cached data loading functions
 @st.cache_data(ttl=600)

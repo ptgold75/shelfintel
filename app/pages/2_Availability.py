@@ -215,7 +215,7 @@ else:
     disp_row = stores_df[stores_df['name'] == selected_store].iloc[0]
     disp_id = disp_row['dispensary_id']
     
-    st.subheader(f"🏪 {selected_store}")
+    st.subheader(f"{selected_store}")
     
     try:
         categories_df, brands_df = get_store_summary(disp_id)
@@ -233,7 +233,7 @@ else:
             st.divider()
             
             # Category pie chart and breakdown
-            tab1, tab2, tab3 = st.tabs(["📊 Category Breakdown", "🏷️ Brands", "📋 Product List"])
+            tab1, tab2, tab3 = st.tabs(["Category Breakdown", "Brands", "Product List"])
             
             with tab1:
                 col1, col2 = st.columns(2)

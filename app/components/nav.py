@@ -68,7 +68,7 @@ def render_state_filter():
     # Create state selector
     options = states
     selected = st.selectbox(
-        "🗺️ State",
+        "State",
         options,
         index=options.index(st.session_state.selected_state) if st.session_state.selected_state in options else 0,
         key="state_filter_select"

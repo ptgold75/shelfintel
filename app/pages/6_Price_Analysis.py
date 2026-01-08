@@ -303,7 +303,7 @@ def get_deals(state, min_price):
             LIMIT 50
         """), conn, params=params)
 
-tab1, tab2, tab3, tab4 = st.tabs(["📊 Category Prices", "💨 Vape Analysis", "🏷️ Best Deals", "🔍 Price Search"])
+tab1, tab2, tab3, tab4 = st.tabs(["Category Prices", "Vape Analysis", "Best Deals", "Price Search"])
 
 with tab1:
     st.header("Average Prices by Category")

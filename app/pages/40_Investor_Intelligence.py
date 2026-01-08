@@ -12,7 +12,7 @@ sys.path.insert(0, '/Users/gleaf/shelfintel')
 from core.db import get_engine
 from sqlalchemy import text
 
-st.set_page_config(page_title="Investor Intelligence", page_icon="📈", layout="wide")
+st.set_page_config(page_title="Investor Intelligence", page_icon=None, layout="wide")
 
 # Navigation
 from components.nav import render_nav
@@ -22,7 +22,7 @@ render_nav(require_login=False)
 # Check if user is authenticated for real data vs demo
 DEMO_MODE = not is_authenticated()
 
-st.title("📈 Investor Intelligence")
+st.title("Investor Intelligence")
 st.markdown("Track public cannabis companies, stock prices, shelf analytics, and financial metrics")
 
 if DEMO_MODE:
@@ -241,7 +241,7 @@ def load_brand_details(company_id):
 companies = load_companies()
 
 # Tabs for different views
-tab1, tab2, tab3, tab4, tab5 = st.tabs(["📊 Overview", "🗺️ State Operations", "📈 Stock Charts", "💰 Financials", "🔬 Company Details"])
+tab1, tab2, tab3, tab4, tab5 = st.tabs(["Overview", "State Operations", "Stock Charts", "Financials", "Company Details"])
 
 with tab1:
     st.subheader("Public Cannabis Companies")
@@ -325,9 +325,9 @@ with tab2:
                 # Create state presence table
                 ops_display = company_ops[['state', 'has_retail', 'has_cultivation', 'has_processing', 'retail_count']].copy()
                 ops_display.columns = ['State', 'Retail', 'Cultivation', 'Processing', 'Store Count']
-                ops_display['Retail'] = ops_display['Retail'].apply(lambda x: '✓' if x else '')
-                ops_display['Cultivation'] = ops_display['Cultivation'].apply(lambda x: '✓' if x else '')
-                ops_display['Processing'] = ops_display['Processing'].apply(lambda x: '✓' if x else '')
+                ops_display['Retail'] = ops_display['Retail'].apply(lambda x: 'Yes' if x else '')
+                ops_display['Cultivation'] = ops_display['Cultivation'].apply(lambda x: 'Yes' if x else '')
+                ops_display['Processing'] = ops_display['Processing'].apply(lambda x: 'Yes' if x else '')
                 ops_display['Store Count'] = ops_display['Store Count'].apply(lambda x: int(x) if pd.notna(x) else '-')
 
                 st.dataframe(ops_display, use_container_width=True, hide_index=True)
@@ -374,9 +374,9 @@ with tab2:
         demo_ops = pd.DataFrame({
             'Company': ['Curaleaf', 'Curaleaf', 'Curaleaf', 'GTI', 'GTI', 'GTI', 'Trulieve', 'Trulieve'],
             'State': ['FL', 'NY', 'NJ', 'IL', 'PA', 'OH', 'FL', 'PA'],
-            'Retail': ['✓', '✓', '✓', '✓', '✓', '✓', '✓', '✓'],
-            'Cultivation': ['✓', '✓', '', '✓', '✓', '', '✓', '✓'],
-            'Processing': ['✓', '✓', '✓', '✓', '✓', '✓', '✓', '✓'],
+            'Retail': ['Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes'],
+            'Cultivation': ['Yes', 'Yes', '', 'Yes', 'Yes', '', 'Yes', 'Yes'],
+            'Processing': ['Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes'],
             'Store Count': [62, 15, 12, 18, 22, 8, 147, 28]
         })
         st.dataframe(demo_ops, use_container_width=True, hide_index=True)
