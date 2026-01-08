@@ -18,7 +18,7 @@ from core.size_utils import get_normalized_size
 st.set_page_config(page_title="Competitor Compare | CannLinx", page_icon=None, layout="wide", initial_sidebar_state="collapsed")
 
 # Import and render navigation
-from app.components.nav import render_nav
+from components.nav import render_nav
 render_nav()
 
 st.title("Competitor Comparison")

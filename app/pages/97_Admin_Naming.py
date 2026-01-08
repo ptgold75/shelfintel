@@ -18,7 +18,7 @@ from core.product_normalizer import (
 st.set_page_config(page_title="Admin: Naming | CannLinx", page_icon=None, layout="wide", initial_sidebar_state="collapsed")
 
 # Import and render navigation
-from app.components.nav import render_nav
+from components.nav import render_nav
 render_nav()
 
 st.title("Naming Convention Verification")

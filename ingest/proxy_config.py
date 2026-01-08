@@ -2,12 +2,12 @@
 """
 Proxy configuration for scraping providers.
 
-Supports CLIproxy.com residential proxies with IP rotation.
+Supports Decodo residential proxies with sticky sessions.
 
 Usage:
     Set environment variables:
-        PROXY_HOST=unlimit.cliproxy.io
-        PROXY_PORT=12345
+        PROXY_HOST=gate.decodo.com
+        PROXY_PORT=10001
         PROXY_USER=your_username
         PROXY_PASS=your_password
 
@@ -23,16 +23,9 @@ from dotenv import load_dotenv
 # Load environment variables
 load_dotenv()
 
-# Pre-generated session IDs for proxy pool (20 Maryland IPs)
-PROXY_SESSION_IDS = [
-    "VEqKfLHz", "CFNB2W9j", "pK1sCBe2", "jaUsiYvG", "j4kMSe3W",
-    "WPLsXHUG", "CCjk3f3m", "3UDkT1qL", "b8KvpwdY", "Nw7bPhgm",
-    "5cMrkREc", "3JL3Mcwi", "bKwDMytr", "BEsjzeDU", "gQQjczXG",
-    "fqf21GYf", "pYENcTCi", "EmeZc4EW", "FgCYTRmh", "Gn8Ugnie",
-]
-
-# Track which session to use next (round-robin)
-_session_index = 0
+# Track which port to use for rotation (Decodo provides ports 10001-10010)
+_port_index = 0
+DECODO_PORTS = [10001, 10002, 10003, 10004, 10005, 10006, 10007, 10008, 10009, 10010]
 
 
 def _get_env(key: str, default: Optional[str] = None) -> Optional[str]:
@@ -40,12 +33,12 @@ def _get_env(key: str, default: Optional[str] = None) -> Optional[str]:
     return os.environ.get(key, default)
 
 
-def get_next_session_id() -> str:
-    """Get next session ID from the pool (round-robin)."""
-    global _session_index
-    session_id = PROXY_SESSION_IDS[_session_index % len(PROXY_SESSION_IDS)]
-    _session_index += 1
-    return session_id
+def get_next_port() -> int:
+    """Get next port from the pool (round-robin) for IP rotation."""
+    global _port_index
+    port = DECODO_PORTS[_port_index % len(DECODO_PORTS)]
+    _port_index += 1
+    return port
 
 
 def get_proxy_config() -> Optional[Dict[str, str]]:
@@ -76,9 +69,9 @@ def get_proxy_url(force_rotate: bool = False, rotation_minutes: int = 5, use_poo
     Get HTTP proxy URL for requests library.
 
     Args:
-        force_rotate: If True, gets next session ID from pool (or generates new one)
-        rotation_minutes: Rotation cycle in minutes (default 5)
-        use_pool: If True, use pre-configured session pool; if False, generate random
+        force_rotate: If True, uses next port for IP rotation
+        rotation_minutes: Not used for Decodo (sessions are sticky by default)
+        use_pool: Not used for Decodo
 
     Returns:
         Proxy URL like http://user:pass@host:port or None if not configured
@@ -88,21 +81,17 @@ def get_proxy_url(force_rotate: bool = False, rotation_minutes: int = 5, use_poo
         return None
 
     user = config["user"]
+    password = config["password"]
+    host = config["host"]
 
-    # CLIproxy rotation: append -sid-xxxx-t-N to username
-    # -sid-xxxx = session ID (change to get new IP)
-    # -t-N = rotation cycle in minutes
+    # Decodo: use different ports for IP rotation
+    # Each port gives a different sticky IP
     if force_rotate:
-        if use_pool:
-            session_id = get_next_session_id()
-        else:
-            session_id = ''.join(random.choices(string.ascii_lowercase + string.digits, k=8))
-        user = f"{user}-sid-{session_id}-t-{rotation_minutes}"
+        port = get_next_port()
     else:
-        # Use first session from pool for consistent IP within batch
-        user = f"{user}-sid-{PROXY_SESSION_IDS[0]}-t-{rotation_minutes}"
+        port = int(config["port"])
 
-    return f"http://{user}:{config['password']}@{config['host']}:{config['port']}"
+    return f"http://{user}:{password}@{host}:{port}"
 
 
 def get_proxies_dict(force_rotate: bool = False) -> Optional[Dict[str, str]]:
@@ -130,8 +119,8 @@ def get_playwright_proxy(force_rotate: bool = False, rotation_minutes: int = 5) 
     Get proxy config for Playwright browser.
 
     Args:
-        force_rotate: If True, gets next session ID from pool for new IP
-        rotation_minutes: Rotation cycle in minutes (default 5)
+        force_rotate: If True, uses next port for new IP
+        rotation_minutes: Not used for Decodo
 
     Returns:
         Dict for Playwright proxy config or None if not configured
@@ -140,17 +129,15 @@ def get_playwright_proxy(force_rotate: bool = False, rotation_minutes: int = 5) 
     if not config:
         return None
 
-    user = config["user"]
-
+    # Decodo: use different ports for IP rotation
     if force_rotate:
-        session_id = get_next_session_id()
-        user = f"{user}-sid-{session_id}-t-{rotation_minutes}"
+        port = get_next_port()
     else:
-        user = f"{user}-sid-{PROXY_SESSION_IDS[0]}-t-{rotation_minutes}"
+        port = int(config["port"])
 
     return {
-        "server": f"http://{config['host']}:{config['port']}",
-        "username": user,
+        "server": f"http://{config['host']}:{port}",
+        "username": config["user"],
         "password": config["password"],
     }
 

@@ -15,7 +15,7 @@ from core.category_utils import get_normalized_category_sql
 st.set_page_config(page_title="Price Analysis | CannLinx", page_icon=None, layout="wide", initial_sidebar_state="collapsed")
 
 # Import and render navigation
-from app.components.nav import render_nav, get_section_from_params
+from components.nav import render_nav, get_section_from_params
 render_nav()
 
 # Handle section parameter for tab navigation

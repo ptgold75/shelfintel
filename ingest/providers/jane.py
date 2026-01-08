@@ -1,6 +1,7 @@
 # ingest/providers/jane.py
-"""iHeartJane provider - scrapes dispensaries using Jane's REST API and Algolia search."""
+"""iHeartJane provider - scrapes dispensaries using Jane's REST API, Algolia search, and Playwright fallback."""
 
+import asyncio
 import re
 import requests
 from typing import Generator, Optional, List, Dict, Any
@@ -8,10 +9,17 @@ from .base import BaseProvider, MenuItem
 
 # Proxy and rate limiting support
 try:
-    from ingest.proxy_config import get_proxies_dict, get_rate_limiter
+    from ingest.proxy_config import get_proxies_dict, get_rate_limiter, get_playwright_proxy
     PROXY_AVAILABLE = True
 except ImportError:
     PROXY_AVAILABLE = False
+
+# Playwright for Cloudflare bypass
+try:
+    from playwright.async_api import async_playwright
+    PLAYWRIGHT_AVAILABLE = True
+except ImportError:
+    PLAYWRIGHT_AVAILABLE = False
 
 
 class JaneProvider(BaseProvider):
@@ -34,10 +42,11 @@ class JaneProvider(BaseProvider):
     ALGOLIA_APP_ID = "VFM4X0N23A"
     ALGOLIA_API_KEY = "11f0fcaee5ae875f14a915b07cb6ef27"
 
-    def __init__(self, dispensary_id: str, store_id: str, use_proxy: bool = True, api_base: str = None):
+    def __init__(self, dispensary_id: str, store_id: str, use_proxy: bool = True, api_base: str = None, menu_url: str = None):
         super().__init__(dispensary_id)
         self.store_id = store_id
         self.api_base = api_base or self.BASE_URL
+        self.menu_url = menu_url  # The actual dispensary menu URL (not iheartjane.com)
         self.use_proxy = use_proxy and PROXY_AVAILABLE
         self.rate_limiter = get_rate_limiter("jane") if PROXY_AVAILABLE else None
 
@@ -485,3 +494,217 @@ class JaneProvider(BaseProvider):
                     raw_json=raw_json,
                     menu_type=menu_type
                 )
+
+    def scrape_with_playwright(self, menu_type: str = "recreational") -> Generator[MenuItem, None, None]:
+        """Scrape using Playwright to bypass Cloudflare.
+
+        This method uses a headless browser to navigate to the Jane embed page
+        and intercepts the API responses to extract product data.
+
+        Args:
+            menu_type: "recreational" or "medical"
+        """
+        if not PLAYWRIGHT_AVAILABLE:
+            print("Playwright not available. Install with: pip install playwright && playwright install chromium")
+            return
+
+        # Run async scrape
+        products = asyncio.run(self._playwright_scrape(menu_type))
+
+        seen_ids = set()
+        for product in products:
+            product_id = str(product.get("id", product.get("objectID", "")))
+            if product_id and product_id not in seen_ids:
+                seen_ids.add(product_id)
+                # Check if this is an Algolia hit or REST API product
+                if "objectID" in product:
+                    yield from self._parse_algolia_hit(product, menu_type=menu_type)
+                else:
+                    yield from self._parse_product(product, menu_type=menu_type)
+
+    async def _playwright_scrape(self, menu_type: str) -> List[dict]:
+        """Use Playwright to scrape Jane menu by intercepting API calls."""
+        all_products = []
+
+        # Note: Residential proxies often don't work well with Playwright's tunnel
+        # Use stealth settings instead for Cloudflare bypass
+
+        async with async_playwright() as p:
+            # Launch browser with stealth settings
+            browser = await p.chromium.launch(
+                headless=True,
+                args=[
+                    "--disable-blink-features=AutomationControlled",
+                    "--disable-dev-shm-usage",
+                    "--no-sandbox",
+                    "--disable-web-security",
+                    "--disable-features=IsolateOrigins,site-per-process",
+                ]
+            )
+
+            # Create context with stealth settings (no proxy - tunnel issues)
+            context_options = {
+                "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+                "viewport": {"width": 1920, "height": 1080},
+                "locale": "en-US",
+                "timezone_id": "America/New_York",
+            }
+
+            context = await browser.new_context(**context_options)
+            page = await context.new_page()
+
+            # Add stealth script
+            await page.add_init_script("""
+                Object.defineProperty(navigator, 'webdriver', {get: () => undefined});
+                Object.defineProperty(navigator, 'plugins', {get: () => [1, 2, 3, 4, 5]});
+                window.chrome = { runtime: {} };
+            """)
+
+            # Intercept API responses
+            async def handle_response(response):
+                url = response.url
+                try:
+                    # Capture Jane API responses
+                    if response.status == 200:
+                        # REST API products
+                        if "/v1/stores/" in url and "/products" in url:
+                            body = await response.json()
+                            products = body.get("products", body.get("data", []))
+                            if products:
+                                all_products.extend(products)
+                                print(f"Playwright: Captured {len(products)} products from REST API")
+
+                        # Algolia search results
+                        elif "algolia" in url.lower() or "search" in url.lower():
+                            body = await response.json()
+                            hits = body.get("hits", body.get("results", []))
+                            if isinstance(hits, list) and hits:
+                                # Handle nested results structure
+                                if isinstance(hits[0], dict) and "hits" in hits[0]:
+                                    for result in hits:
+                                        all_products.extend(result.get("hits", []))
+                                else:
+                                    all_products.extend(hits)
+                                print(f"Playwright: Captured {len(hits)} products from Algolia")
+                except Exception as e:
+                    pass  # Silently ignore parse errors
+
+            page.on("response", handle_response)
+
+            try:
+                # Try different URL patterns for Jane embeds
+                # Start with the dispensary's own menu URL if available (less likely to be blocked)
+                urls_to_try = []
+                if self.menu_url and "iheartjane.com" not in self.menu_url:
+                    urls_to_try.append(self.menu_url)
+                urls_to_try.extend([
+                    f"https://www.iheartjane.com/embed/stores/{self.store_id}",
+                    f"https://www.iheartjane.com/stores/{self.store_id}",
+                ])
+
+                for url in urls_to_try:
+                    print(f"Playwright: Navigating to {url}")
+                    try:
+                        await page.goto(url, timeout=45000, wait_until="domcontentloaded")
+                        await asyncio.sleep(3)
+
+                        # Check if we're blocked
+                        content = await page.content()
+                        if "Attention Required" in content or "captcha" in content.lower():
+                            print(f"Playwright: Cloudflare challenge detected, trying next URL...")
+                            continue
+
+                        # Scroll multiple times to trigger lazy loading and pagination
+                        for i in range(15):
+                            await page.evaluate("window.scrollBy(0, window.innerHeight)")
+                            await asyncio.sleep(0.5)
+                            # Click "Load More" or pagination buttons if present
+                            try:
+                                load_more = await page.query_selector('button:has-text("Load More"), button:has-text("Show More"), [class*="load-more"]')
+                                if load_more:
+                                    await load_more.click()
+                                    await asyncio.sleep(2)
+                            except:
+                                pass
+
+                        # Wait for final products to load
+                        await asyncio.sleep(2)
+
+                        # If we got products, we're done
+                        if all_products:
+                            print(f"Playwright: Successfully captured {len(all_products)} products")
+                            break
+
+                    except Exception as e:
+                        print(f"Playwright: Error with {url}: {e}")
+                        continue
+
+                # If no products from API interception, try scraping the page directly
+                if not all_products:
+                    print("Playwright: No API responses captured, trying direct page scrape...")
+                    all_products = await self._scrape_page_directly(page, menu_type)
+
+            except Exception as e:
+                print(f"Playwright scrape error: {e}")
+
+            await browser.close()
+
+        return all_products
+
+    async def _scrape_page_directly(self, page, menu_type: str) -> List[dict]:
+        """Scrape product data directly from the page DOM."""
+        products = []
+
+        try:
+            # Wait for product cards to appear
+            await page.wait_for_selector('[data-testid="product-card"], .product-card, .menu-item', timeout=10000)
+
+            # Extract product data from the page
+            product_data = await page.evaluate("""
+                () => {
+                    const products = [];
+
+                    // Try different selectors for product cards
+                    const selectors = [
+                        '[data-testid="product-card"]',
+                        '.product-card',
+                        '.menu-item',
+                        '[class*="ProductCard"]',
+                        '[class*="product-tile"]'
+                    ];
+
+                    for (const selector of selectors) {
+                        const cards = document.querySelectorAll(selector);
+                        if (cards.length > 0) {
+                            cards.forEach((card, index) => {
+                                const nameEl = card.querySelector('[data-testid="product-name"], .product-name, h3, h4, [class*="name"]');
+                                const brandEl = card.querySelector('[data-testid="product-brand"], .product-brand, [class*="brand"]');
+                                const priceEl = card.querySelector('[data-testid="product-price"], .product-price, [class*="price"]');
+                                const categoryEl = card.querySelector('[data-testid="product-category"], .product-category, [class*="category"]');
+
+                                if (nameEl) {
+                                    products.push({
+                                        id: `scraped_${index}`,
+                                        name: nameEl.textContent.trim(),
+                                        brand: brandEl ? brandEl.textContent.trim() : '',
+                                        price: priceEl ? priceEl.textContent.replace(/[^0-9.]/g, '') : null,
+                                        category: categoryEl ? categoryEl.textContent.trim() : 'Unknown'
+                                    });
+                                }
+                            });
+                            break;
+                        }
+                    }
+
+                    return products;
+                }
+            """)
+
+            if product_data:
+                print(f"Playwright: Scraped {len(product_data)} products from page DOM")
+                products = product_data
+
+        except Exception as e:
+            print(f"Playwright: DOM scrape error: {e}")
+
+        return products

@@ -58,6 +58,11 @@ def fetch_menu_items(
     """
     Fetch all menu items from a Jane-powered dispensary.
 
+    Uses a multi-tier approach:
+    1. REST API (fastest, but often blocked by Cloudflare)
+    2. Algolia search (alternative API, also may be blocked)
+    3. Playwright with proxy (headless browser, bypasses Cloudflare)
+
     Args:
         menu_url: Dispensary menu URL
         store_id: Jane store ID (optional if in provider_metadata)
@@ -73,16 +78,23 @@ def fetch_menu_items(
             "Run discover_sweed.py and store the result in dispensary.provider_metadata."
         )
 
-    # Create provider instance (disable proxy for now)
+    # Create provider instance with proxy enabled
     provider = JaneProvider(
         dispensary_id="",  # Not needed for scraping
         store_id=resolved_store_id,
-        use_proxy=False,
+        use_proxy=True,  # Enable proxy for Cloudflare bypass
+        menu_url=menu_url,  # Pass the actual dispensary URL for Playwright fallback
     )
 
-    # Scrape and convert items
+    # Scrape and convert items (REST API + Algolia fallback)
     all_items: List[Dict[str, Any]] = []
     for menu_item in provider.scrape():
         all_items.append(_to_raw_item(menu_item))
+
+    # If no items found, try Playwright with proxy to bypass Cloudflare
+    if not all_items:
+        print(f"REST/Algolia returned no products, trying Playwright for store {resolved_store_id}...")
+        for menu_item in provider.scrape_with_playwright():
+            all_items.append(_to_raw_item(menu_item))
 
     return all_items

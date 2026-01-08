@@ -6,6 +6,7 @@ from pathlib import Path
 from sqlalchemy import text
 
 
+@st.cache_data(ttl=600)  # Cache for 10 minutes
 def get_available_states():
     """Get list of states that have dispensary data."""
     from core.db import get_engine
@@ -21,9 +22,32 @@ def get_available_states():
         return [row[0] for row in result]
 
 
+def get_user_allowed_states():
+    """Get states the current user has permission to access."""
+    from components.auth import is_authenticated, is_admin, get_allowed_states
+
+    if not is_authenticated():
+        return []
+
+    # Admins can see all states
+    if is_admin():
+        return get_available_states()
+
+    # Regular users see their permitted states (that also have data)
+    user_states = get_allowed_states()
+    available = get_available_states()
+    return [s for s in user_states if s in available]
+
+
 def render_state_filter():
     """Render a state filter dropdown and return the selected state."""
-    states = get_available_states()
+    from components.auth import is_authenticated
+
+    # Get states based on user permissions
+    if is_authenticated():
+        states = get_user_allowed_states()
+    else:
+        states = []  # No access without login
 
     if not states:
         return None
@@ -32,13 +56,17 @@ def render_state_filter():
     if "selected_state" not in st.session_state:
         st.session_state.selected_state = states[0] if states else None
 
+    # If current selection not in allowed states, reset
+    if st.session_state.selected_state not in states:
+        st.session_state.selected_state = states[0] if states else None
+
     # If only one state, don't show filter
     if len(states) == 1:
         st.session_state.selected_state = states[0]
         return states[0]
 
     # Create state selector
-    options = states  # Could add "All States" option later for admins
+    options = states
     selected = st.selectbox(
         "🗺️ State",
         options,
@@ -51,7 +79,7 @@ def render_state_filter():
 
 def get_selected_state():
     """Get the currently selected state from session state."""
-    return st.session_state.get("selected_state", "MD")
+    return st.session_state.get("selected_state", None)
 
 
 def render_header():
@@ -163,9 +191,15 @@ def render_header():
 </style>
     """, unsafe_allow_html=True)
 
-    # Navigation HTML - separate call
-    st.markdown("""
-<div class="nav-container">
+    # Navigation HTML - dynamically built based on auth status
+    from components.auth import is_authenticated, is_admin
+
+    # Determine which links to show
+    show_admin = is_authenticated() and is_admin()
+    logged_in = is_authenticated()
+
+    # Build nav HTML
+    nav_html = '''<div class="nav-container">
     <a href="/" target="_self" class="nav-link">Home</a>
     <div class="nav-dropdown">
         <a href="/Brand_Intelligence" target="_self" class="nav-link has-dropdown">Brands</a>
@@ -220,21 +254,65 @@ def render_header():
             <div class="dropdown-header">Other</div>
             <a href="/Availability" target="_self">Availability Tracker</a>
         </div>
-    </div>
+    </div>'''
+
+    # Add admin menu if logged in as admin
+    if show_admin:
+        nav_html += '''
     <div class="nav-dropdown">
         <a href="/Admin_Dispensaries" target="_self" class="nav-link has-dropdown">Admin</a>
         <div class="dropdown-content">
             <a href="/Admin_Dispensaries" target="_self">Dispensaries</a>
             <a href="/Admin_Naming" target="_self">Naming Rules</a>
             <a href="/Product_Dedup" target="_self">Product Dedup</a>
+            <a href="/Admin_Clients" target="_self">Client Management</a>
         </div>
-    </div>
-</div>
-    """, unsafe_allow_html=True)
+    </div>'''
+
+    # Add login/logout link
+    if logged_in:
+        nav_html += '''
+    <a href="/Logout" target="_self" class="nav-link">Logout</a>'''
+    else:
+        nav_html += '''
+    <a href="/Login" target="_self" class="nav-link">Login</a>'''
+
+    nav_html += '''
+</div>'''
+
+    st.markdown(nav_html, unsafe_allow_html=True)
 
 
-def render_nav():
+def render_user_bar():
+    """Render user status bar with login/logout."""
+    from components.auth import is_authenticated, get_current_client, logout, is_admin, get_allowed_states
+
+    if is_authenticated():
+        client = get_current_client()
+        states = get_allowed_states()
+        states_str = ", ".join(states) if states else "None"
+
+        col1, col2, col3 = st.columns([3, 1, 1])
+        with col1:
+            role = "Admin" if is_admin() else "Client"
+            st.caption(f"**{client['company_name']}** ({role}) | States: {states_str}")
+        with col2:
+            if is_admin():
+                st.page_link("pages/90_Admin_Clients.py", label="Manage Clients", icon="👥")
+        with col3:
+            if st.button("Logout", key="nav_logout_btn", type="secondary"):
+                logout()
+                st.rerun()
+    else:
+        st.info("Please log in to access the dashboard.")
+
+
+def render_nav(require_login=True):
     """Render the full header with banner and navigation bar."""
+    from components.auth import is_authenticated, init_session_state, render_login_form
+
+    init_session_state()
+
     # Show banner
     banner_path = Path(__file__).parent.parent / "static" / "cannalinx_banner.png"
     if banner_path.exists():
@@ -242,6 +320,14 @@ def render_nav():
 
     # Render navigation
     render_header()
+
+    # Show user bar if authenticated, login form if not
+    if require_login:
+        if not is_authenticated():
+            render_login_form()
+            st.stop()  # Don't render rest of page
+        else:
+            render_user_bar()
 
 
 def get_section_from_params():

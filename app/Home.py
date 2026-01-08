@@ -11,7 +11,7 @@ from core.db import get_engine
 from pathlib import Path
 import re
 import json
-from app.components.nav import render_nav
+from components.nav import render_nav
 
 st.set_page_config(
     page_title="CannLinx - Marketplace Intelligence",
@@ -20,8 +20,8 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# Render shared header with banner and navigation
-render_nav()
+# Render shared header with banner and navigation (public page - no login required)
+render_nav(require_login=False)
 
 # Page-specific styling
 st.markdown("""
@@ -40,18 +40,32 @@ st.markdown("""
     .stat-value {font-size: 1.8rem; font-weight: 700; color: #1e3a5f; margin: 0;}
     .stat-label {font-size: 0.75rem; color: #6c757d; text-transform: uppercase; margin: 0;}
 
-    /* Segment cards */
+    /* Segment cards - clickable */
+    .segment-card-link {
+        display: block;
+        text-decoration: none !important;
+        height: 100%;
+        color: inherit;
+    }
+    .segment-card-link:hover {
+        text-decoration: none !important;
+    }
+    .segment-card-link * {
+        text-decoration: none !important;
+    }
     .segment-card {
         background: white;
         border: 1px solid #e9ecef;
         border-radius: 8px;
         padding: 1.5rem;
         height: 100%;
-        transition: box-shadow 0.2s, border-color 0.2s;
+        transition: box-shadow 0.2s, border-color 0.2s, transform 0.2s;
+        cursor: pointer;
     }
     .segment-card:hover {
         box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         border-color: #1e3a5f;
+        transform: translateY(-2px);
     }
     .segment-card h3 {
         color: #1e3a5f;
@@ -77,10 +91,9 @@ st.markdown("""
         margin-top: 1rem;
         color: #1e3a5f;
         font-weight: 500;
-        text-decoration: none;
+        text-decoration: none !important;
         font-size: 0.9rem;
     }
-    .segment-link:hover {text-decoration: underline;}
 
     /* Section headers */
     .section-title {
@@ -120,33 +133,31 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-st.markdown('<p class="tagline">Real-time shelf intelligence for Maryland\'s cannabis industry</p>', unsafe_allow_html=True)
+st.markdown('<p class="tagline">Real-time shelf intelligence for the cannabis industry</p>', unsafe_allow_html=True)
 
-# Load stats
-@st.cache_data(ttl=300)
+# Load stats from database - optimized with pg_stats for fast approximate counts
+@st.cache_data(ttl=3600)  # Cache for 1 hour since stats don't change frequently
 def load_stats():
-    try:
-        json_path = Path(__file__).parent.parent / "md_dispensaries_by_provider.json"
-        with open(json_path) as f:
-            data = json.load(f)
-        json_dispensaries = sum(len(v) for v in data.values())
-    except:
-        json_dispensaries = 96
-
     try:
         engine = get_engine()
         with engine.connect() as conn:
-            unique_products = conn.execute(text(
-                "SELECT COUNT(DISTINCT raw_name) FROM raw_menu_item WHERE raw_name IS NOT NULL"
-            )).scalar() or 0
-            brands = conn.execute(text(
-                "SELECT COUNT(DISTINCT raw_brand) FROM raw_menu_item WHERE raw_brand IS NOT NULL"
-            )).scalar() or 0
-            return unique_products, brands, json_dispensaries
-    except:
-        return 0, 0, json_dispensaries
+            # Use PostgreSQL statistics for fast approximate counts
+            result = conn.execute(text("""
+                SELECT
+                    (SELECT reltuples::bigint FROM pg_class WHERE relname = 'raw_menu_item'),
+                    (SELECT CASE WHEN n_distinct > 0 THEN n_distinct::bigint
+                                ELSE (reltuples * ABS(n_distinct))::bigint END
+                     FROM pg_stats s JOIN pg_class c ON s.tablename = c.relname
+                     WHERE s.tablename = 'raw_menu_item' AND s.attname = 'raw_brand'),
+                    (SELECT COUNT(*) FROM dispensary WHERE is_active = true),
+                    (SELECT COUNT(DISTINCT state) FROM dispensary WHERE is_active = true)
+            """)).fetchone()
 
-products, brands, stores = load_stats()
+            return result[0] or 0, result[1] or 0, result[2] or 0, result[3] or 0
+    except:
+        return 0, 0, 0, 0
+
+products, brands, stores, states = load_stats()
 
 # Stats bar
 st.markdown(f"""
@@ -156,64 +167,88 @@ st.markdown(f"""
         <p class="stat-label">Products Tracked</p>
     </div>
     <div class="stat-item">
-        <p class="stat-value">{stores}</p>
+        <p class="stat-value">{stores:,}</p>
         <p class="stat-label">Dispensaries</p>
     </div>
     <div class="stat-item">
-        <p class="stat-value">{brands}+</p>
+        <p class="stat-value">{brands:,}</p>
         <p class="stat-label">Brands</p>
+    </div>
+    <div class="stat-item">
+        <p class="stat-value">{states}</p>
+        <p class="stat-label">States</p>
     </div>
 </div>
 """, unsafe_allow_html=True)
 
-# Customer Segments
-st.markdown('<p class="section-title">Choose Your Dashboard</p>', unsafe_allow_html=True)
-
-col1, col2, col3 = st.columns(3)
+col1, col2, col3, col4 = st.columns(4)
 
 with col1:
     st.markdown("""
-    <div class="segment-card">
-        <h3>For Brands</h3>
-        <p>Track your market presence and ensure brand consistency across retail partners.</p>
-        <ul>
-            <li>Store coverage & distribution gaps</li>
-            <li>Retail pricing compliance</li>
-            <li>Product image consistency</li>
-            <li>Naming standardization</li>
-        </ul>
-        <a href="/Brand_Intelligence" target="_self" class="segment-link">Open Brand Dashboard →</a>
-    </div>
+    <a href="/Brand_Intelligence" target="_self" class="segment-card-link">
+        <div class="segment-card">
+            <h3>For Brands</h3>
+            <p>Track your market presence and ensure brand consistency across retail partners.</p>
+            <ul>
+                <li>Store coverage & distribution gaps</li>
+                <li>Retail pricing compliance</li>
+                <li>Product image consistency</li>
+                <li>Naming standardization</li>
+            </ul>
+            <span class="segment-link">Learn more →</span>
+        </div>
+    </a>
     """, unsafe_allow_html=True)
 
 with col2:
     st.markdown("""
-    <div class="segment-card">
-        <h3>For Dispensaries</h3>
-        <p>Competitive intelligence to optimize your pricing and product mix.</p>
-        <ul>
-            <li>Price comparison vs competitors</li>
-            <li>Assortment gap analysis</li>
-            <li>Category mix optimization</li>
-            <li>Inventory insights</li>
-        </ul>
-        <a href="/Retail_Intelligence" target="_self" class="segment-link">Open Retail Dashboard →</a>
-    </div>
+    <a href="/Retail_Intelligence" target="_self" class="segment-card-link">
+        <div class="segment-card">
+            <h3>For Dispensaries</h3>
+            <p>Competitive intelligence to optimize your pricing and product mix.</p>
+            <ul>
+                <li>Price comparison vs competitors</li>
+                <li>Assortment gap analysis</li>
+                <li>Category mix optimization</li>
+                <li>Inventory insights</li>
+            </ul>
+            <span class="segment-link">Learn more →</span>
+        </div>
+    </a>
     """, unsafe_allow_html=True)
 
 with col3:
     st.markdown("""
-    <div class="segment-card">
-        <h3>For Growers</h3>
-        <p>Market trends and distribution insights for cultivators and processors.</p>
-        <ul>
-            <li>Strain popularity rankings</li>
-            <li>Category trends</li>
-            <li>Brand distribution metrics</li>
-            <li>Price benchmarking</li>
-        </ul>
-        <a href="/Grower_Intelligence" target="_self" class="segment-link">Open Grower Dashboard →</a>
-    </div>
+    <a href="/Grower_Intelligence" target="_self" class="segment-card-link">
+        <div class="segment-card">
+            <h3>For Manufacturers</h3>
+            <p>Market trends and distribution insights for cultivators and processors.</p>
+            <ul>
+                <li>Strain popularity rankings</li>
+                <li>Category trends</li>
+                <li>Brand distribution metrics</li>
+                <li>Price benchmarking</li>
+            </ul>
+            <span class="segment-link">Learn more →</span>
+        </div>
+    </a>
+    """, unsafe_allow_html=True)
+
+with col4:
+    st.markdown("""
+    <a href="/Investor_Intelligence" target="_self" class="segment-card-link">
+        <div class="segment-card">
+            <h3>For Investors</h3>
+            <p>Public company analytics and shelf intelligence for investment decisions.</p>
+            <ul>
+                <li>Stock prices & financials</li>
+                <li>SKU counts & shelf penetration</li>
+                <li>Market share by state</li>
+                <li>Revenue & profitability metrics</li>
+            </ul>
+            <span class="segment-link">Learn more →</span>
+        </div>
+    </a>
     """, unsafe_allow_html=True)
 
 # How It Works
