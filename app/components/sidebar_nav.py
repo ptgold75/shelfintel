@@ -130,39 +130,41 @@ def render_sidebar_nav():
             # Main Dashboard
             st.page_link("Home.py", label="Home", icon="🏠")
 
+            # RETAIL Section
+            with st.expander("Retail", expanded=False):
+                st.page_link("pages/20_Retail_Intelligence.py", label="Dashboard")
+                st.page_link("pages/6_Price_Analysis.py", label="Price Comparison")
+                st.page_link("pages/6_Competitor_Compare.py", label="Store vs Store")
+                st.page_link("pages/2_Availability.py", label="Stock Alerts")
+                st.page_link("pages/9_Product_Search.py", label="Product Search")
+                st.page_link("pages/8_County_Insights.py", label="County Insights")
+
+            # WHOLESALE Section
+            with st.expander("Wholesale", expanded=False):
+                st.page_link("pages/30_Grower_Intelligence.py", label="Dashboard")
+                st.page_link("pages/8_County_Insights.py", label="Territory Analysis")
+                st.page_link("pages/2_Availability.py", label="Restock Alerts")
+                st.page_link("pages/9_Product_Search.py", label="Product Lookup")
+
             # BRANDS Section
-            st.markdown('<p class="nav-section-header">Brands</p>', unsafe_allow_html=True)
-            st.page_link("pages/10_Brand_Intelligence.py", label="Brand Dashboard", icon="📊")
-            st.page_link("pages/15_Market_Share.py", label="Market Position", icon="📈")
-            st.page_link("pages/16_Brand_Heatmap.py", label="Coverage Heat Map", icon="🗺️")
-            st.page_link("pages/11_Brand_Assets.py", label="Image Consistency", icon="🖼️")
-            st.page_link("pages/14_Brand_Integrity.py", label="Naming Standards", icon="✓")
-
-            # RETAILERS Section
-            st.markdown('<p class="nav-section-header">Retailers</p>', unsafe_allow_html=True)
-            st.page_link("pages/20_Retail_Intelligence.py", label="Retail Dashboard", icon="🏪")
-            st.page_link("pages/6_Price_Analysis.py", label="Price Comparison", icon="💰")
-            st.page_link("pages/6_Competitor_Compare.py", label="Store vs Store", icon="⚔️")
-            st.page_link("pages/2_Availability.py", label="Stock Alerts", icon="📦")
-            st.page_link("pages/9_Product_Search.py", label="Product Search", icon="🔍")
-
-            # WHOLESALERS Section
-            st.markdown('<p class="nav-section-header">Wholesalers</p>', unsafe_allow_html=True)
-            st.page_link("pages/30_Grower_Intelligence.py", label="Market Trends", icon="🌿")
-            st.page_link("pages/8_County_Insights.py", label="Territory Analysis", icon="🗺️")
-            st.page_link("pages/2_Availability.py", label="Restock Alerts", icon="📦")
+            with st.expander("Brands", expanded=False):
+                st.page_link("pages/10_Brand_Intelligence.py", label="Dashboard")
+                st.page_link("pages/15_Market_Share.py", label="Market Position")
+                st.page_link("pages/16_Brand_Heatmap.py", label="Coverage Heat Map")
+                st.page_link("pages/11_Brand_Assets.py", label="Image Consistency")
+                st.page_link("pages/14_Brand_Integrity.py", label="Naming Standards")
 
             # INVESTORS Section
-            st.markdown('<p class="nav-section-header">Investors</p>', unsafe_allow_html=True)
-            st.page_link("pages/40_Investor_Intelligence.py", label="Public Companies", icon="💹")
-            st.page_link("pages/15_Market_Share.py", label="Market Analysis", icon="📈")
+            with st.expander("Investors", expanded=False):
+                st.page_link("pages/40_Investor_Intelligence.py", label="Dashboard")
+                st.page_link("pages/15_Market_Share.py", label="Market Analysis")
 
             # Admin section
             if admin:
-                st.markdown('<p class="nav-section-header">Admin</p>', unsafe_allow_html=True)
-                st.page_link("pages/90_Admin_Clients.py", label="Manage Clients", icon="👥")
-                st.page_link("pages/97_Admin_Naming.py", label="Naming Rules", icon="📝")
-                st.page_link("pages/98_Admin_Dispensaries.py", label="Dispensaries", icon="🏬")
+                with st.expander("Admin", expanded=False):
+                    st.page_link("pages/90_Admin_Clients.py", label="Manage Clients")
+                    st.page_link("pages/97_Admin_Naming.py", label="Naming Rules")
+                    st.page_link("pages/98_Admin_Dispensaries.py", label="Dispensaries")
 
             st.divider()
             st.page_link("pages/93_Alert_Settings.py", label="Alert Settings", icon="🔔")
@@ -173,19 +175,23 @@ def render_sidebar_nav():
 
             st.page_link("Home.py", label="Home", icon="🏠")
 
-            st.markdown('<p class="nav-section-header">Brands</p>', unsafe_allow_html=True)
-            st.page_link("pages/10_Brand_Intelligence.py", label="Brand Dashboard", icon="📊")
-            st.page_link("pages/16_Brand_Heatmap.py", label="Coverage Heat Map", icon="🗺️")
+            # RETAIL Section
+            with st.expander("Retail", expanded=False):
+                st.page_link("pages/20_Retail_Intelligence.py", label="Dashboard")
+                st.page_link("pages/6_Price_Analysis.py", label="Price Comparison")
 
-            st.markdown('<p class="nav-section-header">Retailers</p>', unsafe_allow_html=True)
-            st.page_link("pages/20_Retail_Intelligence.py", label="Retail Dashboard", icon="🏪")
-            st.page_link("pages/6_Price_Analysis.py", label="Price Comparison", icon="💰")
+            # WHOLESALE Section
+            with st.expander("Wholesale", expanded=False):
+                st.page_link("pages/30_Grower_Intelligence.py", label="Dashboard")
 
-            st.markdown('<p class="nav-section-header">Wholesalers</p>', unsafe_allow_html=True)
-            st.page_link("pages/30_Grower_Intelligence.py", label="Market Trends", icon="🌿")
+            # BRANDS Section
+            with st.expander("Brands", expanded=False):
+                st.page_link("pages/10_Brand_Intelligence.py", label="Dashboard")
+                st.page_link("pages/16_Brand_Heatmap.py", label="Coverage Heat Map")
 
-            st.markdown('<p class="nav-section-header">Investors</p>', unsafe_allow_html=True)
-            st.page_link("pages/40_Investor_Intelligence.py", label="Public Companies", icon="💹")
+            # INVESTORS Section
+            with st.expander("Investors", expanded=False):
+                st.page_link("pages/40_Investor_Intelligence.py", label="Dashboard")
 
             st.divider()
 

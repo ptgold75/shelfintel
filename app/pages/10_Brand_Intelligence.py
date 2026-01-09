@@ -752,7 +752,17 @@ if selected_brand:
                 hole=0.4,
                 color_discrete_sequence=px.colors.qualitative.Set2
             )
-            fig.update_layout(height=280, margin=dict(t=20, b=20, l=20, r=20))
+            fig.update_layout(
+                height=280,
+                margin=dict(t=20, b=20, l=100, r=20),
+                legend=dict(
+                    orientation="v",
+                    yanchor="middle",
+                    y=0.5,
+                    xanchor="right",
+                    x=-0.1
+                )
+            )
             st.plotly_chart(fig, use_container_width=True)
         else:
             st.info("No category data available")
