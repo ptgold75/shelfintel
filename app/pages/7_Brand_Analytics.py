@@ -13,10 +13,10 @@ from sqlalchemy import text
 from core.db import get_engine
 from core.category_utils import get_normalized_category_sql
 
-st.set_page_config(page_title="Brand Analytics | CannLinx", page_icon=None, layout="wide", initial_sidebar_state="collapsed")
+st.set_page_config(page_title="Brand Analytics | CannLinx", page_icon=None, layout="wide", initial_sidebar_state="expanded")
 
 # Import and render navigation
-from components.nav import render_nav
+from components.sidebar_nav import render_nav
 render_nav()
 
 st.title("Brand Analytics")

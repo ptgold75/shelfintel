@@ -11,16 +11,16 @@ from core.db import get_engine
 from pathlib import Path
 import re
 import json
-from components.nav import render_nav
+from components.sidebar_nav import render_nav
 
 st.set_page_config(
     page_title="CannLinx - Marketplace Intelligence",
     page_icon=None,
     layout="wide",
-    initial_sidebar_state="collapsed"
+    initial_sidebar_state="expanded"
 )
 
-# Render shared header with banner and navigation (public page - no login required)
+# Render sidebar navigation (public page - no login required)
 render_nav(require_login=False)
 
 # Import shared styles

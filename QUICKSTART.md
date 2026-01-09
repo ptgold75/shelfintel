@@ -6,11 +6,18 @@ ShelfIntel (CannLinx) is a multi-state shelf intelligence platform for the canna
 
 ## Current Coverage (January 2026)
 
-| State | Dispensaries | Products | Status |
-|-------|--------------|----------|--------|
-| MD | 96+ | 30,000+ | Primary market |
-| NJ | 15+ | 5,000+ | Active |
-| IL | 43+ | 12,000+ | Active |
+| State | Stores w/ Data | Products | Status |
+|-------|----------------|----------|--------|
+| MD | 85 | 43,500+ | Primary market |
+| IL | 45 | 32,000+ | Active |
+| NJ | 44 | 30,500+ | Active |
+| CO | 27 | 17,700+ | Active |
+| OR | 26 | 7,800+ | Active |
+| MI | 23 | 6,700+ | Active |
+| + 16 more | ~205 | ~29,000+ | Expanding |
+| **TOTAL** | **455+** | **167,000+** | Growing |
+
+**Database Totals**: 19,520 dispensaries tracked, 22 states with coverage
 
 ## Directory Structure
 
@@ -37,9 +44,12 @@ shelfintel/
 │   ├── run_scrape.py         # Main scraper orchestrator
 │   └── providers/            # Menu scraping providers
 ├── scripts/                  # Utility scripts
-│   ├── fetch_stock_prices.py # Yahoo Finance stock data
-│   ├── fetch_sec_filings.py  # SEC EDGAR parser
-│   └── import_state_dispensaries.py
+│   ├── fetch_stock_prices.py      # Yahoo Finance stock data
+│   ├── fetch_sec_filings.py       # SEC EDGAR parser
+│   ├── import_state_dispensaries.py
+│   ├── scrape_dutchie_batch_v2.py # Fast Dutchie GraphQL scraper
+│   ├── scrape_leafly_and_import.py # Leafly dispensary discovery
+│   └── scrape_leafly_menus.py     # Leafly menu scraper
 ├── .env                      # Proxy credentials (do not commit)
 ├── .streamlit/
 │   ├── config.toml           # Streamlit config
@@ -229,26 +239,38 @@ client (
 
 ## Menu Providers
 
-| Provider | Stores | Notes |
-|----------|--------|-------|
-| dutchie | ~50 | GraphQL API, Cloudflare blocks some |
-| jane | ~18 | JSON API, generally works |
-| sweed | ~8 | JSON API, gLeaf and similar |
-| weedmaps | fallback | Public API backup |
+| Provider | Stores w/ Data | Notes |
+|----------|----------------|-------|
+| Dutchie | ~200+ | GraphQL via Playwright, use `scrape_dutchie_batch_v2.py` |
+| Leafly | ~100+ | Playwright scraper, use `scrape_leafly_and_import.py` for discovery |
+| Sweed | ~50 | JSON API, gLeaf and similar |
+| Jane | ~40 | JSON API, Cloudflare blocks some |
+| Weedmaps | ~10 | API changes frequently |
 
 ---
 
 ## Scraping Commands
 
-### Scrape by State
+### Dutchie Batch Scraper (Recommended)
 ```bash
-./venv/bin/python ingest/run_scrape.py --state MD
-./venv/bin/python ingest/run_scrape.py --state NJ
-./venv/bin/python ingest/run_scrape.py --state IL
+# Scrape specific states (fast, reliable)
+./venv/bin/python scripts/scrape_dutchie_batch_v2.py OR CA WA
+
+# Run multiple state groups in parallel for speed
+./venv/bin/python scripts/scrape_dutchie_batch_v2.py FL PA OH &
+./venv/bin/python scripts/scrape_dutchie_batch_v2.py NY MA ME CT &
+./venv/bin/python scripts/scrape_dutchie_batch_v2.py CA CO MI AZ NV &
 ```
 
-### Scrape All States
+### Leafly Dispensary Discovery
 ```bash
+# Find and import new dispensaries from Leafly
+./venv/bin/python scripts/scrape_leafly_and_import.py
+```
+
+### Legacy Scraper
+```bash
+./venv/bin/python ingest/run_scrape.py --state MD
 ./venv/bin/python ingest/run_scrape.py --all
 ```
 

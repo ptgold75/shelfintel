@@ -16,7 +16,7 @@ import numpy as np
 st.set_page_config(page_title="Investor Intelligence", page_icon=None, layout="wide")
 
 # Navigation
-from components.nav import render_nav
+from components.sidebar_nav import render_nav
 from components.auth import is_authenticated
 
 # Handle section parameter for tab navigation
@@ -46,48 +46,48 @@ if DEMO_MODE:
 
 # ==================== DEMO DATA ====================
 def get_demo_companies():
-    """Generate realistic demo company data."""
+    """Generate realistic demo company data - Q3 2025 data."""
     return pd.DataFrame([
         {"company_id": "1", "name": "Curaleaf Holdings", "ticker_us": "CURLF", "ticker_ca": "CURA",
          "exchange_us": "OTC", "exchange_ca": "CSE", "company_type": "MSO",
-         "market_cap_millions": 2850, "headquarters": "New York, NY", "website": "curaleaf.com",
+         "market_cap_millions": 1910, "headquarters": "New York, NY", "website": "curaleaf.com",
          "latest_price": 2.47, "price_date": datetime.now().date(), "latest_volume": 1250000},
         {"company_id": "2", "name": "Green Thumb Industries", "ticker_us": "GTBIF", "ticker_ca": "GTII",
          "exchange_us": "OTC", "exchange_ca": "CSE", "company_type": "MSO",
-         "market_cap_millions": 1950, "headquarters": "Chicago, IL", "website": "gtigrows.com",
-         "latest_price": 8.17, "price_date": datetime.now().date(), "latest_volume": 890000},
+         "market_cap_millions": 1850, "headquarters": "Chicago, IL", "website": "gtigrows.com",
+         "latest_price": 7.85, "price_date": datetime.now().date(), "latest_volume": 890000},
         {"company_id": "3", "name": "Trulieve Cannabis", "ticker_us": "TCNNF", "ticker_ca": "TRUL",
          "exchange_us": "OTC", "exchange_ca": "CSE", "company_type": "MSO",
-         "market_cap_millions": 1520, "headquarters": "Tallahassee, FL", "website": "trulieve.com",
-         "latest_price": 8.20, "price_date": datetime.now().date(), "latest_volume": 720000},
+         "market_cap_millions": 1500, "headquarters": "Tallahassee, FL", "website": "trulieve.com",
+         "latest_price": 8.37, "price_date": datetime.now().date(), "latest_volume": 720000},
         {"company_id": "4", "name": "Verano Holdings", "ticker_us": "VRNOF", "ticker_ca": "VRNO",
          "exchange_us": "OTC", "exchange_ca": "CSE", "company_type": "MSO",
-         "market_cap_millions": 420, "headquarters": "Chicago, IL", "website": "verano.com",
-         "latest_price": 1.21, "price_date": datetime.now().date(), "latest_volume": 650000},
+         "market_cap_millions": 474, "headquarters": "Chicago, IL", "website": "verano.com",
+         "latest_price": 1.26, "price_date": datetime.now().date(), "latest_volume": 650000},
         {"company_id": "5", "name": "Tilray Brands", "ticker_us": "TLRY", "ticker_ca": "TLRY",
          "exchange_us": "NASDAQ", "exchange_ca": "TSX", "company_type": "LP",
-         "market_cap_millions": 1680, "headquarters": "New York, NY", "website": "tilray.com",
-         "latest_price": 1.89, "price_date": datetime.now().date(), "latest_volume": 22500000},
+         "market_cap_millions": 1420, "headquarters": "New York, NY", "website": "tilray.com",
+         "latest_price": 1.52, "price_date": datetime.now().date(), "latest_volume": 22500000},
         {"company_id": "6", "name": "Canopy Growth", "ticker_us": "CGC", "ticker_ca": "WEED",
          "exchange_us": "NASDAQ", "exchange_ca": "TSX", "company_type": "LP",
-         "market_cap_millions": 580, "headquarters": "Smiths Falls, ON", "website": "canopygrowth.com",
-         "latest_price": 4.25, "price_date": datetime.now().date(), "latest_volume": 8500000},
+         "market_cap_millions": 420, "headquarters": "Smiths Falls, ON", "website": "canopygrowth.com",
+         "latest_price": 3.85, "price_date": datetime.now().date(), "latest_volume": 8500000},
         {"company_id": "7", "name": "Cresco Labs", "ticker_us": "CRLBF", "ticker_ca": "CL",
          "exchange_us": "OTC", "exchange_ca": "CSE", "company_type": "MSO",
-         "market_cap_millions": 380, "headquarters": "Chicago, IL", "website": "crescolabs.com",
-         "latest_price": 0.85, "price_date": datetime.now().date(), "latest_volume": 520000},
-        {"company_id": "8", "name": "Columbia Care", "ticker_us": "CCHWF", "ticker_ca": "CCHW",
+         "market_cap_millions": 320, "headquarters": "Chicago, IL", "website": "crescolabs.com",
+         "latest_price": 0.78, "price_date": datetime.now().date(), "latest_volume": 520000},
+        {"company_id": "8", "name": "Cannabist Company", "ticker_us": "CBSTF", "ticker_ca": "CBST",
          "exchange_us": "OTC", "exchange_ca": "CSE", "company_type": "MSO",
-         "market_cap_millions": 280, "headquarters": "New York, NY", "website": "col-care.com",
-         "latest_price": 0.52, "price_date": datetime.now().date(), "latest_volume": 380000},
+         "market_cap_millions": 28, "headquarters": "New York, NY", "website": "cannabistcompany.com",
+         "latest_price": 0.055, "price_date": datetime.now().date(), "latest_volume": 380000},
         {"company_id": "9", "name": "TerrAscend", "ticker_us": "TRSSF", "ticker_ca": "TER",
          "exchange_us": "OTC", "exchange_ca": "TSX", "company_type": "MSO",
-         "market_cap_millions": 520, "headquarters": "Mississauga, ON", "website": "terrascend.com",
-         "latest_price": 1.65, "price_date": datetime.now().date(), "latest_volume": 290000},
+         "market_cap_millions": 480, "headquarters": "Mississauga, ON", "website": "terrascend.com",
+         "latest_price": 1.55, "price_date": datetime.now().date(), "latest_volume": 290000},
         {"company_id": "10", "name": "Ayr Wellness", "ticker_us": "AYRWF", "ticker_ca": "AYR.A",
          "exchange_us": "OTC", "exchange_ca": "CSE", "company_type": "MSO",
-         "market_cap_millions": 180, "headquarters": "Miami, FL", "website": "ayrwellness.com",
-         "latest_price": 1.12, "price_date": datetime.now().date(), "latest_volume": 210000},
+         "market_cap_millions": 45, "headquarters": "Miami, FL", "website": "ayrwellness.com",
+         "latest_price": 0.38, "price_date": datetime.now().date(), "latest_volume": 210000},
     ])
 
 
@@ -96,11 +96,11 @@ def get_demo_stock_history(company_name, days=90):
     np.random.seed(hash(company_name) % 2**32)
 
     base_prices = {
-        "Curaleaf Holdings": 2.50, "Green Thumb Industries": 8.00,
-        "Trulieve Cannabis": 8.50, "Verano Holdings": 1.20,
-        "Tilray Brands": 2.00, "Canopy Growth": 4.50,
-        "Cresco Labs": 0.90, "Columbia Care": 0.55,
-        "TerrAscend": 1.70, "Ayr Wellness": 1.15
+        "Curaleaf Holdings": 2.50, "Green Thumb Industries": 7.90,
+        "Trulieve Cannabis": 8.40, "Verano Holdings": 1.25,
+        "Tilray Brands": 1.55, "Canopy Growth": 3.90,
+        "Cresco Labs": 0.80, "Cannabist Company": 0.055,
+        "TerrAscend": 1.55, "Ayr Wellness": 0.40
     }
     base_price = base_prices.get(company_name, 5.0)
 
@@ -152,23 +152,74 @@ def get_demo_financials():
 
 
 def get_demo_state_operations():
-    """Generate demo state operations data."""
+    """Generate demo state operations data - Q3 2025 store counts from latest earnings."""
     return pd.DataFrame([
-        {"name": "Curaleaf Holdings", "ticker_us": "CURLF", "state": "FL", "store_count": 58, "sku_count": 245},
-        {"name": "Curaleaf Holdings", "ticker_us": "CURLF", "state": "NY", "store_count": 12, "sku_count": 89},
-        {"name": "Curaleaf Holdings", "ticker_us": "CURLF", "state": "NJ", "store_count": 8, "sku_count": 156},
-        {"name": "Curaleaf Holdings", "ticker_us": "CURLF", "state": "MD", "store_count": 6, "sku_count": 124},
-        {"name": "Curaleaf Holdings", "ticker_us": "CURLF", "state": "AZ", "store_count": 11, "sku_count": 178},
-        {"name": "Green Thumb Industries", "ticker_us": "GTBIF", "state": "IL", "store_count": 18, "sku_count": 312},
-        {"name": "Green Thumb Industries", "ticker_us": "GTBIF", "state": "FL", "store_count": 15, "sku_count": 198},
-        {"name": "Green Thumb Industries", "ticker_us": "GTBIF", "state": "NJ", "store_count": 10, "sku_count": 167},
-        {"name": "Green Thumb Industries", "ticker_us": "GTBIF", "state": "PA", "store_count": 12, "sku_count": 145},
-        {"name": "Trulieve Cannabis", "ticker_us": "TCNNF", "state": "FL", "store_count": 132, "sku_count": 425},
-        {"name": "Trulieve Cannabis", "ticker_us": "TCNNF", "state": "PA", "store_count": 8, "sku_count": 112},
-        {"name": "Trulieve Cannabis", "ticker_us": "TCNNF", "state": "MD", "store_count": 4, "sku_count": 87},
-        {"name": "Verano Holdings", "ticker_us": "VRNOF", "state": "IL", "store_count": 14, "sku_count": 234},
-        {"name": "Verano Holdings", "ticker_us": "VRNOF", "state": "NJ", "store_count": 6, "sku_count": 145},
-        {"name": "Verano Holdings", "ticker_us": "VRNOF", "state": "FL", "store_count": 12, "sku_count": 189},
+        # Curaleaf - 151 total dispensaries
+        {"name": "Curaleaf Holdings", "ticker_us": "CURLF", "state": "FL", "store_count": 56, "sku_count": 245},
+        {"name": "Curaleaf Holdings", "ticker_us": "CURLF", "state": "NY", "store_count": 14, "sku_count": 89},
+        {"name": "Curaleaf Holdings", "ticker_us": "CURLF", "state": "NJ", "store_count": 12, "sku_count": 156},
+        {"name": "Curaleaf Holdings", "ticker_us": "CURLF", "state": "AZ", "store_count": 15, "sku_count": 178},
+        {"name": "Curaleaf Holdings", "ticker_us": "CURLF", "state": "PA", "store_count": 10, "sku_count": 124},
+        {"name": "Curaleaf Holdings", "ticker_us": "CURLF", "state": "MA", "store_count": 8, "sku_count": 112},
+        {"name": "Curaleaf Holdings", "ticker_us": "CURLF", "state": "IL", "store_count": 9, "sku_count": 145},
+        {"name": "Curaleaf Holdings", "ticker_us": "CURLF", "state": "MD", "store_count": 7, "sku_count": 98},
+        {"name": "Curaleaf Holdings", "ticker_us": "CURLF", "state": "OH", "store_count": 6, "sku_count": 87},
+        {"name": "Curaleaf Holdings", "ticker_us": "CURLF", "state": "Other", "store_count": 14, "sku_count": 165},
+        # Green Thumb Industries - 98 Rise dispensaries
+        {"name": "Green Thumb Industries", "ticker_us": "GTBIF", "state": "IL", "store_count": 16, "sku_count": 312},
+        {"name": "Green Thumb Industries", "ticker_us": "GTBIF", "state": "FL", "store_count": 14, "sku_count": 198},
+        {"name": "Green Thumb Industries", "ticker_us": "GTBIF", "state": "NJ", "store_count": 12, "sku_count": 167},
+        {"name": "Green Thumb Industries", "ticker_us": "GTBIF", "state": "PA", "store_count": 18, "sku_count": 145},
+        {"name": "Green Thumb Industries", "ticker_us": "GTBIF", "state": "OH", "store_count": 15, "sku_count": 134},
+        {"name": "Green Thumb Industries", "ticker_us": "GTBIF", "state": "MA", "store_count": 8, "sku_count": 112},
+        {"name": "Green Thumb Industries", "ticker_us": "GTBIF", "state": "Other", "store_count": 15, "sku_count": 156},
+        # Trulieve - 206 dispensaries (largest retail footprint)
+        {"name": "Trulieve Cannabis", "ticker_us": "TCNNF", "state": "FL", "store_count": 140, "sku_count": 425},
+        {"name": "Trulieve Cannabis", "ticker_us": "TCNNF", "state": "PA", "store_count": 24, "sku_count": 165},
+        {"name": "Trulieve Cannabis", "ticker_us": "TCNNF", "state": "AZ", "store_count": 12, "sku_count": 112},
+        {"name": "Trulieve Cannabis", "ticker_us": "TCNNF", "state": "MD", "store_count": 8, "sku_count": 87},
+        {"name": "Trulieve Cannabis", "ticker_us": "TCNNF", "state": "MA", "store_count": 7, "sku_count": 78},
+        {"name": "Trulieve Cannabis", "ticker_us": "TCNNF", "state": "Other", "store_count": 15, "sku_count": 134},
+        # Verano - 145 dispensaries
+        {"name": "Verano Holdings", "ticker_us": "VRNOF", "state": "IL", "store_count": 32, "sku_count": 234},
+        {"name": "Verano Holdings", "ticker_us": "VRNOF", "state": "FL", "store_count": 28, "sku_count": 189},
+        {"name": "Verano Holdings", "ticker_us": "VRNOF", "state": "NJ", "store_count": 18, "sku_count": 145},
+        {"name": "Verano Holdings", "ticker_us": "VRNOF", "state": "PA", "store_count": 14, "sku_count": 123},
+        {"name": "Verano Holdings", "ticker_us": "VRNOF", "state": "OH", "store_count": 12, "sku_count": 112},
+        {"name": "Verano Holdings", "ticker_us": "VRNOF", "state": "AZ", "store_count": 14, "sku_count": 98},
+        {"name": "Verano Holdings", "ticker_us": "VRNOF", "state": "MD", "store_count": 10, "sku_count": 87},
+        {"name": "Verano Holdings", "ticker_us": "VRNOF", "state": "Other", "store_count": 17, "sku_count": 145},
+        # Cresco Labs - 72 Sunnyside dispensaries
+        {"name": "Cresco Labs", "ticker_us": "CRLBF", "state": "IL", "store_count": 14, "sku_count": 198},
+        {"name": "Cresco Labs", "ticker_us": "CRLBF", "state": "PA", "store_count": 12, "sku_count": 156},
+        {"name": "Cresco Labs", "ticker_us": "CRLBF", "state": "FL", "store_count": 12, "sku_count": 134},
+        {"name": "Cresco Labs", "ticker_us": "CRLBF", "state": "OH", "store_count": 10, "sku_count": 112},
+        {"name": "Cresco Labs", "ticker_us": "CRLBF", "state": "MA", "store_count": 8, "sku_count": 89},
+        {"name": "Cresco Labs", "ticker_us": "CRLBF", "state": "Other", "store_count": 16, "sku_count": 123},
+        # Cannabist Company (formerly Columbia Care) - 83 dispensaries
+        {"name": "Cannabist Company", "ticker_us": "CBSTF", "state": "FL", "store_count": 22, "sku_count": 145},
+        {"name": "Cannabist Company", "ticker_us": "CBSTF", "state": "OH", "store_count": 12, "sku_count": 112},
+        {"name": "Cannabist Company", "ticker_us": "CBSTF", "state": "VA", "store_count": 10, "sku_count": 98},
+        {"name": "Cannabist Company", "ticker_us": "CBSTF", "state": "NJ", "store_count": 8, "sku_count": 87},
+        {"name": "Cannabist Company", "ticker_us": "CBSTF", "state": "PA", "store_count": 6, "sku_count": 76},
+        {"name": "Cannabist Company", "ticker_us": "CBSTF", "state": "Other", "store_count": 25, "sku_count": 134},
+        # TerrAscend - 38 dispensaries
+        {"name": "TerrAscend", "ticker_us": "TRSSF", "state": "NJ", "store_count": 12, "sku_count": 145},
+        {"name": "TerrAscend", "ticker_us": "TRSSF", "state": "PA", "store_count": 10, "sku_count": 123},
+        {"name": "TerrAscend", "ticker_us": "TRSSF", "state": "MD", "store_count": 6, "sku_count": 87},
+        {"name": "TerrAscend", "ticker_us": "TRSSF", "state": "MI", "store_count": 5, "sku_count": 78},
+        {"name": "TerrAscend", "ticker_us": "TRSSF", "state": "Other", "store_count": 5, "sku_count": 65},
+        # Ayr Wellness - 90 dispensaries
+        {"name": "Ayr Wellness", "ticker_us": "AYRWF", "state": "FL", "store_count": 28, "sku_count": 167},
+        {"name": "Ayr Wellness", "ticker_us": "AYRWF", "state": "MA", "store_count": 12, "sku_count": 134},
+        {"name": "Ayr Wellness", "ticker_us": "AYRWF", "state": "PA", "store_count": 14, "sku_count": 112},
+        {"name": "Ayr Wellness", "ticker_us": "AYRWF", "state": "NJ", "store_count": 8, "sku_count": 98},
+        {"name": "Ayr Wellness", "ticker_us": "AYRWF", "state": "OH", "store_count": 10, "sku_count": 89},
+        {"name": "Ayr Wellness", "ticker_us": "AYRWF", "state": "Other", "store_count": 18, "sku_count": 112},
+        # Tilray (primarily Canadian LP, limited US retail)
+        {"name": "Tilray Brands", "ticker_us": "TLRY", "state": "US Ops", "store_count": 12, "sku_count": 89},
+        # Canopy Growth (primarily Canadian LP, minimal US retail)
+        {"name": "Canopy Growth", "ticker_us": "CGC", "state": "US Ops", "store_count": 5, "sku_count": 45},
     ])
 
 
@@ -444,8 +495,10 @@ with tab1:
     display_df.columns = ['Company', 'US Ticker', 'CA Ticker', 'Exchange', 'Type',
                          'Price ($)', 'Market Cap ($M)', 'Volume']
 
-    # Format columns
-    display_df['Price ($)'] = display_df['Price ($)'].apply(lambda x: f"${x:.2f}" if pd.notna(x) else "-")
+    # Format columns - use 3 decimals for penny stocks
+    display_df['Price ($)'] = display_df['Price ($)'].apply(
+        lambda x: f"${x:.3f}" if pd.notna(x) and x < 0.10 else (f"${x:.2f}" if pd.notna(x) else "-")
+    )
     display_df['Market Cap ($M)'] = display_df['Market Cap ($M)'].apply(lambda x: f"${x:,.0f}" if pd.notna(x) else "-")
     display_df['Volume'] = display_df['Volume'].apply(lambda x: f"{x:,.0f}" if pd.notna(x) else "-")
 
@@ -456,10 +509,16 @@ with tab1:
     mcap_df = companies[companies['market_cap_millions'].notna()].copy()
     if not mcap_df.empty:
         mcap_df = mcap_df.sort_values('market_cap_millions', ascending=True)
+        # Format market cap labels
+        mcap_df['mcap_label'] = mcap_df['market_cap_millions'].apply(
+            lambda x: f"${x/1000:.2f}B" if x >= 1000 else f"${x:.0f}M"
+        )
         fig = px.bar(mcap_df, x='market_cap_millions', y='name',
                     color='company_type', orientation='h',
+                    text='mcap_label',
                     labels={'market_cap_millions': 'Market Cap ($M)', 'name': '', 'company_type': 'Type'},
                     color_discrete_map={'MSO': '#2ecc71', 'LP': '#3498db', 'REIT': '#9b59b6', 'Tech': '#e74c3c'})
+        fig.update_traces(textposition='outside', textfont_size=11)
         fig.update_layout(height=500, showlegend=True)
         st.plotly_chart(fig, use_container_width=True)
 

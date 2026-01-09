@@ -15,10 +15,10 @@ from core.db import get_engine
 from core.category_utils import get_normalized_category_sql
 from core.size_utils import get_normalized_size
 
-st.set_page_config(page_title="Competitor Compare | CannLinx", page_icon=None, layout="wide", initial_sidebar_state="collapsed")
+st.set_page_config(page_title="Competitor Compare | CannLinx", page_icon=None, layout="wide", initial_sidebar_state="expanded")
 
 # Import and render navigation
-from components.nav import render_nav
+from components.sidebar_nav import render_nav
 render_nav()
 
 st.title("Competitor Comparison")

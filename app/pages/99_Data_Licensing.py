@@ -14,11 +14,11 @@ st.set_page_config(
     page_title="Data Licensing | CannLinx",
     page_icon=None,
     layout="wide",
-    initial_sidebar_state="collapsed"
+    initial_sidebar_state="expanded"
 )
 
 # Import and render navigation
-from components.nav import render_nav
+from components.sidebar_nav import render_nav
 render_nav(require_login=False)
 
 st.title("Cannabis Retail Data Licensing")

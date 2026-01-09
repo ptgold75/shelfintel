@@ -4,14 +4,14 @@
 import streamlit as st
 from sqlalchemy import text
 from core.db import get_engine
-from components.nav import render_nav, get_available_states
+from components.sidebar_nav import render_nav, get_available_states
 from components.auth import hash_password, is_admin, require_admin
 
 st.set_page_config(
     page_title="Client Management - CannLinx",
     page_icon=None,
     layout="wide",
-    initial_sidebar_state="collapsed"
+    initial_sidebar_state="expanded"
 )
 
 render_nav(require_login=True)

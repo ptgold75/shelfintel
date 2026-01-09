@@ -6,7 +6,7 @@ import pandas as pd
 import re
 from collections import defaultdict
 from sqlalchemy import text
-from components.nav import render_nav
+from components.sidebar_nav import render_nav
 from core.db import get_engine
 
 st.set_page_config(page_title="Naming Review - ShelfIntel", layout="wide")

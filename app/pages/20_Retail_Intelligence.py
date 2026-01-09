@@ -7,7 +7,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 import re
 from sqlalchemy import text
-from components.nav import render_nav, get_section_from_params, render_state_filter, get_selected_state
+from components.sidebar_nav import render_nav, get_section_from_params, render_state_filter, get_selected_state
 from components.auth import is_authenticated
 from core.db import get_engine
 

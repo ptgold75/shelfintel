@@ -5,7 +5,7 @@ import streamlit as st
 import pandas as pd
 import re
 from sqlalchemy import text
-from components.nav import render_nav
+from components.sidebar_nav import render_nav
 from core.db import get_engine
 
 st.set_page_config(page_title="Product Deduplication - ShelfIntel", layout="wide")

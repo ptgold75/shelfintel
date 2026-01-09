@@ -20,11 +20,11 @@ st.set_page_config(
     page_title="Smoke Shop Intelligence | CannLinx",
     page_icon=None,
     layout="wide",
-    initial_sidebar_state="collapsed"
+    initial_sidebar_state="expanded"
 )
 
 # Import and render navigation
-from components.nav import render_nav
+from components.sidebar_nav import render_nav
 render_nav()
 
 st.title("Smoke Shop / Gray Market Intelligence")

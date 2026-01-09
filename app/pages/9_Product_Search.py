@@ -12,10 +12,10 @@ from sqlalchemy import text
 from core.db import get_engine
 from core.category_utils import get_normalized_category_sql
 
-st.set_page_config(page_title="Product Search | CannLinx", page_icon=None, layout="wide", initial_sidebar_state="collapsed")
+st.set_page_config(page_title="Product Search | CannLinx", page_icon=None, layout="wide", initial_sidebar_state="expanded")
 
 # Import and render navigation
-from components.nav import render_nav, get_section_from_params, render_state_filter, get_selected_state
+from components.sidebar_nav import render_nav, get_section_from_params, render_state_filter, get_selected_state
 render_nav()
 
 # Handle section parameter for tab navigation

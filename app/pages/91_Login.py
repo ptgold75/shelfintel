@@ -2,14 +2,14 @@
 """Login page."""
 
 import streamlit as st
-from components.nav import render_nav
+from components.sidebar_nav import render_nav
 from components.auth import login, is_authenticated, init_session_state
 
 st.set_page_config(
     page_title="Login - CannLinx",
     page_icon=None,
     layout="wide",
-    initial_sidebar_state="collapsed"
+    initial_sidebar_state="expanded"
 )
 
 init_session_state()

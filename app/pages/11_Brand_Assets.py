@@ -4,7 +4,7 @@
 import streamlit as st
 import pandas as pd
 from sqlalchemy import text
-from components.nav import render_nav
+from components.sidebar_nav import render_nav
 from core.db import get_engine
 from collections import defaultdict
 

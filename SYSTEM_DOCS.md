@@ -23,12 +23,24 @@ Open http://localhost:8501
 
 ### Multi-State Operations
 
-| State | Dispensaries | Products | Status |
-|-------|--------------|----------|--------|
-| MD | 96+ | 30,000+ | Primary market |
-| NJ | 15+ | 5,000+ | Active expansion |
-| IL | 43+ | 12,000+ | Active expansion |
-| **TOTAL** | 150+ | 47,000+ | Growing |
+| State | Stores w/ Data | Products | Status |
+|-------|----------------|----------|--------|
+| MD | 85 | 43,500+ | Primary market |
+| IL | 45 | 32,000+ | Active |
+| NJ | 44 | 30,500+ | Active |
+| CO | 27 | 17,700+ | Active |
+| OR | 26 | 7,800+ | Active |
+| MI | 23 | 6,700+ | Active |
+| FL | 40 | 2,000+ | Active |
+| NY | 10 | 2,100+ | Active |
+| + 14 more states | ~155 | ~25,000+ | Expanding |
+| **TOTAL** | **455+** | **167,000+** | Growing |
+
+### Total Database
+- **19,520** dispensaries tracked
+- **455** stores with active menu data
+- **167,275** products scraped
+- **22** states with coverage
 
 ### Data Fields Available
 
@@ -93,9 +105,12 @@ shelfintel/
 │       ├── jane_provider.py     # iHeartJane API
 │       └── sweed_provider.py    # Sweed API
 ├── scripts/
-│   ├── fetch_stock_prices.py    # Yahoo Finance stock prices
-│   ├── fetch_sec_filings.py     # SEC EDGAR financial parser
-│   └── import_state_dispensaries.py  # State data imports
+│   ├── fetch_stock_prices.py        # Yahoo Finance stock prices
+│   ├── fetch_sec_filings.py         # SEC EDGAR financial parser
+│   ├── import_state_dispensaries.py # State data imports
+│   ├── scrape_dutchie_batch_v2.py   # Dutchie GraphQL scraper (fast)
+│   ├── scrape_leafly_and_import.py  # Leafly dispensary discovery
+│   └── scrape_leafly_menus.py       # Leafly menu scraper
 └── venv/                        # Python 3.9 virtual environment
 ```
 
@@ -347,27 +362,39 @@ Credentials in: `app/.streamlit/secrets.toml`
 
 ## Menu Provider Types
 
-| Provider | API Type | Count | Notes |
-|----------|----------|-------|-------|
-| Sweed | REST API | ~1,400 | Most common, needs store_id |
-| Dutchie | GraphQL | ~1,200 | Needs retailer_id, Cloudflare issues |
-| Leafly | HTML/API | ~900 | Scraping supported |
-| Jane | REST API | ~430 | Needs store_id, Cloudflare issues |
-| Weedmaps | REST API | ~300 | Fallback scraper |
+| Provider | API Type | Stores with Data | Notes |
+|----------|----------|------------------|-------|
+| Dutchie | GraphQL | ~200+ | Use `scrape_dutchie_batch_v2.py` |
+| Leafly | Playwright | ~100+ | Use `scrape_leafly_and_import.py` for discovery |
+| Sweed | REST API | ~50 | Needs store_id from API |
+| Jane | REST API | ~40 | Needs store_id, Cloudflare issues |
+| Weedmaps | REST API | ~10 | API changes frequently |
 
 ---
 
 ## Running Scrapers
 
-### Scrape by State
+### Dutchie Batch Scraper (Recommended)
+```bash
+# Scrape specific states (fast, reliable)
+./venv/bin/python scripts/scrape_dutchie_batch_v2.py OR CA WA
+
+# Run multiple state groups in parallel
+./venv/bin/python scripts/scrape_dutchie_batch_v2.py FL PA OH &
+./venv/bin/python scripts/scrape_dutchie_batch_v2.py NY MA ME CT &
+./venv/bin/python scripts/scrape_dutchie_batch_v2.py CA CO MI AZ NV &
+```
+
+### Leafly Dispensary Discovery
+```bash
+# Find and import new dispensaries from Leafly
+./venv/bin/python scripts/scrape_leafly_and_import.py
+```
+
+### Legacy Scraper (ingest/run_scrape.py)
 ```bash
 ./venv/bin/python ingest/run_scrape.py --state NJ
 ./venv/bin/python ingest/run_scrape.py --state IL
-./venv/bin/python ingest/run_scrape.py --state MD
-```
-
-### Scrape All States
-```bash
 ./venv/bin/python ingest/run_scrape.py --all
 ```
 
