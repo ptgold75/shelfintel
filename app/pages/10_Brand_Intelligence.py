@@ -3,6 +3,8 @@
 
 import streamlit as st
 import pandas as pd
+import plotly.express as px
+import plotly.graph_objects as go
 import re
 from collections import defaultdict
 from sqlalchemy import text
@@ -456,6 +458,27 @@ def get_demo_data():
             {"week": "Week 2", "stores": 44},
             {"week": "Week 3", "stores": 43},
             {"week": "Week 4", "stores": 47}
+        ],
+        "store_trend": [
+            {"month": "Aug", "stores": 38},
+            {"month": "Sep", "stores": 41},
+            {"month": "Oct", "stores": 44},
+            {"month": "Nov", "stores": 45},
+            {"month": "Dec", "stores": 47},
+        ],
+        "top_products": [
+            {"product": "Blue Dream 3.5g", "stores": 42, "avg_price": 48.00},
+            {"product": "OG Kush 3.5g", "stores": 38, "avg_price": 52.00},
+            {"product": "Sour Diesel 3.5g", "stores": 35, "avg_price": 50.00},
+            {"product": "Wedding Cake 3.5g", "stores": 32, "avg_price": 55.00},
+            {"product": "Gelato 3.5g", "stores": 28, "avg_price": 54.00},
+        ],
+        "competitor_comparison": [
+            {"brand": "CURIO WELLNESS", "stores": 47, "skus": 128, "avg_price": 42.00},
+            {"brand": "EVERMORE", "stores": 61, "skus": 96, "avg_price": 48.00},
+            {"brand": "GRASSROOTS", "stores": 58, "skus": 85, "avg_price": 46.00},
+            {"brand": "VERANO", "stores": 55, "skus": 72, "avg_price": 50.00},
+            {"brand": "CULTA", "stores": 51, "skus": 64, "avg_price": 55.00},
         ]
     }
 
@@ -750,32 +773,94 @@ if selected_brand:
     st.markdown("---")
     st.markdown('<p class="section-header">Market Analysis</p>', unsafe_allow_html=True)
 
-    chart_col1, chart_col2, chart_col3 = st.columns(3)
+    chart_col1, chart_col2 = st.columns(2)
 
     with chart_col1:
         st.markdown("**Your Product Mix by Category**")
         if category_data:
             cat_df = pd.DataFrame(list(category_data.items()), columns=["Category", "Products"])
-            st.bar_chart(cat_df.set_index("Category"), height=250)
+            fig = px.pie(
+                cat_df,
+                values="Products",
+                names="Category",
+                hole=0.4,
+                color_discrete_sequence=px.colors.qualitative.Set2
+            )
+            fig.update_layout(height=280, margin=dict(t=20, b=20, l=20, r=20))
+            st.plotly_chart(fig, use_container_width=True)
         else:
             st.info("No category data available")
 
     with chart_col2:
+        st.markdown("**Market Share (All Brands)**")
+        if market_share:
+            share_df = pd.DataFrame(list(market_share.items()), columns=["Brand", "Share"])
+            # Highlight your brand
+            colors = ['#1e3a5f' if b == selected_brand else '#94a3b8' for b in share_df["Brand"]]
+            fig = px.bar(
+                share_df,
+                x="Brand",
+                y="Share",
+                color="Brand",
+                color_discrete_sequence=colors
+            )
+            fig.update_layout(
+                height=280,
+                showlegend=False,
+                xaxis_tickangle=-45,
+                margin=dict(t=20, b=60, l=40, r=20)
+            )
+            st.plotly_chart(fig, use_container_width=True)
+        else:
+            st.info("No market share data available")
+
+    # Additional charts row
+    chart_col3, chart_col4 = st.columns(2)
+
+    with chart_col3:
         st.markdown("**Price Distribution**")
         if price_dist:
             price_df = pd.DataFrame(price_dist)
-            price_df = price_df.rename(columns={"range": "Price Range", "count": "SKUs"})
-            st.bar_chart(price_df.set_index("Price Range"), height=250)
+            fig = px.bar(
+                price_df,
+                x="range",
+                y="count",
+                color="count",
+                color_continuous_scale="Blues",
+                labels={"range": "Price Range", "count": "SKUs"}
+            )
+            fig.update_layout(height=280, showlegend=False, margin=dict(t=20, b=40, l=40, r=20))
+            st.plotly_chart(fig, use_container_width=True)
         else:
             st.info("No pricing data available")
 
-    with chart_col3:
-        st.markdown("**Market Share (All Brands)**")
-        if market_share:
-            share_df = pd.DataFrame(list(market_share.items()), columns=["Brand", "Share %"])
-            st.bar_chart(share_df.set_index("Brand"), height=250)
+    with chart_col4:
+        # Store trend chart (demo mode only shows this nicely)
+        if DEMO_MODE:
+            st.markdown("**Store Distribution Trend**")
+            trend_df = pd.DataFrame(demo_data.get("store_trend", []))
+            if not trend_df.empty:
+                fig = go.Figure()
+                fig.add_trace(go.Scatter(
+                    x=trend_df["month"],
+                    y=trend_df["stores"],
+                    mode='lines+markers',
+                    line=dict(color='#1e3a5f', width=3),
+                    marker=dict(size=10),
+                    fill='tozeroy',
+                    fillcolor='rgba(30, 58, 95, 0.1)'
+                ))
+                fig.update_layout(
+                    height=280,
+                    margin=dict(t=20, b=40, l=40, r=20),
+                    xaxis_title="",
+                    yaxis_title="Stores"
+                )
+                st.plotly_chart(fig, use_container_width=True)
         else:
-            st.info("No market share data available")
+            st.markdown("**Top Products by Distribution**")
+            # For real mode, could add top products query here
+            st.info("Login for product-level analytics")
 
     # Price Positioning
     if price_comparison:
@@ -899,6 +984,23 @@ if selected_brand:
                 df = pd.DataFrame(gaps, columns=["Store", "City", "County"])
                 st.dataframe(df, use_container_width=True, hide_index=True, height=350)
 
+        # Top products chart (demo mode)
+        if DEMO_MODE and demo_data.get("top_products"):
+            st.markdown("---")
+            st.markdown("**Top Products by Store Distribution**")
+            top_prods = pd.DataFrame(demo_data["top_products"])
+            fig = px.bar(
+                top_prods.sort_values("stores", ascending=True),
+                x="stores",
+                y="product",
+                orientation='h',
+                color="avg_price",
+                color_continuous_scale="Greens",
+                labels={"stores": "Stores Carrying", "product": "", "avg_price": "Avg Price"}
+            )
+            fig.update_layout(height=280, margin=dict(t=10, b=40, l=10, r=20))
+            st.plotly_chart(fig, use_container_width=True)
+
     with tab3:
         st.markdown('<p class="section-header">Coverage by County</p>', unsafe_allow_html=True)
         st.markdown('<p class="chart-description">Shows what percentage of stores in each county carry your products. Low percentages indicate expansion opportunities.</p>', unsafe_allow_html=True)
@@ -927,9 +1029,18 @@ if selected_brand:
 
             with col2:
                 st.markdown("**Coverage by County** - Higher % = better penetration")
-                # Create horizontal bar chart data
-                chart_df = df[["County", "Coverage %"]].set_index("County").head(15)
-                st.bar_chart(chart_df, horizontal=True, height=350)
+                # Create horizontal bar chart with Plotly
+                chart_df = df.head(15).copy()
+                fig = px.bar(
+                    chart_df.sort_values("Coverage %", ascending=True),
+                    x="Coverage %",
+                    y="County",
+                    orientation='h',
+                    color="Coverage %",
+                    color_continuous_scale=["#dc3545", "#ffc107", "#28a745"]
+                )
+                fig.update_layout(height=350, showlegend=False, margin=dict(t=10, b=40, l=10, r=20))
+                st.plotly_chart(fig, use_container_width=True)
 
     with tab4:
         st.markdown('<p class="section-header">Competitor Deep-Dive</p>', unsafe_allow_html=True)
@@ -948,8 +1059,18 @@ if selected_brand:
 
             with col1:
                 st.markdown("**Distribution Reach Comparison**")
-                chart_data = comp_df.set_index("Brand")[["Stores"]]
-                st.bar_chart(chart_data, height=300, horizontal=True)
+                # Color your brand differently
+                colors = ['#1e3a5f' if t == "You" else '#94a3b8' for t in comp_df["Type"]]
+                fig = px.bar(
+                    comp_df.sort_values("Stores", ascending=True),
+                    x="Stores",
+                    y="Brand",
+                    orientation='h',
+                    color="Type",
+                    color_discrete_map={"You": "#1e3a5f", "Competitor": "#94a3b8"}
+                )
+                fig.update_layout(height=300, showlegend=False, margin=dict(t=10, b=40, l=10, r=20))
+                st.plotly_chart(fig, use_container_width=True)
 
             with col2:
                 st.markdown("**Your Position**")
