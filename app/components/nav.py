@@ -92,19 +92,20 @@ def render_header():
     .block-container {padding-top: 0.5rem; padding-bottom: 1rem; max-width: 1200px;}
     header {visibility: hidden;}
 
-    /* Navigation container */
+    /* Navigation container - brighter blue */
     .nav-container {
         display: flex;
         justify-content: center;
         align-items: center;
         gap: 0;
         padding: 0;
-        background: #1e3a5f;
-        margin: 0 auto 1rem auto;
+        background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+        margin: 0 auto 1.5rem auto;
         max-width: 1200px;
-        border-radius: 4px;
+        border-radius: 8px;
         position: relative;
         z-index: 1000;
+        box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.25);
     }
 
     /* Dropdown wrapper */
@@ -117,7 +118,7 @@ def render_header():
     .nav-link {
         color: white !important;
         text-decoration: none !important;
-        padding: 0.75rem 1.1rem;
+        padding: 0.85rem 1.25rem;
         font-size: 0.9rem;
         font-weight: 500;
         display: block;
@@ -126,7 +127,7 @@ def render_header():
         cursor: pointer;
     }
     .nav-link:hover {
-        background: rgba(255,255,255,0.15);
+        background: rgba(255,255,255,0.2);
         text-decoration: none !important;
     }
     .nav-link:visited {color: white !important;}
@@ -135,7 +136,7 @@ def render_header():
     .nav-link.has-dropdown::after {
         content: " ▾";
         font-size: 0.7rem;
-        opacity: 0.7;
+        opacity: 0.8;
     }
 
     /* Dropdown content */
@@ -144,9 +145,9 @@ def render_header():
         position: absolute;
         background: white;
         min-width: 220px;
-        box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
         z-index: 1001;
-        border-radius: 0 0 6px 6px;
+        border-radius: 0 0 8px 8px;
         overflow: hidden;
         left: 0;
         top: 100%;
@@ -157,18 +158,18 @@ def render_header():
 
     /* Dropdown items */
     .dropdown-content a {
-        color: #1e3a5f !important;
-        padding: 0.7rem 1rem;
+        color: #1e293b !important;
+        padding: 0.75rem 1.25rem;
         text-decoration: none !important;
         display: block;
-        font-size: 0.85rem;
-        border-bottom: 1px solid #eee;
-        transition: background 0.15s;
+        font-size: 0.875rem;
+        border-bottom: 1px solid #f1f5f9;
+        transition: all 0.15s;
     }
     .dropdown-content a:last-child {border-bottom: none;}
     .dropdown-content a:hover {
-        background: #f0f4f8;
-        color: #1e3a5f !important;
+        background: #eff6ff;
+        color: #2563eb !important;
     }
 
     /* Nav divider */

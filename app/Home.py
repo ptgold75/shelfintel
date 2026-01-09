@@ -23,113 +23,118 @@ st.set_page_config(
 # Render shared header with banner and navigation (public page - no login required)
 render_nav(require_login=False)
 
-# Page-specific styling
-st.markdown("""
+# Import shared styles
+from components.styles import COLORS
+
+# Page-specific styling with brighter blues
+st.markdown(f"""
 <style>
     /* Stats bar */
-    .stats-bar {
+    .stats-bar {{
         display: flex;
         justify-content: center;
         gap: 3rem;
-        padding: 1rem;
-        background: #f8f9fa;
-        border-radius: 8px;
+        padding: 1.25rem;
+        background: {COLORS['bg_highlight']};
+        border: 1px solid {COLORS['border']};
+        border-radius: 12px;
         margin-bottom: 2rem;
-    }
-    .stat-item {text-align: center;}
-    .stat-value {font-size: 1.8rem; font-weight: 700; color: #1e3a5f; margin: 0;}
-    .stat-label {font-size: 0.75rem; color: #6c757d; text-transform: uppercase; margin: 0;}
+    }}
+    .stat-item {{text-align: center;}}
+    .stat-value {{font-size: 2rem; font-weight: 700; color: {COLORS['primary']}; margin: 0;}}
+    .stat-label {{font-size: 0.75rem; color: {COLORS['text_muted']}; text-transform: uppercase; margin: 0; letter-spacing: 0.5px;}}
 
     /* Segment cards - clickable */
-    .segment-card-link {
+    .segment-card-link {{
         display: block;
         text-decoration: none !important;
         height: 100%;
         color: inherit;
-    }
-    .segment-card-link:hover {
+    }}
+    .segment-card-link:hover {{
         text-decoration: none !important;
-    }
-    .segment-card-link * {
+    }}
+    .segment-card-link * {{
         text-decoration: none !important;
-    }
-    .segment-card {
+    }}
+    .segment-card {{
         background: white;
-        border: 1px solid #e9ecef;
-        border-radius: 8px;
+        border: 1px solid {COLORS['border']};
+        border-radius: 12px;
         padding: 1.5rem;
         height: 100%;
-        transition: box-shadow 0.2s, border-color 0.2s, transform 0.2s;
+        transition: all 0.2s ease;
         cursor: pointer;
-    }
-    .segment-card:hover {
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        border-color: #1e3a5f;
-        transform: translateY(-2px);
-    }
-    .segment-card h3 {
-        color: #1e3a5f;
-        font-size: 1.2rem;
+    }}
+    .segment-card:hover {{
+        box-shadow: 0 8px 25px rgba(37, 99, 235, 0.15);
+        border-color: {COLORS['primary']};
+        transform: translateY(-3px);
+    }}
+    .segment-card h3 {{
+        color: {COLORS['primary']};
+        font-size: 1.15rem;
         margin: 0 0 0.75rem 0;
         font-weight: 600;
-    }
-    .segment-card p {
-        color: #495057;
+    }}
+    .segment-card p {{
+        color: {COLORS['text_secondary']};
         font-size: 0.9rem;
         margin: 0 0 1rem 0;
         line-height: 1.5;
-    }
-    .segment-card ul {
+    }}
+    .segment-card ul {{
         margin: 0;
         padding-left: 1.2rem;
-        color: #6c757d;
+        color: {COLORS['text_muted']};
         font-size: 0.85rem;
-    }
-    .segment-card li {margin-bottom: 0.3rem;}
-    .segment-link {
+    }}
+    .segment-card li {{margin-bottom: 0.35rem;}}
+    .segment-link {{
         display: inline-block;
         margin-top: 1rem;
-        color: #1e3a5f;
-        font-weight: 500;
+        color: {COLORS['primary']};
+        font-weight: 600;
         text-decoration: none !important;
         font-size: 0.9rem;
-    }
+    }}
 
     /* Section headers */
-    .section-title {
+    .section-title {{
         font-size: 1.5rem;
         font-weight: 600;
-        color: #1e3a5f;
+        color: {COLORS['primary']};
         margin: 2rem 0 1rem 0;
         text-align: center;
-    }
+    }}
 
     /* Tagline */
-    .tagline {
-        font-size: 1.1rem;
-        color: #495057;
+    .tagline {{
+        font-size: 1.15rem;
+        color: {COLORS['text_secondary']};
         text-align: center;
         margin-bottom: 1.5rem;
-    }
+    }}
 
     /* How it works */
-    .how-step {
+    .how-step {{
         text-align: center;
         padding: 1rem;
-    }
-    .how-step-num {
+    }}
+    .how-step-num {{
         display: inline-block;
-        width: 32px;
-        height: 32px;
-        background: #1e3a5f;
+        width: 36px;
+        height: 36px;
+        background: linear-gradient(135deg, {COLORS['primary']} 0%, {COLORS['primary_dark']} 100%);
         color: white;
         border-radius: 50%;
-        line-height: 32px;
+        line-height: 36px;
         font-weight: 600;
         margin-bottom: 0.5rem;
-    }
-    .how-step-title {font-weight: 600; color: #1e3a5f; margin-bottom: 0.25rem;}
-    .how-step-desc {font-size: 0.85rem; color: #6c757d;}
+        box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+    }}
+    .how-step-title {{font-weight: 600; color: {COLORS['text_primary']}; margin-bottom: 0.25rem;}}
+    .how-step-desc {{font-size: 0.85rem; color: {COLORS['text_muted']};}}
 </style>
 """, unsafe_allow_html=True)
 

@@ -32,65 +32,31 @@ if section and section in TAB_MAP:
     </script>
     """, unsafe_allow_html=True)
 
-# Custom CSS for premium layout
-st.markdown("""
+# Import shared styles
+from components.styles import get_page_styles, COLORS
+
+# Custom CSS - using design system
+st.markdown(get_page_styles(), unsafe_allow_html=True)
+st.markdown(f"""
 <style>
-    .metric-card {
-        background: linear-gradient(135deg, #1e3a5f 0%, #2d5a87 100%);
-        border-radius: 8px;
-        padding: 1rem 1.25rem;
-        color: white;
-        text-align: center;
-    }
-    .metric-card .value {font-size: 1.8rem; font-weight: 700; margin: 0;}
-    .metric-card .label {font-size: 0.75rem; opacity: 0.9; margin: 0; text-transform: uppercase;}
-    .metric-card .subtext {font-size: 0.7rem; opacity: 0.7; margin-top: 0.25rem;}
-
-    .insight-card {
-        background: #fff;
-        border: 1px solid #e9ecef;
-        border-left: 4px solid #dc3545;
-        border-radius: 4px;
-        padding: 1rem;
-        margin-bottom: 0.75rem;
-    }
-    .insight-card.opportunity {border-left-color: #28a745;}
-    .insight-card.warning {border-left-color: #ffc107;}
-    .insight-card h4 {margin: 0 0 0.5rem 0; font-size: 1rem; color: #1e3a5f;}
-    .insight-card p {margin: 0; font-size: 0.85rem; color: #6c757d;}
-
-    .section-header {
-        font-size: 1.1rem;
-        font-weight: 600;
-        color: #1e3a5f;
-        margin: 1.5rem 0 0.75rem 0;
-        padding-bottom: 0.5rem;
-        border-bottom: 2px solid #e9ecef;
-    }
-
-    .chart-description {
-        font-size: 0.8rem;
-        color: #6c757d;
-        font-style: italic;
-        margin-bottom: 0.5rem;
-    }
-
-    .competitive-highlight {
-        background: #f8f9fa;
-        border-radius: 8px;
-        padding: 1rem;
+    /* Competitive highlight box */
+    .competitive-highlight {{
+        background: {COLORS['bg_highlight']};
+        border: 1px solid {COLORS['border']};
+        border-radius: 12px;
+        padding: 1.25rem;
         margin: 1rem 0;
-    }
-    .competitive-highlight .big-number {
+    }}
+    .competitive-highlight .big-number {{
         font-size: 2.5rem;
         font-weight: 700;
-        color: #1e3a5f;
-    }
-    .competitive-highlight .vs-number {
+        color: {COLORS['primary']};
+    }}
+    .competitive-highlight .vs-number {{
         font-size: 1.5rem;
         font-weight: 600;
-        color: #6c757d;
-    }
+        color: {COLORS['text_secondary']};
+    }}
 </style>
 """, unsafe_allow_html=True)
 
@@ -723,16 +689,16 @@ if selected_brand:
             if gap > 0:
                 st.markdown(f"""
                 <div class="competitive-highlight">
-                    <p style="margin:0; color:#6c757d; font-size:0.85rem;">COMPETITIVE GAP ANALYSIS</p>
+                    <p style="margin:0; color:{COLORS['text_muted']}; font-size:0.8rem; text-transform:uppercase; letter-spacing:0.5px;">Competitive Gap Analysis</p>
                     <p style="margin:0.5rem 0;">
                         <span class="big-number">{metrics['stores_carrying']}</span>
-                        <span style="color:#6c757d; font-size:1rem;"> stores carry your products</span>
+                        <span style="color:{COLORS['text_secondary']}; font-size:1rem;"> stores carry your products</span>
                     </p>
                     <p style="margin:0;">
                         <span class="vs-number">{competitive['avg_competitor_coverage']:.0f}</span>
-                        <span style="color:#6c757d;"> avg stores for competitors in your categories</span>
+                        <span style="color:{COLORS['text_secondary']};"> avg stores for competitors in your categories</span>
                     </p>
-                    <p style="margin-top:0.75rem; color:#dc3545; font-weight:600;">
+                    <p style="margin-top:0.75rem; color:{COLORS['danger']}; font-weight:600;">
                         You're missing ~{gap:.0f} potential stores ({gap_pct:.0f}% opportunity)
                     </p>
                 </div>
@@ -740,12 +706,12 @@ if selected_brand:
             else:
                 st.markdown(f"""
                 <div class="competitive-highlight">
-                    <p style="margin:0; color:#6c757d; font-size:0.85rem;">COMPETITIVE POSITION</p>
+                    <p style="margin:0; color:{COLORS['text_muted']}; font-size:0.8rem; text-transform:uppercase; letter-spacing:0.5px;">Competitive Position</p>
                     <p style="margin:0.5rem 0;">
                         <span class="big-number">{metrics['stores_carrying']}</span>
-                        <span style="color:#6c757d; font-size:1rem;"> stores carry your products</span>
+                        <span style="color:{COLORS['text_secondary']}; font-size:1rem;"> stores carry your products</span>
                     </p>
-                    <p style="margin-top:0.75rem; color:#28a745; font-weight:600;">
+                    <p style="margin-top:0.75rem; color:{COLORS['success']}; font-weight:600;">
                         You're ahead of the average competitor ({competitive['avg_competitor_coverage']:.0f} stores)
                     </p>
                 </div>

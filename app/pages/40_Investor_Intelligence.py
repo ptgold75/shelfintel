@@ -26,6 +26,10 @@ def get_section_from_params():
 
 render_nav(require_login=False)
 
+# Import and apply shared styles
+from components.styles import get_page_styles, COLORS
+st.markdown(get_page_styles(), unsafe_allow_html=True)
+
 # Check if user is authenticated for real data vs demo
 DEMO_MODE = not is_authenticated()
 

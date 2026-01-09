@@ -51,6 +51,10 @@ def extract_size_from_name(name: str) -> str:
 st.set_page_config(page_title="Retail Intelligence - CannLinx", layout="wide")
 render_nav(require_login=False)  # Allow demo access
 
+# Import and apply shared styles
+from components.styles import get_page_styles, COLORS
+st.markdown(get_page_styles(), unsafe_allow_html=True)
+
 # Check if user is authenticated for real data vs demo
 DEMO_MODE = not is_authenticated()
 
