@@ -11,22 +11,181 @@ sys.path.insert(0, '/Users/gleaf/shelfintel')
 
 from core.db import get_engine
 from sqlalchemy import text
+import numpy as np
 
 st.set_page_config(page_title="Investor Intelligence", page_icon=None, layout="wide")
 
 # Navigation
 from components.nav import render_nav
 from components.auth import is_authenticated
+
+# Handle section parameter for tab navigation
+def get_section_from_params():
+    params = st.query_params
+    return params.get("section", None)
+
 render_nav(require_login=False)
 
 # Check if user is authenticated for real data vs demo
 DEMO_MODE = not is_authenticated()
 
+# Section to tab mapping
+section = get_section_from_params()
+TAB_MAP = {"companies": 0, "stocks": 2, "financials": 3, "states": 1, "shelf": 4}
+
 st.title("Investor Intelligence")
 st.markdown("Track public cannabis companies, stock prices, shelf analytics, and financial metrics")
 
 if DEMO_MODE:
-    st.info("**Demo Mode** - Showing live public company data. [Login](/Login) to unlock additional features.")
+    st.info("**Demo Mode** - Explore cannabis industry investment data. [Login](/Login) for full access.")
+
+
+# ==================== DEMO DATA ====================
+def get_demo_companies():
+    """Generate realistic demo company data."""
+    return pd.DataFrame([
+        {"company_id": "1", "name": "Curaleaf Holdings", "ticker_us": "CURLF", "ticker_ca": "CURA",
+         "exchange_us": "OTC", "exchange_ca": "CSE", "company_type": "MSO",
+         "market_cap_millions": 2850, "headquarters": "New York, NY", "website": "curaleaf.com",
+         "latest_price": 2.47, "price_date": datetime.now().date(), "latest_volume": 1250000},
+        {"company_id": "2", "name": "Green Thumb Industries", "ticker_us": "GTBIF", "ticker_ca": "GTII",
+         "exchange_us": "OTC", "exchange_ca": "CSE", "company_type": "MSO",
+         "market_cap_millions": 1950, "headquarters": "Chicago, IL", "website": "gtigrows.com",
+         "latest_price": 8.17, "price_date": datetime.now().date(), "latest_volume": 890000},
+        {"company_id": "3", "name": "Trulieve Cannabis", "ticker_us": "TCNNF", "ticker_ca": "TRUL",
+         "exchange_us": "OTC", "exchange_ca": "CSE", "company_type": "MSO",
+         "market_cap_millions": 1520, "headquarters": "Tallahassee, FL", "website": "trulieve.com",
+         "latest_price": 8.20, "price_date": datetime.now().date(), "latest_volume": 720000},
+        {"company_id": "4", "name": "Verano Holdings", "ticker_us": "VRNOF", "ticker_ca": "VRNO",
+         "exchange_us": "OTC", "exchange_ca": "CSE", "company_type": "MSO",
+         "market_cap_millions": 420, "headquarters": "Chicago, IL", "website": "verano.com",
+         "latest_price": 1.21, "price_date": datetime.now().date(), "latest_volume": 650000},
+        {"company_id": "5", "name": "Tilray Brands", "ticker_us": "TLRY", "ticker_ca": "TLRY",
+         "exchange_us": "NASDAQ", "exchange_ca": "TSX", "company_type": "LP",
+         "market_cap_millions": 1680, "headquarters": "New York, NY", "website": "tilray.com",
+         "latest_price": 1.89, "price_date": datetime.now().date(), "latest_volume": 22500000},
+        {"company_id": "6", "name": "Canopy Growth", "ticker_us": "CGC", "ticker_ca": "WEED",
+         "exchange_us": "NASDAQ", "exchange_ca": "TSX", "company_type": "LP",
+         "market_cap_millions": 580, "headquarters": "Smiths Falls, ON", "website": "canopygrowth.com",
+         "latest_price": 4.25, "price_date": datetime.now().date(), "latest_volume": 8500000},
+        {"company_id": "7", "name": "Cresco Labs", "ticker_us": "CRLBF", "ticker_ca": "CL",
+         "exchange_us": "OTC", "exchange_ca": "CSE", "company_type": "MSO",
+         "market_cap_millions": 380, "headquarters": "Chicago, IL", "website": "crescolabs.com",
+         "latest_price": 0.85, "price_date": datetime.now().date(), "latest_volume": 520000},
+        {"company_id": "8", "name": "Columbia Care", "ticker_us": "CCHWF", "ticker_ca": "CCHW",
+         "exchange_us": "OTC", "exchange_ca": "CSE", "company_type": "MSO",
+         "market_cap_millions": 280, "headquarters": "New York, NY", "website": "col-care.com",
+         "latest_price": 0.52, "price_date": datetime.now().date(), "latest_volume": 380000},
+        {"company_id": "9", "name": "TerrAscend", "ticker_us": "TRSSF", "ticker_ca": "TER",
+         "exchange_us": "OTC", "exchange_ca": "TSX", "company_type": "MSO",
+         "market_cap_millions": 520, "headquarters": "Mississauga, ON", "website": "terrascend.com",
+         "latest_price": 1.65, "price_date": datetime.now().date(), "latest_volume": 290000},
+        {"company_id": "10", "name": "Ayr Wellness", "ticker_us": "AYRWF", "ticker_ca": "AYR.A",
+         "exchange_us": "OTC", "exchange_ca": "CSE", "company_type": "MSO",
+         "market_cap_millions": 180, "headquarters": "Miami, FL", "website": "ayrwellness.com",
+         "latest_price": 1.12, "price_date": datetime.now().date(), "latest_volume": 210000},
+    ])
+
+
+def get_demo_stock_history(company_name, days=90):
+    """Generate realistic stock price history."""
+    np.random.seed(hash(company_name) % 2**32)
+
+    base_prices = {
+        "Curaleaf Holdings": 2.50, "Green Thumb Industries": 8.00,
+        "Trulieve Cannabis": 8.50, "Verano Holdings": 1.20,
+        "Tilray Brands": 2.00, "Canopy Growth": 4.50,
+        "Cresco Labs": 0.90, "Columbia Care": 0.55,
+        "TerrAscend": 1.70, "Ayr Wellness": 1.15
+    }
+    base_price = base_prices.get(company_name, 5.0)
+
+    dates = pd.date_range(end=datetime.now(), periods=days, freq='D')
+    prices = [base_price]
+
+    for i in range(1, days):
+        change = np.random.normal(0, 0.03)  # 3% daily volatility
+        prices.append(max(0.10, prices[-1] * (1 + change)))
+
+    return pd.DataFrame({
+        'price_date': dates,
+        'open_price': prices,
+        'high_price': [p * (1 + abs(np.random.normal(0, 0.02))) for p in prices],
+        'low_price': [p * (1 - abs(np.random.normal(0, 0.02))) for p in prices],
+        'close_price': [p * (1 + np.random.normal(0, 0.01)) for p in prices],
+        'volume': [int(np.random.uniform(200000, 2000000)) for _ in prices]
+    })
+
+
+def get_demo_financials():
+    """Generate demo financial data."""
+    return pd.DataFrame([
+        {"name": "Curaleaf Holdings", "ticker_us": "CURLF", "fiscal_year": 2023,
+         "revenue_millions": 1340, "gross_profit_millions": 670, "net_income_millions": -85,
+         "total_assets_millions": 3200, "total_debt_millions": 850, "cash_millions": 120,
+         "market_cap_millions": 2850},
+        {"name": "Green Thumb Industries", "ticker_us": "GTBIF", "fiscal_year": 2023,
+         "revenue_millions": 1050, "gross_profit_millions": 525, "net_income_millions": 45,
+         "total_assets_millions": 2400, "total_debt_millions": 520, "cash_millions": 180,
+         "market_cap_millions": 1950},
+        {"name": "Trulieve Cannabis", "ticker_us": "TCNNF", "fiscal_year": 2023,
+         "revenue_millions": 1200, "gross_profit_millions": 720, "net_income_millions": -120,
+         "total_assets_millions": 2800, "total_debt_millions": 680, "cash_millions": 95,
+         "market_cap_millions": 1520},
+        {"name": "Tilray Brands", "ticker_us": "TLRY", "fiscal_year": 2023,
+         "revenue_millions": 627, "gross_profit_millions": 175, "net_income_millions": -1400,
+         "total_assets_millions": 4100, "total_debt_millions": 650, "cash_millions": 220,
+         "market_cap_millions": 1680},
+        {"name": "Verano Holdings", "ticker_us": "VRNOF", "fiscal_year": 2023,
+         "revenue_millions": 880, "gross_profit_millions": 440, "net_income_millions": -65,
+         "total_assets_millions": 1900, "total_debt_millions": 420, "cash_millions": 75,
+         "market_cap_millions": 420},
+        {"name": "Cresco Labs", "ticker_us": "CRLBF", "fiscal_year": 2023,
+         "revenue_millions": 780, "gross_profit_millions": 350, "net_income_millions": -210,
+         "total_assets_millions": 1600, "total_debt_millions": 380, "cash_millions": 55,
+         "market_cap_millions": 380},
+    ])
+
+
+def get_demo_state_operations():
+    """Generate demo state operations data."""
+    return pd.DataFrame([
+        {"name": "Curaleaf Holdings", "ticker_us": "CURLF", "state": "FL", "store_count": 58, "sku_count": 245},
+        {"name": "Curaleaf Holdings", "ticker_us": "CURLF", "state": "NY", "store_count": 12, "sku_count": 89},
+        {"name": "Curaleaf Holdings", "ticker_us": "CURLF", "state": "NJ", "store_count": 8, "sku_count": 156},
+        {"name": "Curaleaf Holdings", "ticker_us": "CURLF", "state": "MD", "store_count": 6, "sku_count": 124},
+        {"name": "Curaleaf Holdings", "ticker_us": "CURLF", "state": "AZ", "store_count": 11, "sku_count": 178},
+        {"name": "Green Thumb Industries", "ticker_us": "GTBIF", "state": "IL", "store_count": 18, "sku_count": 312},
+        {"name": "Green Thumb Industries", "ticker_us": "GTBIF", "state": "FL", "store_count": 15, "sku_count": 198},
+        {"name": "Green Thumb Industries", "ticker_us": "GTBIF", "state": "NJ", "store_count": 10, "sku_count": 167},
+        {"name": "Green Thumb Industries", "ticker_us": "GTBIF", "state": "PA", "store_count": 12, "sku_count": 145},
+        {"name": "Trulieve Cannabis", "ticker_us": "TCNNF", "state": "FL", "store_count": 132, "sku_count": 425},
+        {"name": "Trulieve Cannabis", "ticker_us": "TCNNF", "state": "PA", "store_count": 8, "sku_count": 112},
+        {"name": "Trulieve Cannabis", "ticker_us": "TCNNF", "state": "MD", "store_count": 4, "sku_count": 87},
+        {"name": "Verano Holdings", "ticker_us": "VRNOF", "state": "IL", "store_count": 14, "sku_count": 234},
+        {"name": "Verano Holdings", "ticker_us": "VRNOF", "state": "NJ", "store_count": 6, "sku_count": 145},
+        {"name": "Verano Holdings", "ticker_us": "VRNOF", "state": "FL", "store_count": 12, "sku_count": 189},
+    ])
+
+
+def get_demo_shelf_analytics():
+    """Generate demo shelf analytics data."""
+    return pd.DataFrame([
+        {"company": "Curaleaf Holdings", "brand": "Select", "category": "Vapes", "avg_price": 45.00,
+         "store_count": 892, "sku_count": 48, "market_share": 8.2},
+        {"company": "Curaleaf Holdings", "brand": "Curaleaf", "category": "Flower", "avg_price": 42.00,
+         "store_count": 654, "sku_count": 65, "market_share": 5.4},
+        {"company": "Green Thumb Industries", "brand": "Rhythm", "category": "Flower", "avg_price": 48.00,
+         "store_count": 1245, "sku_count": 72, "market_share": 9.8},
+        {"company": "Green Thumb Industries", "brand": "Dogwalkers", "category": "Pre-Rolls", "avg_price": 15.00,
+         "store_count": 890, "sku_count": 24, "market_share": 6.2},
+        {"company": "Trulieve Cannabis", "brand": "TruFlower", "category": "Flower", "avg_price": 38.00,
+         "store_count": 132, "sku_count": 145, "market_share": 4.1},
+        {"company": "Cresco Labs", "brand": "Cresco", "category": "Concentrates", "avg_price": 55.00,
+         "store_count": 567, "sku_count": 38, "market_share": 7.5},
+        {"company": "Verano Holdings", "brand": "Verano", "category": "Flower", "avg_price": 44.00,
+         "store_count": 423, "sku_count": 56, "market_share": 4.8},
+    ])
 
 
 @st.cache_data(ttl=300)
@@ -246,11 +405,14 @@ def load_brand_details(company_id):
         return pd.DataFrame(result.fetchall(), columns=result.keys())
 
 
-# Load data
-companies = load_companies()
+# Load data - use demo data in demo mode for consistent display
+if DEMO_MODE:
+    companies = get_demo_companies()
+else:
+    companies = load_companies()
 
 # Tabs for different views
-tab1, tab2, tab3, tab4, tab5 = st.tabs(["Overview", "State Operations", "Stock Charts", "Financials", "Company Details"])
+tab1, tab2, tab3, tab4, tab5 = st.tabs(["Overview", "State Operations", "Stock Charts", "Financials", "Shelf Analytics"])
 
 with tab1:
     st.subheader("Public Cannabis Companies")
@@ -299,9 +461,12 @@ with tab1:
 
 with tab2:
     st.subheader("State Operations")
-    st.markdown("Track which states each company operates in: retail dispensaries, cultivation, and processing")
+    st.markdown("Track which states each company operates in and their retail footprint")
 
-    state_ops = load_state_operations()
+    if DEMO_MODE:
+        state_ops = get_demo_state_operations()
+    else:
+        state_ops = load_state_operations()
 
     if not state_ops.empty:
         # Summary metrics
@@ -313,11 +478,11 @@ with tab2:
             total_states = state_ops['state'].nunique()
             st.metric("States Covered", total_states)
         with col3:
-            retail_states = state_ops[state_ops['has_retail'] == True]['state'].nunique()
-            st.metric("States with Retail", retail_states)
+            total_stores = state_ops['store_count'].sum()
+            st.metric("Total Store Locations", f"{int(total_stores):,}")
         with col4:
-            total_retail = state_ops['retail_count'].sum()
-            st.metric("Total Retail Locations", f"{total_retail:,}" if pd.notna(total_retail) else "N/A")
+            total_skus = state_ops['sku_count'].sum()
+            st.metric("Total SKUs Tracked", f"{int(total_skus):,}")
 
         # Company selector for detailed view
         st.markdown("---")
@@ -332,53 +497,55 @@ with tab2:
 
             with col1:
                 # Create state presence table
-                ops_display = company_ops[['state', 'has_retail', 'has_cultivation', 'has_processing', 'retail_count']].copy()
-                ops_display.columns = ['State', 'Retail', 'Cultivation', 'Processing', 'Store Count']
-                ops_display['Retail'] = ops_display['Retail'].apply(lambda x: 'Yes' if x else '')
-                ops_display['Cultivation'] = ops_display['Cultivation'].apply(lambda x: 'Yes' if x else '')
-                ops_display['Processing'] = ops_display['Processing'].apply(lambda x: 'Yes' if x else '')
-                ops_display['Store Count'] = ops_display['Store Count'].apply(lambda x: int(x) if pd.notna(x) else '-')
-
+                ops_display = company_ops[['state', 'store_count', 'sku_count']].copy()
+                ops_display.columns = ['State', 'Store Count', 'SKU Count']
                 st.dataframe(ops_display, use_container_width=True, hide_index=True)
+
+                # Bar chart by state
+                fig = px.bar(company_ops, x='state', y='store_count',
+                            color='sku_count', color_continuous_scale='Greens',
+                            labels={'state': 'State', 'store_count': 'Stores', 'sku_count': 'SKUs'},
+                            title=f"{selected_company} - Stores by State")
+                fig.update_layout(height=300)
+                st.plotly_chart(fig, use_container_width=True)
 
             with col2:
                 # Summary for selected company
-                retail_count = len(company_ops[company_ops['has_retail'] == True])
-                cult_count = len(company_ops[company_ops['has_cultivation'] == True])
-                proc_count = len(company_ops[company_ops['has_processing'] == True])
-                total_stores = company_ops['retail_count'].sum()
+                total_states = len(company_ops)
+                total_stores = company_ops['store_count'].sum()
+                total_skus = company_ops['sku_count'].sum()
 
                 st.markdown(f"**{selected_company}**")
-                st.metric("States with Retail", retail_count)
-                st.metric("States with Cultivation", cult_count)
-                st.metric("States with Processing", proc_count)
-                st.metric("Total Store Count", f"{int(total_stores)}" if pd.notna(total_stores) else "N/A")
+                st.metric("States Active", total_states)
+                st.metric("Total Stores", f"{int(total_stores):,}")
+                st.metric("Total SKUs", f"{int(total_skus):,}")
+                avg_stores = total_stores / total_states if total_states > 0 else 0
+                st.metric("Avg Stores/State", f"{avg_stores:.1f}")
 
         # Comparison heatmap
         st.markdown("---")
         st.markdown("### Multi-Company State Comparison")
 
-        # Create pivot table for retail presence
+        # Create pivot table for store presence
         pivot = state_ops.pivot_table(
             index='name',
             columns='state',
-            values='has_retail',
-            aggfunc='max',
-            fill_value=False
-        ).astype(int)
+            values='store_count',
+            aggfunc='sum',
+            fill_value=0
+        )
 
         if not pivot.empty:
             fig = px.imshow(
                 pivot,
-                labels=dict(x="State", y="Company", color="Retail Presence"),
-                color_continuous_scale=['#f0f0f0', '#2ecc71'],
+                labels=dict(x="State", y="Company", color="Store Count"),
+                color_continuous_scale='Greens',
                 aspect='auto'
             )
-            fig.update_layout(height=400, title="Retail Dispensary Presence by State")
+            fig.update_layout(height=400, title="Retail Presence by State (Store Count)")
             st.plotly_chart(fig, use_container_width=True)
     else:
-        # Show demo data when table doesn't exist
-        st.info("State operations data is being compiled. Sample data shown below.")
+        st.info("State operations data is being compiled.")
 
         demo_ops = pd.DataFrame({
             'Company': ['Curaleaf', 'Curaleaf', 'Curaleaf', 'GTI', 'GTI', 'GTI', 'Trulieve', 'Trulieve'],
@@ -395,11 +562,11 @@ with tab3:
 
     # Company selector
     company_options = dict(zip(companies['name'] + ' (' + companies['ticker_us'].fillna(companies['ticker_ca']) + ')',
-                               companies['company_id']))
-    selected_company = st.selectbox("Select Company", list(company_options.keys()))
+                               companies['name']))  # Use name as key for demo data compatibility
+    selected_stock_company = st.selectbox("Select Company", list(company_options.keys()), key="stock_company")
 
-    if selected_company:
-        company_id = company_options[selected_company]
+    if selected_stock_company:
+        company_name = company_options[selected_stock_company]
 
         # Time range selector
         col1, col2 = st.columns([1, 4])
@@ -407,7 +574,11 @@ with tab3:
             days = st.selectbox("Time Range", [30, 60, 90, 180, 365], index=2,
                                format_func=lambda x: f"{x} days")
 
-        prices = load_stock_prices(company_id, days)
+        if DEMO_MODE:
+            prices = get_demo_stock_history(company_name, days)
+        else:
+            company_id = companies[companies['name'] == company_name]['company_id'].iloc[0]
+            prices = load_stock_prices(company_id, days)
 
         if not prices.empty:
             # Candlestick chart
@@ -431,7 +602,7 @@ with tab3:
             ), row=2, col=1)
 
             fig.update_layout(
-                title=f"{selected_company} - Stock Price",
+                title=f"{company_name} - Stock Price",
                 yaxis_title="Price ($)",
                 yaxis2_title="Volume",
                 xaxis_rangeslider_visible=False,
@@ -464,19 +635,24 @@ with tab3:
     compare_companies = st.multiselect(
         "Select companies to compare",
         list(company_options.keys()),
-        default=list(company_options.keys())  # Default to all companies
+        default=list(company_options.keys())[:5]  # Default to first 5 companies
     )
 
     if compare_companies:
         comparison_data = []
-        for comp_name in compare_companies:
-            comp_id = company_options[comp_name]
-            prices = load_stock_prices(comp_id, 90)
-            if not prices.empty:
+        for comp_display_name in compare_companies:
+            comp_name = company_options[comp_display_name]
+            if DEMO_MODE:
+                comp_prices = get_demo_stock_history(comp_name, 90)
+            else:
+                comp_id = companies[companies['name'] == comp_name]['company_id'].iloc[0]
+                comp_prices = load_stock_prices(comp_id, 90)
+
+            if not comp_prices.empty:
                 # Normalize to 100 at start
-                prices['normalized'] = (prices['close_price'] / prices['close_price'].iloc[0]) * 100
-                prices['company'] = comp_name.split(' (')[0]  # Short name
-                comparison_data.append(prices[['price_date', 'normalized', 'company']])
+                comp_prices['normalized'] = (comp_prices['close_price'] / comp_prices['close_price'].iloc[0]) * 100
+                comp_prices['company'] = comp_display_name.split(' (')[0]  # Short name
+                comparison_data.append(comp_prices[['price_date', 'normalized', 'company']])
 
         if comparison_data:
             combined = pd.concat(comparison_data)
@@ -488,7 +664,10 @@ with tab3:
 with tab4:
     st.subheader("Financial Metrics")
 
-    financials = load_all_financials_summary()
+    if DEMO_MODE:
+        financials = get_demo_financials()
+    else:
+        financials = load_all_financials_summary()
 
     if not financials.empty and financials['revenue_millions'].notna().any():
         # Filter to companies with financial data
@@ -557,93 +736,90 @@ with tab4:
             st.dataframe(sec_df, use_container_width=True, hide_index=True)
 
 with tab5:
-    st.subheader("Company Details")
+    st.subheader("Shelf Analytics")
+    st.markdown("Track public company brand presence across retail dispensaries")
 
-    # Company selector
-    detail_company = st.selectbox("Select Company for Details", list(company_options.keys()), key="detail_select")
+    if DEMO_MODE:
+        shelf_data = get_demo_shelf_analytics()
+    else:
+        shelf_data = pd.DataFrame()  # Would come from load_shelf_analytics()
 
-    if detail_company:
-        company_id = company_options[detail_company]
-        company_data = companies[companies['company_id'] == company_id].iloc[0]
+    if not shelf_data.empty:
+        # Summary metrics
+        col1, col2, col3, col4 = st.columns(4)
+        with col1:
+            companies_tracked = shelf_data['company'].nunique()
+            st.metric("Companies Tracked", companies_tracked)
+        with col2:
+            total_brands = shelf_data['brand'].nunique()
+            st.metric("Brands Tracked", total_brands)
+        with col3:
+            total_stores = shelf_data['store_count'].sum()
+            st.metric("Total Store Presence", f"{int(total_stores):,}")
+        with col4:
+            total_skus = shelf_data['sku_count'].sum()
+            st.metric("Total SKUs", f"{int(total_skus):,}")
 
+        # Brand performance table
+        st.markdown("### Brand Performance by Company")
+        shelf_display = shelf_data.copy()
+        shelf_display['avg_price'] = shelf_display['avg_price'].apply(lambda x: f"${x:.2f}")
+        shelf_display['market_share'] = shelf_display['market_share'].apply(lambda x: f"{x:.1f}%")
+        shelf_display.columns = ['Company', 'Brand', 'Category', 'Avg Price', 'Store Count', 'SKU Count', 'Market Share']
+        st.dataframe(shelf_display, use_container_width=True, hide_index=True)
+
+        # Market share visualization
+        st.markdown("### Market Share by Brand")
+        fig = px.bar(shelf_data.sort_values('market_share', ascending=True),
+                    x='market_share', y='brand', orientation='h',
+                    color='company',
+                    labels={'market_share': 'Market Share (%)', 'brand': '', 'company': 'Company'},
+                    title="Brand Market Share")
+        fig.update_layout(height=400)
+        st.plotly_chart(fig, use_container_width=True)
+
+        # Store presence by company
+        st.markdown("### Store Presence by Company")
+        company_summary = shelf_data.groupby('company').agg({
+            'store_count': 'sum',
+            'sku_count': 'sum',
+            'brand': 'count'
+        }).reset_index()
+        company_summary.columns = ['Company', 'Total Store Presence', 'Total SKUs', 'Brand Count']
+
+        fig = px.bar(company_summary.sort_values('Total Store Presence', ascending=True),
+                    x='Total Store Presence', y='Company', orientation='h',
+                    color='Total SKUs', color_continuous_scale='Greens',
+                    title="Company Retail Footprint")
+        fig.update_layout(height=350)
+        st.plotly_chart(fig, use_container_width=True)
+
+        # Insights
+        st.markdown("### Key Insights")
         col1, col2 = st.columns(2)
 
         with col1:
-            st.markdown("### Company Info")
-            st.markdown(f"**Name:** {company_data['name']}")
-            st.markdown(f"**Type:** {company_data['company_type']}")
-            if company_data['ticker_us']:
-                st.markdown(f"**US Ticker:** {company_data['ticker_us']} ({company_data['exchange_us']})")
-            if company_data['ticker_ca']:
-                st.markdown(f"**CA Ticker:** {company_data['ticker_ca']} ({company_data['exchange_ca']})")
-            if company_data.get('headquarters'):
-                st.markdown(f"**Headquarters:** {company_data['headquarters']}")
-            if company_data['website']:
-                st.markdown(f"**Website:** [{company_data['website']}]({company_data['website']})")
+            top_brand = shelf_data.loc[shelf_data['market_share'].idxmax()]
+            st.markdown(f"""
+            <div style="background:#e8f5e9; padding:1rem; border-radius:8px; margin-bottom:1rem;">
+                <p style="margin:0 0 0.5rem 0; font-weight:600; color:#2e7d32;">Top Brand by Market Share</p>
+                <p style="margin:0; font-size:1.2rem; color:#1b5e20;"><strong>{top_brand['brand']}</strong> ({top_brand['company']})</p>
+                <p style="margin:0; font-size:0.85rem; color:#424242;">{top_brand['market_share']:.1f}% market share in {top_brand['category']}</p>
+            </div>
+            """, unsafe_allow_html=True)
 
         with col2:
-            st.markdown("### Market Data")
-            if pd.notna(company_data['latest_price']):
-                st.metric("Latest Price", f"${company_data['latest_price']:.2f}")
-            if pd.notna(company_data['market_cap_millions']):
-                st.metric("Market Cap", f"${company_data['market_cap_millions']:,.0f}M")
-            if pd.notna(company_data['latest_volume']):
-                st.metric("Latest Volume", f"{company_data['latest_volume']:,.0f}")
+            top_presence = shelf_data.loc[shelf_data['store_count'].idxmax()]
+            st.markdown(f"""
+            <div style="background:#e3f2fd; padding:1rem; border-radius:8px; margin-bottom:1rem;">
+                <p style="margin:0 0 0.5rem 0; font-weight:600; color:#1565c0;">Widest Store Presence</p>
+                <p style="margin:0; font-size:1.2rem; color:#0d47a1;"><strong>{top_presence['brand']}</strong> ({top_presence['company']})</p>
+                <p style="margin:0; font-size:0.85rem; color:#424242;">{int(top_presence['store_count']):,} stores carrying {int(top_presence['sku_count'])} SKUs</p>
+            </div>
+            """, unsafe_allow_html=True)
 
-        # Shelf analytics for this company
-        st.markdown("---")
-        st.markdown("### Shelf Analytics")
-
-        brand_details = load_brand_details(company_id)
-        if not brand_details.empty and brand_details['sku_count'].sum() > 0:
-            col1, col2, col3 = st.columns(3)
-            with col1:
-                total_skus = brand_details['sku_count'].sum()
-                st.metric("Total SKUs", f"{total_skus:,}")
-            with col2:
-                total_stores = brand_details['store_count'].max()
-                st.metric("Store Presence", f"{total_stores:,}")
-            with col3:
-                avg_price = brand_details[brand_details['avg_price'].notna()]['avg_price'].mean()
-                st.metric("Avg Price", f"${avg_price:.2f}" if pd.notna(avg_price) else "N/A")
-
-            # Brand breakdown
-            st.markdown("#### Brand Performance")
-            brand_display = brand_details[['brand_name', 'is_primary', 'sku_count', 'store_count', 'avg_price', 'category_count']].copy()
-            brand_display.columns = ['Brand', 'Primary', 'SKUs', 'Stores', 'Avg Price', 'Categories']
-            brand_display['Primary'] = brand_display['Primary'].apply(lambda x: 'Yes' if x else '')
-            brand_display['Avg Price'] = brand_display['Avg Price'].apply(lambda x: f"${x:.2f}" if pd.notna(x) else "-")
-            st.dataframe(brand_display, use_container_width=True, hide_index=True)
-        else:
-            st.info("No shelf data available for this company's brands.")
-
-        # Historical financials for this company
-        st.markdown("---")
-        st.markdown("### Financial History")
-
-        company_fin = load_financials(company_id)
-        if not company_fin.empty:
-            # Revenue trend
-            annual = company_fin[company_fin['period_type'] == 'annual'].sort_values('fiscal_year')
-            if not annual.empty and annual['revenue_millions'].notna().any():
-                fig = go.Figure()
-                fig.add_trace(go.Bar(x=annual['fiscal_year'], y=annual['revenue_millions'], name='Revenue'))
-                if annual['net_income_millions'].notna().any():
-                    fig.add_trace(go.Scatter(x=annual['fiscal_year'], y=annual['net_income_millions'],
-                                            name='Net Income', mode='lines+markers'))
-                fig.update_layout(title="Annual Revenue & Net Income",
-                                 xaxis_title="Fiscal Year", yaxis_title="$M",
-                                 height=350)
-                st.plotly_chart(fig, use_container_width=True)
-
-            # Show raw data
-            st.markdown("### Raw Financial Data")
-            st.dataframe(company_fin[['fiscal_year', 'period_type', 'revenue_millions',
-                                     'gross_profit_millions', 'net_income_millions',
-                                     'total_assets_millions', 'cash_millions']],
-                        use_container_width=True, hide_index=True)
-        else:
-            st.info("No SEC filing data available for this company. This may be a Canadian LP filing with SEDAR.")
+    else:
+        st.info("Shelf analytics data is being compiled. Check back soon for brand performance metrics.")
 
 # Footer
 st.markdown("---")

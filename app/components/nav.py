@@ -235,6 +235,17 @@ def render_header():
             <a href="/Price_Analysis?section=search" target="_self">Price Search</a>
             <a href="/Availability" target="_self">Availability Tracker</a>
         </div>
+    </div>
+    <div class="nav-dropdown">
+        <a href="/Investor_Intelligence" target="_self" class="nav-link has-dropdown">Investors</a>
+        <div class="dropdown-content">
+            <a href="/Investor_Intelligence" target="_self">Investor Dashboard</a>
+            <a href="/Investor_Intelligence?section=companies" target="_self">Public Companies</a>
+            <a href="/Investor_Intelligence?section=stocks" target="_self">Stock Performance</a>
+            <a href="/Investor_Intelligence?section=financials" target="_self">Financial Metrics</a>
+            <a href="/Investor_Intelligence?section=states" target="_self">State Operations</a>
+            <a href="/Investor_Intelligence?section=shelf" target="_self">Shelf Analytics</a>
+        </div>
     </div>'''
 
     # Add admin menu if logged in as admin
