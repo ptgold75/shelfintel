@@ -140,33 +140,28 @@ st.markdown(f"""
 
 st.markdown('<p class="tagline">Real-time shelf intelligence for the cannabis industry</p>', unsafe_allow_html=True)
 
-# Load stats from database - use fast approximate counts
+# Load stats from database - accurate counts of scraped data
 @st.cache_data(ttl=3600)  # Cache for 1 hour since stats don't change frequently
 def load_stats():
     try:
         engine = get_engine()
         with engine.connect() as conn:
-            # Use pg_class for fast approximate row counts (updated by ANALYZE)
-            products = conn.execute(text(
-                "SELECT reltuples::bigint FROM pg_class WHERE relname = 'raw_menu_item'"
-            )).scalar() or 0
+            # Get actual scraped data counts (stores with menu data)
+            result = conn.execute(text("""
+                SELECT
+                    COUNT(*) as products,
+                    COUNT(DISTINCT r.dispensary_id) as stores_with_menus,
+                    COUNT(DISTINCT r.raw_brand) FILTER (WHERE r.raw_brand IS NOT NULL) as brands,
+                    COUNT(DISTINCT d.state) as states
+                FROM raw_menu_item r
+                JOIN dispensary d ON r.dispensary_id = d.dispensary_id
+                WHERE d.is_active = true
+            """)).fetchone()
 
-            # Use pg_stats for approximate distinct count
-            brands_result = conn.execute(text("""
-                SELECT CASE WHEN n_distinct > 0 THEN n_distinct::bigint
-                            ELSE (reltuples * ABS(n_distinct))::bigint END
-                FROM pg_stats s JOIN pg_class c ON s.tablename = c.relname
-                WHERE s.tablename = 'raw_menu_item' AND s.attname = 'raw_brand'
-            """)).scalar()
-            brands = int(brands_result) if brands_result else 1500
-
-            # Count all active dispensaries
-            stores = conn.execute(text(
-                "SELECT COUNT(*) FROM dispensary WHERE is_active = true"
-            )).scalar() or 0
-            states = conn.execute(text(
-                "SELECT COUNT(DISTINCT state) FROM dispensary WHERE is_active = true"
-            )).scalar() or 0
+            products = result[0] or 0
+            stores = result[1] or 0
+            brands = result[2] or 0
+            states = result[3] or 0
 
             return int(products), int(brands), int(stores), int(states)
     except Exception as e:
@@ -180,15 +175,15 @@ st.markdown(f"""
 <div class="stats-bar">
     <div class="stat-item">
         <p class="stat-value">{products:,}</p>
-        <p class="stat-label">Products Tracked</p>
+        <p class="stat-label">Products on Menus</p>
     </div>
     <div class="stat-item">
         <p class="stat-value">{stores:,}</p>
-        <p class="stat-label">Stores</p>
+        <p class="stat-label">Dispensaries Scraped</p>
     </div>
     <div class="stat-item">
         <p class="stat-value">{brands:,}</p>
-        <p class="stat-label">Brands</p>
+        <p class="stat-label">Brands Tracked</p>
     </div>
     <div class="stat-item">
         <p class="stat-value">{states}</p>
