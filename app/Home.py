@@ -175,15 +175,15 @@ st.markdown(f"""
 <div class="stats-bar">
     <div class="stat-item">
         <p class="stat-value">{products:,}</p>
-        <p class="stat-label">Products on Menus</p>
+        <p class="stat-label">Products Tracked</p>
     </div>
     <div class="stat-item">
         <p class="stat-value">{stores:,}</p>
-        <p class="stat-label">Dispensaries Scraped</p>
+        <p class="stat-label">Dispensaries Monitored</p>
     </div>
     <div class="stat-item">
         <p class="stat-value">{brands:,}</p>
-        <p class="stat-label">Brands Tracked</p>
+        <p class="stat-label">Brands</p>
     </div>
     <div class="stat-item">
         <p class="stat-value">{states}</p>
