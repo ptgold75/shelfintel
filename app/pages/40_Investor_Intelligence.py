@@ -34,21 +34,36 @@ def load_companies():
     """Load all public companies with latest prices."""
     engine = get_engine()
     with engine.connect() as conn:
-        # Use subquery instead of LATERAL for broader compatibility
-        result = conn.execute(text("""
+        # Load companies first
+        companies = conn.execute(text("""
             SELECT
-                c.company_id, c.name, c.ticker_us, c.ticker_ca,
-                c.exchange_us, c.exchange_ca, c.company_type,
-                c.market_cap_millions, c.headquarters,
-                c.website,
-                (SELECT close_price FROM stock_price WHERE company_id = c.company_id ORDER BY price_date DESC LIMIT 1) as latest_price,
-                (SELECT price_date FROM stock_price WHERE company_id = c.company_id ORDER BY price_date DESC LIMIT 1) as price_date,
-                (SELECT volume FROM stock_price WHERE company_id = c.company_id ORDER BY price_date DESC LIMIT 1) as latest_volume
-            FROM public_company c
-            WHERE c.is_active = true
-            ORDER BY c.market_cap_millions DESC NULLS LAST
+                company_id, name, ticker_us, ticker_ca,
+                exchange_us, exchange_ca, company_type,
+                market_cap_millions, headquarters, website
+            FROM public_company
+            WHERE is_active = true
+            ORDER BY market_cap_millions DESC NULLS LAST
         """))
-        return pd.DataFrame(result.fetchall(), columns=result.keys())
+        df = pd.DataFrame(companies.fetchall(), columns=companies.keys())
+
+        # Load latest prices separately
+        prices = conn.execute(text("""
+            SELECT DISTINCT ON (company_id)
+                company_id, close_price as latest_price, price_date, volume as latest_volume
+            FROM stock_price
+            ORDER BY company_id, price_date DESC
+        """))
+        prices_df = pd.DataFrame(prices.fetchall(), columns=prices.keys())
+
+        # Merge
+        if not prices_df.empty:
+            df = df.merge(prices_df, on='company_id', how='left')
+        else:
+            df['latest_price'] = None
+            df['price_date'] = None
+            df['latest_volume'] = None
+
+        return df
 
 
 @st.cache_data(ttl=300)
