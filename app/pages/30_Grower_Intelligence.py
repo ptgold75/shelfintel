@@ -4,6 +4,7 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
+import plotly.graph_objects as go
 from sqlalchemy import text
 from components.nav import render_nav, get_section_from_params, render_state_filter, get_selected_state
 from components.auth import is_authenticated
@@ -185,6 +186,8 @@ def get_grower_demo_data():
             ("Concentrates", 8234, 45, 55.00),
             ("Edibles", 5892, 52, 28.50),
             ("Pre-Rolls", 3503, 41, 15.00),
+            ("Tinctures", 1850, 28, 42.00),
+            ("Topicals", 1150, 22, 38.00),
         ],
         "strains": [
             ("CURIO", "Blue Dream 3.5g", 47, 45.00, 42.00, 55.00),
@@ -192,13 +195,27 @@ def get_grower_demo_data():
             ("GRASSROOTS", "Birthday Cake 3.5g", 42, 48.00, 45.00, 52.00),
             ("RYTHM", "Dosidos 3.5g", 38, 50.00, 47.00, 55.00),
             ("VERANO", "G Purps 3.5g", 35, 52.00, 48.00, 58.00),
+            ("STRANE", "MAC 1 3.5g", 34, 48.00, 45.00, 52.00),
+            ("CRESCO", "Outer Space 3.5g", 32, 46.00, 42.00, 50.00),
+            ("CULTA", "Poochie Love 3.5g", 30, 55.00, 50.00, 62.00),
+            ("SELECT", "Elite Live Resin Cart", 28, 45.00, 40.00, 50.00),
+            ("GARCIA", "Hand Picked 3.5g", 26, 42.00, 38.00, 48.00),
+            ("SUNMED", "Sun Drops 3.5g", 24, 35.00, 32.00, 40.00),
+            ("NATURE'S HERITAGE", "GSC 3.5g", 22, 50.00, 45.00, 55.00),
         ],
         "brands": [
-            ("CURIO", 47, 128, 1842, 42.50),
-            ("EVERMORE", 44, 96, 1634, 48.25),
-            ("GRASSROOTS", 42, 85, 1521, 46.00),
-            ("RYTHM", 38, 72, 1298, 50.00),
-            ("VERANO", 35, 64, 1156, 52.25),
+            ("CURIO", 78, 128, 2842, 42.50),
+            ("EVERMORE", 72, 96, 2634, 48.25),
+            ("GRASSROOTS", 68, 85, 2521, 46.00),
+            ("RYTHM", 65, 72, 2298, 50.00),
+            ("VERANO", 62, 64, 2156, 52.25),
+            ("STRANE", 58, 78, 1945, 44.00),
+            ("CRESCO", 54, 62, 1732, 47.50),
+            ("SELECT", 52, 45, 1520, 43.00),
+            ("CULTA", 48, 58, 1380, 55.00),
+            ("GARCIA", 45, 42, 1245, 41.00),
+            ("SUNMED", 42, 65, 1890, 36.00),
+            ("NATURE'S HERITAGE", 38, 48, 1120, 48.00),
         ],
         "prices": [
             ("Flower", 35.00, 45.00, 55.00, 45.50),
@@ -206,6 +223,34 @@ def get_grower_demo_data():
             ("Concentrates", 35.00, 50.00, 72.00, 55.00),
             ("Edibles", 18.00, 25.00, 38.00, 28.50),
             ("Pre-Rolls", 10.00, 14.00, 22.00, 15.00),
+            ("Tinctures", 32.00, 42.00, 55.00, 42.00),
+            ("Topicals", 25.00, 38.00, 52.00, 38.00),
+        ],
+        "size_distribution": {
+            "Flower": {"1g": 1850, "3.5g": 12500, "7g": 2800, "14g": 980, "28g": 412},
+            "Pre-Rolls": {"Single": 1200, "2pk": 450, "3pk": 680, "5pk": 520, "10pk": 280, "Unknown": 373}
+        },
+        "market_trends": {
+            "growing_categories": [
+                {"category": "Live Resin Vapes", "growth": 24.5},
+                {"category": "Infused Pre-Rolls", "growth": 18.2},
+                {"category": "Nano Edibles", "growth": 15.8},
+                {"category": "Rosin", "growth": 12.3},
+            ],
+            "declining_categories": [
+                {"category": "RSO", "growth": -8.5},
+                {"category": "Distillate Carts", "growth": -5.2},
+                {"category": "Shake", "growth": -12.1},
+            ]
+        },
+        "counties": ["Anne Arundel", "Baltimore", "Baltimore City", "Carroll", "Frederick",
+                     "Harford", "Howard", "Montgomery", "Prince George's", "Washington"],
+        "demo_stores": [
+            ("demo-s1", "Starbuds Baltimore (Baltimore)"),
+            ("demo-s2", "Herbiculture (Towson)"),
+            ("demo-s3", "Greenhouse Wellness (Ellicott City)"),
+            ("demo-s4", "Gold Leaf (Annapolis)"),
+            ("demo-s5", "Curio Wellness (Timonium)"),
         ]
     }
 
@@ -233,6 +278,77 @@ with col3:
     st.metric("Brands Tracked", overview['brands'])
 with col4:
     st.metric("Active Dispensaries", overview['stores'])
+
+# Market Overview Charts (Demo Mode)
+if DEMO_MODE:
+    st.markdown("---")
+    st.subheader("Market Overview")
+
+    chart_col1, chart_col2 = st.columns(2)
+
+    with chart_col1:
+        # Category distribution pie chart
+        cat_df = pd.DataFrame(demo_data["categories"], columns=["Category", "Products", "Brands", "Avg Price"])
+        fig = px.pie(
+            cat_df,
+            values="Products",
+            names="Category",
+            title="Product Distribution by Category",
+            hole=0.4,
+            color_discrete_sequence=px.colors.qualitative.Set2
+        )
+        fig.update_layout(height=320)
+        st.plotly_chart(fig, use_container_width=True)
+
+    with chart_col2:
+        # Top brands bar chart
+        brands_df = pd.DataFrame(demo_data["brands"][:8], columns=["Brand", "Stores", "SKUs", "Listings", "Avg Price"])
+        fig = px.bar(
+            brands_df.sort_values("Stores", ascending=True),
+            x="Stores",
+            y="Brand",
+            orientation='h',
+            title="Top Brands by Store Distribution",
+            color="SKUs",
+            color_continuous_scale="Greens"
+        )
+        fig.update_layout(height=320, showlegend=False)
+        st.plotly_chart(fig, use_container_width=True)
+
+    # Market trends
+    chart_col3, chart_col4 = st.columns(2)
+
+    with chart_col3:
+        st.markdown("#### Growing Categories")
+        growing_df = pd.DataFrame(demo_data["market_trends"]["growing_categories"])
+        fig = px.bar(
+            growing_df,
+            x="growth",
+            y="category",
+            orientation='h',
+            title="Fastest Growing Segments",
+            labels={"growth": "Growth %", "category": ""},
+            color="growth",
+            color_continuous_scale="Greens"
+        )
+        fig.update_layout(height=250, showlegend=False)
+        st.plotly_chart(fig, use_container_width=True)
+
+    with chart_col4:
+        st.markdown("#### Declining Categories")
+        declining_df = pd.DataFrame(demo_data["market_trends"]["declining_categories"])
+        fig = px.bar(
+            declining_df,
+            x="growth",
+            y="category",
+            orientation='h',
+            title="Declining Segments",
+            labels={"growth": "Growth %", "category": ""},
+            color="growth",
+            color_continuous_scale="Reds_r"
+        )
+        fig.update_layout(height=250, showlegend=False)
+        st.plotly_chart(fig, use_container_width=True)
 
 # Tabs
 st.markdown("---")
@@ -416,141 +532,213 @@ with tab5:
 
         return "Unknown"
 
-    # Get size distribution data
-    @st.cache_data(ttl=600)  # Cache for 10 minutes
-    def get_size_distribution(level: str, filter_id: str = None, state: str = "MD"):
-        """Get product counts by category and size."""
-        engine = get_engine()
-        with engine.connect() as conn:
-            if level == "state":
-                result = conn.execute(text("""
-                    SELECT r.raw_category, r.raw_name, COUNT(*) as cnt
-                    FROM raw_menu_item r
-                    JOIN dispensary d ON r.dispensary_id = d.dispensary_id
-                    WHERE d.state = :state
-                      AND (r.raw_category ILIKE '%flower%' OR r.raw_category ILIKE '%bud%'
-                           OR r.raw_category ILIKE '%pre-roll%' OR r.raw_category ILIKE '%preroll%')
-                    GROUP BY r.raw_category, r.raw_name
-                """), {"state": state}).fetchall()
-            elif level == "county":
-                result = conn.execute(text("""
-                    SELECT r.raw_category, r.raw_name, COUNT(*) as cnt
-                    FROM raw_menu_item r
-                    JOIN dispensary d ON r.dispensary_id = d.dispensary_id
-                    WHERE d.county = :county AND d.state = :state
-                      AND (r.raw_category ILIKE '%flower%' OR r.raw_category ILIKE '%bud%'
-                           OR r.raw_category ILIKE '%pre-roll%' OR r.raw_category ILIKE '%preroll%')
-                    GROUP BY r.raw_category, r.raw_name
-                """), {"county": filter_id, "state": state}).fetchall()
-            else:  # store
-                result = conn.execute(text("""
-                    SELECT raw_category, raw_name, COUNT(*) as cnt
-                    FROM raw_menu_item
-                    WHERE dispensary_id = :store_id
-                      AND (raw_category ILIKE '%flower%' OR raw_category ILIKE '%bud%'
-                           OR raw_category ILIKE '%pre-roll%' OR raw_category ILIKE '%preroll%')
-                    GROUP BY raw_category, raw_name
-                """), {"store_id": filter_id}).fetchall()
+    if DEMO_MODE:
+        # Demo mode - use sample size distribution data
+        st.markdown("**Viewing:** State (All MD) - Demo Data")
 
-            # Aggregate by size
-            from collections import defaultdict
-            size_counts = defaultdict(lambda: defaultdict(int))
-            for cat, name, cnt in result:
-                size = extract_size(name)
-                cat_norm = "Flower" if "flower" in cat.lower() or "bud" in cat.lower() else "Pre-Rolls"
-                size_counts[cat_norm][size] += cnt
+        size_data = demo_data["size_distribution"]
 
-            return dict(size_counts)
-
-    @st.cache_data(ttl=600)  # Cache for 10 minutes
-    def get_counties(state: str = "MD"):
-        engine = get_engine()
-        with engine.connect() as conn:
-            result = conn.execute(text("""
-                SELECT DISTINCT county FROM dispensary
-                WHERE county IS NOT NULL AND state = :state ORDER BY county
-            """), {"state": state}).fetchall()
-            return [r[0] for r in result]
-
-    @st.cache_data(ttl=600)  # Cache for 10 minutes
-    def get_stores(state: str = "MD"):
-        engine = get_engine()
-        with engine.connect() as conn:
-            result = conn.execute(text("""
-                SELECT dispensary_id, name, city FROM dispensary
-                WHERE is_active = true AND state = :state ORDER BY name
-            """), {"state": state}).fetchall()
-            return [(r[0], f"{r[1]} ({r[2]})") for r in result]
-
-    # Level selector
-    col1, col2 = st.columns([1, 2])
-    with col1:
-        level = st.selectbox("View Level", [f"State (All {selected_state})", "By County", "By Store"])
-
-    filter_id = None
-    if level == "By County":
-        counties = get_counties(selected_state)
-        with col2:
-            selected_county = st.selectbox("Select County", counties)
-            filter_id = selected_county
-        level_key = "county"
-    elif level == "By Store":
-        stores = get_stores(selected_state)
-        with col2:
-            store_options = {name: sid for sid, name in stores}
-            selected_store = st.selectbox("Select Store", list(store_options.keys()))
-            filter_id = store_options[selected_store]
-        level_key = "store"
-    else:
-        level_key = "state"
-
-    # Get and display data
-    size_data = get_size_distribution(level_key, filter_id, selected_state)
-
-    if size_data:
-        # Flower sizes
+        # Flower sizes chart
         st.markdown("#### Flower by Size")
-        if "Flower" in size_data:
-            flower_sizes = size_data["Flower"]
-            size_order = ["1g", "3.5g", "7g", "14g", "28g", "Unknown"]
-            df_flower = pd.DataFrame([
-                {"Size": s, "Products": flower_sizes.get(s, 0)}
-                for s in size_order if flower_sizes.get(s, 0) > 0
-            ])
+        flower_sizes = size_data["Flower"]
+        size_order = ["1g", "3.5g", "7g", "14g", "28g"]
+        df_flower = pd.DataFrame([
+            {"Size": s, "Products": flower_sizes.get(s, 0)}
+            for s in size_order if flower_sizes.get(s, 0) > 0
+        ])
 
-            if not df_flower.empty:
-                col1, col2 = st.columns([2, 1])
-                with col1:
-                    fig = px.bar(df_flower, x="Size", y="Products",
-                                 title="Flower Products by Size",
-                                 color="Size",
-                                 color_discrete_sequence=px.colors.qualitative.Set2)
-                    fig.update_layout(showlegend=False, height=350)
-                    st.plotly_chart(fig, use_container_width=True)
-                with col2:
-                    st.dataframe(df_flower, hide_index=True, use_container_width=True)
+        col1, col2 = st.columns([2, 1])
+        with col1:
+            fig = px.bar(df_flower, x="Size", y="Products",
+                         title="Flower Products by Size",
+                         color="Size",
+                         color_discrete_sequence=px.colors.qualitative.Set2)
+            fig.update_layout(showlegend=False, height=350)
+            st.plotly_chart(fig, use_container_width=True)
+        with col2:
+            st.dataframe(df_flower, hide_index=True, use_container_width=True)
 
-                    total = df_flower["Products"].sum()
-                    known = total - flower_sizes.get("Unknown", 0)
-                    st.metric("Total Flower", f"{total:,}")
-                    st.metric("Known Sizes", f"{known:,} ({100*known/total:.0f}%)" if total > 0 else "0")
-        else:
-            st.info("No flower data available for this selection")
+            total = df_flower["Products"].sum()
+            st.metric("Total Flower", f"{total:,}")
+            st.metric("Most Popular", "3.5g (eighth)")
 
-        # Pre-roll sizes (could expand this)
-        st.markdown("#### Pre-Rolls by Size")
-        if "Pre-Rolls" in size_data:
-            preroll_sizes = size_data["Pre-Rolls"]
-            df_preroll = pd.DataFrame([
-                {"Size": s, "Products": c}
-                for s, c in sorted(preroll_sizes.items(), key=lambda x: -x[1])
-            ])
-            if not df_preroll.empty:
-                st.dataframe(df_preroll.head(10), hide_index=True, use_container_width=True)
-        else:
-            st.info("No pre-roll data available for this selection")
+        # Pre-roll sizes
+        st.markdown("#### Pre-Rolls by Pack Size")
+        preroll_sizes = size_data["Pre-Rolls"]
+        df_preroll = pd.DataFrame([
+            {"Pack Size": s, "Products": c}
+            for s, c in preroll_sizes.items()
+        ])
+        df_preroll = df_preroll.sort_values("Products", ascending=False)
+
+        col1, col2 = st.columns([2, 1])
+        with col1:
+            fig = px.bar(df_preroll, x="Pack Size", y="Products",
+                         title="Pre-Roll Products by Pack Size",
+                         color="Products",
+                         color_continuous_scale="Blues")
+            fig.update_layout(showlegend=False, height=300)
+            st.plotly_chart(fig, use_container_width=True)
+        with col2:
+            st.dataframe(df_preroll, hide_index=True, use_container_width=True)
+
+        # Insights
+        st.markdown("---")
+        st.markdown("#### Size Insights")
+        insight_col1, insight_col2 = st.columns(2)
+        with insight_col1:
+            st.markdown("""
+            <div style="background:#e8f5e9; padding:1rem; border-radius:8px;">
+                <p style="margin:0 0 0.5rem 0; font-weight:600; color:#2e7d32;">Flower Market</p>
+                <p style="margin:0; font-size:0.9rem;">3.5g (eighth) dominates with <strong>67%</strong> of all flower products.
+                7g quarter-ounce is second at <strong>15%</strong>.</p>
+            </div>
+            """, unsafe_allow_html=True)
+        with insight_col2:
+            st.markdown("""
+            <div style="background:#e3f2fd; padding:1rem; border-radius:8px;">
+                <p style="margin:0 0 0.5rem 0; font-weight:600; color:#1565c0;">Pre-Roll Trends</p>
+                <p style="margin:0; font-size:0.9rem;">Single pre-rolls lead at <strong>34%</strong>.
+                Multi-packs (3pk, 5pk) gaining share at <strong>38%</strong> combined.</p>
+            </div>
+            """, unsafe_allow_html=True)
+
     else:
-        st.warning("No data available for this selection")
+        # Real data mode - query database
+        @st.cache_data(ttl=600)
+        def get_size_distribution(level: str, filter_id: str = None, state: str = "MD"):
+            """Get product counts by category and size."""
+            engine = get_engine()
+            with engine.connect() as conn:
+                if level == "state":
+                    result = conn.execute(text("""
+                        SELECT r.raw_category, r.raw_name, COUNT(*) as cnt
+                        FROM raw_menu_item r
+                        JOIN dispensary d ON r.dispensary_id = d.dispensary_id
+                        WHERE d.state = :state
+                          AND (r.raw_category ILIKE '%flower%' OR r.raw_category ILIKE '%bud%'
+                               OR r.raw_category ILIKE '%pre-roll%' OR r.raw_category ILIKE '%preroll%')
+                        GROUP BY r.raw_category, r.raw_name
+                    """), {"state": state}).fetchall()
+                elif level == "county":
+                    result = conn.execute(text("""
+                        SELECT r.raw_category, r.raw_name, COUNT(*) as cnt
+                        FROM raw_menu_item r
+                        JOIN dispensary d ON r.dispensary_id = d.dispensary_id
+                        WHERE d.county = :county AND d.state = :state
+                          AND (r.raw_category ILIKE '%flower%' OR r.raw_category ILIKE '%bud%'
+                               OR r.raw_category ILIKE '%pre-roll%' OR r.raw_category ILIKE '%preroll%')
+                        GROUP BY r.raw_category, r.raw_name
+                    """), {"county": filter_id, "state": state}).fetchall()
+                else:  # store
+                    result = conn.execute(text("""
+                        SELECT raw_category, raw_name, COUNT(*) as cnt
+                        FROM raw_menu_item
+                        WHERE dispensary_id = :store_id
+                          AND (raw_category ILIKE '%flower%' OR raw_category ILIKE '%bud%'
+                               OR raw_category ILIKE '%pre-roll%' OR raw_category ILIKE '%preroll%')
+                        GROUP BY raw_category, raw_name
+                    """), {"store_id": filter_id}).fetchall()
+
+                # Aggregate by size
+                from collections import defaultdict
+                size_counts = defaultdict(lambda: defaultdict(int))
+                for cat, name, cnt in result:
+                    size = extract_size(name)
+                    cat_norm = "Flower" if "flower" in cat.lower() or "bud" in cat.lower() else "Pre-Rolls"
+                    size_counts[cat_norm][size] += cnt
+
+                return dict(size_counts)
+
+        @st.cache_data(ttl=600)
+        def get_counties(state: str = "MD"):
+            engine = get_engine()
+            with engine.connect() as conn:
+                result = conn.execute(text("""
+                    SELECT DISTINCT county FROM dispensary
+                    WHERE county IS NOT NULL AND state = :state ORDER BY county
+                """), {"state": state}).fetchall()
+                return [r[0] for r in result]
+
+        @st.cache_data(ttl=600)
+        def get_stores(state: str = "MD"):
+            engine = get_engine()
+            with engine.connect() as conn:
+                result = conn.execute(text("""
+                    SELECT dispensary_id, name, city FROM dispensary
+                    WHERE is_active = true AND state = :state ORDER BY name
+                """), {"state": state}).fetchall()
+                return [(r[0], f"{r[1]} ({r[2]})") for r in result]
+
+        # Level selector
+        col1, col2 = st.columns([1, 2])
+        with col1:
+            level = st.selectbox("View Level", [f"State (All {selected_state})", "By County", "By Store"])
+
+        filter_id = None
+        if level == "By County":
+            counties = get_counties(selected_state)
+            with col2:
+                selected_county = st.selectbox("Select County", counties)
+                filter_id = selected_county
+            level_key = "county"
+        elif level == "By Store":
+            stores = get_stores(selected_state)
+            with col2:
+                store_options = {name: sid for sid, name in stores}
+                selected_store = st.selectbox("Select Store", list(store_options.keys()))
+                filter_id = store_options[selected_store]
+            level_key = "store"
+        else:
+            level_key = "state"
+
+        # Get and display data
+        size_data = get_size_distribution(level_key, filter_id, selected_state)
+
+        if size_data:
+            # Flower sizes
+            st.markdown("#### Flower by Size")
+            if "Flower" in size_data:
+                flower_sizes = size_data["Flower"]
+                size_order = ["1g", "3.5g", "7g", "14g", "28g", "Unknown"]
+                df_flower = pd.DataFrame([
+                    {"Size": s, "Products": flower_sizes.get(s, 0)}
+                    for s in size_order if flower_sizes.get(s, 0) > 0
+                ])
+
+                if not df_flower.empty:
+                    col1, col2 = st.columns([2, 1])
+                    with col1:
+                        fig = px.bar(df_flower, x="Size", y="Products",
+                                     title="Flower Products by Size",
+                                     color="Size",
+                                     color_discrete_sequence=px.colors.qualitative.Set2)
+                        fig.update_layout(showlegend=False, height=350)
+                        st.plotly_chart(fig, use_container_width=True)
+                    with col2:
+                        st.dataframe(df_flower, hide_index=True, use_container_width=True)
+
+                        total = df_flower["Products"].sum()
+                        known = total - flower_sizes.get("Unknown", 0)
+                        st.metric("Total Flower", f"{total:,}")
+                        st.metric("Known Sizes", f"{known:,} ({100*known/total:.0f}%)" if total > 0 else "0")
+            else:
+                st.info("No flower data available for this selection")
+
+            # Pre-roll sizes
+            st.markdown("#### Pre-Rolls by Size")
+            if "Pre-Rolls" in size_data:
+                preroll_sizes = size_data["Pre-Rolls"]
+                df_preroll = pd.DataFrame([
+                    {"Size": s, "Products": c}
+                    for s, c in sorted(preroll_sizes.items(), key=lambda x: -x[1])
+                ])
+                if not df_preroll.empty:
+                    st.dataframe(df_preroll.head(10), hide_index=True, use_container_width=True)
+            else:
+                st.info("No pre-roll data available for this selection")
+        else:
+            st.warning("No data available for this selection")
 
 # Value proposition
 st.markdown("---")
