@@ -140,8 +140,8 @@ st.markdown(f"""
 
 st.markdown('<p class="tagline">Real-time shelf intelligence for the cannabis industry</p>', unsafe_allow_html=True)
 
-# Load stats from database - accurate counts of scraped data
-@st.cache_data(ttl=3600)  # Cache for 1 hour since stats don't change frequently
+# Load stats from database - accurate counts of monitored data
+@st.cache_data(ttl=300)  # Cache for 5 minutes
 def load_stats():
     try:
         engine = get_engine()
