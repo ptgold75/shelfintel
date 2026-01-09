@@ -135,20 +135,38 @@ st.markdown("""
 
 st.markdown('<p class="tagline">Real-time shelf intelligence for the cannabis industry</p>', unsafe_allow_html=True)
 
-# Load stats from database
+# Load stats from database - use fast approximate counts
 @st.cache_data(ttl=3600)  # Cache for 1 hour since stats don't change frequently
 def load_stats():
     try:
         engine = get_engine()
         with engine.connect() as conn:
-            # Get counts with separate queries to avoid any compatibility issues
-            products = conn.execute(text("SELECT COUNT(*) FROM raw_menu_item")).scalar() or 0
-            brands = conn.execute(text("SELECT COUNT(DISTINCT raw_brand) FROM raw_menu_item WHERE raw_brand IS NOT NULL")).scalar() or 0
-            dispensaries = conn.execute(text("SELECT COUNT(*) FROM dispensary WHERE is_active = true AND store_type = 'dispensary'")).scalar() or 0
-            smoke_shops = conn.execute(text("SELECT COUNT(*) FROM dispensary WHERE is_active = true AND store_type = 'smoke_shop'")).scalar() or 0
-            states = conn.execute(text("SELECT COUNT(DISTINCT state) FROM dispensary WHERE is_active = true")).scalar() or 0
+            # Use pg_class for fast approximate row counts (updated by ANALYZE)
+            products = conn.execute(text(
+                "SELECT reltuples::bigint FROM pg_class WHERE relname = 'raw_menu_item'"
+            )).scalar() or 0
 
-            return products, brands, dispensaries, smoke_shops, states
+            # Use pg_stats for approximate distinct count
+            brands_result = conn.execute(text("""
+                SELECT CASE WHEN n_distinct > 0 THEN n_distinct::bigint
+                            ELSE (reltuples * ABS(n_distinct))::bigint END
+                FROM pg_stats s JOIN pg_class c ON s.tablename = c.relname
+                WHERE s.tablename = 'raw_menu_item' AND s.attname = 'raw_brand'
+            """)).scalar()
+            brands = int(brands_result) if brands_result else 1500
+
+            # Dispensary table is smaller, direct counts are fast
+            dispensaries = conn.execute(text(
+                "SELECT COUNT(*) FROM dispensary WHERE is_active = true AND store_type = 'dispensary'"
+            )).scalar() or 0
+            smoke_shops = conn.execute(text(
+                "SELECT COUNT(*) FROM dispensary WHERE is_active = true AND store_type = 'smoke_shop'"
+            )).scalar() or 0
+            states = conn.execute(text(
+                "SELECT COUNT(DISTINCT state) FROM dispensary WHERE is_active = true"
+            )).scalar() or 0
+
+            return int(products), int(brands), int(dispensaries), int(smoke_shops), int(states)
     except Exception as e:
         st.error(f"Error loading stats: {e}")
         return 0, 0, 0, 0, 0
