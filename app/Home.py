@@ -141,18 +141,16 @@ def load_stats():
     try:
         engine = get_engine()
         with engine.connect() as conn:
-            # Get accurate counts by store type
-            result = conn.execute(text("""
-                SELECT
-                    (SELECT COUNT(*) FROM raw_menu_item) as products,
-                    (SELECT COUNT(DISTINCT raw_brand) FROM raw_menu_item WHERE raw_brand IS NOT NULL) as brands,
-                    (SELECT COUNT(*) FROM dispensary WHERE is_active = true AND store_type = 'dispensary') as dispensaries,
-                    (SELECT COUNT(*) FROM dispensary WHERE is_active = true AND store_type = 'smoke_shop') as smoke_shops,
-                    (SELECT COUNT(DISTINCT state) FROM dispensary WHERE is_active = true) as states
-            """)).fetchone()
+            # Get counts with separate queries to avoid any compatibility issues
+            products = conn.execute(text("SELECT COUNT(*) FROM raw_menu_item")).scalar() or 0
+            brands = conn.execute(text("SELECT COUNT(DISTINCT raw_brand) FROM raw_menu_item WHERE raw_brand IS NOT NULL")).scalar() or 0
+            dispensaries = conn.execute(text("SELECT COUNT(*) FROM dispensary WHERE is_active = true AND store_type = 'dispensary'")).scalar() or 0
+            smoke_shops = conn.execute(text("SELECT COUNT(*) FROM dispensary WHERE is_active = true AND store_type = 'smoke_shop'")).scalar() or 0
+            states = conn.execute(text("SELECT COUNT(DISTINCT state) FROM dispensary WHERE is_active = true")).scalar() or 0
 
-            return result[0] or 0, result[1] or 0, result[2] or 0, result[3] or 0, result[4] or 0
-    except:
+            return products, brands, dispensaries, smoke_shops, states
+    except Exception as e:
+        st.error(f"Error loading stats: {e}")
         return 0, 0, 0, 0, 0
 
 products, brands, dispensaries, smoke_shops, states = load_stats()
