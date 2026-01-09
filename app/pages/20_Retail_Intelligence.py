@@ -3,6 +3,8 @@
 
 import streamlit as st
 import pandas as pd
+import plotly.express as px
+import plotly.graph_objects as go
 import re
 from sqlalchemy import text
 from components.nav import render_nav, get_section_from_params, render_state_filter, get_selected_state
@@ -538,6 +540,40 @@ def get_retail_demo_data(store_id="demo-001"):
     }
 
 
+# Demo market overview data
+DEMO_MARKET_OVERVIEW = {
+    "total_stores": 96,
+    "total_products": 32450,
+    "avg_price": 44.50,
+    "top_brands": [
+        {"brand": "Curio", "store_count": 78, "products": 245},
+        {"brand": "Evermore", "store_count": 72, "products": 198},
+        {"brand": "Grassroots", "store_count": 68, "products": 176},
+        {"brand": "Rythm", "store_count": 65, "products": 165},
+        {"brand": "Verano", "store_count": 62, "products": 152},
+        {"brand": "Strane", "store_count": 58, "products": 142},
+        {"brand": "Cresco", "store_count": 54, "products": 128},
+        {"brand": "Select", "store_count": 52, "products": 98},
+    ],
+    "category_distribution": [
+        {"category": "Flower", "products": 12500, "avg_price": 48.00},
+        {"category": "Vapes", "products": 6800, "avg_price": 45.00},
+        {"category": "Concentrates", "products": 4200, "avg_price": 55.00},
+        {"category": "Edibles", "products": 3800, "avg_price": 28.00},
+        {"category": "Pre-Rolls", "products": 3100, "avg_price": 15.00},
+        {"category": "Tinctures", "products": 1200, "avg_price": 42.00},
+        {"category": "Topicals", "products": 850, "avg_price": 38.00},
+    ],
+    "price_ranges": [
+        {"range": "$0-20", "count": 4500},
+        {"range": "$21-40", "count": 8200},
+        {"range": "$41-60", "count": 12800},
+        {"range": "$61-80", "count": 4500},
+        {"range": "$81+", "count": 2450},
+    ]
+}
+
+
 if DEMO_MODE:
     st.info("**Demo Mode** - Showing sample data. [Login](/Login) to access your store's real data.")
 
@@ -591,6 +627,92 @@ if selected_store_id:
         st.metric("Avg Price", f"${metrics['avg_price']:.2f}" if metrics["avg_price"] else "N/A")
     with col4:
         st.metric("Categories", metrics["categories"])
+
+    # Market Position Charts (Demo Mode)
+    if DEMO_MODE:
+        st.markdown("---")
+        st.subheader("Market Position")
+
+        chart_col1, chart_col2 = st.columns(2)
+
+        with chart_col1:
+            # Your store vs market average
+            store_name_short = selected_store_name.split(" (")[0]
+            comparison_data = pd.DataFrame({
+                "Metric": ["Products", "Brands", "Avg Price ($)"],
+                store_name_short: [metrics["products"], metrics["brands"], metrics["avg_price"]],
+                "Market Average": [338, 45, 44.50]
+            })
+
+            fig = go.Figure()
+            fig.add_trace(go.Bar(
+                name=store_name_short,
+                x=comparison_data["Metric"],
+                y=comparison_data[store_name_short],
+                marker_color='#2ecc71'
+            ))
+            fig.add_trace(go.Bar(
+                name="Market Average",
+                x=comparison_data["Metric"],
+                y=comparison_data["Market Average"],
+                marker_color='#3498db'
+            ))
+            fig.update_layout(
+                title="Your Store vs Market Average",
+                barmode='group',
+                height=300,
+                showlegend=True,
+                legend=dict(orientation="h", yanchor="bottom", y=1.02)
+            )
+            st.plotly_chart(fig, use_container_width=True)
+
+        with chart_col2:
+            # Category distribution
+            cat_df = pd.DataFrame(DEMO_MARKET_OVERVIEW["category_distribution"])
+            fig = px.pie(
+                cat_df,
+                values="products",
+                names="category",
+                title="Market Category Distribution",
+                hole=0.4,
+                color_discrete_sequence=px.colors.qualitative.Set2
+            )
+            fig.update_layout(height=300)
+            st.plotly_chart(fig, use_container_width=True)
+
+        # Top brands and price distribution
+        chart_col3, chart_col4 = st.columns(2)
+
+        with chart_col3:
+            # Top brands chart
+            brands_df = pd.DataFrame(DEMO_MARKET_OVERVIEW["top_brands"])
+            fig = px.bar(
+                brands_df.sort_values("store_count", ascending=True),
+                x="store_count",
+                y="brand",
+                orientation='h',
+                title="Top Brands by Store Distribution",
+                labels={"store_count": "Stores Carrying", "brand": ""},
+                color="products",
+                color_continuous_scale="Blues"
+            )
+            fig.update_layout(height=300, showlegend=False)
+            st.plotly_chart(fig, use_container_width=True)
+
+        with chart_col4:
+            # Price distribution chart
+            price_df = pd.DataFrame(DEMO_MARKET_OVERVIEW["price_ranges"])
+            fig = px.bar(
+                price_df,
+                x="range",
+                y="count",
+                title="Market Price Distribution",
+                labels={"range": "Price Range", "count": "Products"},
+                color="count",
+                color_continuous_scale="Greens"
+            )
+            fig.update_layout(height=300, showlegend=False)
+            st.plotly_chart(fig, use_container_width=True)
 
     # INSIGHTS SECTION
     st.markdown("---")
@@ -672,6 +794,7 @@ if selected_store_id:
             if pricing:
                 # Use competitor name in column header
                 comp_col_name = selected_comp_name.split(" (")[0]  # Just store name for column
+                store_name_short = selected_store_name.split(" (")[0]
                 df = pd.DataFrame(pricing, columns=["Brand", "Product", "Size", "Category", "Your Price", f"{comp_col_name} Price", "Difference"])
 
                 # Summary stats
@@ -685,6 +808,32 @@ if selected_store_id:
                 with col3:
                     avg_diff = df["Difference"].mean()
                     st.metric("Avg Difference", f"${avg_diff:+.2f}")
+
+                # Price comparison scatter plot
+                if len(df) > 0:
+                    fig = px.scatter(
+                        df,
+                        x="Your Price",
+                        y=f"{comp_col_name} Price",
+                        color="Difference",
+                        hover_data=["Brand", "Product", "Size"],
+                        color_continuous_scale=["green", "yellow", "red"],
+                        color_continuous_midpoint=0,
+                        title=f"Price Comparison: {store_name_short} vs {comp_col_name}"
+                    )
+                    # Add diagonal line (equal pricing)
+                    max_price = max(df["Your Price"].max(), df[f"{comp_col_name} Price"].max()) + 5
+                    fig.add_trace(go.Scatter(
+                        x=[0, max_price],
+                        y=[0, max_price],
+                        mode='lines',
+                        line=dict(color='gray', dash='dash'),
+                        name='Equal Price',
+                        showlegend=True
+                    ))
+                    fig.update_layout(height=350)
+                    st.plotly_chart(fig, use_container_width=True)
+                    st.caption("Points above the line = you're priced lower. Points below = you're priced higher.")
 
                 st.markdown("---")
 
@@ -743,14 +892,47 @@ if selected_store_id:
 
             if cat_data:
                 comp_col_name = selected_comp_name.split(" (")[0]  # Just store name for column
+                store_name_short = selected_store_name.split(" (")[0]
                 df = pd.DataFrame(cat_data, columns=["Category", "Your Products", comp_col_name])
                 df["Difference"] = df["Your Products"] - df[comp_col_name]
 
-                # Horizontal bar chart comparison
-                st.bar_chart(
-                    df.set_index("Category")[["Your Products", comp_col_name]],
-                    horizontal=True
+                # Plotly grouped bar chart
+                fig = go.Figure()
+                fig.add_trace(go.Bar(
+                    name=store_name_short,
+                    y=df["Category"],
+                    x=df["Your Products"],
+                    orientation='h',
+                    marker_color='#2ecc71'
+                ))
+                fig.add_trace(go.Bar(
+                    name=comp_col_name,
+                    y=df["Category"],
+                    x=df[comp_col_name],
+                    orientation='h',
+                    marker_color='#e74c3c'
+                ))
+                fig.update_layout(
+                    title="Product Count by Category",
+                    barmode='group',
+                    height=350,
+                    xaxis_title="Products",
+                    yaxis_title="",
+                    legend=dict(orientation="h", yanchor="bottom", y=1.02)
                 )
+                st.plotly_chart(fig, use_container_width=True)
+
+                # Summary metrics
+                col1, col2, col3 = st.columns(3)
+                with col1:
+                    your_total = df["Your Products"].sum()
+                    st.metric("Your Total Products", your_total)
+                with col2:
+                    comp_total = df[comp_col_name].sum()
+                    st.metric(f"{comp_col_name} Total", comp_total)
+                with col3:
+                    diff = your_total - comp_total
+                    st.metric("Difference", f"{diff:+d}")
 
                 st.dataframe(df, use_container_width=True, hide_index=True)
             else:
