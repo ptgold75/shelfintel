@@ -155,23 +155,20 @@ def load_stats():
             """)).scalar()
             brands = int(brands_result) if brands_result else 1500
 
-            # Dispensary table is smaller, direct counts are fast
-            dispensaries = conn.execute(text(
-                "SELECT COUNT(*) FROM dispensary WHERE is_active = true AND store_type = 'dispensary'"
-            )).scalar() or 0
-            smoke_shops = conn.execute(text(
-                "SELECT COUNT(*) FROM dispensary WHERE is_active = true AND store_type = 'smoke_shop'"
+            # Count all active dispensaries
+            stores = conn.execute(text(
+                "SELECT COUNT(*) FROM dispensary WHERE is_active = true"
             )).scalar() or 0
             states = conn.execute(text(
                 "SELECT COUNT(DISTINCT state) FROM dispensary WHERE is_active = true"
             )).scalar() or 0
 
-            return int(products), int(brands), int(dispensaries), int(smoke_shops), int(states)
+            return int(products), int(brands), int(stores), int(states)
     except Exception as e:
         st.error(f"Error loading stats: {e}")
-        return 0, 0, 0, 0, 0
+        return 0, 0, 0, 0
 
-products, brands, dispensaries, smoke_shops, states = load_stats()
+products, brands, stores, states = load_stats()
 
 # Stats bar
 st.markdown(f"""
@@ -181,12 +178,8 @@ st.markdown(f"""
         <p class="stat-label">Products Tracked</p>
     </div>
     <div class="stat-item">
-        <p class="stat-value">{dispensaries:,}</p>
-        <p class="stat-label">Dispensaries</p>
-    </div>
-    <div class="stat-item">
-        <p class="stat-value">{smoke_shops:,}</p>
-        <p class="stat-label">Smoke Shops</p>
+        <p class="stat-value">{stores:,}</p>
+        <p class="stat-label">Stores</p>
     </div>
     <div class="stat-item">
         <p class="stat-value">{brands:,}</p>
@@ -279,7 +272,7 @@ with h1:
     <div class="how-step">
         <div class="how-step-num">1</div>
         <div class="how-step-title">Collect</div>
-        <div class="how-step-desc">Daily scans from {dispensaries:,}+ dispensary menus</div>
+        <div class="how-step-desc">Daily scans from {stores:,}+ store menus</div>
     </div>
     """, unsafe_allow_html=True)
 
