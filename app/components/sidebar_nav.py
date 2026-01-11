@@ -15,8 +15,8 @@ def render_sidebar_nav():
     st.markdown("""
     <style>
         [data-testid="stSidebar"] {
-            min-width: 240px;
-            max-width: 240px;
+            min-width: 260px;
+            max-width: 260px;
         }
         [data-testid="stSidebar"] > div:first-child {
             padding-top: 1rem;
@@ -46,6 +46,33 @@ def render_sidebar_nav():
         section[data-testid="stSidebar"] .stPageLink[data-active="true"] > div {
             background: rgba(37, 99, 235, 0.3);
             border-left: 3px solid #60a5fa;
+        }
+        /* Main nav tabs at top */
+        .main-nav-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .main-nav-tab {
+            background: rgba(255,255,255,0.1);
+            padding: 0.4rem 0.7rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.15s;
+            text-decoration: none !important;
+            color: white !important;
+        }
+        .main-nav-tab:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        .main-nav-tab.active {
+            background: rgba(37, 99, 235, 0.4);
+            border: 1px solid rgba(96, 165, 250, 0.5);
         }
         /* Section headers */
         .nav-section-header {
@@ -95,6 +122,21 @@ def render_sidebar_nav():
             font-size: 0.7rem;
             opacity: 0.7;
         }
+        /* Sub-nav links */
+        .sub-nav-link {
+            display: block;
+            padding: 0.35rem 0.75rem 0.35rem 1.25rem;
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.8) !important;
+            text-decoration: none !important;
+            border-radius: 4px;
+            margin: 1px 0;
+            transition: background 0.15s;
+        }
+        .sub-nav-link:hover {
+            background: rgba(255,255,255,0.1);
+            color: white !important;
+        }
     </style>
     """, unsafe_allow_html=True)
 
@@ -127,7 +169,17 @@ def render_sidebar_nav():
 
             # LOGGED IN NAVIGATION
 
-            # Main Dashboard
+            # Main nav tabs at top
+            st.markdown("""
+            <div class="main-nav-tabs">
+                <a href="/Retail_Intelligence" class="main-nav-tab">Retail</a>
+                <a href="/Grower_Intelligence" class="main-nav-tab">Wholesale</a>
+                <a href="/Brand_Intelligence" class="main-nav-tab">Brands</a>
+                <a href="/Investor_Intelligence" class="main-nav-tab">Investors</a>
+            </div>
+            """, unsafe_allow_html=True)
+
+            # Home link
             st.page_link("Home.py", label="Home", icon="🏠")
 
             # RETAIL Section
@@ -165,6 +217,7 @@ def render_sidebar_nav():
                     st.page_link("pages/90_Admin_Clients.py", label="Manage Clients")
                     st.page_link("pages/97_Admin_Naming.py", label="Naming Rules")
                     st.page_link("pages/98_Admin_Dispensaries.py", label="Dispensaries")
+                    st.page_link("pages/96_Admin_Coverage.py", label="Coverage Tracker")
 
             st.divider()
             st.page_link("pages/93_Alert_Settings.py", label="Alert Settings", icon="🔔")
@@ -172,6 +225,16 @@ def render_sidebar_nav():
 
         else:
             # LOGGED OUT NAVIGATION - Show what's available by user type
+
+            # Main nav tabs at top
+            st.markdown("""
+            <div class="main-nav-tabs">
+                <a href="/Retail_Intelligence" class="main-nav-tab">Retail</a>
+                <a href="/Grower_Intelligence" class="main-nav-tab">Wholesale</a>
+                <a href="/Brand_Intelligence" class="main-nav-tab">Brands</a>
+                <a href="/Investor_Intelligence" class="main-nav-tab">Investors</a>
+            </div>
+            """, unsafe_allow_html=True)
 
             st.page_link("Home.py", label="Home", icon="🏠")
 

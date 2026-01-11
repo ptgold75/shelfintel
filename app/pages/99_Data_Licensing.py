@@ -52,27 +52,6 @@ with col1:
     | **Website URL** | Menu or company website | 70-95% |
     | **Menu Provider** | Dutchie, Jane, Leafly, etc. | Where detected |
     | **Store Type** | Dispensary, smoke shop, or unverified | 100% |
-
-    ### Data Quality
-
-    - **Verified against state licensing databases** (PA, NY, OH, and expanding)
-    - **Cross-referenced with Google Places** for address accuracy
-    - **Updated regularly** with new openings and closures
-    - **Classified by store type** to separate licensed dispensaries from smoke shops
-
-    ### Delivery Format
-
-    - CSV or Excel format
-    - JSON available upon request
-    - API access available for enterprise customers
-
-    ### Use Cases
-
-    - Market research and competitive analysis
-    - Sales prospecting for cannabis industry vendors
-    - Location intelligence for real estate
-    - Regulatory compliance tracking
-    - Investment due diligence
     """)
 
 with col2:
@@ -123,6 +102,75 @@ with col2:
         """)
     except:
         st.info("Contact sales@cannlinx.com for pricing")
+
+# Horizontal info boxes
+st.markdown("""
+<style>
+.info-box {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 1.25rem;
+    height: 100%;
+}
+.info-box h4 {
+    color: #1e3a5f;
+    margin: 0 0 0.75rem 0;
+    font-size: 1rem;
+    font-weight: 600;
+}
+.info-box ul {
+    margin: 0;
+    padding-left: 1.2rem;
+    color: #475569;
+    font-size: 0.9rem;
+}
+.info-box li {
+    margin-bottom: 0.4rem;
+}
+</style>
+""", unsafe_allow_html=True)
+
+box1, box2, box3 = st.columns(3)
+
+with box1:
+    st.markdown("""
+    <div class="info-box">
+        <h4>Data Quality</h4>
+        <ul>
+            <li><strong>Verified</strong> against state licensing databases</li>
+            <li><strong>Cross-referenced</strong> with Google Places</li>
+            <li><strong>Updated regularly</strong> with new openings/closures</li>
+            <li><strong>Classified</strong> by store type</li>
+        </ul>
+    </div>
+    """, unsafe_allow_html=True)
+
+with box2:
+    st.markdown("""
+    <div class="info-box">
+        <h4>Delivery Format</h4>
+        <ul>
+            <li>CSV or Excel format</li>
+            <li>JSON available upon request</li>
+            <li>API access for enterprise</li>
+            <li>One-time or subscription</li>
+        </ul>
+    </div>
+    """, unsafe_allow_html=True)
+
+with box3:
+    st.markdown("""
+    <div class="info-box">
+        <h4>Use Cases</h4>
+        <ul>
+            <li>Market research & competitive analysis</li>
+            <li>Sales prospecting</li>
+            <li>Location intelligence</li>
+            <li>Investment due diligence</li>
+        </ul>
+    </div>
+    """, unsafe_allow_html=True)
 
 st.divider()
 
