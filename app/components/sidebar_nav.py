@@ -203,7 +203,7 @@ def render_main_header():
     """Render the main content area header with banner."""
     banner_path = Path(__file__).parent.parent / "static" / "cannalinx_banner.png"
     if banner_path.exists():
-        st.image(str(banner_path), use_container_width=True)
+        st.image(str(banner_path), width="stretch")
 
 
 def render_state_filter():

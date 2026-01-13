@@ -201,7 +201,7 @@ with tab2:
             monthly = len(selected_states) * 399
             st.info(f"Monthly subscription: ${monthly:,} ({len(selected_states)} state(s) x $399)")
 
-        submitted = st.form_submit_button("Create Client", use_container_width=True, type="primary")
+        submitted = st.form_submit_button("Create Client", width="stretch", type="primary")
 
         if submitted:
             errors = []

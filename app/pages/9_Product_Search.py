@@ -107,7 +107,7 @@ col1, col2 = st.columns([3, 1])
 with col1:
     search_term = st.text_input("Search for a product", placeholder="e.g., Blue Dream, Pax Pod, 1g cart...")
 with col2:
-    search_button = st.button("Search", type="primary", use_container_width=True)
+    search_button = st.button("Search", type="primary", width="stretch")
 
 # Filters
 filter_col1, filter_col2, filter_col3, filter_col4 = st.columns(4)
@@ -149,7 +149,7 @@ if search_button or search_term:
                     lambda x: f"${x:.2f}" if pd.notna(x) else ""
                 )
 
-            st.dataframe(display_df, use_container_width=True, height=500, hide_index=True)
+            st.dataframe(display_df, width="stretch", height=500, hide_index=True)
 
         with tab2:
             # Price comparison across stores
@@ -169,9 +169,9 @@ if search_button or search_term:
                     hover_data=['Min Price', 'Max Price', 'Products']
                 )
                 fig.update_layout(height=400, xaxis_tickangle=-45, showlegend=False, coloraxis_showscale=False)
-                st.plotly_chart(fig, use_container_width=True)
+                st.plotly_chart(fig, width="stretch")
 
-                st.dataframe(store_prices, use_container_width=True)
+                st.dataframe(store_prices, width="stretch")
             else:
                 st.info(f"Found only in: {results['store'].iloc[0]}")
 
@@ -182,7 +182,7 @@ if search_button or search_term:
 
             fig2 = px.pie(county_counts, values='products', names='county', hole=0.4)
             fig2.update_layout(height=300)
-            st.plotly_chart(fig2, use_container_width=True)
+            st.plotly_chart(fig2, width="stretch")
 
     else:
         st.warning("No products found matching your search criteria.")
@@ -214,7 +214,7 @@ else:
             color_continuous_scale='Viridis'
         )
         fig.update_layout(height=350, xaxis_tickangle=-45, coloraxis_colorbar_title='Stores')
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
 
     # Popular brands
     st.subheader("Top Brands")
@@ -241,7 +241,7 @@ else:
             color_continuous_scale='Viridis'
         )
         fig2.update_layout(height=450, yaxis={'categoryorder': 'total ascending'}, coloraxis_colorbar_title='Stores')
-        st.plotly_chart(fig2, use_container_width=True)
+        st.plotly_chart(fig2, width="stretch")
 
 st.divider()
 st.caption(f"Search across all tracked {selected_state} dispensary menus")

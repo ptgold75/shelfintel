@@ -387,4 +387,4 @@ brand_df = pd.DataFrame([
 ]).sort_values('Total Variations', ascending=False)
 
 if not brand_df.empty:
-    st.dataframe(brand_df.head(20), use_container_width=True, hide_index=True)
+    st.dataframe(brand_df.head(20), width="stretch", hide_index=True)

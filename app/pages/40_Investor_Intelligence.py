@@ -502,7 +502,7 @@ with tab1:
     display_df['Market Cap ($M)'] = display_df['Market Cap ($M)'].apply(lambda x: f"${x:,.0f}" if pd.notna(x) else "-")
     display_df['Volume'] = display_df['Volume'].apply(lambda x: f"{x:,.0f}" if pd.notna(x) else "-")
 
-    st.dataframe(display_df, use_container_width=True, hide_index=True)
+    st.dataframe(display_df, width="stretch", hide_index=True)
 
     # Market cap bar chart
     st.markdown("### Market Capitalization Comparison")
@@ -520,7 +520,7 @@ with tab1:
                     color_discrete_map={'MSO': '#2ecc71', 'LP': '#3498db', 'REIT': '#9b59b6', 'Tech': '#e74c3c'})
         fig.update_traces(textposition='outside', textfont_size=11)
         fig.update_layout(height=500, showlegend=True)
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
 
 with tab2:
     st.subheader("State Operations")
@@ -562,7 +562,7 @@ with tab2:
                 # Create state presence table
                 ops_display = company_ops[['state', 'store_count', 'sku_count']].copy()
                 ops_display.columns = ['State', 'Store Count', 'SKU Count']
-                st.dataframe(ops_display, use_container_width=True, hide_index=True)
+                st.dataframe(ops_display, width="stretch", hide_index=True)
 
                 # Bar chart by state
                 fig = px.bar(company_ops, x='state', y='store_count',
@@ -570,7 +570,7 @@ with tab2:
                             labels={'state': 'State', 'store_count': 'Stores', 'sku_count': 'SKUs'},
                             title=f"{selected_company} - Stores by State")
                 fig.update_layout(height=300)
-                st.plotly_chart(fig, use_container_width=True)
+                st.plotly_chart(fig, width="stretch")
 
             with col2:
                 # Summary for selected company
@@ -606,7 +606,7 @@ with tab2:
                 aspect='auto'
             )
             fig.update_layout(height=400, title="Retail Presence by State (Store Count)")
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width="stretch")
     else:
         st.info("State operations data is being compiled.")
 
@@ -618,7 +618,7 @@ with tab2:
             'Processing': ['Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes'],
             'Store Count': [62, 15, 12, 18, 22, 8, 147, 28]
         })
-        st.dataframe(demo_ops, use_container_width=True, hide_index=True)
+        st.dataframe(demo_ops, width="stretch", hide_index=True)
 
 with tab3:
     st.subheader("Stock Price Charts")
@@ -671,7 +671,7 @@ with tab3:
                 xaxis_rangeslider_visible=False,
                 height=500
             )
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width="stretch")
 
             # Price metrics
             col1, col2, col3, col4 = st.columns(4)
@@ -722,7 +722,7 @@ with tab3:
             fig = px.line(combined, x='price_date', y='normalized', color='company',
                          labels={'price_date': 'Date', 'normalized': 'Normalized Price (Base=100)', 'company': 'Company'})
             fig.update_layout(height=400, title="90-Day Relative Performance (Normalized to 100)")
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width="stretch")
 
 with tab4:
     st.subheader("Financial Metrics")
@@ -744,7 +744,7 @@ with tab4:
                         labels={'revenue_millions': 'Revenue ($M)', 'name': ''},
                         color='revenue_millions', color_continuous_scale='Greens')
             fig.update_layout(height=400, showlegend=False)
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width="stretch")
 
             # Financial metrics table
             st.markdown("### Financial Summary")
@@ -759,7 +759,7 @@ with tab4:
                        'Total Assets ($M)', 'Total Debt ($M)', 'Cash ($M)']:
                 fin_display[col] = fin_display[col].apply(lambda x: f"${x:,.0f}" if pd.notna(x) else "-")
 
-            st.dataframe(fin_display, use_container_width=True, hide_index=True)
+            st.dataframe(fin_display, width="stretch", hide_index=True)
 
             # Profitability scatter
             if fin_df['net_income_millions'].notna().any():
@@ -779,7 +779,7 @@ with tab4:
                                     color_continuous_midpoint=0)
                     fig.add_hline(y=0, line_dash="dash", line_color="gray")
                     fig.update_layout(height=400)
-                    st.plotly_chart(fig, use_container_width=True)
+                    st.plotly_chart(fig, width="stretch")
     else:
         st.info("Financial data is being collected. Run the SEC filing script to populate this section.")
 
@@ -796,7 +796,7 @@ with tab4:
                 ORDER BY filing_count DESC
             """))
             sec_df = pd.DataFrame(result.fetchall(), columns=['Company', 'Ticker', 'CIK', 'Filing Periods'])
-            st.dataframe(sec_df, use_container_width=True, hide_index=True)
+            st.dataframe(sec_df, width="stretch", hide_index=True)
 
 with tab5:
     st.subheader("Shelf Analytics")
@@ -829,7 +829,7 @@ with tab5:
         shelf_display['avg_price'] = shelf_display['avg_price'].apply(lambda x: f"${x:.2f}")
         shelf_display['market_share'] = shelf_display['market_share'].apply(lambda x: f"{x:.1f}%")
         shelf_display.columns = ['Company', 'Brand', 'Category', 'Avg Price', 'Store Count', 'SKU Count', 'Market Share']
-        st.dataframe(shelf_display, use_container_width=True, hide_index=True)
+        st.dataframe(shelf_display, width="stretch", hide_index=True)
 
         # Market share visualization
         st.markdown("### Market Share by Brand")
@@ -839,7 +839,7 @@ with tab5:
                     labels={'market_share': 'Market Share (%)', 'brand': '', 'company': 'Company'},
                     title="Brand Market Share")
         fig.update_layout(height=400)
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
 
         # Store presence by company
         st.markdown("### Store Presence by Company")
@@ -855,7 +855,7 @@ with tab5:
                     color='Total SKUs', color_continuous_scale='Greens',
                     title="Company Retail Footprint")
         fig.update_layout(height=350)
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
 
         # Insights
         st.markdown("### Key Insights")

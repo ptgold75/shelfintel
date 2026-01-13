@@ -309,7 +309,7 @@ def render_nav(require_login=True):
     # Show banner
     banner_path = Path(__file__).parent.parent / "static" / "cannalinx_banner.png"
     if banner_path.exists():
-        st.image(str(banner_path), use_container_width=True)
+        st.image(str(banner_path), width="stretch")
 
     # Render navigation
     render_header()

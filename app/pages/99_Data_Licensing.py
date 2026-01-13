@@ -213,7 +213,7 @@ try:
             'URL Coverage %': '{:.0f}%',
             'Phone Coverage %': '{:.0f}%'
         }),
-        use_container_width=True,
+        width="stretch",
         height=600
     )
 
@@ -275,7 +275,7 @@ with sample_col2:
             if 'Website' in sample.columns:
                 sample['Website'] = sample['Website'].apply(lambda x: x[:50] + '...' if len(str(x)) > 50 else x)
 
-            st.dataframe(sample, use_container_width=True, hide_index=True)
+            st.dataframe(sample, width="stretch", hide_index=True)
         except Exception as e:
             st.info("Select a state to see sample data")
 

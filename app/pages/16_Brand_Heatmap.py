@@ -79,7 +79,7 @@ if DEMO_MODE:
         )
         fig.update_layout(height=500)
         fig.update_coloraxes(colorbar_title="Penetration %")
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
 
     with col2:
         st.subheader("Penetration by County")
@@ -104,7 +104,7 @@ if DEMO_MODE:
             showlegend=False,
             xaxis=dict(range=[0, 100])
         )
-        st.plotly_chart(fig2, use_container_width=True)
+        st.plotly_chart(fig2, width="stretch")
 
     # Detailed table
     st.subheader("County Details")
@@ -112,7 +112,7 @@ if DEMO_MODE:
     display_df = df.copy()
     display_df['penetration'] = display_df['penetration'].apply(lambda x: f"{x}%")
     display_df.columns = ['County', 'Total Stores', 'Brand Stores', 'Penetration']
-    st.dataframe(display_df, use_container_width=True, hide_index=True)
+    st.dataframe(display_df, width="stretch", hide_index=True)
 
     # Gap analysis
     st.subheader("Coverage Gaps")
@@ -251,7 +251,7 @@ else:
         )
         fig.update_layout(height=500)
         fig.update_coloraxes(colorbar_title="Penetration %")
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
 
     with col2:
         st.subheader("Penetration by County")
@@ -276,7 +276,7 @@ else:
             showlegend=False,
             xaxis=dict(range=[0, 105])
         )
-        st.plotly_chart(fig2, use_container_width=True)
+        st.plotly_chart(fig2, width="stretch")
 
     # Detailed table
     st.subheader("County Details")
@@ -284,7 +284,7 @@ else:
     display_df = df.copy()
     display_df['penetration'] = display_df['penetration'].apply(lambda x: f"{x}%")
     display_df.columns = ['County', 'Total Stores', 'Brand Stores', 'Penetration']
-    st.dataframe(display_df.sort_values('Total Stores', ascending=False), use_container_width=True, hide_index=True)
+    st.dataframe(display_df.sort_values('Total Stores', ascending=False), width="stretch", hide_index=True)
 
     # Gap analysis
     st.subheader("Coverage Gaps - Expansion Opportunities")
@@ -308,4 +308,4 @@ else:
     # Store list
     with st.expander("View Stores Carrying This Brand"):
         store_df = get_brand_store_details(state, selected_brand)
-        st.dataframe(store_df, use_container_width=True, hide_index=True)
+        st.dataframe(store_df, width="stretch", hide_index=True)

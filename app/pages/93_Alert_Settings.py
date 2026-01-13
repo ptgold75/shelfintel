@@ -231,7 +231,7 @@ with engine.connect() as conn:
             import pandas as pd
             df = pd.DataFrame(rows, columns=['Type', 'Status', 'Details', 'Sent'])
             df['Sent'] = pd.to_datetime(df['Sent']).dt.strftime('%Y-%m-%d %H:%M')
-            st.dataframe(df, use_container_width=True, hide_index=True)
+            st.dataframe(df, width="stretch", hide_index=True)
         else:
             st.info("No alerts sent yet")
     else:

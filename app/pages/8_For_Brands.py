@@ -204,4 +204,4 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-st.page_link("Home.py", label="Back to Home", use_container_width=True)
+st.page_link("Home.py", label="Back to Home", width="stretch")

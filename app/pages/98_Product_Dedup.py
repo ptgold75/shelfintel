@@ -275,7 +275,7 @@ if brand_filter and brand_filter != "All":
 
     st.dataframe(
         product_summary[['Base Name', 'Category', 'Variation Count', 'Store Count', 'Min Price', 'Max Price']],
-        use_container_width=True,
+        width="stretch",
         height=400
     )
 

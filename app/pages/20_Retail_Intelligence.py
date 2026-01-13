@@ -669,7 +669,7 @@ if selected_store_id:
                 showlegend=True,
                 legend=dict(orientation="h", yanchor="bottom", y=1.02)
             )
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width="stretch")
 
         with chart_col2:
             # Category distribution
@@ -683,7 +683,7 @@ if selected_store_id:
                 color_discrete_sequence=px.colors.qualitative.Set2
             )
             fig.update_layout(height=300)
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width="stretch")
 
         # Top brands and price distribution
         chart_col3, chart_col4 = st.columns(2)
@@ -702,7 +702,7 @@ if selected_store_id:
                 color_continuous_scale="Blues"
             )
             fig.update_layout(height=300, showlegend=False)
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width="stretch")
 
         with chart_col4:
             # Price distribution chart
@@ -717,7 +717,7 @@ if selected_store_id:
                 color_continuous_scale="Greens"
             )
             fig.update_layout(height=300, showlegend=False)
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width="stretch")
 
     # INSIGHTS SECTION
     st.markdown("---")
@@ -739,7 +739,7 @@ if selected_store_id:
 
                 if insight["type"] == "assortment":
                     df = pd.DataFrame(insight["data"], columns=["Brand", "Product", "Competitors Carrying"])
-                    st.dataframe(df, use_container_width=True, hide_index=True)
+                    st.dataframe(df, width="stretch", hide_index=True)
                     st.markdown("**Action:** Consider adding these popular products to your menu")
 
                 elif insight["type"] == "pricing_high":
@@ -747,18 +747,18 @@ if selected_store_id:
                     df["Your Price"] = df["Your Price"].apply(lambda x: f"${x:.2f}")
                     df["Market Avg"] = df["Market Avg"].apply(lambda x: f"${x:.2f}")
                     df["Difference"] = df["Difference"].apply(lambda x: f"+${x:.2f}")
-                    st.dataframe(df, use_container_width=True, hide_index=True)
+                    st.dataframe(df, width="stretch", hide_index=True)
                     st.markdown("**Action:** Review pricing on these items to stay competitive")
 
                 elif insight["type"] == "brands":
                     df = pd.DataFrame(insight["data"], columns=["Brand", "Competitor Stores", "Products Available"])
-                    st.dataframe(df, use_container_width=True, hide_index=True)
+                    st.dataframe(df, width="stretch", hide_index=True)
                     st.markdown("**Action:** Reach out to these brands for distribution")
 
                 elif insight["type"] == "unique":
                     df = pd.DataFrame(insight["data"], columns=["Brand", "Product", "Category", "Price"])
                     df["Price"] = df["Price"].apply(lambda x: f"${x:.2f}" if x else "N/A")
-                    st.dataframe(df, use_container_width=True, hide_index=True)
+                    st.dataframe(df, width="stretch", hide_index=True)
                     st.markdown("**Action:** Highlight these exclusive products in marketing and promotions")
     else:
         st.success("Your store looks well-positioned in the market!")
@@ -837,7 +837,7 @@ if selected_store_id:
                         showlegend=True
                     ))
                     fig.update_layout(height=350)
-                    st.plotly_chart(fig, use_container_width=True)
+                    st.plotly_chart(fig, width="stretch")
                     st.caption("Points above the line = you're priced lower. Points below = you're priced higher.")
 
                 st.markdown("---")
@@ -857,7 +857,7 @@ if selected_store_id:
                         else "",
                         subset=["Difference"]
                     ),
-                    use_container_width=True,
+                    width="stretch",
                     hide_index=True,
                     height=400
                 )
@@ -883,7 +883,7 @@ if selected_store_id:
                 if brand_filter != "All":
                     df = df[df["Brand"] == brand_filter]
 
-                st.dataframe(df, use_container_width=True, hide_index=True, height=400)
+                st.dataframe(df, width="stretch", hide_index=True, height=400)
             else:
                 st.success("No assortment gaps found!")
 
@@ -925,7 +925,7 @@ if selected_store_id:
                     yaxis_title="",
                     legend=dict(orientation="h", yanchor="bottom", y=1.02)
                 )
-                st.plotly_chart(fig, use_container_width=True)
+                st.plotly_chart(fig, width="stretch")
 
                 # Summary metrics
                 col1, col2, col3 = st.columns(3)
@@ -939,7 +939,7 @@ if selected_store_id:
                     diff = your_total - comp_total
                     st.metric("Difference", f"{diff:+d}")
 
-                st.dataframe(df, use_container_width=True, hide_index=True)
+                st.dataframe(df, width="stretch", hide_index=True)
             else:
                 st.info("No category data available")
     else:

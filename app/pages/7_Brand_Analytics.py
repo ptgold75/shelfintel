@@ -118,7 +118,7 @@ try:
                 yaxis={'categoryorder': 'total ascending'},
                 coloraxis_colorbar_title='Products'
             )
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width="stretch")
 
             # Brand reach distribution
             st.subheader("Brand Reach Distribution")
@@ -132,7 +132,7 @@ try:
                 labels={'stores': 'Number of Stores', 'brands': 'Number of Brands'}
             )
             fig2.update_layout(height=300)
-            st.plotly_chart(fig2, use_container_width=True)
+            st.plotly_chart(fig2, width="stretch")
 
             st.caption(f"Distribution shows how many brands are in N stores (e.g., {reach_dist.iloc[-1]['brands']} brands are in {reach_dist.iloc[-1]['stores']} stores)")
 
@@ -164,7 +164,7 @@ try:
                     labels={'products': 'Product Count', 'brand': 'Brand'}
                 )
                 fig.update_layout(height=400, xaxis_tickangle=-45)
-                st.plotly_chart(fig, use_container_width=True)
+                st.plotly_chart(fig, width="stretch")
 
                 # Category breakdown table
                 pivot = filtered.pivot_table(
@@ -173,7 +173,7 @@ try:
                     values='products',
                     fill_value=0
                 )
-                st.dataframe(pivot, use_container_width=True)
+                st.dataframe(pivot, width="stretch")
         else:
             st.info("No category data available")
 
@@ -214,7 +214,7 @@ try:
                 yaxis_title='Average Price ($)',
                 showlegend=False
             )
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width="stretch")
 
             # Price range scatter
             st.subheader("Price Range by Brand")
@@ -244,7 +244,7 @@ try:
                 yaxis_title='Price ($)',
                 xaxis_title='Brand'
             )
-            st.plotly_chart(fig2, use_container_width=True)
+            st.plotly_chart(fig2, width="stretch")
             st.caption("Lines show min-max range, diamonds show average price")
 
         else:

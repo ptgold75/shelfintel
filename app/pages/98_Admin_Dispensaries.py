@@ -216,7 +216,7 @@ with tab2:
     display_df['Last Success'] = pd.to_datetime(display_df['Last Success']).dt.strftime('%Y-%m-%d %H:%M')
     display_df['Menu URL'] = display_df['Menu URL'].apply(lambda x: x[:50] + '...' if x and len(x) > 50 else x)
 
-    st.dataframe(display_df, use_container_width=True, height=500)
+    st.dataframe(display_df, width="stretch", height=500)
 
     # Export
     if st.button("Export to CSV"):
@@ -235,7 +235,7 @@ with tab3:
     display_rankings.columns = ['Rank', 'Dispensary', 'Products', 'Categories', 'Category List', 'Provider']
     display_rankings['Category List'] = display_rankings['Category List'].apply(lambda x: x[:80] + '...' if x and len(x) > 80 else x)
 
-    st.dataframe(display_rankings, use_container_width=True, height=600)
+    st.dataframe(display_rankings, width="stretch", height=600)
 
     # Summary stats
     st.markdown("---")

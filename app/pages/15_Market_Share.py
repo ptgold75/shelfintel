@@ -170,12 +170,12 @@ try:
             color_continuous_scale='Greens'
         )
         fig.update_layout(height=350, showlegend=False, coloraxis_showscale=False)
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
 
     with col2:
         st.dataframe(
             cat_sales.style.format({"Sales ($M)": "${:.1f}M"}),
-            use_container_width=True,
+            width="stretch",
             hide_index=True
         )
 
@@ -215,13 +215,13 @@ try:
             yaxis={'categoryorder': 'total ascending'},
             xaxis_tickformat='$,.0f'
         )
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
 
         # Revenue table
         display_df = top_brands.copy()
         display_df['estimated_revenue'] = display_df['estimated_revenue'].apply(lambda x: f"${x:,.0f}")
         display_df.columns = ['Brand', 'Est. Monthly Revenue', 'Store Reach', 'Total SKUs', 'Categories']
-        st.dataframe(display_df, use_container_width=True, hide_index=True)
+        st.dataframe(display_df, width="stretch", hide_index=True)
 
     with tab2:
         st.subheader("Top Brands by Category")
@@ -254,7 +254,7 @@ try:
                 xaxis_tickangle=-45,
                 yaxis_tickformat='$,.0f'
             )
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width="stretch")
 
             # Market share pie
             fig2 = px.pie(
@@ -264,7 +264,7 @@ try:
                 title=f"Top 10 {selected_cat} Market Share"
             )
             fig2.update_layout(height=400)
-            st.plotly_chart(fig2, use_container_width=True)
+            st.plotly_chart(fig2, width="stretch")
         else:
             st.info(f"No data available for {selected_cat}")
 
@@ -295,14 +295,14 @@ try:
                 names='category',
                 title=f"{selected_brand} Revenue by Category"
             )
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width="stretch")
 
             # Detail table
             detail_display = brand_detail[['category', 'store_count', 'sku_count', 'market_share_pct', 'estimated_revenue']].copy()
             detail_display['market_share_pct'] = detail_display['market_share_pct'].apply(lambda x: f"{x:.1f}%")
             detail_display['estimated_revenue'] = detail_display['estimated_revenue'].apply(lambda x: f"${x:,.0f}")
             detail_display.columns = ['Category', 'Stores', 'SKUs', 'Category Share', 'Est. Revenue']
-            st.dataframe(detail_display, use_container_width=True, hide_index=True)
+            st.dataframe(detail_display, width="stretch", hide_index=True)
         else:
             st.info(f"No data available for {selected_brand}")
 

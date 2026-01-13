@@ -105,16 +105,18 @@ def get_brands(state: str = "MD"):
 
 @st.cache_data(ttl=3600)  # Cache for 1 hour
 def get_categories_for_brand(brand: str, state: str = "MD"):
-    """Get list of categories for a brand in a state."""
+    """Get list of normalized categories for a brand in a state."""
     engine = get_engine()
     with engine.connect() as conn:
         result = conn.execute(text("""
-            SELECT DISTINCT r.raw_category
+            SELECT DISTINCT COALESCE(cm.normalized_category, 'Unknown') as category
             FROM raw_menu_item r
             JOIN dispensary d ON r.dispensary_id = d.dispensary_id
-            WHERE UPPER(r.raw_brand) = :brand AND r.raw_category IS NOT NULL
+            LEFT JOIN category_mapping cm ON COALESCE(r.raw_category, '') = cm.raw_category
+            WHERE UPPER(r.raw_brand) = :brand
               AND d.state = :state
-            ORDER BY r.raw_category
+              AND COALESCE(cm.normalized_category, 'Unknown') != 'Unknown'
+            ORDER BY category
         """), {"brand": brand, "state": state})
         return [row[0] for row in result]
 
@@ -125,9 +127,11 @@ def get_brand_metrics(brand: str, category: str = None, state: str = "MD"):
     engine = get_engine()
     with engine.connect() as conn:
         params = {"brand": brand, "state": state}
+        cat_join = ""
         cat_filter = ""
         if category:
-            cat_filter = "AND r.raw_category = :category"
+            cat_join = "LEFT JOIN category_mapping cm ON COALESCE(r.raw_category, '') = cm.raw_category"
+            cat_filter = "AND COALESCE(cm.normalized_category, 'Unknown') = :category"
             params["category"] = category
 
         # Combined query to get all metrics in one database round-trip
@@ -148,6 +152,7 @@ def get_brand_metrics(brand: str, category: str = None, state: str = "MD"):
                     SUM(CASE WHEN r.raw_price > 0 AND r.raw_price < 500 THEN r.raw_price ELSE 0 END) as total_retail
                 FROM raw_menu_item r
                 JOIN dispensary d ON r.dispensary_id = d.dispensary_id
+                {cat_join}
                 WHERE UPPER(r.raw_brand) = :brand AND d.state = :state {cat_filter}
             )
             SELECT
@@ -180,16 +185,19 @@ def get_brand_metrics(brand: str, category: str = None, state: str = "MD"):
 
 @st.cache_data(ttl=600)  # Cache for 10 minutes
 def get_competitive_comparison(brand: str, state: str = "MD"):
-    """Compare brand's distribution to similar brands in same categories."""
+    """Compare brand's distribution to similar brands in same normalized categories."""
     engine = get_engine()
     with engine.connect() as conn:
-        # Get brand's main categories
+        # Get brand's main normalized categories
         categories = conn.execute(text("""
-            SELECT r.raw_category, COUNT(*) as cnt
+            SELECT COALESCE(cm.normalized_category, 'Unknown') as category, COUNT(*) as cnt
             FROM raw_menu_item r
             JOIN dispensary d ON r.dispensary_id = d.dispensary_id
+            LEFT JOIN category_mapping cm ON COALESCE(r.raw_category, '') = cm.raw_category
             WHERE UPPER(r.raw_brand) = :brand AND d.state = :state
-            GROUP BY r.raw_category ORDER BY cnt DESC LIMIT 3
+            GROUP BY COALESCE(cm.normalized_category, 'Unknown')
+            HAVING COALESCE(cm.normalized_category, 'Unknown') != 'Unknown'
+            ORDER BY cnt DESC LIMIT 3
         """), {"brand": brand, "state": state}).fetchall()
 
         if not categories:
@@ -199,12 +207,13 @@ def get_competitive_comparison(brand: str, state: str = "MD"):
         if not main_cats:
             return None
 
-        # Get competitor brands in same categories
+        # Get competitor brands in same normalized categories
         competitors = conn.execute(text("""
             SELECT UPPER(r.raw_brand) as brand, COUNT(DISTINCT r.dispensary_id) as stores
             FROM raw_menu_item r
             JOIN dispensary d ON r.dispensary_id = d.dispensary_id
-            WHERE r.raw_category = ANY(:cats)
+            LEFT JOIN category_mapping cm ON COALESCE(r.raw_category, '') = cm.raw_category
+            WHERE COALESCE(cm.normalized_category, 'Unknown') = ANY(:cats)
               AND r.raw_brand IS NOT NULL
               AND UPPER(r.raw_brand) <> :brand
               AND d.state = :state
@@ -228,13 +237,15 @@ def get_competitive_comparison(brand: str, state: str = "MD"):
 
 @st.cache_data(ttl=600)  # Cache for 10 minutes
 def get_distribution_gaps(brand: str, category: str = None, state: str = "MD"):
-    """Get stores with data that don't carry the brand (optionally in a category)."""
+    """Get stores with data that don't carry the brand (optionally in a normalized category)."""
     engine = get_engine()
     with engine.connect() as conn:
         params = {"brand": brand, "state": state}
+        cat_join = ""
         cat_filter = ""
         if category:
-            cat_filter = "AND r.raw_category = :category"
+            cat_join = "LEFT JOIN category_mapping cm ON COALESCE(r.raw_category, '') = cm.raw_category"
+            cat_filter = "AND COALESCE(cm.normalized_category, 'Unknown') = :category"
             params["category"] = category
 
         result = conn.execute(text(f"""
@@ -252,6 +263,7 @@ def get_distribution_gaps(brand: str, category: str = None, state: str = "MD"):
                   SELECT DISTINCT r.dispensary_id
                   FROM raw_menu_item r
                   JOIN dispensary d2 ON r.dispensary_id = d2.dispensary_id
+                  {cat_join}
                   WHERE UPPER(r.raw_brand) = :brand AND d2.state = :state {cat_filter}
               )
             ORDER BY d.county, d.name
@@ -261,13 +273,15 @@ def get_distribution_gaps(brand: str, category: str = None, state: str = "MD"):
 
 @st.cache_data(ttl=600)  # Cache for 10 minutes
 def get_county_coverage(brand: str, category: str = None, state: str = "MD"):
-    """Get coverage by county."""
+    """Get coverage by county using normalized categories."""
     engine = get_engine()
     with engine.connect() as conn:
         params = {"brand": brand, "state": state}
+        cat_join = ""
         cat_filter = ""
         if category:
-            cat_filter = "AND r.raw_category = :category"
+            cat_join = "LEFT JOIN category_mapping cm ON COALESCE(r.raw_category, '') = cm.raw_category"
+            cat_filter = "AND COALESCE(cm.normalized_category, 'Unknown') = :category"
             params["category"] = category
 
         result = conn.execute(text(f"""
@@ -281,6 +295,7 @@ def get_county_coverage(brand: str, category: str = None, state: str = "MD"):
                 SELECT DISTINCT r.dispensary_id, d.county
                 FROM raw_menu_item r
                 JOIN dispensary d ON r.dispensary_id = d.dispensary_id
+                {cat_join}
                 WHERE UPPER(r.raw_brand) = :brand AND d.county IS NOT NULL AND d.state = :state {cat_filter}
             )
             SELECT
@@ -297,19 +312,22 @@ def get_county_coverage(brand: str, category: str = None, state: str = "MD"):
 
 @st.cache_data(ttl=600)  # Cache for 10 minutes
 def get_pricing_issues(brand: str, category: str = None, state: str = "MD"):
-    """Get products with pricing variance (same size only)."""
+    """Get products with pricing variance (same size only) using normalized categories."""
     engine = get_engine()
     with engine.connect() as conn:
         params = {"brand": brand, "state": state}
+        cat_join = ""
         cat_filter = ""
         if category:
-            cat_filter = "AND r.raw_category = :category"
+            cat_join = "LEFT JOIN category_mapping cm ON COALESCE(r.raw_category, '') = cm.raw_category"
+            cat_filter = "AND COALESCE(cm.normalized_category, 'Unknown') = :category"
             params["category"] = category
 
         all_products = conn.execute(text(f"""
             SELECT r.raw_name, r.raw_price
             FROM raw_menu_item r
             JOIN dispensary d ON r.dispensary_id = d.dispensary_id
+            {cat_join}
             WHERE UPPER(r.raw_brand) = :brand AND r.raw_price > 0 AND r.raw_price < 500
               AND d.state = :state {cat_filter}
         """), params).fetchall()
@@ -482,16 +500,17 @@ def get_demo_data(brand: str = "RYTHM"):
 
 @st.cache_data(ttl=600)
 def get_category_breakdown(brand: str, state: str = "MD"):
-    """Get product count by category for a brand."""
+    """Get product count by normalized category for a brand."""
     engine = get_engine()
     with engine.connect() as conn:
         result = conn.execute(text("""
-            SELECT r.raw_category, COUNT(*) as cnt
+            SELECT COALESCE(cm.normalized_category, 'Unknown') as category, COUNT(*) as cnt
             FROM raw_menu_item r
             JOIN dispensary d ON r.dispensary_id = d.dispensary_id
+            LEFT JOIN category_mapping cm ON COALESCE(r.raw_category, '') = cm.raw_category
             WHERE UPPER(r.raw_brand) = :brand AND d.state = :state
-              AND r.raw_category IS NOT NULL
-            GROUP BY r.raw_category
+            GROUP BY COALESCE(cm.normalized_category, 'Unknown')
+            HAVING COALESCE(cm.normalized_category, 'Unknown') != 'Unknown'
             ORDER BY cnt DESC
         """), {"brand": brand, "state": state}).fetchall()
         return {row[0]: row[1] for row in result}
@@ -550,7 +569,7 @@ def get_market_share(state: str = "MD", limit: int = 6):
 
 @st.cache_data(ttl=600)
 def get_price_vs_category(brand: str, state: str = "MD"):
-    """Get brand's average price vs category average."""
+    """Get brand's average price vs normalized category average."""
     engine = get_engine()
     with engine.connect() as conn:
         result = conn.execute(text("""
@@ -562,10 +581,12 @@ def get_price_vs_category(brand: str, state: str = "MD"):
                   AND r.raw_price > 0 AND r.raw_price < 500
             ),
             brand_categories AS (
-                SELECT DISTINCT r.raw_category
+                SELECT DISTINCT COALESCE(cm.normalized_category, 'Unknown') as category
                 FROM raw_menu_item r
                 JOIN dispensary d ON r.dispensary_id = d.dispensary_id
+                LEFT JOIN category_mapping cm ON COALESCE(r.raw_category, '') = cm.raw_category
                 WHERE UPPER(r.raw_brand) = :brand AND d.state = :state
+                  AND COALESCE(cm.normalized_category, 'Unknown') != 'Unknown'
             ),
             category_prices AS (
                 SELECT AVG(r.raw_price) as cat_avg,
@@ -573,7 +594,8 @@ def get_price_vs_category(brand: str, state: str = "MD"):
                        MIN(r.raw_price) as cat_low
                 FROM raw_menu_item r
                 JOIN dispensary d ON r.dispensary_id = d.dispensary_id
-                WHERE r.raw_category IN (SELECT raw_category FROM brand_categories)
+                LEFT JOIN category_mapping cm ON COALESCE(r.raw_category, '') = cm.raw_category
+                WHERE COALESCE(cm.normalized_category, 'Unknown') IN (SELECT category FROM brand_categories)
                   AND d.state = :state
                   AND r.raw_price > 0 AND r.raw_price < 500
             )
@@ -796,7 +818,7 @@ if selected_brand:
                     x=-0.1
                 )
             )
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width="stretch")
         else:
             st.info("No category data available")
 
@@ -819,7 +841,7 @@ if selected_brand:
                 xaxis_tickangle=-45,
                 margin=dict(t=20, b=60, l=40, r=20)
             )
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width="stretch")
         else:
             st.info("No market share data available")
 
@@ -839,7 +861,7 @@ if selected_brand:
                 labels={"range": "Price Range", "count": "SKUs"}
             )
             fig.update_layout(height=280, showlegend=False, margin=dict(t=20, b=40, l=40, r=20))
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width="stretch")
         else:
             st.info("No pricing data available")
 
@@ -865,7 +887,7 @@ if selected_brand:
                     xaxis_title="",
                     yaxis_title="Stores"
                 )
-                st.plotly_chart(fig, use_container_width=True)
+                st.plotly_chart(fig, width="stretch")
         else:
             st.markdown("**Top Products by Distribution**")
             # For real mode, could add top products query here
@@ -925,7 +947,7 @@ if selected_brand:
 
             with st.expander(f"View {len(gaps)} target stores"):
                 df = pd.DataFrame(gaps, columns=["Store", "City", "County"])
-                st.dataframe(df, use_container_width=True, hide_index=True, height=300)
+                st.dataframe(df, width="stretch", hide_index=True, height=300)
 
         # Pricing Issues - use pre-loaded data
         if pricing_issues:
@@ -942,7 +964,7 @@ if selected_brand:
                 df["Min Price"] = df["Min Price"].apply(lambda x: f"${x:.2f}")
                 df["Max Price"] = df["Max Price"].apply(lambda x: f"${x:.2f}")
                 df["Spread"] = df["Spread"].apply(lambda x: f"${x:.2f}")
-                st.dataframe(df, use_container_width=True, hide_index=True)
+                st.dataframe(df, width="stretch", hide_index=True)
 
         # No critical issues
         if not gaps and not pricing_issues:
@@ -985,13 +1007,13 @@ if selected_brand:
             st.markdown(f"**Currently Carrying ({len(carrying)} stores)**")
             if carrying:
                 df = pd.DataFrame(carrying, columns=["Store", "City", "County", "Products"])
-                st.dataframe(df, use_container_width=True, hide_index=True, height=350)
+                st.dataframe(df, width="stretch", hide_index=True, height=350)
 
         with col2:
             st.markdown(f"**Not Carrying - Sales Targets ({len(gaps)} stores)**")
             if gaps:
                 df = pd.DataFrame(gaps, columns=["Store", "City", "County"])
-                st.dataframe(df, use_container_width=True, hide_index=True, height=350)
+                st.dataframe(df, width="stretch", hide_index=True, height=350)
 
         # Top products chart (demo mode)
         if DEMO_MODE and demo_data.get("top_products"):
@@ -1008,7 +1030,7 @@ if selected_brand:
                 labels={"stores": "Stores Carrying", "product": "", "avg_price": "Avg Price"}
             )
             fig.update_layout(height=280, margin=dict(t=10, b=40, l=10, r=20))
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width="stretch")
 
     with tab3:
         st.markdown('<p class="section-header">Coverage by County</p>', unsafe_allow_html=True)
@@ -1034,7 +1056,7 @@ if selected_brand:
                 st.markdown("**Coverage Table** - Sorted by opportunity size")
                 display_df = df[["County", "Carrying", "Total Stores", "Coverage %", "Gap"]].copy()
                 display_df["Coverage %"] = display_df["Coverage %"].apply(lambda x: f"{x}%")
-                st.dataframe(display_df, use_container_width=True, hide_index=True, height=350)
+                st.dataframe(display_df, width="stretch", hide_index=True, height=350)
 
             with col2:
                 st.markdown("**Coverage by County** - Higher % = better penetration")
@@ -1049,7 +1071,7 @@ if selected_brand:
                     color_continuous_scale=["#dc3545", "#ffc107", "#28a745"]
                 )
                 fig.update_layout(height=350, showlegend=False, margin=dict(t=10, b=40, l=10, r=20))
-                st.plotly_chart(fig, use_container_width=True)
+                st.plotly_chart(fig, width="stretch")
 
     with tab4:
         st.markdown('<p class="section-header">Competitor Deep-Dive</p>', unsafe_allow_html=True)
@@ -1079,7 +1101,7 @@ if selected_brand:
                     color_discrete_map={"You": "#1e3a5f", "Competitor": "#94a3b8"}
                 )
                 fig.update_layout(height=300, showlegend=False, margin=dict(t=10, b=40, l=10, r=20))
-                st.plotly_chart(fig, use_container_width=True)
+                st.plotly_chart(fig, width="stretch")
 
             with col2:
                 st.markdown("**Your Position**")

@@ -30,7 +30,7 @@ else:
         with st.form("login_form"):
             email = st.text_input("Email or Username")
             password = st.text_input("Password", type="password")
-            submitted = st.form_submit_button("Login", use_container_width=True, type="primary")
+            submitted = st.form_submit_button("Login", width="stretch", type="primary")
 
             if submitted:
                 if email and password:

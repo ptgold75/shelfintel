@@ -121,7 +121,7 @@ try:
                 labels={'store_count': 'Number of Stores', 'county': 'County', 'unique_products': 'Products'}
             )
             fig.update_layout(height=400, coloraxis_colorbar_title='Products')
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width="stretch")
 
         with col2:
             st.subheader("Average Price by County")
@@ -134,7 +134,7 @@ try:
                 labels={'avg_price': 'Avg Price ($)', 'county': 'County'}
             )
             fig2.update_layout(height=400, xaxis_tickangle=-45, showlegend=False, coloraxis_showscale=False)
-            st.plotly_chart(fig2, use_container_width=True)
+            st.plotly_chart(fig2, width="stretch")
 
         # Brand diversity
         st.subheader("Brand Diversity by County")
@@ -149,7 +149,7 @@ try:
             color_continuous_scale='Viridis'
         )
         fig3.update_layout(height=400)
-        st.plotly_chart(fig3, use_container_width=True)
+        st.plotly_chart(fig3, width="stretch")
         st.caption("Bubble size = number of products | Color = average price")
 
         # Summary table
@@ -157,7 +157,7 @@ try:
         display_df = county_summary.copy()
         display_df['avg_price'] = display_df['avg_price'].apply(lambda x: f"${x:.2f}")
         display_df.columns = ['County', 'Stores', 'Products', 'Brands', 'Avg Price']
-        st.dataframe(display_df, use_container_width=True, hide_index=True)
+        st.dataframe(display_df, width="stretch", hide_index=True)
 
     with tab2:
         st.subheader("Category Mix by County")
@@ -180,14 +180,14 @@ try:
                     labels={'products': 'Product Count', 'county': 'County'}
                 )
                 fig.update_layout(height=500, xaxis_tickangle=-45)
-                st.plotly_chart(fig, use_container_width=True)
+                st.plotly_chart(fig, width="stretch")
 
                 # Percentage breakdown
                 st.subheader("Category Percentage by County")
                 pivot = filtered.pivot_table(index='county', columns='category', values='products', fill_value=0)
                 pivot_pct = pivot.div(pivot.sum(axis=1), axis=0) * 100
                 pivot_pct = pivot_pct.round(1)
-                st.dataframe(pivot_pct, use_container_width=True)
+                st.dataframe(pivot_pct, width="stretch")
         else:
             st.info("No category data available")
 
@@ -213,7 +213,7 @@ try:
                 labels={'products': 'Products', 'store': 'Store'}
             )
             fig.update_layout(height=600, yaxis={'categoryorder': 'total ascending'})
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width="stretch")
 
             # Top brands in selected county
             if county_filter != 'All':
@@ -228,7 +228,7 @@ try:
                         labels={'products': 'Products', 'brand': 'Brand'}
                     )
                     fig2.update_layout(height=400, yaxis={'categoryorder': 'total ascending'})
-                    st.plotly_chart(fig2, use_container_width=True)
+                    st.plotly_chart(fig2, width="stretch")
         else:
             st.info("No store data available")
 

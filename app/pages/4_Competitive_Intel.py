@@ -343,7 +343,7 @@ else:
 
                 data = [{"Product": p["name"][:35], "Brand": p["brand"][:15] if p["brand"] else "", "You": f"${p['your_price']:.2f}", "Market": f"${p['market_avg']:.2f}", "Diff": f"{p['diff_pct']:+.1f}%"} for p in sorted(filtered, key=lambda x: x["diff_pct"])[:30]]
                 if data:
-                    st.dataframe(data, use_container_width=True, hide_index=True)
+                    st.dataframe(data, width="stretch", hide_index=True)
             else:
                 st.info("No overlapping products to compare prices.")
 
@@ -361,7 +361,7 @@ else:
                     status = "Under" if diff < -5 else "Over" if diff > 5 else "Balanced"
                     data.append({"Category": cat, "You": f"{my_pct:.1f}%", "Market": f"{comp_pct:.1f}%", "Diff": f"{diff:+.1f}%", "Status": status})
 
-                st.dataframe(data, use_container_width=True, hide_index=True)
+                st.dataframe(data, width="stretch", hide_index=True)
 
                 # Chart
                 import pandas as pd

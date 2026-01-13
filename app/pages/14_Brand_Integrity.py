@@ -239,7 +239,7 @@ for i in range(0, len(image_items), cols_per_row):
                 st.caption(f"**{item['dispensary'][:20]}**")
                 if item['has_image']:
                     try:
-                        st.image(item['image'], use_container_width=True)
+                        st.image(item['image'], width="stretch")
                     except:
                         st.markdown("*Image load error*")
                 else:
@@ -271,7 +271,7 @@ for item in product_images:
     })
 
 summary_df = pd.DataFrame(summary_data)
-st.dataframe(summary_df, use_container_width=True, height=300)
+st.dataframe(summary_df, width="stretch", height=300)
 
 st.divider()
 

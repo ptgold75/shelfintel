@@ -302,7 +302,7 @@ if DEMO_MODE:
             color_discrete_sequence=px.colors.qualitative.Set2
         )
         fig.update_layout(height=320)
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
 
     with chart_col2:
         # Top brands bar chart
@@ -317,7 +317,7 @@ if DEMO_MODE:
             color_continuous_scale="Greens"
         )
         fig.update_layout(height=320, showlegend=False)
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
 
     # Market trends
     chart_col3, chart_col4 = st.columns(2)
@@ -336,7 +336,7 @@ if DEMO_MODE:
             color_continuous_scale="Greens"
         )
         fig.update_layout(height=250, showlegend=False)
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
 
     with chart_col4:
         st.markdown("#### Declining Categories")
@@ -352,7 +352,7 @@ if DEMO_MODE:
             color_continuous_scale="Reds_r"
         )
         fig.update_layout(height=250, showlegend=False)
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
 
 # Tabs
 st.markdown("---")
@@ -388,10 +388,10 @@ with tab1:
                 showlegend=False,
                 height=450
             )
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width="stretch")
 
         with col2:
-            st.dataframe(df, use_container_width=True, hide_index=True)
+            st.dataframe(df, width="stretch", hide_index=True)
 
 with tab2:
     st.subheader("Most Distributed Flower Products")
@@ -411,7 +411,7 @@ with tab2:
         # Top 20 table
         st.dataframe(
             df[["Brand", "Product", "Stores", "Avg Price", "Price Range"]].head(30),
-            use_container_width=True,
+            width="stretch",
             hide_index=True,
             height=500
         )
@@ -439,7 +439,7 @@ with tab3:
         # Distribution efficiency = listings per store
         df["Listings/Store"] = (df["Total Listings"] / df["Stores"]).round(1)
 
-        st.dataframe(df, use_container_width=True, hide_index=True, height=500)
+        st.dataframe(df, width="stretch", hide_index=True, height=500)
 
         # Top 20 visualization
         st.markdown("---")
@@ -458,7 +458,7 @@ with tab3:
             showlegend=False,
             height=500
         )
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
 
 with tab4:
     st.subheader("Price Benchmarks by Category")
@@ -472,7 +472,7 @@ with tab4:
         df = pd.DataFrame(prices, columns=["Category", "25th %ile", "Median", "75th %ile", "Average"])
         df = df.round(2)
 
-        st.dataframe(df, use_container_width=True, hide_index=True)
+        st.dataframe(df, width="stretch", hide_index=True)
 
         st.markdown("---")
         # Melt the dataframe for grouped bar chart
@@ -495,7 +495,7 @@ with tab4:
             legend_title="Percentile",
             height=400
         )
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
 
 with tab5:
     st.subheader("Size Distribution by Category")
@@ -558,9 +558,9 @@ with tab5:
                          color="Size",
                          color_discrete_sequence=px.colors.qualitative.Set2)
             fig.update_layout(showlegend=False, height=350)
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width="stretch")
         with col2:
-            st.dataframe(df_flower, hide_index=True, use_container_width=True)
+            st.dataframe(df_flower, hide_index=True, width="stretch")
 
             total = df_flower["Products"].sum()
             st.metric("Total Flower", f"{total:,}")
@@ -582,9 +582,9 @@ with tab5:
                          color="Products",
                          color_continuous_scale="Blues")
             fig.update_layout(showlegend=False, height=300)
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width="stretch")
         with col2:
-            st.dataframe(df_preroll, hide_index=True, use_container_width=True)
+            st.dataframe(df_preroll, hide_index=True, width="stretch")
 
         # Insights
         st.markdown("---")
@@ -718,9 +718,9 @@ with tab5:
                                      color="Size",
                                      color_discrete_sequence=px.colors.qualitative.Set2)
                         fig.update_layout(showlegend=False, height=350)
-                        st.plotly_chart(fig, use_container_width=True)
+                        st.plotly_chart(fig, width="stretch")
                     with col2:
-                        st.dataframe(df_flower, hide_index=True, use_container_width=True)
+                        st.dataframe(df_flower, hide_index=True, width="stretch")
 
                         total = df_flower["Products"].sum()
                         known = total - flower_sizes.get("Unknown", 0)
@@ -738,7 +738,7 @@ with tab5:
                     for s, c in sorted(preroll_sizes.items(), key=lambda x: -x[1])
                 ])
                 if not df_preroll.empty:
-                    st.dataframe(df_preroll.head(10), hide_index=True, use_container_width=True)
+                    st.dataframe(df_preroll.head(10), hide_index=True, width="stretch")
             else:
                 st.info("No pre-roll data available for this selection")
         else:

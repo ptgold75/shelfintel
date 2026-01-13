@@ -136,7 +136,7 @@ if selected_store == "Select a store...":
     display_df = stores_df[['name', 'product_count']].rename(columns={
         'name': 'Store', 'product_count': 'Products'
     })
-    st.dataframe(display_df, use_container_width=True, height=400)
+    st.dataframe(display_df, width="stretch", height=400)
     st.stop()
 
 # Get selected store info
@@ -268,7 +268,7 @@ with tab1:
                 display_higher['your_price'] = display_higher['your_price'].apply(lambda x: f"${x:.2f}")
                 display_higher['comp_price'] = display_higher['comp_price'].apply(lambda x: f"${x:.2f}")
                 display_higher['price_diff'] = display_higher['price_diff'].apply(lambda x: f"+${x:.2f}")
-                st.dataframe(display_higher, use_container_width=True, hide_index=True)
+                st.dataframe(display_higher, width="stretch", hide_index=True)
             else:
                 st.success("No significant price gaps where you're higher!")
 
@@ -279,7 +279,7 @@ with tab1:
                 display_lower['your_price'] = display_lower['your_price'].apply(lambda x: f"${x:.2f}")
                 display_lower['comp_price'] = display_lower['comp_price'].apply(lambda x: f"${x:.2f}")
                 display_lower['price_diff'] = display_lower['price_diff'].apply(lambda x: f"${x:.2f}")
-                st.dataframe(display_lower, use_container_width=True, hide_index=True)
+                st.dataframe(display_lower, width="stretch", hide_index=True)
             else:
                 st.info("No significant price advantages found.")
         else:
@@ -335,7 +335,7 @@ with tab2:
         st.markdown("**Top Missing Products** (carried by most competitors)")
         display_missing = product_counts.head(20)[['product', 'brand', 'category', 'price', 'competitors', 'carried_by']].copy()
         display_missing['price'] = display_missing['price'].apply(lambda x: f"${x:.2f}" if pd.notna(x) else "")
-        st.dataframe(display_missing, use_container_width=True, hide_index=True)
+        st.dataframe(display_missing, width="stretch", hide_index=True)
     else:
         st.success("You carry all products that your competitors have!")
 
@@ -359,14 +359,14 @@ with tab3:
         fig = px.bar(combined_cats, x='category', y='count', color='store',
                     barmode='group', title='Product Count by Category')
         fig.update_layout(xaxis_tickangle=-45, height=400)
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
 
         # Category percentages
         st.markdown("**Category Distribution (%)**")
         pivot_df = combined_cats.pivot(index='category', columns='store', values='count').fillna(0)
         for col in pivot_df.columns:
             pivot_df[col] = (pivot_df[col] / pivot_df[col].sum() * 100).round(1)
-        st.dataframe(pivot_df, use_container_width=True)
+        st.dataframe(pivot_df, width="stretch")
 
 st.divider()
 st.caption("Comparison based on most recent menu data | Update frequency: daily")

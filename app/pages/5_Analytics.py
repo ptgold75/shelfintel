@@ -99,15 +99,15 @@ with tab1:
     st.subheader("Coverage by State")
     if not state_df.empty:
         fig = px.pie(state_df, values='store_count', names='state', title='Dispensaries by State')
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
 
 with tab2:
     st.header("Brand Analysis")
     if not brand_df.empty:
         fig = px.bar(brand_df.head(15), x="sku_count", y="brand", orientation="h", title="Top Brands by Product Count")
         fig.update_layout(yaxis={"categoryorder": "total ascending"}, height=500)
-        st.plotly_chart(fig, use_container_width=True)
-        st.dataframe(brand_df, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
+        st.dataframe(brand_df, width="stretch")
     else:
         st.info("No brand data available")
 
@@ -117,18 +117,18 @@ with tab3:
         col1, col2 = st.columns(2)
         with col1:
             fig = px.pie(category_df, values="product_count", names="category", title="Categories", hole=0.4)
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width="stretch")
         with col2:
             fig = px.bar(category_df, x="category", y="product_count", title="Products per Category")
             fig.update_layout(xaxis_tickangle=-45)
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width="stretch")
     else:
         st.info("No category data available")
 
 with tab4:
     st.header("Stores by State")
     if not state_df.empty:
-        st.dataframe(state_df, use_container_width=True)
+        st.dataframe(state_df, width="stretch")
 
         # Show stores for selected state
         if selected_state != 'All States':
@@ -139,7 +139,7 @@ with tab4:
                     "SELECT name, city, address FROM dispensary WHERE COALESCE(state, 'MD') = :state ORDER BY name"
                 ), conn, params={"state": selected_state})
             if not stores.empty:
-                st.dataframe(stores, use_container_width=True)
+                st.dataframe(stores, width="stretch")
             else:
                 st.info(f"No stores found in {selected_state}")
 
