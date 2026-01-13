@@ -146,6 +146,7 @@ def render_sidebar_nav():
         with st.expander("Retail", expanded=False):
             st.caption("For dispensaries & retailers")
             st.page_link("pages/20_Retail_Intelligence.py", label="Dashboard")
+            st.page_link("pages/50_Deals_Dashboard.py", label="Deals & Promos")
             st.page_link("pages/6_Price_Analysis.py", label="Price Analysis")
             st.page_link("pages/6_Competitor_Compare.py", label="Competitor Compare")
             if logged_in:
@@ -184,6 +185,7 @@ def render_sidebar_nav():
                 st.page_link("pages/98_Admin_Dispensaries.py", label="Dispensaries")
                 st.page_link("pages/99_Admin_Brands.py", label="Brand Hierarchy")
                 st.page_link("pages/97_Admin_Naming.py", label="Naming Rules")
+                st.page_link("pages/93_Admin_Loyalty.py", label="Loyalty SMS")
 
         st.divider()
 
