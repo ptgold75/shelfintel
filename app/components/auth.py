@@ -2,6 +2,16 @@
 """Authentication and authorization utilities."""
 
 import hashlib
+import sys
+import os
+from pathlib import Path
+
+# Add parent directory to path so we can import core module
+_app_dir = Path(__file__).parent.parent  # app/
+_root_dir = _app_dir.parent  # shelfintel/
+if str(_root_dir) not in sys.path:
+    sys.path.insert(0, str(_root_dir))
+
 import streamlit as st
 from sqlalchemy import text
 from typing import Optional, List
