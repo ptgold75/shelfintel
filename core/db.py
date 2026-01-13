@@ -15,15 +15,20 @@ def get_database_url() -> str:
     2. Streamlit secrets (for Streamlit app)
     3. Local secrets.toml file (fallback)
     """
+    import sys
+
     url = os.getenv("DATABASE_URL")
+    if url:
+        print("DB SOURCE: environment variable", file=sys.stderr)
 
     # Try Streamlit secrets if env var not set
     if not url:
         try:
             import streamlit as st
             url = st.secrets["DATABASE_URL"]
-        except Exception:
-            pass
+            print("DB SOURCE: streamlit secrets", file=sys.stderr)
+        except Exception as e:
+            print(f"DB: streamlit secrets failed: {e}", file=sys.stderr)
 
     # Fallback: read directly from secrets.toml
     if not url:
@@ -46,12 +51,13 @@ def get_database_url() -> str:
             pass
 
     if not url:
+        print("DB ERROR: DATABASE_URL not set", file=sys.stderr)
         raise RuntimeError("DATABASE_URL not set")
 
     # Safe debug (no password)
     m = re.search(r"@([^:/]+)", url)
     host = m.group(1) if m else "unknown"
-    print("DB HOST:", host)
+    print(f"DB HOST: {host}", file=sys.stderr)
 
     return url
 
