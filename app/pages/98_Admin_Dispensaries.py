@@ -24,6 +24,32 @@ st.markdown("Track scraping status, fix issues, and manage dispensary data")
 engine = get_engine()
 
 @st.cache_data(ttl=60)
+def get_md_dispensaries():
+    """Get all Maryland dispensaries for cleanup tab."""
+    with engine.connect() as conn:
+        return pd.read_sql(text("""
+            SELECT
+                d.dispensary_id,
+                d.name,
+                d.address,
+                d.city,
+                d.store_type,
+                d.is_active,
+                d.menu_url,
+                d.menu_provider,
+                COALESCE(pc.product_count, 0) as products
+            FROM dispensary d
+            LEFT JOIN (
+                SELECT dispensary_id, COUNT(*) as product_count
+                FROM raw_menu_item
+                GROUP BY dispensary_id
+            ) pc ON d.dispensary_id = pc.dispensary_id
+            WHERE d.state = 'MD'
+            ORDER BY d.name
+        """), conn)
+
+
+@st.cache_data(ttl=60)
 def get_dispensary_status():
     """Get comprehensive status for all dispensaries."""
     with engine.connect() as conn:
@@ -395,36 +421,17 @@ with tab4:
                 else:
                     st.info("No duplicates to clean up")
 
-    # Get MD dispensaries
-    @st.cache_data(ttl=30)
-    def get_md_dispensaries():
-        with engine.connect() as conn:
-            return pd.read_sql(text("""
-                SELECT
-                    d.dispensary_id,
-                    d.name,
-                    d.address,
-                    d.city,
-                    d.store_type,
-                    d.is_active,
-                    d.menu_url,
-                    d.menu_provider,
-                    COALESCE(pc.product_count, 0) as products
-                FROM dispensary d
-                LEFT JOIN (
-                    SELECT dispensary_id, COUNT(*) as product_count
-                    FROM raw_menu_item
-                    GROUP BY dispensary_id
-                ) pc ON d.dispensary_id = pc.dispensary_id
-                WHERE d.state = 'MD'
-                ORDER BY d.name
-            """), conn)
-
+    # Get MD dispensaries (function defined at module level)
     md_df = get_md_dispensaries()
+
+    # Debug info if empty
+    if md_df.empty:
+        st.error("No MD dispensaries found in database. Check database connection.")
+        st.stop()
 
     # Summary
     total_md = len(md_df)
-    active_md = len(md_df[md_df['is_active'] == True])
+    active_md = len(md_df[md_df['is_active'].fillna(False) == True])
     dispensaries = len(md_df[(md_df['store_type'] == 'dispensary') & (md_df['is_active'] == True)])
     smoke_shops = len(md_df[(md_df['store_type'] == 'smoke_shop') & (md_df['is_active'] == True)])
     with_products = len(md_df[md_df['products'] > 0])
@@ -450,17 +457,20 @@ with tab4:
     # Apply filters
     display_md = md_df.copy()
     if show_filter == "Active Only":
-        display_md = display_md[display_md['is_active'] == True]
+        display_md = display_md[display_md['is_active'].fillna(False) == True]
     elif show_filter == "Inactive Only":
-        display_md = display_md[display_md['is_active'] == False]
+        display_md = display_md[display_md['is_active'].fillna(False) == False]
 
     if type_filter != "All":
-        display_md = display_md[display_md['store_type'] == type_filter]
+        display_md = display_md[display_md['store_type'].fillna('dispensary') == type_filter]
 
     if search:
-        display_md = display_md[display_md['name'].str.lower().str.contains(search.lower())]
+        display_md = display_md[display_md['name'].str.lower().str.contains(search.lower(), na=False)]
 
     st.markdown(f"**Showing {len(display_md)} dispensaries**")
+
+    if display_md.empty:
+        st.warning("No dispensaries match the current filters. Try changing the filter options.")
 
     # Bulk actions
     st.markdown("### Bulk Actions")
