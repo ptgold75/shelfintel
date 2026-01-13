@@ -182,6 +182,7 @@ def render_sidebar_nav():
             with st.expander("Admin", expanded=False):
                 st.page_link("pages/90_Admin_Clients.py", label="Clients")
                 st.page_link("pages/98_Admin_Dispensaries.py", label="Dispensaries")
+                st.page_link("pages/99_Admin_Brands.py", label="Brand Hierarchy")
                 st.page_link("pages/97_Admin_Naming.py", label="Naming Rules")
 
         st.divider()
