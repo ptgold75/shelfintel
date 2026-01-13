@@ -527,42 +527,83 @@ with tab4:
     if 'selected_ids' not in st.session_state:
         st.session_state.selected_ids = []
 
-    # Display dispensaries with checkboxes
+    # Display dispensaries as a table with selection
     st.markdown("### Dispensary List")
-    st.markdown("Select dispensaries to mark as duplicate or smoke shop:")
 
-    for idx, row in display_md.iterrows():
-        col1, col2, col3, col4 = st.columns([0.5, 3, 1.5, 1.5])
+    if not display_md.empty:
+        # Prepare display dataframe
+        table_df = display_md[['name', 'city', 'store_type', 'products', 'is_active', 'menu_provider', 'dispensary_id']].copy()
+        table_df['Status'] = table_df['is_active'].apply(lambda x: 'Active' if x else 'Inactive')
+        table_df['Products'] = table_df['products'].fillna(0).astype(int)
+        table_df['Type'] = table_df['store_type'].fillna('dispensary')
+        table_df['Provider'] = table_df['menu_provider'].fillna('unknown')
 
-        with col1:
-            is_selected = st.checkbox(
-                "sel",
-                key=f"sel_{row['dispensary_id']}",
-                label_visibility="collapsed",
-                value=row['dispensary_id'] in st.session_state.selected_ids
-            )
-            if is_selected and row['dispensary_id'] not in st.session_state.selected_ids:
-                st.session_state.selected_ids.append(row['dispensary_id'])
-            elif not is_selected and row['dispensary_id'] in st.session_state.selected_ids:
-                st.session_state.selected_ids.remove(row['dispensary_id'])
+        # Use data editor for selection
+        selected = st.data_editor(
+            table_df[['name', 'city', 'Type', 'Products', 'Status', 'Provider']].rename(columns={
+                'name': 'Name',
+                'city': 'City'
+            }),
+            hide_index=True,
+            use_container_width=True,
+            height=400,
+            column_config={
+                "Products": st.column_config.NumberColumn("Products", width="small"),
+                "Status": st.column_config.TextColumn("Status", width="small"),
+                "Type": st.column_config.TextColumn("Type", width="small"),
+            },
+            disabled=True  # Read-only table
+        )
 
-        with col2:
-            status_icon = "" if row['is_active'] else ""
-            products_badge = f" ({row['products']} products)" if row['products'] > 0 else ""
-            st.markdown(f"{status_icon} **{row['name']}**{products_badge}")
-            st.caption(f"{row['address'] or 'No address'}, {row['city'] or 'Unknown'}")
+        # Single dispensary actions
+        st.markdown("---")
+        st.markdown("**Quick Actions** (select a dispensary by name)")
 
-        with col3:
-            type_color = "green" if row['store_type'] == 'dispensary' else ("orange" if row['store_type'] == 'smoke_shop' else "red")
-            st.markdown(f":{type_color}[{row['store_type'] or 'dispensary'}]")
+        disp_options = table_df['name'].tolist()
+        selected_name = st.selectbox("Select Dispensary", [""] + disp_options, key="quick_select")
 
-        with col4:
-            provider = row['menu_provider'] or 'unknown'
-            st.caption(provider)
+        if selected_name:
+            selected_row = table_df[table_df['name'] == selected_name].iloc[0]
+            disp_id = selected_row['dispensary_id']
 
-    # Show selected count
-    if st.session_state.selected_ids:
-        st.info(f"**{len(st.session_state.selected_ids)} selected** - Use bulk actions above to update")
+            st.caption(f"ID: {disp_id}")
+
+            col1, col2, col3 = st.columns(3)
+            with col1:
+                if st.button("Mark as Duplicate", key="quick_dup"):
+                    with engine.connect() as conn:
+                        conn.execute(text("""
+                            UPDATE dispensary SET store_type = 'duplicate', is_active = false
+                            WHERE dispensary_id = :id
+                        """), {"id": disp_id})
+                        conn.commit()
+                    st.success(f"Marked {selected_name} as duplicate")
+                    st.cache_data.clear()
+                    st.rerun()
+
+            with col2:
+                if st.button("Mark as Smoke Shop", key="quick_smoke"):
+                    with engine.connect() as conn:
+                        conn.execute(text("""
+                            UPDATE dispensary SET store_type = 'smoke_shop', is_active = false
+                            WHERE dispensary_id = :id
+                        """), {"id": disp_id})
+                        conn.commit()
+                    st.success(f"Marked {selected_name} as smoke shop")
+                    st.cache_data.clear()
+                    st.rerun()
+
+            with col3:
+                if st.button("Reactivate", key="quick_activate"):
+                    with engine.connect() as conn:
+                        conn.execute(text("""
+                            UPDATE dispensary SET store_type = 'dispensary', is_active = true
+                            WHERE dispensary_id = :id
+                        """), {"id": disp_id})
+                        conn.commit()
+                    st.success(f"Reactivated {selected_name}")
+                    st.cache_data.clear()
+                    st.rerun()
 
 st.divider()
 
