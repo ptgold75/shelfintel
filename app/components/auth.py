@@ -28,8 +28,8 @@ def authenticate_user(email: str, password: str) -> Optional[dict]:
             result = conn.execute(text("""
                 SELECT client_id, company_name, contact_name, email, is_admin, is_active
                 FROM client
-                WHERE email = :email AND password_hash = :password_hash
-            """), {"email": email.lower(), "password_hash": password_hash})
+                WHERE LOWER(email) = LOWER(:email) AND password_hash = :password_hash
+            """), {"email": email.strip(), "password_hash": password_hash})
             row = result.fetchone()
 
             if row and row[5]:  # is_active
@@ -41,9 +41,14 @@ def authenticate_user(email: str, password: str) -> Optional[dict]:
                     "is_admin": row[4]
                 }
         return None
+    except RuntimeError as e:
+        # DATABASE_URL not set
+        import streamlit as st
+        st.error(f"Database not configured. Please check secrets.")
+        return None
     except Exception as e:
         import streamlit as st
-        st.error(f"Authentication error: {type(e).__name__}")
+        st.error(f"Login error: {type(e).__name__}: {str(e)[:100]}")
         return None
 
 
