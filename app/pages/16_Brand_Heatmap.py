@@ -114,14 +114,60 @@ if DEMO_MODE:
     display_df.columns = ['County', 'Total Stores', 'Brand Stores', 'Penetration']
     st.dataframe(display_df, width="stretch", hide_index=True)
 
-    # Gap analysis
-    st.subheader("Coverage Gaps")
+    # Gap analysis with store names
+    st.subheader("Coverage Gaps - Sales Targets")
     gaps = df[df['penetration'] < 50].sort_values('stores', ascending=False)
+
+    # Demo store data for gaps
+    demo_gap_stores = [
+        {"Store": "Green Leaf Dispensary", "City": "Frederick", "County": "Frederick County", "Address": "123 Main St"},
+        {"Store": "Harvest House", "City": "Frederick", "County": "Frederick County", "Address": "456 Oak Ave"},
+        {"Store": "Nature's Remedy", "City": "Frederick", "County": "Frederick County", "Address": "789 Elm Blvd"},
+        {"Store": "Cannabis Corner", "City": "Westminster", "County": "Carroll County", "Address": "321 Center St"},
+        {"Store": "Wellness Works", "City": "Westminster", "County": "Carroll County", "Address": "654 Liberty Rd"},
+        {"Store": "The Green Door", "City": "Elkton", "County": "Cecil County", "Address": "987 Bridge St"},
+        {"Store": "Maryland Medicinals", "City": "Laurel", "County": "Prince George's County", "Address": "147 Cherry Ln"},
+        {"Store": "Capital Cannabis", "City": "College Park", "County": "Prince George's County", "Address": "258 University Blvd"},
+        {"Store": "Potomac Wellness", "City": "Waldorf", "County": "Prince George's County", "Address": "369 Crain Hwy"},
+        {"Store": "DMV Dispensary", "City": "Hyattsville", "County": "Prince George's County", "Address": "741 Baltimore Ave"},
+        {"Store": "Chesapeake Cannabis", "City": "Bowie", "County": "Prince George's County", "Address": "852 Annapolis Rd"},
+    ]
+    gap_stores_df = pd.DataFrame(demo_gap_stores)
+
     if len(gaps) > 0:
-        st.warning(f"**{len(gaps)} counties** have less than 50% penetration")
-        for _, row in gaps.iterrows():
-            opportunity = row['stores'] - row['brand_stores']
-            st.markdown(f"- **{row['county']}**: {row['brand_stores']}/{row['stores']} stores ({row['penetration']}%) - **{opportunity} store opportunity**")
+        total_gap_stores = len(gap_stores_df)
+        st.warning(f"**{total_gap_stores} stores** don't carry {selected_brand} - these are your sales targets")
+
+        col1, col2 = st.columns([1, 2])
+
+        with col1:
+            st.markdown("**Opportunity by County**")
+            for _, row in gaps.iterrows():
+                opportunity = row['stores'] - row['brand_stores']
+                st.markdown(f"**{row['county']}**: {row['brand_stores']}/{row['stores']} stores ({row['penetration']}%)")
+                st.caption(f"{opportunity} store opportunities")
+
+        with col2:
+            st.markdown("**Target Stores (Not Carrying Your Brand)**")
+            county_filter = st.selectbox(
+                "Filter by County",
+                ["All Counties"] + list(gaps['county']),
+                key="demo_gap_filter"
+            )
+
+            if county_filter == "All Counties":
+                display_gaps = gap_stores_df
+            else:
+                display_gaps = gap_stores_df[gap_stores_df['County'] == county_filter]
+
+            st.dataframe(display_gaps, width="stretch", hide_index=True, height=300)
+
+            st.download_button(
+                label="Download Target List (CSV)",
+                data=display_gaps.to_csv(index=False),
+                file_name=f"{selected_brand}_sales_targets_demo.csv",
+                mime="text/csv"
+            )
     else:
         st.success("Strong coverage across all counties!")
 
@@ -195,6 +241,31 @@ else:
                 JOIN raw_menu_item r ON d.dispensary_id = r.dispensary_id
                 WHERE d.state = :state AND d.is_active = true
                 AND LOWER(r.raw_brand) = LOWER(:brand)
+                ORDER BY d.county, d.name
+            """), {"state": state, "brand": brand})
+
+            rows = result.fetchall()
+            return pd.DataFrame(rows, columns=['Store', 'City', 'County', 'Address'])
+
+    @st.cache_data(ttl=300)
+    def get_stores_not_carrying_brand(state, brand):
+        """Get list of stores that DON'T carry the brand - these are sales targets."""
+        engine = get_engine()
+        with engine.connect() as conn:
+            result = conn.execute(text("""
+                SELECT DISTINCT d.name, d.city, d.county, d.address
+                FROM dispensary d
+                WHERE d.state = :state
+                AND d.is_active = true
+                AND d.county IS NOT NULL
+                AND EXISTS (
+                    SELECT 1 FROM raw_menu_item r WHERE r.dispensary_id = d.dispensary_id
+                )
+                AND NOT EXISTS (
+                    SELECT 1 FROM raw_menu_item r
+                    WHERE r.dispensary_id = d.dispensary_id
+                    AND LOWER(r.raw_brand) = LOWER(:brand)
+                )
                 ORDER BY d.county, d.name
             """), {"state": state, "brand": brand})
 
@@ -286,26 +357,66 @@ else:
     display_df.columns = ['County', 'Total Stores', 'Brand Stores', 'Penetration']
     st.dataframe(display_df.sort_values('Total Stores', ascending=False), width="stretch", hide_index=True)
 
-    # Gap analysis
-    st.subheader("Coverage Gaps - Expansion Opportunities")
-    gaps = df[df['penetration'] < 50].sort_values('stores', ascending=False)
+    # Gap analysis - Show actual stores not carrying the brand
+    st.subheader("Coverage Gaps - Sales Targets")
 
-    if len(gaps) > 0:
-        total_opportunity = gaps['stores'].sum() - gaps['brand_stores'].sum()
-        st.warning(f"**{len(gaps)} counties** have less than 50% penetration - **{int(total_opportunity)} store opportunities**")
+    # Get stores not carrying the brand
+    gap_stores = get_stores_not_carrying_brand(state, selected_brand)
 
-        gap_cols = st.columns(2)
-        for i, (_, row) in enumerate(gaps.head(10).iterrows()):
-            opportunity = int(row['stores'] - row['brand_stores'])
-            with gap_cols[i % 2]:
-                st.markdown(f"**{row['county']}**")
-                st.markdown(f"{int(row['brand_stores'])}/{int(row['stores'])} stores ({row['penetration']}%)")
-                st.markdown(f"*{opportunity} store opportunity*")
-                st.markdown("---")
+    if len(gap_stores) > 0:
+        st.warning(f"**{len(gap_stores)} stores** don't carry {selected_brand} - these are your sales targets")
+
+        # Group by county for organized display
+        gap_counties = gap_stores.groupby('County').size().reset_index(name='Stores Missing')
+        gap_counties = gap_counties.sort_values('Stores Missing', ascending=False)
+
+        # Show summary by county
+        col1, col2 = st.columns([1, 2])
+
+        with col1:
+            st.markdown("**Opportunity by County**")
+            for _, row in gap_counties.head(10).iterrows():
+                county_pen = df[df['county'] == row['County']]
+                if not county_pen.empty:
+                    pen_val = county_pen['penetration'].values[0]
+                    total = int(county_pen['stores'].values[0])
+                    carrying = int(county_pen['brand_stores'].values[0])
+                    st.markdown(f"**{row['County']}**: {carrying}/{total} stores ({pen_val}%)")
+                    st.caption(f"{row['Stores Missing']} store opportunities")
+
+        with col2:
+            st.markdown("**Target Stores (Not Carrying Your Brand)**")
+            # Filter to show stores by selected county or all
+            county_filter = st.selectbox(
+                "Filter by County",
+                ["All Counties"] + list(gap_counties['County']),
+                key="gap_county_filter"
+            )
+
+            if county_filter == "All Counties":
+                display_gaps = gap_stores
+            else:
+                display_gaps = gap_stores[gap_stores['County'] == county_filter]
+
+            st.dataframe(
+                display_gaps,
+                width="stretch",
+                hide_index=True,
+                height=400
+            )
+
+            # Download button
+            csv = display_gaps.to_csv(index=False)
+            st.download_button(
+                label="Download Target List (CSV)",
+                data=csv,
+                file_name=f"{selected_brand}_sales_targets_{state}.csv",
+                mime="text/csv"
+            )
     else:
-        st.success("Strong coverage across all counties!")
+        st.success(f"Amazing! {selected_brand} is in every store in {state}!")
 
-    # Store list
-    with st.expander("View Stores Carrying This Brand"):
+    # Store list - stores carrying the brand
+    with st.expander("View Stores Currently Carrying This Brand"):
         store_df = get_brand_store_details(state, selected_brand)
         st.dataframe(store_df, width="stretch", hide_index=True)
