@@ -1,5 +1,71 @@
 # ShelfIntel / CannLinx - System Documentation
 
+---
+
+## CURRENT PRIORITY: Maryland Test Case
+
+**Maryland is the primary test market.** All data collection, cleanup, and validation must be completed here before expanding focus to other states.
+
+### Maryland Status (January 2026)
+
+| Metric | Count | Notes |
+|--------|-------|-------|
+| Total MD Dispensaries in DB | 222 | Includes duplicates |
+| **Actual Real Dispensaries** | ~112 | Per state records |
+| Duplicates to Remove | ~60-100 | Auto-detected + manual |
+| Stores with Menu Data | 85+ | Successfully scraped |
+| Products Scraped | 43,500+ | Active inventory |
+
+### MD Cleanup Priority Tasks
+
+1. **Run auto-cleanup** - Admin page identifies ~63 duplicates automatically
+2. **Manual review** - ~47 stores need human verification
+3. **Mark smoke shops** - Non-dispensaries should have `store_type = 'smoke_shop'`
+4. **Verify 100% coverage** - All 112 real dispensaries must have menu data
+
+### MD Cleanup Admin Page
+
+**Location**: Admin > Dispensaries > "MD Cleanup" tab
+
+**Features**:
+- Auto-detect duplicates by name/address/company similarity
+- One-click auto-cleanup (keeps store with most products)
+- Manual checkbox selection with bulk actions
+- Filter by store type, active status, search term
+
+---
+
+## Progress Notes (January 2026)
+
+### Completed
+
+| Item | Details |
+|------|---------|
+| ✅ Sweed API | Working without proxy - 121 stores, 79,141 products |
+| ✅ Dutchie bypass | undetected-chromedriver with HEADED browser |
+| ✅ MD Cleanup page | Admin tab with auto-detect and bulk actions |
+| ✅ Provider docs | Configurations documented with what works/doesn't |
+| ✅ Admin login | phil@leadstorm.com / rock21! |
+
+### In Progress
+
+| Item | Status |
+|------|--------|
+| 🔄 MD data cleanup | Need to run auto-cleanup + manual review |
+| 🔄 Dutchie MD scrape | Testing on Maryland stores |
+| 🔄 Coverage verification | Confirm all 112 real MD dispensaries |
+
+### Blocked / Won't Work
+
+| Item | Reason |
+|------|--------|
+| ❌ Proxy for Sweed | Decodo IPs blocked by Sweed |
+| ❌ Proxy for Dutchie | Doesn't help with Cloudflare |
+| ❌ Headless Dutchie | All headless modes detected |
+| ❌ Direct Dutchie API | 403 Forbidden |
+
+---
+
 ## Quick Start
 
 ```bash
@@ -10,9 +76,10 @@ source venv/bin/activate
 # 2. Run the Streamlit app
 ./venv/bin/python -m streamlit run app/Home.py --server.port 8501
 
-# 3. Run scrapers
-./venv/bin/python ingest/run_scrape.py --state NJ    # Scrape specific state
-./venv/bin/python ingest/run_scrape.py --all          # Scrape all states
+# 3. Run scrapers (PRIORITY ORDER)
+./venv/bin/python scripts/scrape_sweed_batch.py MD    # Sweed first (fastest)
+./venv/bin/python scripts/scrape_dutchie_uc.py MD     # Dutchie (headed browser)
+./venv/bin/python scripts/scrape_leafly_menus.py      # Leafly last
 ```
 
 Open http://localhost:8501
@@ -360,15 +427,241 @@ Credentials in: `app/.streamlit/secrets.toml`
 
 ---
 
-## Menu Provider Types
+## Menu Provider Types & Configurations
 
-| Provider | API Type | Stores with Data | Notes |
-|----------|----------|------------------|-------|
-| Dutchie | GraphQL | ~200+ | Use `scrape_dutchie_batch_v2.py` |
-| Leafly | Playwright | ~100+ | Use `scrape_leafly_and_import.py` for discovery |
-| Sweed | REST API | ~50 | Needs store_id from API |
-| Jane | REST API | ~40 | Needs store_id, Cloudflare issues |
-| Weedmaps | REST API | ~10 | API changes frequently |
+### Provider Priority Order
+
+**Scrape in this order for best results:**
+
+1. **Sweed** - Fastest, most reliable
+2. **Dutchie** - Works but requires headed browser
+3. **Leafly** - Browser automation works
+4. **Jane** - Intermittent, try last
+
+### Provider Status Matrix
+
+| Provider | Status | Method | Proxy? | Speed | Stores |
+|----------|--------|--------|--------|-------|--------|
+| **Sweed** | ✅ WORKING | REST API | ❌ NO | Fast | ~130 |
+| **Dutchie** | ✅ WORKING | undetected-chromedriver | ❌ NO | Medium | ~200+ |
+| **Leafly** | ✅ Working | Playwright | Optional | Medium | ~150+ |
+| **Jane** | ⚠️ Intermittent | REST API | Try both | Fast | ~40 |
+| **Weedmaps** | ⚠️ Unstable | REST API | N/A | - | ~10 |
+
+### Key Lessons Learned
+
+| What We Tried | Result | Lesson |
+|---------------|--------|--------|
+| Proxy for Sweed | ❌ Blocked | Sweed blocks datacenter/residential proxy IPs |
+| Proxy for Dutchie | ❌ Still blocked | Cloudflare detects proxy regardless |
+| Playwright headless | ❌ Detected | Cloudflare detects headless browsers |
+| undetected-chromedriver headless | ❌ Detected | Even UC is detected in headless mode |
+| **undetected-chromedriver headed** | ✅ WORKS | Must have visible browser window |
+| Direct Dutchie GraphQL | ❌ 403 | API requires browser context |
+
+---
+
+## Provider Configuration Details
+
+### Sweed (WORKING - January 2026)
+
+**Status**: ✅ Fully functional without proxy
+
+**Optimal Configuration**:
+```python
+# ✅ WORKING: Direct requests without proxy
+from ingest.providers.sweed_api import fetch_all_products_for_category
+
+products = fetch_all_products_for_category(
+    store_id="376",           # Required - from provider_metadata
+    category_or_filters={},   # Empty = all products
+    use_proxy=False           # IMPORTANT: Proxy IPs get blocked!
+)
+```
+
+**Key Points**:
+- **DO NOT use proxy** - Decodo IPs are blocked by Sweed
+- Requires `store_id` in `dispensary.provider_metadata`
+- Use `discover_sweed.py` to find store_ids
+- Rate limit: 0.5s delay between stores recommended
+- API endpoint: `https://web-ui-production.sweedpos.com/_api/proxy`
+
+**Store ID Discovery**:
+```bash
+./venv/bin/python ingest/discover_sweed.py --url "https://example.com/order"
+```
+
+**Batch Scrape**:
+```bash
+./venv/bin/python -c "
+from ingest.providers.sweed_api import fetch_all_products_for_category
+products = fetch_all_products_for_category('376', {}, use_proxy=False)
+print(f'Found {len(products)} products')
+"
+```
+
+---
+
+### Dutchie (WORKING - January 2026)
+
+**Status**: ✅ Working with undetected-chromedriver (HEADED browser)
+
+**What Works**:
+- ✅ `undetected-chromedriver` with **headed browser** (not headless)
+- ✅ GraphQL response capture via performance logs
+- ✅ Category navigation for full product coverage
+
+**What Doesn't Work**:
+- ❌ Direct GraphQL API (403 Forbidden)
+- ❌ Playwright headless (Cloudflare blocks)
+- ❌ undetected-chromedriver headless (Still detected)
+- ❌ Proxy rotation (Cloudflare still blocks)
+
+**Optimal Configuration**:
+```python
+# ✅ WORKING: undetected-chromedriver with HEADED browser
+import undetected_chromedriver as uc
+
+options = uc.ChromeOptions()
+# NO headless! Must be visible browser
+options.add_argument("--no-sandbox")
+options.add_argument("--window-size=1920,1080")
+options.set_capability('goog:loggingPrefs', {'performance': 'ALL'})
+
+driver = uc.Chrome(options=options)
+driver.get("https://dutchie.com/dispensary/store-name")
+```
+
+**Batch Scrape**:
+```bash
+# Scrape all unscraped Dutchie stores (headed browser will open)
+./venv/bin/python scripts/scrape_dutchie_uc.py
+
+# Scrape specific state
+./venv/bin/python scripts/scrape_dutchie_uc.py MD
+
+# Limit number of stores
+./venv/bin/python scripts/scrape_dutchie_uc.py --limit=10
+```
+
+**Key Points**:
+- **MUST use headed browser** - headless is still detected
+- Browser window will be visible during scraping
+- Captures GraphQL via Chrome DevTools Protocol
+- ~30 seconds per store (slower than API but works)
+- Install: `pip install undetected-chromedriver`
+
+---
+
+### Leafly (WORKING)
+
+**Status**: ✅ Works with Playwright
+
+**Configuration**:
+```python
+# Uses Playwright for browser automation
+# Discovery script finds dispensaries
+./venv/bin/python scripts/scrape_leafly_and_import.py
+```
+
+**Key Points**:
+- Browser-based scraping
+- No proxy needed
+- Rate limit between pages recommended
+
+---
+
+### Jane (INTERMITTENT)
+
+**Status**: ⚠️ Often blocked by Cloudflare
+
+**Configuration**:
+```python
+# Requires store_id
+# Similar to Dutchie - subject to Cloudflare blocking
+```
+
+**Key Points**:
+- Direct API when not blocked
+- Requires store_id discovery
+- Cloudflare blocks intermittently
+
+---
+
+## Proxy Configuration
+
+**Provider**: Decodo Residential Proxies
+
+```python
+# ingest/proxy_config.py
+PROXY_HOST = 'gate.decodo.com'
+PROXY_USER = 'spn1pjbpd4'
+PROXY_PASS = 'k0xH_iq29reyWfz3JR'
+PROXY_PORTS = range(10001, 10011)  # 10 rotating ports
+```
+
+**Usage**:
+```python
+from ingest.proxy_config import get_proxies_dict, get_playwright_proxy
+
+# For requests library
+proxies = get_proxies_dict(force_rotate=True)
+response = requests.get(url, proxies=proxies)
+
+# For Playwright
+proxy = get_playwright_proxy(force_rotate=True)
+context = await browser.new_context(proxy=proxy)
+```
+
+### When to Use Proxy (Updated January 2026)
+
+| Provider | Use Proxy? | Reason |
+|----------|------------|--------|
+| **Sweed** | ❌ NO | Proxy IPs are blocked - use direct requests |
+| **Dutchie** | ❌ NO | Proxy doesn't help bypass Cloudflare |
+| **Leafly** | ⚠️ Optional | May help with rate limits |
+| **Jane** | ⚠️ Try both | Sometimes helps, sometimes blocked |
+
+### Key Insight
+
+**Proxy does NOT help bypass Cloudflare.** For Dutchie and other Cloudflare-protected sites, use `undetected-chromedriver` with a **headed (visible) browser** instead of proxy rotation.
+
+```bash
+# Install undetected-chromedriver
+pip install undetected-chromedriver
+
+# Use headed browser for Dutchie
+./venv/bin/python scripts/scrape_dutchie_uc.py MD
+```
+
+---
+
+## Scraping Best Practices
+
+1. **Always test without proxy first** - Many providers block proxy IPs
+2. **Store configurations in provider_metadata** - Use JSON field
+3. **Rotate between stores** - Don't hammer one provider
+4. **Check recent scrape_run status** - Look for patterns
+5. **Update this doc when things change** - Provider blocks shift frequently
+
+### Check Provider Status
+```bash
+./venv/bin/python -c "
+from sqlalchemy import create_engine, text
+engine = create_engine('postgresql+psycopg://postgres:Tattershall2020@db.trteltlgtmcggdbrqwdw.supabase.co:5432/postgres')
+with engine.connect() as conn:
+    result = conn.execute(text('''
+        SELECT d.menu_provider, sr.status, COUNT(*) as runs, SUM(sr.records_found) as products
+        FROM scrape_run sr
+        JOIN dispensary d ON sr.dispensary_id = d.dispensary_id
+        WHERE sr.started_at > NOW() - INTERVAL '24 hours'
+        GROUP BY d.menu_provider, sr.status
+        ORDER BY d.menu_provider, sr.status
+    '''))
+    for row in result:
+        print(f'{row[0]:15} | {row[1]:10} | {row[2]:4} runs | {row[3] or 0:6} products')
+"
+```
 
 ---
 
@@ -500,16 +793,11 @@ with engine.connect() as conn:
 
 ---
 
-## Proxy Configuration (Cloudflare Bypass)
+## Admin Credentials
 
-For Dutchie/Jane stores blocked by Cloudflare:
-
-```python
-# Decodo Residential Proxies
-PROXY_HOST = 'gate.decodo.com'
-PROXY_USER = 'spn1pjbpd4'
-PROXY_PASS = 'k0xH_iq29reyWfz3JR'
-PROXY_PORTS = range(10001, 10011)  # Rotate for rate limiting
+```
+Email: phil@leadstorm.com
+Password: rock21!
 ```
 
 ---
@@ -521,4 +809,4 @@ PROXY_PORTS = range(10001, 10011)  # Rotate for rate limiting
 
 ---
 
-*Last updated: January 2026*
+*Last updated: January 12, 2026*

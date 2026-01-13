@@ -20,26 +20,31 @@ def get_db_engine():
 
 def authenticate_user(email: str, password: str) -> Optional[dict]:
     """Authenticate user and return client info if valid."""
-    engine = get_db_engine()
-    password_hash = hash_password(password)
+    try:
+        engine = get_db_engine()
+        password_hash = hash_password(password)
 
-    with engine.connect() as conn:
-        result = conn.execute(text("""
-            SELECT client_id, company_name, contact_name, email, is_admin, is_active
-            FROM client
-            WHERE email = :email AND password_hash = :password_hash
-        """), {"email": email.lower(), "password_hash": password_hash})
-        row = result.fetchone()
+        with engine.connect() as conn:
+            result = conn.execute(text("""
+                SELECT client_id, company_name, contact_name, email, is_admin, is_active
+                FROM client
+                WHERE email = :email AND password_hash = :password_hash
+            """), {"email": email.lower(), "password_hash": password_hash})
+            row = result.fetchone()
 
-        if row and row[5]:  # is_active
-            return {
-                "client_id": str(row[0]),
-                "company_name": row[1],
-                "contact_name": row[2],
-                "email": row[3],
-                "is_admin": row[4]
-            }
-    return None
+            if row and row[5]:  # is_active
+                return {
+                    "client_id": str(row[0]),
+                    "company_name": row[1],
+                    "contact_name": row[2],
+                    "email": row[3],
+                    "is_admin": row[4]
+                }
+        return None
+    except Exception as e:
+        import streamlit as st
+        st.error(f"Authentication error: {type(e).__name__}")
+        return None
 
 
 @st.cache_data(ttl=300)  # Cache for 5 minutes

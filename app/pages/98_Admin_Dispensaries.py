@@ -118,7 +118,7 @@ col4.metric("Total Products", f"{df['product_count'].sum():,}")
 st.divider()
 
 # Tabs for different views
-tab1, tab2, tab3 = st.tabs(["Needs Attention", "All Dispensaries", "Product Rankings"])
+tab1, tab2, tab3, tab4 = st.tabs(["Needs Attention", "All Dispensaries", "Product Rankings", "MD Cleanup"])
 
 with tab1:
     st.subheader("Dispensaries Needing Attention")
@@ -251,6 +251,308 @@ with tab3:
     low_product_stores = rankings_df[rankings_df['product_count'] < 100]['name'].tolist()
     if low_product_stores:
         st.warning(f"**Stores with potentially incomplete data:** {', '.join(low_product_stores[:10])}")
+
+with tab4:
+    st.subheader("Maryland Dispensary Cleanup")
+    st.markdown("Mark duplicates and smoke shops to clean up MD data. Only ~112 are real dispensaries.")
+
+    # Auto-detect duplicates helper
+    with st.expander("Auto-Detect Potential Duplicates"):
+        st.markdown("These dispensaries have very similar names and may be duplicates:")
+
+        @st.cache_data(ttl=60)
+        def find_potential_duplicates():
+            with engine.connect() as conn:
+                return pd.read_sql(text("""
+                    WITH normalized AS (
+                        SELECT
+                            dispensary_id,
+                            name,
+                            city,
+                            is_active,
+                            LOWER(REGEXP_REPLACE(name, '[^a-zA-Z0-9]', '', 'g')) as norm_name
+                        FROM dispensary
+                        WHERE state = 'MD' AND is_active = true
+                    )
+                    SELECT
+                        n1.name as name1,
+                        n1.city as city1,
+                        n1.dispensary_id as id1,
+                        n2.name as name2,
+                        n2.city as city2,
+                        n2.dispensary_id as id2
+                    FROM normalized n1
+                    JOIN normalized n2 ON n1.norm_name = n2.norm_name
+                        AND n1.dispensary_id < n2.dispensary_id
+                    ORDER BY n1.name
+                """), conn)
+
+        dupes = find_potential_duplicates()
+        if not dupes.empty:
+            st.warning(f"Found {len(dupes)} potential duplicate pairs")
+            for _, row in dupes.iterrows():
+                st.markdown(f"- **{row['name1']}** ({row['city1']}) = **{row['name2']}** ({row['city2']})")
+        else:
+            st.success("No exact duplicates found")
+
+        # Also check for similar addresses
+        st.markdown("---")
+        st.markdown("**Dispensaries at same address:**")
+
+        @st.cache_data(ttl=60)
+        def find_same_address():
+            with engine.connect() as conn:
+                return pd.read_sql(text("""
+                    SELECT address, city, STRING_AGG(name, ' | ') as names, COUNT(*) as count
+                    FROM dispensary
+                    WHERE state = 'MD' AND is_active = true AND address IS NOT NULL
+                    GROUP BY address, city
+                    HAVING COUNT(*) > 1
+                    ORDER BY count DESC
+                """), conn)
+
+        same_addr = find_same_address()
+        if not same_addr.empty:
+            for _, row in same_addr.iterrows():
+                st.markdown(f"- **{row['address']}, {row['city']}**: {row['names']}")
+        else:
+            st.success("No duplicate addresses found")
+
+        st.markdown("---")
+        st.markdown("**Grouped by company name (same first word + city):**")
+
+        @st.cache_data(ttl=60)
+        def find_company_groups():
+            with engine.connect() as conn:
+                return pd.read_sql(text("""
+                    WITH grouped AS (
+                        SELECT
+                            dispensary_id,
+                            name,
+                            city,
+                            menu_provider,
+                            LOWER(SPLIT_PART(name, ' ', 1)) as first_word,
+                            (SELECT COUNT(*) FROM raw_menu_item WHERE dispensary_id = d.dispensary_id) as products
+                        FROM dispensary d
+                        WHERE state = 'MD' AND is_active = true
+                    )
+                    SELECT
+                        first_word,
+                        city,
+                        COUNT(*) as count,
+                        STRING_AGG(name || ' (' || COALESCE(products::text, '0') || ' products)', ' | ' ORDER BY products DESC) as names
+                    FROM grouped
+                    GROUP BY first_word, city
+                    HAVING COUNT(*) > 1
+                    ORDER BY count DESC, first_word
+                """), conn)
+
+        groups = find_company_groups()
+        if not groups.empty:
+            st.warning(f"Found {len(groups)} groups with duplicates in same city")
+            for _, row in groups.head(20).iterrows():
+                st.markdown(f"- **{row['first_word'].upper()} in {row['city']}** ({row['count']}): {row['names'][:150]}...")
+        else:
+            st.success("No same-company duplicates in same city")
+
+        # Auto-cleanup button
+        st.markdown("---")
+        if st.button("Auto-Cleanup: Keep dispensary with most products, deactivate others", type="primary"):
+            with engine.connect() as conn:
+                # For each group, keep the one with most products
+                result = conn.execute(text("""
+                    WITH grouped AS (
+                        SELECT
+                            dispensary_id,
+                            name,
+                            city,
+                            LOWER(SPLIT_PART(name, ' ', 1)) as first_word,
+                            (SELECT COUNT(*) FROM raw_menu_item WHERE dispensary_id = d.dispensary_id) as products,
+                            ROW_NUMBER() OVER (
+                                PARTITION BY LOWER(SPLIT_PART(name, ' ', 1)), city
+                                ORDER BY (SELECT COUNT(*) FROM raw_menu_item WHERE dispensary_id = d.dispensary_id) DESC, name
+                            ) as rn
+                        FROM dispensary d
+                        WHERE state = 'MD' AND is_active = true
+                    )
+                    SELECT dispensary_id, name
+                    FROM grouped
+                    WHERE rn > 1
+                """))
+
+                to_deactivate = [(r[0], r[1]) for r in result]
+
+                if to_deactivate:
+                    for did, name in to_deactivate:
+                        conn.execute(text("""
+                            UPDATE dispensary SET store_type = 'duplicate', is_active = false
+                            WHERE dispensary_id = :id
+                        """), {"id": did})
+                    conn.commit()
+                    st.success(f"Deactivated {len(to_deactivate)} duplicates")
+                    st.cache_data.clear()
+                    st.rerun()
+                else:
+                    st.info("No duplicates to clean up")
+
+    # Get MD dispensaries
+    @st.cache_data(ttl=30)
+    def get_md_dispensaries():
+        with engine.connect() as conn:
+            return pd.read_sql(text("""
+                SELECT
+                    d.dispensary_id,
+                    d.name,
+                    d.address,
+                    d.city,
+                    d.store_type,
+                    d.is_active,
+                    d.menu_url,
+                    d.menu_provider,
+                    COALESCE(pc.product_count, 0) as products
+                FROM dispensary d
+                LEFT JOIN (
+                    SELECT dispensary_id, COUNT(*) as product_count
+                    FROM raw_menu_item
+                    GROUP BY dispensary_id
+                ) pc ON d.dispensary_id = pc.dispensary_id
+                WHERE d.state = 'MD'
+                ORDER BY d.name
+            """), conn)
+
+    md_df = get_md_dispensaries()
+
+    # Summary
+    total_md = len(md_df)
+    active_md = len(md_df[md_df['is_active'] == True])
+    dispensaries = len(md_df[(md_df['store_type'] == 'dispensary') & (md_df['is_active'] == True)])
+    smoke_shops = len(md_df[(md_df['store_type'] == 'smoke_shop') & (md_df['is_active'] == True)])
+    with_products = len(md_df[md_df['products'] > 0])
+
+    col1, col2, col3, col4, col5 = st.columns(5)
+    col1.metric("Total MD", total_md)
+    col2.metric("Active", active_md)
+    col3.metric("Dispensaries", dispensaries)
+    col4.metric("Smoke Shops", smoke_shops)
+    col5.metric("With Products", with_products)
+
+    st.divider()
+
+    # Filter options
+    filter_col1, filter_col2, filter_col3 = st.columns(3)
+    with filter_col1:
+        show_filter = st.selectbox("Show", ["Active Only", "All", "Inactive Only"], key="md_show")
+    with filter_col2:
+        type_filter = st.selectbox("Store Type", ["All", "dispensary", "smoke_shop", "duplicate"], key="md_type")
+    with filter_col3:
+        search = st.text_input("Search by name", key="md_search")
+
+    # Apply filters
+    display_md = md_df.copy()
+    if show_filter == "Active Only":
+        display_md = display_md[display_md['is_active'] == True]
+    elif show_filter == "Inactive Only":
+        display_md = display_md[display_md['is_active'] == False]
+
+    if type_filter != "All":
+        display_md = display_md[display_md['store_type'] == type_filter]
+
+    if search:
+        display_md = display_md[display_md['name'].str.lower().str.contains(search.lower())]
+
+    st.markdown(f"**Showing {len(display_md)} dispensaries**")
+
+    # Bulk actions
+    st.markdown("### Bulk Actions")
+    bulk_col1, bulk_col2, bulk_col3 = st.columns(3)
+
+    with bulk_col1:
+        if st.button("Mark Selected as Duplicate", type="secondary"):
+            if 'selected_ids' in st.session_state and st.session_state.selected_ids:
+                with engine.connect() as conn:
+                    for did in st.session_state.selected_ids:
+                        conn.execute(text("""
+                            UPDATE dispensary SET store_type = 'duplicate', is_active = false
+                            WHERE dispensary_id = :id
+                        """), {"id": did})
+                    conn.commit()
+                st.success(f"Marked {len(st.session_state.selected_ids)} as duplicate")
+                st.session_state.selected_ids = []
+                st.cache_data.clear()
+                st.rerun()
+
+    with bulk_col2:
+        if st.button("Mark Selected as Smoke Shop", type="secondary"):
+            if 'selected_ids' in st.session_state and st.session_state.selected_ids:
+                with engine.connect() as conn:
+                    for did in st.session_state.selected_ids:
+                        conn.execute(text("""
+                            UPDATE dispensary SET store_type = 'smoke_shop', is_active = false
+                            WHERE dispensary_id = :id
+                        """), {"id": did})
+                    conn.commit()
+                st.success(f"Marked {len(st.session_state.selected_ids)} as smoke shop")
+                st.session_state.selected_ids = []
+                st.cache_data.clear()
+                st.rerun()
+
+    with bulk_col3:
+        if st.button("Reactivate Selected", type="primary"):
+            if 'selected_ids' in st.session_state and st.session_state.selected_ids:
+                with engine.connect() as conn:
+                    for did in st.session_state.selected_ids:
+                        conn.execute(text("""
+                            UPDATE dispensary SET store_type = 'dispensary', is_active = true
+                            WHERE dispensary_id = :id
+                        """), {"id": did})
+                    conn.commit()
+                st.success(f"Reactivated {len(st.session_state.selected_ids)}")
+                st.session_state.selected_ids = []
+                st.cache_data.clear()
+                st.rerun()
+
+    st.divider()
+
+    # Initialize selected_ids in session state
+    if 'selected_ids' not in st.session_state:
+        st.session_state.selected_ids = []
+
+    # Display dispensaries with checkboxes
+    st.markdown("### Dispensary List")
+    st.markdown("Select dispensaries to mark as duplicate or smoke shop:")
+
+    for idx, row in display_md.iterrows():
+        col1, col2, col3, col4 = st.columns([0.5, 3, 1.5, 1.5])
+
+        with col1:
+            is_selected = st.checkbox(
+                "sel",
+                key=f"sel_{row['dispensary_id']}",
+                label_visibility="collapsed",
+                value=row['dispensary_id'] in st.session_state.selected_ids
+            )
+            if is_selected and row['dispensary_id'] not in st.session_state.selected_ids:
+                st.session_state.selected_ids.append(row['dispensary_id'])
+            elif not is_selected and row['dispensary_id'] in st.session_state.selected_ids:
+                st.session_state.selected_ids.remove(row['dispensary_id'])
+
+        with col2:
+            status_icon = "" if row['is_active'] else ""
+            products_badge = f" ({row['products']} products)" if row['products'] > 0 else ""
+            st.markdown(f"{status_icon} **{row['name']}**{products_badge}")
+            st.caption(f"{row['address'] or 'No address'}, {row['city'] or 'Unknown'}")
+
+        with col3:
+            type_color = "green" if row['store_type'] == 'dispensary' else ("orange" if row['store_type'] == 'smoke_shop' else "red")
+            st.markdown(f":{type_color}[{row['store_type'] or 'dispensary'}]")
+
+        with col4:
+            provider = row['menu_provider'] or 'unknown'
+            st.caption(provider)
+
+    # Show selected count
+    if st.session_state.selected_ids:
+        st.info(f"**{len(st.session_state.selected_ids)} selected** - Use bulk actions above to update")
 
 st.divider()
 

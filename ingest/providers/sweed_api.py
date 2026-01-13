@@ -14,6 +14,15 @@ from typing import Any, Dict, List, Optional
 
 import requests
 
+# Import proxy support
+try:
+    from ingest.proxy_config import get_proxies_dict
+    PROXY_AVAILABLE = True
+except ImportError:
+    PROXY_AVAILABLE = False
+    def get_proxies_dict(force_rotate=False):
+        return None
+
 SWEED_BASE = "https://web-ui-production.sweedpos.com/_api/proxy"
 DEFAULT_TIMEOUT = 30
 
@@ -38,25 +47,30 @@ def get_categories(
     store_id: str,
     sale_type: str = "Recreational",
     referer: Optional[str] = None,
+    use_proxy: bool = False,  # Default False - Sweed blocks proxy IPs
 ) -> List[Dict[str, Any]]:
     """
     Fetch product categories for a store.
-    
+
     Returns list of category objects. Structure varies by store config.
     """
     url = f"{SWEED_BASE}/Products/GetProductCategoryList"
     payload = {"saleType": sale_type}
-    
+
+    # Get proxy if enabled
+    proxies = get_proxies_dict(force_rotate=True) if use_proxy else None
+
     try:
         r = requests.post(
             url,
             headers=_headers(store_id, sale_type, referer),
             json=payload,
             timeout=DEFAULT_TIMEOUT,
+            proxies=proxies,
         )
         r.raise_for_status()
         data = r.json()
-        
+
         # Handle various response shapes
         if isinstance(data, list):
             return data
@@ -64,7 +78,7 @@ def get_categories(
             for key in ["data", "result", "items", "categories", "list"]:
                 if isinstance(data.get(key), list):
                     return data[key]
-        
+
         return []
     except requests.RequestException as e:
         raise RuntimeError(f"Failed to get categories: {e}")
@@ -79,10 +93,12 @@ def get_product_list(
     sorting_method_id: int = 7,
     search_term: str = "",
     referer: Optional[str] = None,
+    use_proxy: bool = False,  # Default False - Sweed blocks proxy IPs
+    proxies: Optional[Dict[str, str]] = None,
 ) -> Dict[str, Any]:
     """
     Fetch a page of products.
-    
+
     Args:
         store_id: Sweed store identifier
         filters: Category/filter dict, e.g., {"category": [495364]}
@@ -90,11 +106,13 @@ def get_product_list(
         page: Page number (1-indexed)
         page_size: Items per page (max typically 60)
         sorting_method_id: Sort order (7 = default/popular)
-    
+        use_proxy: Whether to use proxy
+        proxies: Pre-configured proxy dict (to maintain same IP for pagination)
+
     Returns raw API response dict.
     """
     url = f"{SWEED_BASE}/Products/GetProductList"
-    
+
     payload = {
         "filters": filters,
         "page": page,
@@ -105,12 +123,17 @@ def get_product_list(
         "platformOs": "web",
         "sourcePage": 1,
     }
-    
+
+    # Use provided proxies or get new ones
+    if proxies is None and use_proxy:
+        proxies = get_proxies_dict(force_rotate=False)  # Don't rotate during pagination
+
     r = requests.post(
         url,
         headers=_headers(store_id, sale_type, referer),
         json=payload,
         timeout=DEFAULT_TIMEOUT,
+        proxies=proxies,
     )
     r.raise_for_status()
     return r.json()
@@ -146,10 +169,11 @@ def fetch_all_products_for_category(
     max_pages: int = 100,
     polite_delay_s: float = 0.15,
     referer: Optional[str] = None,
+    use_proxy: bool = False,  # Default False - Sweed blocks proxy IPs
 ) -> List[Dict[str, Any]]:
     """
     Fetch all products for a category, handling pagination.
-    
+
     Args:
         store_id: Sweed store ID
         category_or_filters: Either:
@@ -159,7 +183,8 @@ def fetch_all_products_for_category(
         page_size: Items per page
         max_pages: Safety limit to prevent infinite loops
         polite_delay_s: Delay between requests
-    
+        use_proxy: Whether to use proxy
+
     Returns list of raw product dicts from API.
     """
     # Normalize filters
@@ -169,10 +194,13 @@ def fetch_all_products_for_category(
         filters = {"category": [int(category_or_filters)]}
     else:
         filters = {}
-    
+
     all_products: List[Dict[str, Any]] = []
     seen_ids: set = set()
-    
+
+    # Get proxy for this category (use same proxy throughout pagination)
+    proxies = get_proxies_dict(force_rotate=True) if use_proxy else None
+
     page = 1
     while page <= max_pages:
         try:
@@ -183,39 +211,41 @@ def fetch_all_products_for_category(
                 page=page,
                 page_size=page_size,
                 referer=referer,
+                use_proxy=use_proxy,
+                proxies=proxies,  # Reuse same proxy for pagination
             )
         except Exception as e:
             print(f"  Warning: Error on page {page}: {e}")
             break
-        
+
         products = _extract_products(resp)
-        
+
         if not products:
             break
-        
+
         # Dedupe by product ID
         new_count = 0
         for p in products:
             pid = p.get("id") or p.get("productId") or p.get("ProductId")
             key = str(pid) if pid else json.dumps(p, sort_keys=True)[:200]
-            
+
             if key not in seen_ids:
                 seen_ids.add(key)
                 all_products.append(p)
                 new_count += 1
-        
+
         # Stop if no new products (hit end or duplicate page)
         if new_count == 0:
             break
-        
+
         # Stop if fewer than page_size returned (last page)
         if len(products) < page_size:
             break
-        
+
         page += 1
         if polite_delay_s > 0:
             time.sleep(polite_delay_s)
-    
+
     return all_products
 
 

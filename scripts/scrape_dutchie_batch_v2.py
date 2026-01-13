@@ -1,12 +1,18 @@
 #!/usr/bin/env python3
-"""Dutchie batch scraper v2 - faster with shorter timeouts."""
+"""Dutchie batch scraper v2 - faster with shorter timeouts and proxy support."""
 
 import asyncio
 import uuid
 import sys
+import os
 from datetime import datetime
 from playwright.async_api import async_playwright
 from sqlalchemy import create_engine, text
+
+# Add project root to path for imports
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+from ingest.proxy_config import get_playwright_proxy
 
 DATABASE_URL = "postgresql+psycopg://postgres:Tattershall2020@db.trteltlgtmcggdbrqwdw.supabase.co:5432/postgres"
 
@@ -17,15 +23,25 @@ def get_engine():
     return create_engine(DATABASE_URL)
 
 
-async def scrape_store(url, store_name, timeout_ms=30000):
-    """Scrape a single Dutchie store with shorter timeout."""
+async def scrape_store(url, store_name, timeout_ms=30000, use_proxy=True, proxy_config=None):
+    """Scrape a single Dutchie store with shorter timeout and proxy support."""
     all_products = {}
 
     async with async_playwright() as p:
         browser = await p.chromium.launch(headless=True)
-        context = await browser.new_context(
-            user_agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36"
-        )
+
+        # Get proxy config - use provided config or get new one
+        context_options = {
+            "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        }
+
+        if use_proxy:
+            proxy = proxy_config or get_playwright_proxy(force_rotate=True)
+            if proxy:
+                context_options["proxy"] = proxy
+                print(f"  Using proxy port: {proxy['server'].split(':')[-1]}", flush=True)
+
+        context = await browser.new_context(**context_options)
         page = await context.new_page()
 
         async def capture_response(response):
@@ -154,11 +170,11 @@ async def main():
     # Get state filter from args
     state_filter = sys.argv[1:] if len(sys.argv) > 1 else None
 
-    print("="*60)
-    print(f"DUTCHIE BATCH SCRAPER V2")
+    print("="*60, flush=True)
+    print(f"DUTCHIE BATCH SCRAPER V2 (with proxy)", flush=True)
     if state_filter:
-        print(f"States: {', '.join(state_filter)}")
-    print("="*60)
+        print(f"States: {', '.join(state_filter)}", flush=True)
+    print("="*60, flush=True)
 
     engine = get_engine()
 
@@ -179,27 +195,30 @@ async def main():
         result = conn.execute(text(query))
         stores = result.fetchall()
 
-    print(f"Found {len(stores)} stores to scrape\n")
+    print(f"Found {len(stores)} stores to scrape\n", flush=True)
 
     total_products = 0
     total_stores = 0
 
-    for dispensary_id, name, state, url in stores:
-        print(f"{state} - {name[:45]:45}", end=" ", flush=True)
+    for i, (dispensary_id, name, state, url) in enumerate(stores, 1):
+        print(f"\n[{i}/{len(stores)}] {state} - {name[:45]}", flush=True)
+
+        # Get fresh proxy for each store (rotate through ports)
+        proxy = get_playwright_proxy(force_rotate=True)
 
         try:
-            products = await scrape_store(url, name)
+            products = await scrape_store(url, name, proxy_config=proxy)
 
             if products:
                 saved = save_products(products, dispensary_id, name)
-                print(f"-> {saved} products")
+                print(f"  ✅ {saved} products saved", flush=True)
                 total_products += saved
                 total_stores += 1
             else:
-                print(f"-> 0")
+                print(f"  ⚠️  0 products found", flush=True)
 
         except Exception as e:
-            print(f"-> error")
+            print(f"  ❌ Error: {str(e)[:50]}", flush=True)
 
     print(f"\n{'='*60}")
     print(f"TOTAL: {total_stores} stores, {total_products} products")

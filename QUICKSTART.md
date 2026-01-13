@@ -4,11 +4,46 @@
 
 ShelfIntel (CannLinx) is a multi-state shelf intelligence platform for the cannabis industry. It tracks products, prices, and availability across dispensaries in Maryland, New Jersey, Illinois, and expanding markets.
 
+---
+
+## CURRENT PRIORITY: Maryland Test Case
+
+**Maryland is our primary test market** - all data collection and cleanup must be completed here first before expanding to other states.
+
+### Maryland Status (January 2026)
+
+| Metric | Count | Status |
+|--------|-------|--------|
+| Total MD Dispensaries | 222 | In database |
+| **Actual Real Dispensaries** | ~112 | Per state records |
+| Duplicates to Remove | ~60-100 | Need cleanup |
+| Stores with Menu Data | 85+ | Scraped |
+| Products Scraped | 43,500+ | Active |
+
+### MD Cleanup Tasks
+
+1. **Auto-cleanup duplicates** - Admin page can identify and deactivate ~63 duplicates automatically
+2. **Manual review** - ~47 stores need manual verification (could be smoke shops or legitimate)
+3. **Mark smoke shops** - Set `store_type = 'smoke_shop'` for non-dispensaries
+4. **Verify coverage** - Ensure all 112 real dispensaries have menu data
+
+### MD Cleanup Admin Page
+
+Navigate to: **Admin > Dispensaries > "MD Cleanup" tab**
+
+Features:
+- Auto-detect duplicates by name/address similarity
+- One-click auto-cleanup (keeps store with most products)
+- Manual checkbox selection for bulk actions
+- Filter by store type, active status, search
+
+---
+
 ## Current Coverage (January 2026)
 
 | State | Stores w/ Data | Products | Status |
 |-------|----------------|----------|--------|
-| MD | 85 | 43,500+ | Primary market |
+| MD | 85 | 43,500+ | **PRIMARY - Test Case** |
 | IL | 45 | 32,000+ | Active |
 | NJ | 44 | 30,500+ | Active |
 | CO | 27 | 17,700+ | Active |
@@ -18,6 +53,135 @@ ShelfIntel (CannLinx) is a multi-state shelf intelligence platform for the canna
 | **TOTAL** | **455+** | **167,000+** | Growing |
 
 **Database Totals**: 19,520 dispensaries tracked, 22 states with coverage
+
+---
+
+## Provider Status & Configuration
+
+### PRIORITY ORDER for Scraping
+
+1. **Sweed** - Works reliably, scrape first
+2. **Dutchie** - Works with undetected-chromedriver (headed)
+3. **Leafly** - Works with Playwright
+4. **Jane** - Intermittent, try last
+
+### Provider Quick Reference
+
+| Provider | Status | Method | Proxy? | Notes |
+|----------|--------|--------|--------|-------|
+| **Sweed** | ✅ Working | REST API | ❌ NO | Proxy IPs blocked |
+| **Dutchie** | ✅ Working | undetected-chromedriver | ❌ NO | Must be HEADED browser |
+| **Leafly** | ✅ Working | Playwright | Optional | Browser automation |
+| **Jane** | ⚠️ Intermittent | REST API | Try both | Cloudflare blocks sometimes |
+
+### Sweed (WORKING)
+
+**Status**: ✅ Fully functional - 121 stores scraped, 79,141 products
+
+```bash
+# Batch scrape all Sweed stores
+./venv/bin/python scripts/scrape_sweed_batch.py
+
+# Scrape specific state
+./venv/bin/python scripts/scrape_sweed_batch.py MD
+```
+
+**Key Points**:
+- **DO NOT use proxy** - Decodo IPs are blocked by Sweed
+- Requires `store_id` in `dispensary.provider_metadata`
+- API: `https://web-ui-production.sweedpos.com/_api/proxy`
+
+### Dutchie (WORKING)
+
+**Status**: ✅ Working with undetected-chromedriver (HEADED browser)
+
+```bash
+# Batch scrape (browser window will be visible)
+./venv/bin/python scripts/scrape_dutchie_uc.py
+
+# Scrape specific state
+./venv/bin/python scripts/scrape_dutchie_uc.py MD
+
+# Limit stores
+./venv/bin/python scripts/scrape_dutchie_uc.py --limit=10
+```
+
+**Key Points**:
+- **MUST use headed browser** - headless is detected by Cloudflare
+- Browser window will be visible during scraping
+- ~30 seconds per store
+- Install: `pip install undetected-chromedriver`
+
+**What Doesn't Work**:
+- ❌ Direct GraphQL API (403 Forbidden)
+- ❌ Playwright headless (Cloudflare blocks)
+- ❌ undetected-chromedriver headless (Still detected)
+- ❌ Proxy rotation (Cloudflare still blocks)
+
+### Leafly (WORKING)
+
+```bash
+# Discovery and import
+./venv/bin/python scripts/scrape_leafly_and_import.py
+
+# Menu scraping
+./venv/bin/python scripts/scrape_leafly_menus.py
+```
+
+---
+
+## Proxy Configuration
+
+**Provider**: Decodo Residential Proxies
+
+```
+Host: gate.decodo.com
+Ports: 10001-10010 (rotating)
+User: spn1pjbpd4
+Pass: k0xH_iq29reyWfz3JR
+```
+
+### When to Use Proxy
+
+| Provider | Use Proxy? | Reason |
+|----------|------------|--------|
+| Sweed | ❌ NO | Proxy IPs are blocked |
+| Dutchie | ❌ NO | Cloudflare still blocks |
+| Leafly | ⚠️ Optional | Helps with rate limits |
+| Jane | ⚠️ Try both | May help avoid blocks |
+
+**Lesson Learned**: Proxy doesn't help bypass Cloudflare. Use undetected-chromedriver instead.
+
+---
+
+## Quick Start
+
+### 1. Environment Setup
+```bash
+cd /Users/gleaf/shelfintel
+source venv/bin/activate
+```
+
+### 2. Run the App
+```bash
+streamlit run app/Home.py --server.port 8501
+```
+Open http://localhost:8501
+
+### 3. Scrape Data (Priority Order)
+
+```bash
+# 1. Sweed stores (fast, reliable)
+./venv/bin/python scripts/scrape_sweed_batch.py MD
+
+# 2. Dutchie stores (headed browser required)
+./venv/bin/python scripts/scrape_dutchie_uc.py MD
+
+# 3. Leafly stores
+./venv/bin/python scripts/scrape_leafly_menus.py
+```
+
+---
 
 ## Directory Structure
 
@@ -36,58 +200,29 @@ shelfintel/
 │       ├── 30_Grower_Intelligence.py    # Cultivator dashboard
 │       ├── 40_Investor_Intelligence.py  # Public company tracking
 │       ├── 90_Admin_Clients.py          # Client management
+│       ├── 98_Admin_Dispensaries.py     # Dispensary management + MD Cleanup
 │       └── ...
 ├── core/                     # Core utilities
 │   ├── db.py                 # Database connection (Supabase)
 │   └── category_utils.py     # Category normalization
 ├── ingest/                   # Data ingestion
 │   ├── run_scrape.py         # Main scraper orchestrator
+│   ├── proxy_config.py       # Decodo proxy configuration
 │   └── providers/            # Menu scraping providers
+│       ├── sweed_api.py      # Sweed REST API (WORKING)
+│       ├── dutchie_provider.py
+│       └── jane_provider.py
 ├── scripts/                  # Utility scripts
-│   ├── fetch_stock_prices.py      # Yahoo Finance stock data
-│   ├── fetch_sec_filings.py       # SEC EDGAR parser
-│   ├── import_state_dispensaries.py
-│   ├── scrape_dutchie_batch_v2.py # Fast Dutchie GraphQL scraper
+│   ├── scrape_sweed_batch.py       # Sweed batch scraper
+│   ├── scrape_dutchie_uc.py        # Dutchie undetected-chromedriver
+│   ├── scrape_dutchie_batch_v2.py  # Legacy Dutchie GraphQL
 │   ├── scrape_leafly_and_import.py # Leafly dispensary discovery
-│   └── scrape_leafly_menus.py     # Leafly menu scraper
-├── .env                      # Proxy credentials (do not commit)
-├── .streamlit/
-│   ├── config.toml           # Streamlit config
-│   └── secrets.toml          # DATABASE_URL (do not commit)
-└── QUICKSTART.md             # This file
+│   ├── fetch_stock_prices.py       # Yahoo Finance stock data
+│   └── fetch_sec_filings.py        # SEC EDGAR parser
+├── QUICKSTART.md             # This file
+├── SYSTEM_DOCS.md            # Detailed system documentation
+└── venv/                     # Python virtual environment
 ```
-
-## Quick Start
-
-### 1. Environment Setup
-```bash
-cd /Users/gleaf/shelfintel
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-```
-
-### 2. Configuration Files
-
-**`.env` (Proxy for Cloudflare bypass)**
-```
-PROXY_HOST=gate.decodo.com
-PROXY_PORT=10001
-PROXY_USER=spn1pjbpd4
-PROXY_PASS=k0xH_iq29reyWfz3JR
-```
-
-**`.streamlit/secrets.toml` (Database)**
-```toml
-DATABASE_URL="postgresql+psycopg://postgres:Tattershall2020@db.trteltlgtmcggdbrqwdw.supabase.co:5432/postgres?sslmode=require"
-```
-
-### 3. Run the App
-```bash
-source .venv/bin/activate
-streamlit run app/Home.py --server.port 8501
-```
-Open http://localhost:8501
 
 ---
 
@@ -115,6 +250,13 @@ Open http://localhost:8501
 | **Client** | Real data for permitted states |
 | **Admin** | All states + admin pages |
 
+### Admin Login
+
+```
+Email: phil@leadstorm.com
+Password: rock21!
+```
+
 ### Demo Mode Pattern
 
 ```python
@@ -127,21 +269,6 @@ if DEMO_MODE:
     companies = get_demo_companies()  # Sample data
 else:
     companies = load_companies()      # Real database
-```
-
-### State Filtering
-
-```python
-from components.nav import render_state_filter
-
-# Show state dropdown (filtered by user permissions)
-state = render_state_filter()
-if not state:
-    st.warning("No states available")
-    st.stop()
-
-# Use in queries
-query = "SELECT * FROM dispensary WHERE state = :state"
 ```
 
 ---
@@ -158,6 +285,8 @@ dispensary (
     phone VARCHAR, email VARCHAR,
     menu_url TEXT,
     menu_provider VARCHAR,  -- dutchie, jane, sweed, etc.
+    provider_metadata JSONB,  -- store_id, etc.
+    store_type VARCHAR,  -- NULL, 'smoke_shop', 'duplicate'
     is_active BOOLEAN
 )
 
@@ -173,27 +302,6 @@ raw_menu_item (
     raw_price DECIMAL
 )
 
--- Public Companies (Investor Intelligence)
-public_company (
-    company_id UUID PRIMARY KEY,
-    name VARCHAR,
-    ticker_us VARCHAR,
-    ticker_ca VARCHAR,
-    company_type VARCHAR,  -- MSO, LP
-    market_cap_millions DECIMAL
-)
-
--- Stock Prices
-stock_price (
-    company_id UUID,
-    price_date DATE,
-    open_price DECIMAL,
-    high_price DECIMAL,
-    low_price DECIMAL,
-    close_price DECIMAL,
-    volume BIGINT
-)
-
 -- Clients (Authentication)
 client (
     client_id UUID PRIMARY KEY,
@@ -207,111 +315,29 @@ client (
 
 ---
 
-## Intelligence Dashboards
+## Progress Notes (January 2026)
 
-### Brand Intelligence (`10_Brand_Intelligence.py`)
-- Competitive gap analysis
-- Store distribution visualization
-- County coverage map
-- Category filtering
-- Size-aware price comparisons
+### Completed
 
-### Retail Intelligence (`20_Retail_Intelligence.py`)
-- Competitor price comparison
-- Assortment gap analysis
-- Category mix optimization
-- Actionable insights
+- ✅ Sweed API integration working (NO proxy needed)
+- ✅ Sweed batch scrape: 121 stores, 79,141 products
+- ✅ Dutchie bypass with undetected-chromedriver (HEADED)
+- ✅ MD Cleanup admin page created
+- ✅ Duplicate detection algorithm implemented
+- ✅ Provider configuration documented
 
-### Grower Intelligence (`30_Grower_Intelligence.py`)
-- Strain popularity rankings
-- Category trend analysis
-- Price benchmarking
-- Size distribution
+### In Progress
 
-### Investor Intelligence (`40_Investor_Intelligence.py`)
-- Public company tracking (10 MSOs/LPs)
-- Stock charts with candlestick view
-- Financial metrics comparison
-- State operations footprint
-- Shelf analytics (brand penetration)
+- 🔄 Maryland data cleanup (priority)
+- 🔄 Testing Dutchie scraper on MD stores
+- 🔄 Verifying all 112 real MD dispensaries have data
 
----
+### Blocked/Won't Work
 
-## Menu Providers
-
-| Provider | Stores w/ Data | Notes |
-|----------|----------------|-------|
-| Dutchie | ~200+ | GraphQL via Playwright, use `scrape_dutchie_batch_v2.py` |
-| Leafly | ~100+ | Playwright scraper, use `scrape_leafly_and_import.py` for discovery |
-| Sweed | ~50 | JSON API, gLeaf and similar |
-| Jane | ~40 | JSON API, Cloudflare blocks some |
-| Weedmaps | ~10 | API changes frequently |
-
----
-
-## Scraping Commands
-
-### Dutchie Batch Scraper (Recommended)
-```bash
-# Scrape specific states (fast, reliable)
-./venv/bin/python scripts/scrape_dutchie_batch_v2.py OR CA WA
-
-# Run multiple state groups in parallel for speed
-./venv/bin/python scripts/scrape_dutchie_batch_v2.py FL PA OH &
-./venv/bin/python scripts/scrape_dutchie_batch_v2.py NY MA ME CT &
-./venv/bin/python scripts/scrape_dutchie_batch_v2.py CA CO MI AZ NV &
-```
-
-### Leafly Dispensary Discovery
-```bash
-# Find and import new dispensaries from Leafly
-./venv/bin/python scripts/scrape_leafly_and_import.py
-```
-
-### Legacy Scraper
-```bash
-./venv/bin/python ingest/run_scrape.py --state MD
-./venv/bin/python ingest/run_scrape.py --all
-```
-
-### Fetch Stock Prices
-```bash
-./venv/bin/python scripts/fetch_stock_prices.py
-```
-
-### Fetch SEC Filings
-```bash
-./venv/bin/python scripts/fetch_sec_filings.py
-```
-
----
-
-## Key Code Patterns
-
-### Category Normalization
-```python
-from core.category_utils import get_normalized_category_sql
-
-# Returns SQL CASE statement for category mapping
-category_sql = get_normalized_category_sql('raw_category')
-# Maps: 'flower', 'bud' -> 'Flower'
-#       'pre-roll', 'preroll' -> 'Pre-Rolls'
-#       etc.
-```
-
-### Size Extraction (Price Comparisons)
-```python
-def extract_size_from_name(name: str) -> str:
-    """Extract size/weight from product name."""
-    # Returns: "3.5g", "7g", "14g", "28g", "100mg", "5pk", "std"
-```
-
-### PostgreSQL Array Parameters
-```python
-# WRONG: WHERE state IN :states  -- syntax error
-# RIGHT: WHERE state = ANY(:states)
-conn.execute(text("WHERE state = ANY(:states)"), {"states": ['MD', 'NJ']})
-```
+- ❌ Proxy for Sweed (blocked)
+- ❌ Proxy for Dutchie Cloudflare bypass (doesn't help)
+- ❌ Headless browser for Dutchie (detected)
+- ❌ Direct Dutchie GraphQL API (403)
 
 ---
 
@@ -331,7 +357,7 @@ with engine.connect() as conn:
 "
 ```
 
-### Check Stores by State
+### Check MD Coverage
 ```bash
 ./venv/bin/python -c "
 from core.db import get_engine
@@ -339,59 +365,37 @@ from sqlalchemy import text
 engine = get_engine()
 with engine.connect() as conn:
     result = conn.execute(text('''
-        SELECT state, COUNT(*) FROM dispensary
-        WHERE is_active = true GROUP BY state ORDER BY COUNT(*) DESC
+        SELECT
+            COUNT(*) as total,
+            COUNT(*) FILTER (WHERE is_active) as active,
+            COUNT(DISTINCT r.dispensary_id) as with_data
+        FROM dispensary d
+        LEFT JOIN raw_menu_item r ON d.dispensary_id = r.dispensary_id
+        WHERE d.state = 'MD'
     '''))
-    for row in result: print(f'{row[0]}: {row[1]} stores')
+    row = result.fetchone()
+    print(f'MD: {row[0]} total, {row[1]} active, {row[2]} with menu data')
 "
 ```
 
-### Test Proxy Connection
+### Check Provider Status (Last 24h)
 ```bash
 ./venv/bin/python -c "
-import asyncio
-from playwright.async_api import async_playwright
-
-async def test():
-    async with async_playwright() as p:
-        browser = await p.chromium.launch(
-            headless=True,
-            proxy={
-                'server': 'http://gate.decodo.com:10002',
-                'username': 'spn1pjbpd4',
-                'password': 'k0xH_iq29reyWfz3JR'
-            }
-        )
-        page = await browser.new_page()
-        await page.goto('https://httpbin.org/ip')
-        print(await page.content())
-        await browser.close()
-
-asyncio.run(test())
+from sqlalchemy import create_engine, text
+engine = create_engine('postgresql+psycopg://postgres:Tattershall2020@db.trteltlgtmcggdbrqwdw.supabase.co:5432/postgres')
+with engine.connect() as conn:
+    result = conn.execute(text('''
+        SELECT d.menu_provider, sr.status, COUNT(*) as runs, SUM(sr.records_found) as products
+        FROM scrape_run sr
+        JOIN dispensary d ON sr.dispensary_id = d.dispensary_id
+        WHERE sr.started_at > NOW() - INTERVAL '24 hours'
+        GROUP BY d.menu_provider, sr.status
+        ORDER BY d.menu_provider, sr.status
+    '''))
+    for row in result:
+        print(f'{row[0]:15} | {row[1]:10} | {row[2]:4} runs | {row[3] or 0:6} products')
 "
 ```
-
----
-
-## Known Issues & Solutions
-
-| Issue | Cause | Solution |
-|-------|-------|----------|
-| Cloudflare blocks | Direct dutchie URLs blocked | Use proxy or Weedmaps fallback |
-| Only ~25 products | Only first page loaded | Navigate to each category URL |
-| Proxy rate limits | Port saturated | Rotate ports 10002-10010 |
-| Demo data only | Not authenticated | Login for real data |
-
----
-
-## Common Fixes
-
-| Issue | Fix |
-|-------|-----|
-| `NoneType format` errors | Add `or 0`: `value = metrics.get('field') or 0` |
-| `IN :param` syntax error | Use `= ANY(:param)` for PostgreSQL |
-| State filter empty | Check `get_user_allowed_states()` permissions |
-| Page spinning forever | Use `pg_class` for large table counts |
 
 ---
 
@@ -401,16 +405,7 @@ asyncio.run(test())
 |---------|------|------|----------|
 | Supabase DB | db.trteltlgtmcggdbrqwdw.supabase.co | postgres | Tattershall2020 |
 | Decodo Proxy | gate.decodo.com | spn1pjbpd4 | k0xH_iq29reyWfz3JR |
-
----
-
-## Data Sources
-
-- **Dispensary Menus**: Scraped from individual store websites
-- **State Data**: Official state cannabis commission data
-- **Stock Prices**: Yahoo Finance API
-- **SEC Filings**: SEC EDGAR
-- **Fallback**: Weedmaps public API
+| Admin Login | - | phil@leadstorm.com | rock21! |
 
 ---
 
