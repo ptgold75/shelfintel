@@ -1,25 +1,25 @@
 # app/components/sidebar_nav.py
-"""Static left sidebar navigation that changes based on authentication status."""
+"""Clean sidebar navigation organized by user type."""
 
 import streamlit as st
 from pathlib import Path
 
 
 def render_sidebar_nav():
-    """Render the static left sidebar navigation panel."""
+    """Render the sidebar navigation panel."""
     from components.auth import is_authenticated, is_admin, get_current_client, get_allowed_states, init_session_state
 
     init_session_state()
 
-    # Force sidebar to always be visible
+    # Sidebar styling - clean and compact
     st.markdown("""
     <style>
         [data-testid="stSidebar"] {
-            min-width: 260px;
-            max-width: 260px;
+            min-width: 240px;
+            max-width: 240px;
         }
         [data-testid="stSidebar"] > div:first-child {
-            padding-top: 1rem;
+            padding-top: 0.5rem;
         }
         section[data-testid="stSidebar"] {
             background: linear-gradient(180deg, #1e3a5f 0%, #0f2744 100%);
@@ -29,119 +29,92 @@ def render_sidebar_nav():
         }
         section[data-testid="stSidebar"] hr {
             border-color: rgba(255,255,255,0.1);
+            margin: 0.5rem 0;
         }
         /* Navigation link styling */
         section[data-testid="stSidebar"] a {
             text-decoration: none !important;
         }
         section[data-testid="stSidebar"] .stPageLink > div {
-            padding: 0.5rem 0.75rem;
-            border-radius: 6px;
-            margin: 2px 0;
+            padding: 0.4rem 0.6rem;
+            border-radius: 4px;
+            margin: 1px 0;
             transition: background 0.15s;
+            font-size: 0.9rem;
         }
         section[data-testid="stSidebar"] .stPageLink > div:hover {
             background: rgba(255,255,255,0.1);
         }
-        section[data-testid="stSidebar"] .stPageLink[data-active="true"] > div {
-            background: rgba(37, 99, 235, 0.3);
-            border-left: 3px solid #60a5fa;
-        }
-        /* Main nav tabs at top */
-        .main-nav-tabs {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-            margin-bottom: 1rem;
-            padding-bottom: 0.75rem;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-        .main-nav-tab {
-            background: rgba(255,255,255,0.1);
-            padding: 0.4rem 0.7rem;
+        /* Expander styling - compact */
+        section[data-testid="stSidebar"] .streamlit-expanderHeader {
+            font-size: 0.95rem;
+            font-weight: 600;
+            padding: 0.5rem 0.5rem;
+            background: rgba(255,255,255,0.05);
             border-radius: 6px;
-            font-size: 0.8rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: background 0.15s;
-            text-decoration: none !important;
-            color: white !important;
+            margin: 0.25rem 0;
         }
-        .main-nav-tab:hover {
-            background: rgba(255,255,255,0.2);
+        section[data-testid="stSidebar"] .streamlit-expanderHeader:hover {
+            background: rgba(255,255,255,0.12);
         }
-        .main-nav-tab.active {
-            background: rgba(37, 99, 235, 0.4);
-            border: 1px solid rgba(96, 165, 250, 0.5);
+        section[data-testid="stSidebar"] .streamlit-expanderContent {
+            padding: 0.25rem 0 0.25rem 0.5rem;
         }
-        /* Section headers */
-        .nav-section-header {
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: rgba(255,255,255,0.5) !important;
-            margin: 1rem 0 0.5rem 0.5rem;
-            font-weight: 600;
-        }
-        /* User info box */
-        .user-info-box {
-            background: rgba(255,255,255,0.1);
-            border-radius: 8px;
-            padding: 0.75rem;
-            margin-bottom: 1rem;
-        }
-        .user-info-box .company-name {
-            font-weight: 600;
-            font-size: 0.9rem;
-            margin-bottom: 0.25rem;
-        }
-        .user-info-box .user-role {
-            font-size: 0.75rem;
-            opacity: 0.8;
-        }
-        .user-info-box .user-states {
-            font-size: 0.7rem;
-            opacity: 0.6;
-            margin-top: 0.25rem;
-        }
-        /* Logo area */
+        /* Logo area - compact */
         .sidebar-logo {
             text-align: center;
-            padding: 0.5rem 0 1rem 0;
+            padding: 0.25rem 0 0.5rem 0;
             border-bottom: 1px solid rgba(255,255,255,0.1);
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem;
         }
         .sidebar-logo h2 {
             margin: 0;
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             font-weight: 700;
             color: white !important;
         }
         .sidebar-logo p {
-            margin: 0.25rem 0 0 0;
+            margin: 0.1rem 0 0 0;
+            font-size: 0.65rem;
+            opacity: 0.6;
+        }
+        /* User info box - compact */
+        .user-info-box {
+            background: rgba(255,255,255,0.08);
+            border-radius: 6px;
+            padding: 0.5rem;
+            margin-bottom: 0.5rem;
+            font-size: 0.8rem;
+        }
+        .user-info-box .company-name {
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+        .user-info-box .user-meta {
             font-size: 0.7rem;
             opacity: 0.7;
         }
-        /* Sub-nav links */
-        .sub-nav-link {
-            display: block;
-            padding: 0.35rem 0.75rem 0.35rem 1.25rem;
-            font-size: 0.85rem;
-            color: rgba(255,255,255,0.8) !important;
-            text-decoration: none !important;
-            border-radius: 4px;
-            margin: 1px 0;
-            transition: background 0.15s;
+        /* CTA box */
+        .cta-box {
+            padding: 0.6rem;
+            background: rgba(37,99,235,0.25);
+            border-radius: 6px;
+            margin: 0.5rem 0;
+            font-size: 0.8rem;
         }
-        .sub-nav-link:hover {
-            background: rgba(255,255,255,0.1);
-            color: white !important;
+        .cta-box p {
+            margin: 0;
+            font-size: 0.75rem;
+        }
+        .cta-box .cta-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
         }
     </style>
     """, unsafe_allow_html=True)
 
     with st.sidebar:
-        # Logo/Brand
+        # Logo - compact
         st.markdown("""
         <div class="sidebar-logo">
             <h2>CannLinx</h2>
@@ -153,124 +126,81 @@ def render_sidebar_nav():
         admin = is_admin() if logged_in else False
 
         if logged_in:
-            # Show user info
+            # User info - compact
             client = get_current_client()
             states = get_allowed_states()
             role = "Admin" if admin else "Client"
-            states_str = ", ".join(states[:3]) + ("..." if len(states) > 3 else "") if states else "All"
+            states_str = ", ".join(states[:2]) + ("+" if len(states) > 2 else "") if states else "All"
 
             st.markdown(f"""
             <div class="user-info-box">
                 <div class="company-name">{client['company_name']}</div>
-                <div class="user-role">{role}</div>
-                <div class="user-states">States: {states_str}</div>
+                <div class="user-meta">{role} | {states_str}</div>
             </div>
             """, unsafe_allow_html=True)
 
-            # LOGGED IN NAVIGATION
+        # HOME - always visible
+        st.page_link("Home.py", label="Home")
 
-            # Main nav tabs at top
-            st.markdown("""
-            <div class="main-nav-tabs">
-                <a href="/Retail_Intelligence" class="main-nav-tab">Retail</a>
-                <a href="/Grower_Intelligence" class="main-nav-tab">Wholesale</a>
-                <a href="/Brand_Intelligence" class="main-nav-tab">Brands</a>
-                <a href="/Investor_Intelligence" class="main-nav-tab">Investors</a>
-            </div>
-            """, unsafe_allow_html=True)
-
-            # Home link
-            st.page_link("Home.py", label="Home", icon="🏠")
-
-            # RETAIL Section
-            with st.expander("Retail", expanded=False):
-                st.page_link("pages/20_Retail_Intelligence.py", label="Dashboard")
-                st.page_link("pages/6_Price_Analysis.py", label="Price Comparison")
-                st.page_link("pages/6_Competitor_Compare.py", label="Store vs Store")
+        # RETAIL INTELLIGENCE
+        with st.expander("Retail", expanded=False):
+            st.caption("For dispensaries & retailers")
+            st.page_link("pages/20_Retail_Intelligence.py", label="Dashboard")
+            st.page_link("pages/6_Price_Analysis.py", label="Price Analysis")
+            st.page_link("pages/6_Competitor_Compare.py", label="Competitor Compare")
+            if logged_in:
                 st.page_link("pages/2_Availability.py", label="Stock Alerts")
-                st.page_link("pages/9_Product_Search.py", label="Product Search")
                 st.page_link("pages/8_County_Insights.py", label="County Insights")
 
-            # WHOLESALE Section
-            with st.expander("Wholesale", expanded=False):
-                st.page_link("pages/30_Grower_Intelligence.py", label="Dashboard")
+        # WHOLESALE / GROWERS
+        with st.expander("Wholesale", expanded=False):
+            st.caption("For growers & manufacturers")
+            st.page_link("pages/30_Grower_Intelligence.py", label="Dashboard")
+            if logged_in:
                 st.page_link("pages/8_County_Insights.py", label="Territory Analysis")
-                st.page_link("pages/2_Availability.py", label="Restock Alerts")
                 st.page_link("pages/9_Product_Search.py", label="Product Lookup")
 
-            # BRANDS Section
-            with st.expander("Brands", expanded=False):
-                st.page_link("pages/10_Brand_Intelligence.py", label="Dashboard")
-                st.page_link("pages/15_Market_Share.py", label="Market Position")
-                st.page_link("pages/16_Brand_Heatmap.py", label="Coverage Heat Map")
+        # BRANDS
+        with st.expander("Brands", expanded=False):
+            st.caption("For brand owners")
+            st.page_link("pages/10_Brand_Intelligence.py", label="Dashboard")
+            st.page_link("pages/16_Brand_Heatmap.py", label="Coverage Map")
+            if logged_in:
+                st.page_link("pages/15_Market_Share.py", label="Market Share")
                 st.page_link("pages/11_Brand_Assets.py", label="Image Consistency")
                 st.page_link("pages/14_Brand_Integrity.py", label="Naming Standards")
 
-            # INVESTORS Section
-            with st.expander("Investors", expanded=False):
-                st.page_link("pages/40_Investor_Intelligence.py", label="Dashboard")
+        # INVESTORS
+        with st.expander("Investors", expanded=False):
+            st.caption("For analysts & investors")
+            st.page_link("pages/40_Investor_Intelligence.py", label="Dashboard")
+            if logged_in:
                 st.page_link("pages/15_Market_Share.py", label="Market Analysis")
 
-            # Admin section
-            if admin:
-                with st.expander("Admin", expanded=False):
-                    st.page_link("pages/90_Admin_Clients.py", label="Manage Clients")
-                    st.page_link("pages/97_Admin_Naming.py", label="Naming Rules")
-                    st.page_link("pages/98_Admin_Dispensaries.py", label="Dispensaries")
-                    st.page_link("pages/96_Admin_Coverage.py", label="Coverage Tracker")
+        # ADMIN (logged in admins only)
+        if logged_in and admin:
+            with st.expander("Admin", expanded=False):
+                st.page_link("pages/90_Admin_Clients.py", label="Clients")
+                st.page_link("pages/98_Admin_Dispensaries.py", label="Dispensaries")
+                st.page_link("pages/97_Admin_Naming.py", label="Naming Rules")
 
-            st.divider()
-            st.page_link("pages/93_Alert_Settings.py", label="Alert Settings", icon="🔔")
-            st.page_link("pages/92_Logout.py", label="Logout", icon="🚪")
+        st.divider()
 
+        if logged_in:
+            st.page_link("pages/92_Logout.py", label="Logout")
         else:
-            # LOGGED OUT NAVIGATION - Show what's available by user type
-
-            # Main nav tabs at top
+            # CTA for non-logged in users
             st.markdown("""
-            <div class="main-nav-tabs">
-                <a href="/Retail_Intelligence" class="main-nav-tab">Retail</a>
-                <a href="/Grower_Intelligence" class="main-nav-tab">Wholesale</a>
-                <a href="/Brand_Intelligence" class="main-nav-tab">Brands</a>
-                <a href="/Investor_Intelligence" class="main-nav-tab">Investors</a>
+            <div class="cta-box">
+                <p class="cta-title">Get Full Access</p>
+                <p>Login to unlock all features and real-time data.</p>
             </div>
             """, unsafe_allow_html=True)
-
-            st.page_link("Home.py", label="Home", icon="🏠")
-
-            # RETAIL Section
-            with st.expander("Retail", expanded=False):
-                st.page_link("pages/20_Retail_Intelligence.py", label="Dashboard")
-                st.page_link("pages/6_Price_Analysis.py", label="Price Comparison")
-
-            # WHOLESALE Section
-            with st.expander("Wholesale", expanded=False):
-                st.page_link("pages/30_Grower_Intelligence.py", label="Dashboard")
-
-            # BRANDS Section
-            with st.expander("Brands", expanded=False):
-                st.page_link("pages/10_Brand_Intelligence.py", label="Dashboard")
-                st.page_link("pages/16_Brand_Heatmap.py", label="Coverage Heat Map")
-
-            # INVESTORS Section
-            with st.expander("Investors", expanded=False):
-                st.page_link("pages/40_Investor_Intelligence.py", label="Dashboard")
-
-            st.divider()
-
-            st.markdown("""
-            <div style="padding: 1rem; background: rgba(37,99,235,0.2); border-radius: 8px; margin: 1rem 0;">
-                <p style="font-size: 0.85rem; margin: 0 0 0.5rem 0; font-weight: 600;">Ready to get started?</p>
-                <p style="font-size: 0.75rem; margin: 0; opacity: 0.8;">Log in to access full market intelligence and track your competition.</p>
-            </div>
-            """, unsafe_allow_html=True)
-
-            st.page_link("pages/91_Login.py", label="Login", icon="🔑")
+            st.page_link("pages/91_Login.py", label="Login")
 
 
 def render_main_header():
     """Render the main content area header with banner."""
-    # Banner image
     banner_path = Path(__file__).parent.parent / "static" / "cannalinx_banner.png"
     if banner_path.exists():
         st.image(str(banner_path), use_container_width=True)
@@ -296,7 +226,6 @@ def render_state_filter():
             """))
             return [row[0] for row in result]
 
-    # Get states based on user permissions
     if not is_authenticated():
         return None
 
@@ -310,31 +239,24 @@ def render_state_filter():
     if not states:
         return None
 
-    # Initialize session state
     if "selected_state" not in st.session_state:
         st.session_state.selected_state = states[0] if states else None
 
-    # If current selection not in allowed states, reset
     if st.session_state.selected_state not in states:
         st.session_state.selected_state = states[0] if states else None
 
-    # If only one state, don't show filter
     if len(states) == 1:
         st.session_state.selected_state = states[0]
         return states[0]
 
-    # Create state selector in sidebar
-    with st.sidebar:
-        st.markdown('<p class="nav-section-header">Filter</p>', unsafe_allow_html=True)
-        selected = st.selectbox(
-            "State",
-            states,
-            index=states.index(st.session_state.selected_state) if st.session_state.selected_state in states else 0,
-            key="state_filter_select",
-            label_visibility="collapsed"
-        )
-        st.session_state.selected_state = selected
-
+    # State selector in main area (not sidebar)
+    selected = st.selectbox(
+        "State",
+        states,
+        index=states.index(st.session_state.selected_state) if st.session_state.selected_state in states else 0,
+        key="state_filter_select"
+    )
+    st.session_state.selected_state = selected
     return selected
 
 
@@ -353,13 +275,9 @@ def render_nav(require_login=True):
     """Main entry point - render sidebar nav and handle authentication."""
     from components.auth import is_authenticated, render_login_form
 
-    # Render sidebar navigation
     render_sidebar_nav()
-
-    # Render banner in main area
     render_main_header()
 
-    # Handle login requirement
     if require_login and not is_authenticated():
         render_login_form()
         st.stop()
