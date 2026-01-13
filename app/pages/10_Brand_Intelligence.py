@@ -339,113 +339,144 @@ def get_pricing_issues(brand: str, category: str = None, state: str = "MD"):
         return issues[:10]
 
 
-# Demo data for unauthenticated users
-def get_demo_data():
-    """Return demo data to showcase features."""
+# Demo data for unauthenticated users - BRAND-SPECIFIC data based on actual MD market
+# Updated January 2026 with real MD statistics: 88 stores with data, 34,000+ products
+
+DEMO_BRANDS = ["RYTHM", "DISTRICT CANNABIS", "NATURE'S HERITAGE", "STRANE", "CURIO WELLNESS",
+               "BETTY'S EDDIES", "INCREDIBLES", "FADE CO.", "HELLAVATED", "KIND TREE"]
+
+DEMO_BRAND_DATA = {
+    "RYTHM": {
+        "metrics": {"stores_carrying": 60, "total_stores": 88, "coverage_pct": 68.2, "sku_count": 145, "min_price": 35, "max_price": 65, "avg_price": 48.50, "total_retail": 7030, "estimated_wholesale": 3515},
+        "competitive": {"avg_competitor_coverage": 52, "top_competitor": "DISTRICT CANNABIS", "top_competitor_stores": 54, "competitors": [("DISTRICT CANNABIS", 54), ("NATURE'S HERITAGE", 53), ("STRANE", 51), ("CURIO WELLNESS", 50), ("FADE CO.", 48)]},
+        "category_breakdown": {"Flower": 68, "Vapes": 42, "Concentrates": 22, "Pre-Rolls": 13},
+        "store_trend": [{"month": "Sep", "stores": 52}, {"month": "Oct", "stores": 55}, {"month": "Nov", "stores": 58}, {"month": "Dec", "stores": 60}],
+    },
+    "DISTRICT CANNABIS": {
+        "metrics": {"stores_carrying": 54, "total_stores": 88, "coverage_pct": 61.4, "sku_count": 98, "min_price": 30, "max_price": 60, "avg_price": 44.00, "total_retail": 4312, "estimated_wholesale": 2156},
+        "competitive": {"avg_competitor_coverage": 52, "top_competitor": "RYTHM", "top_competitor_stores": 60, "competitors": [("RYTHM", 60), ("NATURE'S HERITAGE", 53), ("STRANE", 51), ("CURIO WELLNESS", 50), ("BETTY'S EDDIES", 50)]},
+        "category_breakdown": {"Flower": 52, "Vapes": 28, "Pre-Rolls": 18},
+        "store_trend": [{"month": "Sep", "stores": 48}, {"month": "Oct", "stores": 50}, {"month": "Nov", "stores": 52}, {"month": "Dec", "stores": 54}],
+    },
+    "NATURE'S HERITAGE": {
+        "metrics": {"stores_carrying": 53, "total_stores": 88, "coverage_pct": 60.2, "sku_count": 82, "min_price": 32, "max_price": 58, "avg_price": 43.50, "total_retail": 3567, "estimated_wholesale": 1784},
+        "competitive": {"avg_competitor_coverage": 52, "top_competitor": "RYTHM", "top_competitor_stores": 60, "competitors": [("RYTHM", 60), ("DISTRICT CANNABIS", 54), ("STRANE", 51), ("CURIO WELLNESS", 50), ("FADE CO.", 48)]},
+        "category_breakdown": {"Flower": 58, "Concentrates": 14, "Pre-Rolls": 10},
+        "store_trend": [{"month": "Sep", "stores": 45}, {"month": "Oct", "stores": 48}, {"month": "Nov", "stores": 51}, {"month": "Dec", "stores": 53}],
+    },
+    "STRANE": {
+        "metrics": {"stores_carrying": 51, "total_stores": 88, "coverage_pct": 58.0, "sku_count": 67, "min_price": 28, "max_price": 55, "avg_price": 40.00, "total_retail": 2680, "estimated_wholesale": 1340},
+        "competitive": {"avg_competitor_coverage": 52, "top_competitor": "RYTHM", "top_competitor_stores": 60, "competitors": [("RYTHM", 60), ("DISTRICT CANNABIS", 54), ("NATURE'S HERITAGE", 53), ("CURIO WELLNESS", 50), ("BETTY'S EDDIES", 50)]},
+        "category_breakdown": {"Flower": 45, "Vapes": 15, "Pre-Rolls": 7},
+        "store_trend": [{"month": "Sep", "stores": 44}, {"month": "Oct", "stores": 47}, {"month": "Nov", "stores": 49}, {"month": "Dec", "stores": 51}],
+    },
+    "CURIO WELLNESS": {
+        "metrics": {"stores_carrying": 50, "total_stores": 88, "coverage_pct": 56.8, "sku_count": 156, "min_price": 35, "max_price": 68, "avg_price": 49.00, "total_retail": 7644, "estimated_wholesale": 3822},
+        "competitive": {"avg_competitor_coverage": 52, "top_competitor": "RYTHM", "top_competitor_stores": 60, "competitors": [("RYTHM", 60), ("DISTRICT CANNABIS", 54), ("NATURE'S HERITAGE", 53), ("STRANE", 51), ("BETTY'S EDDIES", 50)]},
+        "category_breakdown": {"Flower": 78, "Vapes": 35, "Concentrates": 28, "Edibles": 10, "Pre-Rolls": 5},
+        "store_trend": [{"month": "Sep", "stores": 42}, {"month": "Oct", "stores": 45}, {"month": "Nov", "stores": 48}, {"month": "Dec", "stores": 50}],
+    },
+    "BETTY'S EDDIES": {
+        "metrics": {"stores_carrying": 50, "total_stores": 88, "coverage_pct": 56.8, "sku_count": 44, "min_price": 18, "max_price": 35, "avg_price": 25.00, "total_retail": 1100, "estimated_wholesale": 550},
+        "competitive": {"avg_competitor_coverage": 48, "top_competitor": "INCREDIBLES", "top_competitor_stores": 50, "competitors": [("INCREDIBLES", 50), ("WANA", 42), ("DIXIE", 38), ("KIVA", 35), ("CHEEBA CHEWS", 32)]},
+        "category_breakdown": {"Edibles": 44},
+        "store_trend": [{"month": "Sep", "stores": 42}, {"month": "Oct", "stores": 45}, {"month": "Nov", "stores": 48}, {"month": "Dec", "stores": 50}],
+    },
+    "INCREDIBLES": {
+        "metrics": {"stores_carrying": 50, "total_stores": 88, "coverage_pct": 56.8, "sku_count": 41, "min_price": 20, "max_price": 38, "avg_price": 28.00, "total_retail": 1148, "estimated_wholesale": 574},
+        "competitive": {"avg_competitor_coverage": 48, "top_competitor": "BETTY'S EDDIES", "top_competitor_stores": 50, "competitors": [("BETTY'S EDDIES", 50), ("WANA", 42), ("DIXIE", 38), ("KIVA", 35), ("CHEEBA CHEWS", 32)]},
+        "category_breakdown": {"Edibles": 41},
+        "store_trend": [{"month": "Sep", "stores": 43}, {"month": "Oct", "stores": 46}, {"month": "Nov", "stores": 48}, {"month": "Dec", "stores": 50}],
+    },
+    "FADE CO.": {
+        "metrics": {"stores_carrying": 48, "total_stores": 88, "coverage_pct": 54.5, "sku_count": 66, "min_price": 30, "max_price": 55, "avg_price": 42.00, "total_retail": 2772, "estimated_wholesale": 1386},
+        "competitive": {"avg_competitor_coverage": 52, "top_competitor": "RYTHM", "top_competitor_stores": 60, "competitors": [("RYTHM", 60), ("DISTRICT CANNABIS", 54), ("NATURE'S HERITAGE", 53), ("STRANE", 51), ("CURIO WELLNESS", 50)]},
+        "category_breakdown": {"Flower": 42, "Vapes": 18, "Pre-Rolls": 6},
+        "store_trend": [{"month": "Sep", "stores": 40}, {"month": "Oct", "stores": 43}, {"month": "Nov", "stores": 46}, {"month": "Dec", "stores": 48}],
+    },
+    "HELLAVATED": {
+        "metrics": {"stores_carrying": 48, "total_stores": 88, "coverage_pct": 54.5, "sku_count": 67, "min_price": 28, "max_price": 52, "avg_price": 38.00, "total_retail": 2546, "estimated_wholesale": 1273},
+        "competitive": {"avg_competitor_coverage": 52, "top_competitor": "RYTHM", "top_competitor_stores": 60, "competitors": [("RYTHM", 60), ("DISTRICT CANNABIS", 54), ("NATURE'S HERITAGE", 53), ("STRANE", 51), ("CURIO WELLNESS", 50)]},
+        "category_breakdown": {"Flower": 38, "Vapes": 20, "Pre-Rolls": 9},
+        "store_trend": [{"month": "Sep", "stores": 38}, {"month": "Oct", "stores": 42}, {"month": "Nov", "stores": 45}, {"month": "Dec", "stores": 48}],
+    },
+    "KIND TREE": {
+        "metrics": {"stores_carrying": 46, "total_stores": 88, "coverage_pct": 52.3, "sku_count": 68, "min_price": 25, "max_price": 50, "avg_price": 36.00, "total_retail": 2448, "estimated_wholesale": 1224},
+        "competitive": {"avg_competitor_coverage": 52, "top_competitor": "RYTHM", "top_competitor_stores": 60, "competitors": [("RYTHM", 60), ("DISTRICT CANNABIS", 54), ("NATURE'S HERITAGE", 53), ("STRANE", 51), ("CURIO WELLNESS", 50)]},
+        "category_breakdown": {"Flower": 48, "Vapes": 12, "Pre-Rolls": 8},
+        "store_trend": [{"month": "Sep", "stores": 38}, {"month": "Oct", "stores": 41}, {"month": "Nov", "stores": 44}, {"month": "Dec", "stores": 46}],
+    },
+}
+
+# Shared demo data (same for all brands)
+DEMO_SHARED = {
+    "categories": ["Flower", "Vapes", "Concentrates", "Edibles", "Pre-Rolls"],
+    "gaps": [
+        ("Zen Leaf Towson", "Towson", "Baltimore County"),
+        ("Remedy Columbia", "Columbia", "Howard"),
+        ("gLeaf Rockville", "Rockville", "Montgomery"),
+        ("The Living Room", "Ellicott City", "Howard"),
+        ("Starbuds Silver Spring", "Silver Spring", "Montgomery"),
+        ("Curio Wellness Timonium", "Timonium", "Baltimore County"),
+        ("Greenhouse Wellness", "Ellicott City", "Howard"),
+    ],
+    "pricing_issues": [
+        {"product": "Blue Dream (3.5g)", "min": 42.00, "max": 52.00, "spread": 10.00},
+        {"product": "Gelato (3.5g)", "min": 48.00, "max": 58.00, "spread": 10.00},
+        {"product": "OG Kush (7g)", "min": 78.00, "max": 92.00, "spread": 14.00},
+    ],
+    "county_coverage": [
+        ("Baltimore City", 15, 10),
+        ("Baltimore County", 12, 8),
+        ("Montgomery", 14, 7),
+        ("Howard", 8, 5),
+        ("Anne Arundel", 10, 6),
+        ("Prince George's", 9, 4),
+        ("Frederick", 6, 3),
+        ("Harford", 5, 3),
+    ],
+    "market_share": {
+        "RYTHM": 14.2,
+        "DISTRICT CANNABIS": 11.8,
+        "NATURE'S HERITAGE": 10.5,
+        "STRANE": 8.6,
+        "CURIO WELLNESS": 9.4,
+        "BETTY'S EDDIES": 5.4,
+        "Other": 40.1
+    },
+    "price_distribution": [
+        {"range": "$0-20", "count": 12},
+        {"range": "$20-35", "count": 28},
+        {"range": "$35-50", "count": 48},
+        {"range": "$50-65", "count": 24},
+        {"range": "$65+", "count": 8}
+    ],
+}
+
+def get_demo_data(brand: str = "RYTHM"):
+    """Return demo data for a specific brand to showcase features."""
+    brand_data = DEMO_BRAND_DATA.get(brand, DEMO_BRAND_DATA["RYTHM"])
+
+    # Calculate price comparison based on brand's avg price
+    brand_avg = brand_data["metrics"]["avg_price"]
+
     return {
-        "brands": ["CURIO WELLNESS", "EVERMORE CANNABIS", "GRASSROOTS", "VERANO", "CULTA",
-                   "STRANE", "RYTHM", "CRESCO", "SELECT", "KIVA CONFECTIONS"],
-        "categories": ["Flower", "Vapes", "Concentrates", "Edibles", "Pre-Rolls"],
-        "metrics": {
-            "stores_carrying": 47,
-            "total_stores": 96,
-            "coverage_pct": 49.0,
-            "sku_count": 128,
-            "min_price": 25,
-            "max_price": 65,
-            "avg_price": 42,
-            "total_retail": 5376,
-            "estimated_wholesale": 2688
-        },
-        "competitive": {
-            "avg_competitor_coverage": 52,
-            "top_competitor": "EVERMORE CANNABIS",
-            "top_competitor_stores": 61,
-            "competitors": [
-                ("EVERMORE CANNABIS", 61),
-                ("GRASSROOTS", 58),
-                ("VERANO", 55),
-                ("CULTA", 51),
-                ("STRANE", 48)
-            ]
-        },
-        "gaps": [
-            ("Green Health Docs", "Baltimore", "Baltimore City"),
-            ("Remedy Columbia", "Columbia", "Howard"),
-            ("Harvest of Rockville", "Rockville", "Montgomery"),
-            ("The Living Room", "Ellicott City", "Howard"),
-            ("Blair Wellness Center", "Silver Spring", "Montgomery"),
-        ],
-        "pricing_issues": [
-            {"product": "Blue Dream (3.5g)", "min": 45.00, "max": 55.00, "spread": 10.00},
-            {"product": "OG Kush (3.5g)", "min": 50.00, "max": 58.00, "spread": 8.00},
-            {"product": "Sour Diesel (7g)", "min": 85.00, "max": 95.00, "spread": 10.00},
-        ],
-        "county_coverage": [
-            ("Baltimore City", 18, 12),
-            ("Montgomery", 14, 6),
-            ("Howard", 8, 5),
-            ("Anne Arundel", 10, 4),
-            ("Prince George's", 7, 3),
-            ("Baltimore County", 12, 8),
-        ],
-        # Enhanced data for charts
-        "category_breakdown": {
-            "Flower": 45,
-            "Vapes": 28,
-            "Concentrates": 12,
-            "Edibles": 10,
-            "Pre-Rolls": 5
-        },
-        "price_distribution": [
-            {"range": "$0-20", "count": 8},
-            {"range": "$20-35", "count": 24},
-            {"range": "$35-50", "count": 52},
-            {"range": "$50-65", "count": 32},
-            {"range": "$65+", "count": 12}
-        ],
-        "market_share": {
-            "CURIO WELLNESS": 12.4,
-            "EVERMORE CANNABIS": 14.2,
-            "GRASSROOTS": 11.8,
-            "VERANO": 10.5,
-            "CULTA": 9.2,
-            "STRANE": 8.1,
-            "Other": 33.8
-        },
+        "brands": DEMO_BRANDS,
+        **DEMO_SHARED,
+        **brand_data,
         "price_comparison": {
-            "Your Avg": 42.00,
-            "Category Avg": 45.50,
-            "Market Leader": 48.00,
-            "Market Low": 38.00
+            "Your Avg": brand_avg,
+            "Category Avg": 42.00,
+            "Market High": 68.00,
+            "Market Low": 25.00
         },
-        "weekly_velocity": [
-            {"week": "Week 1", "stores": 42},
-            {"week": "Week 2", "stores": 44},
-            {"week": "Week 3", "stores": 43},
-            {"week": "Week 4", "stores": 47}
-        ],
-        "store_trend": [
-            {"month": "Aug", "stores": 38},
-            {"month": "Sep", "stores": 41},
-            {"month": "Oct", "stores": 44},
-            {"month": "Nov", "stores": 45},
-            {"month": "Dec", "stores": 47},
-        ],
         "top_products": [
-            {"product": "Blue Dream 3.5g", "stores": 42, "avg_price": 48.00},
-            {"product": "OG Kush 3.5g", "stores": 38, "avg_price": 52.00},
-            {"product": "Sour Diesel 3.5g", "stores": 35, "avg_price": 50.00},
-            {"product": "Wedding Cake 3.5g", "stores": 32, "avg_price": 55.00},
-            {"product": "Gelato 3.5g", "stores": 28, "avg_price": 54.00},
+            {"product": f"{brand} Premium 3.5g", "stores": brand_data["metrics"]["stores_carrying"] - 5, "avg_price": brand_avg + 5},
+            {"product": f"{brand} Classic 3.5g", "stores": brand_data["metrics"]["stores_carrying"] - 8, "avg_price": brand_avg},
+            {"product": f"{brand} Value 3.5g", "stores": brand_data["metrics"]["stores_carrying"] - 12, "avg_price": brand_avg - 8},
+            {"product": f"{brand} Cart 0.5g", "stores": brand_data["metrics"]["stores_carrying"] - 15, "avg_price": 35.00},
+            {"product": f"{brand} Pre-Roll 5pk", "stores": brand_data["metrics"]["stores_carrying"] - 18, "avg_price": 28.00},
         ],
-        "competitor_comparison": [
-            {"brand": "CURIO WELLNESS", "stores": 47, "skus": 128, "avg_price": 42.00},
-            {"brand": "EVERMORE", "stores": 61, "skus": 96, "avg_price": 48.00},
-            {"brand": "GRASSROOTS", "stores": 58, "skus": 85, "avg_price": 46.00},
-            {"brand": "VERANO", "stores": 55, "skus": 72, "avg_price": 50.00},
-            {"brand": "CULTA", "stores": 51, "skus": 64, "avg_price": 55.00},
-        ]
     }
 
 
@@ -569,14 +600,16 @@ if DEMO_MODE:
 col_state, col_brand, col_cat = st.columns([1, 2, 1])
 
 if DEMO_MODE:
-    # Demo mode - use sample data
-    demo_data = get_demo_data()
+    # Demo mode - use sample data that changes based on brand selection
     with col_state:
         st.selectbox("State", ["MD"], disabled=True)
         selected_state = "MD"
 
     with col_brand:
-        selected_brand = st.selectbox("Select Your Brand", demo_data["brands"], index=0)
+        selected_brand = st.selectbox("Select Your Brand", DEMO_BRANDS, index=0)
+
+    # Get brand-specific demo data AFTER brand selection
+    demo_data = get_demo_data(selected_brand)
 
     with col_cat:
         cat_options = ["All Categories"] + demo_data["categories"]

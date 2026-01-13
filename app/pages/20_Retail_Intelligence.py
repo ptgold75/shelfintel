@@ -544,36 +544,37 @@ def get_retail_demo_data(store_id="demo-001"):
     }
 
 
-# Demo market overview data
+# Demo market overview data - Updated January 2026 with actual MD statistics
+# 88 stores with data, 34,000+ products, 556 brands
 DEMO_MARKET_OVERVIEW = {
-    "total_stores": 96,
-    "total_products": 32450,
-    "avg_price": 44.50,
+    "total_stores": 88,
+    "total_products": 34055,
+    "avg_price": 41.79,
     "top_brands": [
-        {"brand": "Curio", "store_count": 78, "products": 245},
-        {"brand": "Evermore", "store_count": 72, "products": 198},
-        {"brand": "Grassroots", "store_count": 68, "products": 176},
-        {"brand": "Rythm", "store_count": 65, "products": 165},
-        {"brand": "Verano", "store_count": 62, "products": 152},
-        {"brand": "Strane", "store_count": 58, "products": 142},
-        {"brand": "Cresco", "store_count": 54, "products": 128},
-        {"brand": "Select", "store_count": 52, "products": 98},
+        {"brand": "Rythm", "store_count": 60, "products": 1114},
+        {"brand": "District Cannabis", "store_count": 54, "products": 754},
+        {"brand": "Nature's Heritage", "store_count": 53, "products": 639},
+        {"brand": "Strane", "store_count": 51, "products": 517},
+        {"brand": "Curio Wellness", "store_count": 50, "products": 1196},
+        {"brand": "Betty's Eddies", "store_count": 50, "products": 339},
+        {"brand": "Fade Co.", "store_count": 48, "products": 512},
+        {"brand": "Kind Tree", "store_count": 46, "products": 525},
     ],
     "category_distribution": [
-        {"category": "Flower", "products": 12500, "avg_price": 48.00},
-        {"category": "Vapes", "products": 6800, "avg_price": 45.00},
-        {"category": "Concentrates", "products": 4200, "avg_price": 55.00},
-        {"category": "Edibles", "products": 3800, "avg_price": 28.00},
-        {"category": "Pre-Rolls", "products": 3100, "avg_price": 15.00},
-        {"category": "Tinctures", "products": 1200, "avg_price": 42.00},
-        {"category": "Topicals", "products": 850, "avg_price": 38.00},
+        {"category": "Flower", "products": 14200, "avg_price": 45.00},
+        {"category": "Vapes", "products": 7800, "avg_price": 42.00},
+        {"category": "Concentrates", "products": 4500, "avg_price": 52.00},
+        {"category": "Edibles", "products": 4200, "avg_price": 25.00},
+        {"category": "Pre-Rolls", "products": 2800, "avg_price": 18.00},
+        {"category": "Tinctures", "products": 400, "avg_price": 48.00},
+        {"category": "Topicals", "products": 155, "avg_price": 35.00},
     ],
     "price_ranges": [
-        {"range": "$0-20", "count": 4500},
-        {"range": "$21-40", "count": 8200},
-        {"range": "$41-60", "count": 12800},
-        {"range": "$61-80", "count": 4500},
-        {"range": "$81+", "count": 2450},
+        {"range": "$0-20", "count": 5200},
+        {"range": "$21-40", "count": 9800},
+        {"range": "$41-60", "count": 12500},
+        {"range": "$61-80", "count": 4800},
+        {"range": "$81+", "count": 1755},
     ]
 }
 
