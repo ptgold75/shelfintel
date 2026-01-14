@@ -345,6 +345,7 @@ def get_state_dispensary_consolidation():
             {"original_brand": "Wellness Solutions Frederick", "current_brand": "gLeaf Frederick", "acquirer": "Cannabist (Columbia Care)", "year": 2022},
             {"original_brand": "Allegany Wellness Cumberland", "current_brand": "Apothecarium Cumberland", "acquirer": "TerrAscend", "year": 2023},
             {"original_brand": "Mission Silver Spring", "current_brand": "Apothecarium", "acquirer": "TerrAscend", "year": 2023},
+            {"original_brand": "Peninsula Alternative Health", "current_brand": "Apothecarium Salisbury", "acquirer": "TerrAscend", "year": 2023},
             {"original_brand": "Kannavis Frederick", "current_brand": "Culta", "acquirer": "Culta", "year": 2024},
             {"original_brand": "Green House Wellness", "current_brand": "Culta", "acquirer": "Culta", "year": 2024},
             {"original_brand": "SoMD Relief Mechanicsville", "current_brand": "Story Cannabis Mechanicsville", "acquirer": "Story Cannabis", "year": 2024},
@@ -352,10 +353,41 @@ def get_state_dispensary_consolidation():
             {"original_brand": "Nature's Medicines Baltimore", "current_brand": "Ascend (consolidated)", "acquirer": "Ascend Wellness", "year": 2023},
             {"original_brand": "North Cecil Wellness Perryville", "current_brand": "Ascend (consolidated)", "acquirer": "Ascend Wellness", "year": 2023},
             {"original_brand": "True Wellness", "current_brand": "Ascend", "acquirer": "Ascend Wellness", "year": 2023},
-            {"original_brand": "MedLeaf Upper Marlboro", "current_brand": "Thrive Upper Marlboro", "acquirer": "MariMed", "year": 2024},
+            {"original_brand": "Community Wellness/Compassionate Care", "current_brand": "Thrive Upper Marlboro", "acquirer": "MariMed", "year": 2024},
+            {"original_brand": "Green Leaf Medical", "current_brand": "gLeaf", "acquirer": "Cannabist (Columbia Care)", "year": 2022},
         ]),
         'summary': {
-            'MD': {'total_acquisitions': 14, 'top_acquirers': ['Ascend Wellness (4)', 'Culta (3)', 'TerrAscend (2)', 'Cannabist (2)', 'Cookies (2)']}
+            'MD': {'total_acquisitions': 16, 'top_acquirers': ['Ascend Wellness (4)', 'TerrAscend (3)', 'Culta (3)', 'Cannabist (3)', 'Cookies (2)']}
+        },
+        'narratives': {
+            'MD': {
+                'title': 'Maryland M&A Transactions and Trends',
+                'store_limit': 4,
+                'key_deals': [
+                    {
+                        'acquirer': 'TerrAscend',
+                        'description': 'Active acquirer reaching the state-imposed cap of 4 stores. Notable transactions include Peninsula Alternative Health (Salisbury) and Allegany Medical Marijuana Dispensary (Cumberland).'
+                    },
+                    {
+                        'acquirer': 'MariMed',
+                        'description': 'Closed $5.3M deal for Community Wellness/Compassionate Care Center in Upper Marlboro. Also operates cultivation/processing in Hagerstown and retail in Annapolis. Seeking additional acquisitions to reach 4-store limit.'
+                    },
+                    {
+                        'acquirer': 'Culta',
+                        'description': 'Federal Hill-based operator acquired two female-owned dispensaries: Greenhouse Wellness and Kannavis, expanding retail presence within the state.'
+                    },
+                    {
+                        'acquirer': 'Columbia Care (Cannabist)',
+                        'description': 'Acquired Green Leaf Medical (cultivation, production, and dispensaries) to reach maximum of 4 Maryland dispensary licenses.'
+                    },
+                ],
+                'trends': [
+                    'Maryland caps dispensary ownership at 4 stores per operator',
+                    'MSOs racing to acquire independent dispensaries to hit cap',
+                    'Employee Stock Ownership Plans (ESOPs) approved as exit strategy alternative to M&A',
+                    'ESOPs offer tax benefits in challenging cannabis M&A environment'
+                ]
+            }
         }
     }
 
@@ -1026,7 +1058,7 @@ with tab3:
 
     # State selector
     state_options = list(consolidation_data.keys())
-    state_options = [s for s in state_options if s != 'summary']
+    state_options = [s for s in state_options if s not in ('summary', 'narratives')]
     selected_state = st.selectbox("Select State", state_options, key="consolidation_state")
 
     if selected_state and selected_state in consolidation_data:
@@ -1059,6 +1091,34 @@ with tab3:
                     color='Stores Acquired', color_continuous_scale='Blues')
         fig.update_layout(height=300, showlegend=False)
         st.plotly_chart(fig, use_container_width=True)
+
+        # Show narrative/context if available
+        narratives = consolidation_data.get('narratives', {})
+        if selected_state in narratives:
+            narrative = narratives[selected_state]
+            st.markdown("---")
+            st.markdown(f"#### {narrative.get('title', f'{selected_state} M&A Overview')}")
+
+            # Store limit info
+            if 'store_limit' in narrative:
+                st.info(f"**Dispensary Ownership Cap:** {narrative['store_limit']} stores per operator")
+
+            # Key deals
+            if 'key_deals' in narrative:
+                st.markdown("##### Key Transactions")
+                for deal in narrative['key_deals']:
+                    st.markdown(f"""
+                    <div style="background:#f8f9fa; padding:0.75rem; border-radius:6px; margin-bottom:0.5rem; border-left:4px solid #1976d2;">
+                        <strong style="color:#1565c0;">{deal['acquirer']}</strong><br>
+                        <span style="font-size:0.9rem; color:#424242;">{deal['description']}</span>
+                    </div>
+                    """, unsafe_allow_html=True)
+
+            # Market trends
+            if 'trends' in narrative:
+                st.markdown("##### Market Trends")
+                for trend in narrative['trends']:
+                    st.markdown(f"- {trend}")
 
     st.caption("Data sources: SEC filings, company press releases, news reports, state license records.")
 
