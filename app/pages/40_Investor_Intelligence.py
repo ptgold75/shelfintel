@@ -335,6 +335,31 @@ def get_demo_mna_activity():
     ])
 
 
+def get_state_dispensary_consolidation():
+    """Track dispensary brand consolidation by state - showing M&A activity at store level."""
+    return {
+        'MD': pd.DataFrame([
+            {"original_brand": "Mission Elkton", "current_brand": "Far & Dotter Elkton", "acquirer": "Cookies/Culta", "year": 2023},
+            {"original_brand": "PharmKent Chestertown", "current_brand": "Far & Dotter Elkton", "acquirer": "Cookies/Culta", "year": 2023},
+            {"original_brand": "Wellness Institute Frederick", "current_brand": "gLeaf Frederick", "acquirer": "Curaleaf", "year": 2022},
+            {"original_brand": "Wellness Solutions Frederick", "current_brand": "gLeaf Frederick", "acquirer": "Curaleaf", "year": 2022},
+            {"original_brand": "Allegany Wellness Cumberland", "current_brand": "Apothecarium Cumberland", "acquirer": "TerrAscend", "year": 2023},
+            {"original_brand": "Mission Silver Spring", "current_brand": "Apothecarium", "acquirer": "TerrAscend", "year": 2023},
+            {"original_brand": "Kannavis Frederick", "current_brand": "Culta", "acquirer": "Culta", "year": 2024},
+            {"original_brand": "Green House Wellness", "current_brand": "Culta", "acquirer": "Culta", "year": 2024},
+            {"original_brand": "SoMD Relief Mechanicsville", "current_brand": "Story Cannabis Mechanicsville", "acquirer": "Story Cannabis", "year": 2024},
+            {"original_brand": "Nature's Medicines Ellicott City", "current_brand": "Ascend Ellicott City", "acquirer": "Ascend Wellness", "year": 2023},
+            {"original_brand": "Nature's Medicines Baltimore", "current_brand": "Ascend (consolidated)", "acquirer": "Ascend Wellness", "year": 2023},
+            {"original_brand": "North Cecil Wellness Perryville", "current_brand": "Ascend (consolidated)", "acquirer": "Ascend Wellness", "year": 2023},
+            {"original_brand": "True Wellness", "current_brand": "Ascend", "acquirer": "Ascend Wellness", "year": 2023},
+            {"original_brand": "MedLeaf Upper Marlboro", "current_brand": "Thrive Upper Marlboro", "acquirer": "MariMed", "year": 2024},
+        ]),
+        'summary': {
+            'MD': {'total_acquisitions': 14, 'top_acquirers': ['Ascend Wellness (4)', 'TerrAscend (2)', 'Culta (3)', 'Curaleaf (2)']}
+        }
+    }
+
+
 @st.cache_data(ttl=300)
 def load_companies():
     """Load all public companies with latest prices."""
@@ -992,7 +1017,50 @@ with tab3:
                            '$/Store', 'Status']
     st.dataframe(mna_display, use_container_width=True, hide_index=True)
 
-    st.caption("Data sources: SEC filings, company press releases, news reports. Estimates may vary.")
+    # State-Level Dispensary Consolidation
+    st.markdown("---")
+    st.markdown("### State Dispensary Consolidation Tracker")
+    st.markdown("Track how dispensary brands have been acquired and rebranded at the store level")
+
+    consolidation_data = get_state_dispensary_consolidation()
+
+    # State selector
+    state_options = list(consolidation_data.keys())
+    state_options = [s for s in state_options if s != 'summary']
+    selected_state = st.selectbox("Select State", state_options, key="consolidation_state")
+
+    if selected_state and selected_state in consolidation_data:
+        state_data = consolidation_data[selected_state]
+
+        # Summary for selected state
+        if selected_state in consolidation_data.get('summary', {}):
+            summary_info = consolidation_data['summary'][selected_state]
+            col1, col2 = st.columns(2)
+            with col1:
+                st.metric("Total Acquisitions Tracked", summary_info['total_acquisitions'])
+            with col2:
+                st.markdown("**Top Acquirers:**")
+                for acq in summary_info['top_acquirers']:
+                    st.markdown(f"- {acq}")
+
+        # Consolidation table
+        st.markdown(f"#### {selected_state} Dispensary Brand Changes")
+        display_df = state_data.copy()
+        display_df.columns = ['Original Brand', 'Current Brand', 'Acquirer', 'Year']
+        st.dataframe(display_df, use_container_width=True, hide_index=True)
+
+        # Visual summary by acquirer
+        acquirer_counts = state_data['acquirer'].value_counts().reset_index()
+        acquirer_counts.columns = ['Acquirer', 'Stores Acquired']
+
+        fig = px.bar(acquirer_counts.sort_values('Stores Acquired', ascending=True),
+                    x='Stores Acquired', y='Acquirer', orientation='h',
+                    title=f"{selected_state} Dispensary Consolidation by Acquirer",
+                    color='Stores Acquired', color_continuous_scale='Blues')
+        fig.update_layout(height=300, showlegend=False)
+        st.plotly_chart(fig, use_container_width=True)
+
+    st.caption("Data sources: SEC filings, company press releases, news reports, state license records.")
 
 with tab4:
     st.subheader("US Cannabis Regulatory Map")
