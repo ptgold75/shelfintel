@@ -341,8 +341,8 @@ def get_state_dispensary_consolidation():
         'MD': pd.DataFrame([
             {"original_brand": "Mission Elkton", "current_brand": "Far & Dotter Elkton", "acquirer": "Cookies/Culta", "year": 2023},
             {"original_brand": "PharmKent Chestertown", "current_brand": "Far & Dotter Elkton", "acquirer": "Cookies/Culta", "year": 2023},
-            {"original_brand": "Wellness Institute Frederick", "current_brand": "gLeaf Frederick", "acquirer": "Curaleaf", "year": 2022},
-            {"original_brand": "Wellness Solutions Frederick", "current_brand": "gLeaf Frederick", "acquirer": "Curaleaf", "year": 2022},
+            {"original_brand": "Wellness Institute Frederick", "current_brand": "gLeaf Frederick", "acquirer": "Cannabist (Columbia Care)", "year": 2022},
+            {"original_brand": "Wellness Solutions Frederick", "current_brand": "gLeaf Frederick", "acquirer": "Cannabist (Columbia Care)", "year": 2022},
             {"original_brand": "Allegany Wellness Cumberland", "current_brand": "Apothecarium Cumberland", "acquirer": "TerrAscend", "year": 2023},
             {"original_brand": "Mission Silver Spring", "current_brand": "Apothecarium", "acquirer": "TerrAscend", "year": 2023},
             {"original_brand": "Kannavis Frederick", "current_brand": "Culta", "acquirer": "Culta", "year": 2024},
@@ -355,7 +355,7 @@ def get_state_dispensary_consolidation():
             {"original_brand": "MedLeaf Upper Marlboro", "current_brand": "Thrive Upper Marlboro", "acquirer": "MariMed", "year": 2024},
         ]),
         'summary': {
-            'MD': {'total_acquisitions': 14, 'top_acquirers': ['Ascend Wellness (4)', 'TerrAscend (2)', 'Culta (3)', 'Curaleaf (2)']}
+            'MD': {'total_acquisitions': 14, 'top_acquirers': ['Ascend Wellness (4)', 'Culta (3)', 'TerrAscend (2)', 'Cannabist (2)', 'Cookies (2)']}
         }
     }
 
