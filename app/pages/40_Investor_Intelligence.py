@@ -70,16 +70,16 @@ def get_demo_companies():
          "latest_price": 1.26, "price_date": datetime.now().date(), "latest_volume": 650000},
         {"company_id": "5", "name": "Tilray Brands", "ticker_us": "TLRY", "ticker_ca": "TLRY",
          "exchange_us": "NASDAQ", "exchange_ca": "TSX", "company_type": "LP",
-         "market_cap_millions": 1420, "headquarters": "New York, NY", "website": "tilray.com",
-         "latest_price": 1.52, "price_date": datetime.now().date(), "latest_volume": 22500000},
+         "market_cap_millions": 2800, "headquarters": "New York, NY", "website": "tilray.com",
+         "latest_price": 8.99, "price_date": datetime.now().date(), "latest_volume": 22500000},
         {"company_id": "6", "name": "Canopy Growth", "ticker_us": "CGC", "ticker_ca": "WEED",
          "exchange_us": "NASDAQ", "exchange_ca": "TSX", "company_type": "LP",
-         "market_cap_millions": 420, "headquarters": "Smiths Falls, ON", "website": "canopygrowth.com",
-         "latest_price": 3.85, "price_date": datetime.now().date(), "latest_volume": 8500000},
+         "market_cap_millions": 180, "headquarters": "Smiths Falls, ON", "website": "canopygrowth.com",
+         "latest_price": 1.19, "price_date": datetime.now().date(), "latest_volume": 8500000},
         {"company_id": "7", "name": "Cresco Labs", "ticker_us": "CRLBF", "ticker_ca": "CL",
          "exchange_us": "OTC", "exchange_ca": "CSE", "company_type": "MSO",
-         "market_cap_millions": 320, "headquarters": "Chicago, IL", "website": "crescolabs.com",
-         "latest_price": 0.78, "price_date": datetime.now().date(), "latest_volume": 520000},
+         "market_cap_millions": 450, "headquarters": "Chicago, IL", "website": "crescolabs.com",
+         "latest_price": 1.20, "price_date": datetime.now().date(), "latest_volume": 520000},
         {"company_id": "8", "name": "Cannabist Company", "ticker_us": "CBSTF", "ticker_ca": "CBST",
          "exchange_us": "OTC", "exchange_ca": "CSE", "company_type": "MSO",
          "market_cap_millions": 28, "headquarters": "New York, NY", "website": "cannabistcompany.com",
@@ -90,8 +90,8 @@ def get_demo_companies():
          "latest_price": 1.55, "price_date": datetime.now().date(), "latest_volume": 290000},
         {"company_id": "10", "name": "Ayr Wellness", "ticker_us": "AYRWF", "ticker_ca": "AYR.A",
          "exchange_us": "OTC", "exchange_ca": "CSE", "company_type": "MSO",
-         "market_cap_millions": 45, "headquarters": "Miami, FL", "website": "ayrwellness.com",
-         "latest_price": 0.38, "price_date": datetime.now().date(), "latest_volume": 210000},
+         "market_cap_millions": 8, "headquarters": "Miami, FL", "website": "ayrwellness.com",
+         "latest_price": 0.023, "price_date": datetime.now().date(), "latest_volume": 210000},
         {"company_id": "11", "name": "Vireo Growth", "ticker_us": "VREOF", "ticker_ca": "VREO",
          "exchange_us": "OTCQX", "exchange_ca": "CSE", "company_type": "MSO",
          "market_cap_millions": 650, "headquarters": "Minneapolis, MN", "website": "vireohealth.com",
@@ -104,11 +104,11 @@ def get_demo_stock_history(company_name, days=90):
     np.random.seed(hash(company_name) % 2**32)
 
     base_prices = {
-        "Curaleaf Holdings": 2.50, "Green Thumb Industries": 7.90,
-        "Trulieve Cannabis": 8.40, "Verano Holdings": 1.25,
-        "Tilray Brands": 1.55, "Canopy Growth": 3.90,
-        "Cresco Labs": 0.80, "Cannabist Company": 0.055,
-        "TerrAscend": 1.55, "Ayr Wellness": 0.40,
+        "Curaleaf Holdings": 2.47, "Green Thumb Industries": 8.17,
+        "Trulieve Cannabis": 8.20, "Verano Holdings": 1.21,
+        "Tilray Brands": 8.99, "Canopy Growth": 1.19,
+        "Cresco Labs": 1.20, "Cannabist Company": 0.055,
+        "TerrAscend": 1.55, "Ayr Wellness": 0.023,
         "Vireo Growth": 0.62
     }
     base_price = base_prices.get(company_name, 5.0)
@@ -233,22 +233,28 @@ def get_demo_state_operations():
 
 
 def get_demo_shelf_analytics():
-    """Generate demo shelf analytics data."""
+    """Generate demo shelf analytics data - shows stores carrying each brand."""
+    # Note: store_count here represents stores carrying brand, not owned stores
+    # Based on ~17,000 total dispensaries tracked
     return pd.DataFrame([
         {"company": "Curaleaf Holdings", "brand": "Select", "category": "Vapes", "avg_price": 45.00,
-         "store_count": 892, "sku_count": 48, "market_share": 8.2},
+         "store_count": 245, "sku_count": 48, "market_share": 8.2},
         {"company": "Curaleaf Holdings", "brand": "Curaleaf", "category": "Flower", "avg_price": 42.00,
-         "store_count": 654, "sku_count": 65, "market_share": 5.4},
-        {"company": "Green Thumb Industries", "brand": "Rhythm", "category": "Flower", "avg_price": 48.00,
-         "store_count": 1245, "sku_count": 72, "market_share": 9.8},
+         "store_count": 180, "sku_count": 65, "market_share": 5.4},
+        {"company": "Green Thumb Industries", "brand": "RYTHM", "category": "Flower", "avg_price": 48.00,
+         "store_count": 312, "sku_count": 72, "market_share": 9.8},
         {"company": "Green Thumb Industries", "brand": "Dogwalkers", "category": "Pre-Rolls", "avg_price": 15.00,
-         "store_count": 890, "sku_count": 24, "market_share": 6.2},
-        {"company": "Trulieve Cannabis", "brand": "TruFlower", "category": "Flower", "avg_price": 38.00,
-         "store_count": 132, "sku_count": 145, "market_share": 4.1},
+         "store_count": 198, "sku_count": 24, "market_share": 6.2},
+        {"company": "Trulieve Cannabis", "brand": "Trulieve", "category": "Flower", "avg_price": 38.00,
+         "store_count": 156, "sku_count": 145, "market_share": 4.1},
         {"company": "Cresco Labs", "brand": "Cresco", "category": "Concentrates", "avg_price": 55.00,
-         "store_count": 567, "sku_count": 38, "market_share": 7.5},
+         "store_count": 187, "sku_count": 38, "market_share": 7.5},
         {"company": "Verano Holdings", "brand": "Verano", "category": "Flower", "avg_price": 44.00,
-         "store_count": 423, "sku_count": 56, "market_share": 4.8},
+         "store_count": 145, "sku_count": 56, "market_share": 4.8},
+        {"company": "Vireo Growth", "brand": "Hi*AF", "category": "Flower", "avg_price": 35.00,
+         "store_count": 42, "sku_count": 28, "market_share": 1.2},
+        {"company": "Vireo Growth", "brand": "R.Greenleaf", "category": "Flower", "avg_price": 32.00,
+         "store_count": 35, "sku_count": 22, "market_share": 0.9},
     ])
 
 
@@ -946,7 +952,7 @@ with tab3:
 
 with tab4:
     st.subheader("State Operations")
-    st.markdown("Track which states each company operates in and their retail footprint")
+    st.markdown("Track which states each company operates in and their *owned* retail footprint (company-operated dispensaries)")
 
     if DEMO_MODE:
         state_ops = get_demo_state_operations()
@@ -1222,60 +1228,92 @@ with tab6:
 
 with tab7:
     st.subheader("Shelf Analytics")
-    st.markdown("Track public company brand presence across retail dispensaries")
+    st.markdown("Track public company brand presence across retail dispensaries. This shows stores *carrying* brands (based on menu data), which differs from stores *owned* by each company shown in State Operations.")
 
     if DEMO_MODE:
         shelf_data = get_demo_shelf_analytics()
+        is_demo = True
     else:
-        shelf_data = pd.DataFrame()  # Would come from load_shelf_analytics()
+        shelf_data = load_shelf_analytics()
+        is_demo = False
+        # Transform to match demo format if needed
+        if not shelf_data.empty and 'name' in shelf_data.columns:
+            shelf_data = shelf_data.rename(columns={'name': 'company', 'total_skus': 'sku_count'})
 
     if not shelf_data.empty:
         # Summary metrics
         col1, col2, col3, col4 = st.columns(4)
         with col1:
-            companies_tracked = shelf_data['company'].nunique()
+            companies_tracked = shelf_data['company'].nunique() if 'company' in shelf_data.columns else len(shelf_data)
             st.metric("Companies Tracked", companies_tracked)
         with col2:
-            total_brands = shelf_data['brand'].nunique()
-            st.metric("Brands Tracked", total_brands)
+            if 'brand' in shelf_data.columns:
+                total_brands = shelf_data['brand'].nunique()
+            elif 'brand_count' in shelf_data.columns:
+                total_brands = shelf_data['brand_count'].sum()
+            else:
+                total_brands = 0
+            st.metric("Brands Tracked", int(total_brands))
         with col3:
-            total_stores = shelf_data['store_count'].sum()
+            total_stores = shelf_data['store_count'].sum() if 'store_count' in shelf_data.columns else 0
             st.metric("Total Store Presence", f"{int(total_stores):,}")
         with col4:
-            total_skus = shelf_data['sku_count'].sum()
+            sku_col = 'sku_count' if 'sku_count' in shelf_data.columns else 'total_skus'
+            total_skus = shelf_data[sku_col].sum() if sku_col in shelf_data.columns else 0
             st.metric("Total SKUs", f"{int(total_skus):,}")
 
-        # Brand performance table
+        # Brand performance table - display format depends on data source
         st.markdown("### Brand Performance by Company")
-        shelf_display = shelf_data.copy()
-        shelf_display['avg_price'] = shelf_display['avg_price'].apply(lambda x: f"${x:.2f}")
-        shelf_display['market_share'] = shelf_display['market_share'].apply(lambda x: f"{x:.1f}%")
-        shelf_display.columns = ['Company', 'Brand', 'Category', 'Avg Price', 'Store Count', 'SKU Count', 'Market Share']
-        st.dataframe(shelf_display, use_container_width=True, hide_index=True)
+        if is_demo and 'brand' in shelf_data.columns:
+            shelf_display = shelf_data.copy()
+            shelf_display['avg_price'] = shelf_display['avg_price'].apply(lambda x: f"${x:.2f}")
+            shelf_display['market_share'] = shelf_display['market_share'].apply(lambda x: f"{x:.1f}%")
+            shelf_display.columns = ['Company', 'Brand', 'Category', 'Avg Price', 'Store Count', 'SKU Count', 'Market Share']
+            st.dataframe(shelf_display, use_container_width=True, hide_index=True)
+        else:
+            # Real data format - company-level summary
+            display_cols = ['company', 'ticker_us', 'store_count', 'sku_count', 'brand_count', 'penetration_pct']
+            display_cols = [c for c in display_cols if c in shelf_data.columns]
+            shelf_display = shelf_data[display_cols].copy()
+            col_names = {'company': 'Company', 'ticker_us': 'Ticker', 'store_count': 'Stores Carrying',
+                        'sku_count': 'SKU Count', 'brand_count': 'Brands', 'penetration_pct': 'Penetration %'}
+            shelf_display = shelf_display.rename(columns=col_names)
+            st.dataframe(shelf_display, use_container_width=True, hide_index=True)
 
-        # Market share visualization
-        st.markdown("### Market Share by Brand")
-        fig = px.bar(shelf_data.sort_values('market_share', ascending=True),
-                    x='market_share', y='brand', orientation='h',
-                    color='company',
-                    labels={'market_share': 'Market Share (%)', 'brand': '', 'company': 'Company'},
-                    title="Brand Market Share")
-        fig.update_layout(height=400)
-        st.plotly_chart(fig, use_container_width=True)
+        # Visualizations - only show if we have the right columns
+        if is_demo and 'market_share' in shelf_data.columns and 'brand' in shelf_data.columns:
+            # Market share visualization (demo mode with brand-level data)
+            st.markdown("### Market Share by Brand")
+            fig = px.bar(shelf_data.sort_values('market_share', ascending=True),
+                        x='market_share', y='brand', orientation='h',
+                        color='company',
+                        labels={'market_share': 'Market Share (%)', 'brand': '', 'company': 'Company'},
+                        title="Brand Market Share")
+            fig.update_layout(height=400)
+            st.plotly_chart(fig, use_container_width=True)
 
         # Store presence by company
         st.markdown("### Store Presence by Company")
-        company_summary = shelf_data.groupby('company').agg({
-            'store_count': 'sum',
-            'sku_count': 'sum',
-            'brand': 'count'
-        }).reset_index()
-        company_summary.columns = ['Company', 'Total Store Presence', 'Total SKUs', 'Brand Count']
+        if is_demo and 'brand' in shelf_data.columns:
+            company_summary = shelf_data.groupby('company').agg({
+                'store_count': 'sum',
+                'sku_count': 'sum',
+                'brand': 'count'
+            }).reset_index()
+            company_summary.columns = ['Company', 'Total Store Presence', 'Total SKUs', 'Brand Count']
+        else:
+            # Real data format
+            company_summary = shelf_data[['company', 'store_count', 'sku_count']].copy()
+            if 'brand_count' in shelf_data.columns:
+                company_summary['Brand Count'] = shelf_data['brand_count']
+            else:
+                company_summary['Brand Count'] = 1
+            company_summary.columns = ['Company', 'Total Store Presence', 'Total SKUs', 'Brand Count']
 
         fig = px.bar(company_summary.sort_values('Total Store Presence', ascending=True),
                     x='Total Store Presence', y='Company', orientation='h',
                     color='Total SKUs', color_continuous_scale='Greens',
-                    title="Company Retail Footprint")
+                    title="Company Retail Footprint (Stores Carrying Their Brands)")
         fig.update_layout(height=350)
         st.plotly_chart(fig, use_container_width=True)
 
@@ -1283,25 +1321,46 @@ with tab7:
         st.markdown("### Key Insights")
         col1, col2 = st.columns(2)
 
-        with col1:
-            top_brand = shelf_data.loc[shelf_data['market_share'].idxmax()]
-            st.markdown(f"""
-            <div style="background:#e8f5e9; padding:1rem; border-radius:8px; margin-bottom:1rem;">
-                <p style="margin:0 0 0.5rem 0; font-weight:600; color:#2e7d32;">Top Brand by Market Share</p>
-                <p style="margin:0; font-size:1.2rem; color:#1b5e20;"><strong>{top_brand['brand']}</strong> ({top_brand['company']})</p>
-                <p style="margin:0; font-size:0.85rem; color:#424242;">{top_brand['market_share']:.1f}% market share in {top_brand['category']}</p>
-            </div>
-            """, unsafe_allow_html=True)
+        if is_demo and 'market_share' in shelf_data.columns and 'brand' in shelf_data.columns:
+            with col1:
+                top_brand = shelf_data.loc[shelf_data['market_share'].idxmax()]
+                st.markdown(f"""
+                <div style="background:#e8f5e9; padding:1rem; border-radius:8px; margin-bottom:1rem;">
+                    <p style="margin:0 0 0.5rem 0; font-weight:600; color:#2e7d32;">Top Brand by Market Share</p>
+                    <p style="margin:0; font-size:1.2rem; color:#1b5e20;"><strong>{top_brand['brand']}</strong> ({top_brand['company']})</p>
+                    <p style="margin:0; font-size:0.85rem; color:#424242;">{top_brand['market_share']:.1f}% market share in {top_brand['category']}</p>
+                </div>
+                """, unsafe_allow_html=True)
 
-        with col2:
-            top_presence = shelf_data.loc[shelf_data['store_count'].idxmax()]
-            st.markdown(f"""
-            <div style="background:#e3f2fd; padding:1rem; border-radius:8px; margin-bottom:1rem;">
-                <p style="margin:0 0 0.5rem 0; font-weight:600; color:#1565c0;">Widest Store Presence</p>
-                <p style="margin:0; font-size:1.2rem; color:#0d47a1;"><strong>{top_presence['brand']}</strong> ({top_presence['company']})</p>
-                <p style="margin:0; font-size:0.85rem; color:#424242;">{int(top_presence['store_count']):,} stores carrying {int(top_presence['sku_count'])} SKUs</p>
-            </div>
-            """, unsafe_allow_html=True)
+            with col2:
+                top_presence = shelf_data.loc[shelf_data['store_count'].idxmax()]
+                st.markdown(f"""
+                <div style="background:#e3f2fd; padding:1rem; border-radius:8px; margin-bottom:1rem;">
+                    <p style="margin:0 0 0.5rem 0; font-weight:600; color:#1565c0;">Widest Store Presence</p>
+                    <p style="margin:0; font-size:1.2rem; color:#0d47a1;"><strong>{top_presence['brand']}</strong> ({top_presence['company']})</p>
+                    <p style="margin:0; font-size:0.85rem; color:#424242;">{int(top_presence['store_count']):,} stores carrying {int(top_presence['sku_count'])} SKUs</p>
+                </div>
+                """, unsafe_allow_html=True)
+        else:
+            # Real data - show company-level insights
+            if 'store_count' in shelf_data.columns and len(shelf_data) > 0:
+                top_company = shelf_data.loc[shelf_data['store_count'].idxmax()]
+                with col1:
+                    st.markdown(f"""
+                    <div style="background:#e8f5e9; padding:1rem; border-radius:8px; margin-bottom:1rem;">
+                        <p style="margin:0 0 0.5rem 0; font-weight:600; color:#2e7d32;">Top Company by Penetration</p>
+                        <p style="margin:0; font-size:1.2rem; color:#1b5e20;"><strong>{top_company['company']}</strong></p>
+                        <p style="margin:0; font-size:0.85rem; color:#424242;">{top_company.get('penetration_pct', 0):.1f}% of stores carry their brands</p>
+                    </div>
+                    """, unsafe_allow_html=True)
+                with col2:
+                    st.markdown(f"""
+                    <div style="background:#e3f2fd; padding:1rem; border-radius:8px; margin-bottom:1rem;">
+                        <p style="margin:0 0 0.5rem 0; font-weight:600; color:#1565c0;">Widest Store Presence</p>
+                        <p style="margin:0; font-size:1.2rem; color:#0d47a1;"><strong>{top_company['company']}</strong></p>
+                        <p style="margin:0; font-size:0.85rem; color:#424242;">{int(top_company['store_count']):,} stores carrying {int(top_company.get('sku_count', 0))} SKUs</p>
+                    </div>
+                    """, unsafe_allow_html=True)
 
     else:
         st.info("Shelf analytics data is being compiled. Check back soon for brand performance metrics.")
