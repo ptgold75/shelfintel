@@ -10,6 +10,10 @@ import sys
 sys.path.insert(0, '/Users/gleaf/shelfintel')
 
 from core.db import get_engine
+from core.state_regulations import (
+    STATE_REGULATIONS, LegalStatus, STATUS_COLORS, STATUS_LABELS,
+    get_status_summary, get_states_by_status, UPCOMING_BALLOTS
+)
 from sqlalchemy import text
 import numpy as np
 
@@ -88,6 +92,10 @@ def get_demo_companies():
          "exchange_us": "OTC", "exchange_ca": "CSE", "company_type": "MSO",
          "market_cap_millions": 45, "headquarters": "Miami, FL", "website": "ayrwellness.com",
          "latest_price": 0.38, "price_date": datetime.now().date(), "latest_volume": 210000},
+        {"company_id": "11", "name": "Vireo Growth", "ticker_us": "VREOF", "ticker_ca": "VREO",
+         "exchange_us": "OTCQX", "exchange_ca": "CSE", "company_type": "MSO",
+         "market_cap_millions": 650, "headquarters": "Minneapolis, MN", "website": "vireohealth.com",
+         "latest_price": 0.62, "price_date": datetime.now().date(), "latest_volume": 185000},
     ])
 
 
@@ -100,7 +108,8 @@ def get_demo_stock_history(company_name, days=90):
         "Trulieve Cannabis": 8.40, "Verano Holdings": 1.25,
         "Tilray Brands": 1.55, "Canopy Growth": 3.90,
         "Cresco Labs": 0.80, "Cannabist Company": 0.055,
-        "TerrAscend": 1.55, "Ayr Wellness": 0.40
+        "TerrAscend": 1.55, "Ayr Wellness": 0.40,
+        "Vireo Growth": 0.62
     }
     base_price = base_prices.get(company_name, 5.0)
 
@@ -467,7 +476,7 @@ else:
     companies = load_companies()
 
 # Tabs for different views
-tab1, tab2, tab3, tab4, tab5 = st.tabs(["Overview", "State Operations", "Stock Charts", "Financials", "Shelf Analytics"])
+tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs(["Overview", "Regulatory Map", "State Operations", "Stock Charts", "Financials", "Shelf Analytics"])
 
 with tab1:
     st.subheader("Public Cannabis Companies")
@@ -502,7 +511,7 @@ with tab1:
     display_df['Market Cap ($M)'] = display_df['Market Cap ($M)'].apply(lambda x: f"${x:,.0f}" if pd.notna(x) else "-")
     display_df['Volume'] = display_df['Volume'].apply(lambda x: f"{x:,.0f}" if pd.notna(x) else "-")
 
-    st.dataframe(display_df, width="stretch", hide_index=True)
+    st.dataframe(display_df, use_container_width=True, hide_index=True)
 
     # Market cap bar chart
     st.markdown("### Market Capitalization Comparison")
@@ -520,9 +529,187 @@ with tab1:
                     color_discrete_map={'MSO': '#2ecc71', 'LP': '#3498db', 'REIT': '#9b59b6', 'Tech': '#e74c3c'})
         fig.update_traces(textposition='outside', textfont_size=11)
         fig.update_layout(height=500, showlegend=True)
-        st.plotly_chart(fig, width="stretch")
+        st.plotly_chart(fig, use_container_width=True)
 
 with tab2:
+    st.subheader("US Cannabis Regulatory Map")
+    st.markdown("Real-time cannabis legalization status across all 50 states")
+
+    # Status summary
+    summary = get_status_summary()
+
+    # Metrics row
+    col1, col2, col3, col4, col5, col6 = st.columns(6)
+    with col1:
+        rec_states = len(get_states_by_status(LegalStatus.FULLY_LEGAL))
+        st.metric("Recreational", rec_states, help="States with adult-use cannabis")
+    with col2:
+        med_decrim = len(get_states_by_status(LegalStatus.MEDICAL_DECRIM))
+        st.metric("Medical + Decrim", med_decrim)
+    with col3:
+        med_only = len(get_states_by_status(LegalStatus.MEDICAL_ONLY))
+        st.metric("Medical Only", med_only)
+    with col4:
+        cbd_only = len(get_states_by_status(LegalStatus.CBD_ONLY))
+        st.metric("CBD Only", cbd_only)
+    with col5:
+        decrim = len(get_states_by_status(LegalStatus.DECRIMINALIZED))
+        st.metric("Decriminalized", decrim)
+    with col6:
+        illegal = len(get_states_by_status(LegalStatus.ILLEGAL))
+        st.metric("Fully Illegal", illegal)
+
+    st.markdown("---")
+
+    # Create US state map using Plotly choropleth
+    import plotly.express as px
+
+    # Prepare data for map
+    map_data = []
+    for abbr, reg in STATE_REGULATIONS.items():
+        map_data.append({
+            'state': abbr,
+            'state_name': reg.state,
+            'status': reg.status.value,
+            'status_short': STATUS_LABELS[reg.status],
+            'notes': reg.notes,
+            'medical_year': reg.medical_year,
+            'rec_year': reg.recreational_year,
+            'color_code': list(LegalStatus).index(reg.status)
+        })
+
+    map_df = pd.DataFrame(map_data)
+
+    # Create choropleth map
+    fig = px.choropleth(
+        map_df,
+        locations='state',
+        locationmode='USA-states',
+        color='status',
+        color_discrete_map={
+            LegalStatus.FULLY_LEGAL.value: STATUS_COLORS[LegalStatus.FULLY_LEGAL],
+            LegalStatus.MEDICAL_DECRIM.value: STATUS_COLORS[LegalStatus.MEDICAL_DECRIM],
+            LegalStatus.MEDICAL_ONLY.value: STATUS_COLORS[LegalStatus.MEDICAL_ONLY],
+            LegalStatus.CBD_ONLY.value: STATUS_COLORS[LegalStatus.CBD_ONLY],
+            LegalStatus.DECRIMINALIZED.value: STATUS_COLORS[LegalStatus.DECRIMINALIZED],
+            LegalStatus.ILLEGAL.value: STATUS_COLORS[LegalStatus.ILLEGAL],
+        },
+        scope='usa',
+        hover_name='state_name',
+        hover_data={'status': True, 'notes': True, 'state': False},
+        labels={'status': 'Legal Status'},
+        title='Cannabis Legalization by State (January 2026)'
+    )
+
+    fig.update_layout(
+        height=500,
+        geo=dict(
+            showlakes=True,
+            lakecolor='rgb(255, 255, 255)',
+        ),
+        legend=dict(
+            title="Legal Status",
+            orientation="h",
+            yanchor="bottom",
+            y=-0.2,
+            xanchor="center",
+            x=0.5
+        )
+    )
+
+    st.plotly_chart(fig, use_container_width=True)
+
+    # State details
+    col1, col2 = st.columns([1, 2])
+
+    with col1:
+        st.markdown("### Filter by Status")
+        status_filter = st.selectbox(
+            "Show states with:",
+            ["All"] + [s.value for s in LegalStatus],
+            key="reg_status_filter"
+        )
+
+    with col2:
+        st.markdown("### 2026 Ballot Initiatives")
+        ballot_col1, ballot_col2 = st.columns(2)
+        for i, (state, info) in enumerate(UPCOMING_BALLOTS.items()):
+            target_col = ballot_col1 if i % 2 == 0 else ballot_col2
+            with target_col:
+                reg = STATE_REGULATIONS.get(state)
+                st.markdown(f"""
+                <div style="background:#fff3e0; padding:0.75rem; border-radius:6px; margin-bottom:0.5rem; border-left:4px solid #ff9800;">
+                    <p style="margin:0; font-weight:600;">{reg.state if reg else state} - {info['type']}</p>
+                    <p style="margin:0; font-size:0.8rem; color:#666;">{info['description']}</p>
+                    <p style="margin:0; font-size:0.75rem; color:#999;">Status: {info['status']}</p>
+                </div>
+                """, unsafe_allow_html=True)
+
+    st.markdown("---")
+
+    # State details table
+    st.markdown("### State Details")
+
+    if status_filter == "All":
+        filtered_states = list(STATE_REGULATIONS.values())
+    else:
+        filtered_states = [s for s in STATE_REGULATIONS.values() if s.status.value == status_filter]
+
+    state_table_data = []
+    for reg in filtered_states:
+        state_table_data.append({
+            'State': reg.state,
+            'Status': STATUS_LABELS[reg.status],
+            'Medical Year': reg.medical_year if reg.medical_year else "-",
+            'Rec Year': reg.recreational_year if reg.recreational_year else "-",
+            'Notes': reg.notes[:80] + "..." if len(reg.notes) > 80 else reg.notes
+        })
+
+    if state_table_data:
+        st.dataframe(pd.DataFrame(state_table_data), use_container_width=True, hide_index=True, height=400)
+
+    # Investment implications
+    st.markdown("---")
+    st.markdown("### Investment Implications")
+
+    impl_col1, impl_col2, impl_col3 = st.columns(3)
+
+    with impl_col1:
+        st.markdown(f"""
+        <div style="background:#e8f5e9; padding:1rem; border-radius:8px;">
+            <p style="margin:0 0 0.5rem 0; font-weight:600; color:#2e7d32;">Growth Markets</p>
+            <p style="margin:0; font-size:0.85rem; color:#424242;">
+            <strong>{rec_states} recreational states</strong> represent the largest addressable market.
+            New markets (OH, MN) offer first-mover advantages.
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+
+    with impl_col2:
+        st.markdown(f"""
+        <div style="background:#e3f2fd; padding:1rem; border-radius:8px;">
+            <p style="margin:0 0 0.5rem 0; font-weight:600; color:#1565c0;">Expansion Opportunities</p>
+            <p style="margin:0; font-size:0.85rem; color:#424242;">
+            <strong>{med_only} medical-only states</strong> may convert to recreational.
+            FL, PA, TX are large population targets.
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+
+    with impl_col3:
+        st.markdown(f"""
+        <div style="background:#fff3e0; padding:1rem; border-radius:8px;">
+            <p style="margin:0 0 0.5rem 0; font-weight:600; color:#e65100;">Watch List</p>
+            <p style="margin:0; font-size:0.85rem; color:#424242;">
+            <strong>{len(UPCOMING_BALLOTS)} states</strong> with 2026 ballot initiatives.
+            Federal rescheduling to Schedule III pending.
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+
+    st.caption("Data source: DISA, NCSL, state government websites. Updated January 2026.")
+
+with tab3:
     st.subheader("State Operations")
     st.markdown("Track which states each company operates in and their retail footprint")
 
@@ -562,7 +749,7 @@ with tab2:
                 # Create state presence table
                 ops_display = company_ops[['state', 'store_count', 'sku_count']].copy()
                 ops_display.columns = ['State', 'Store Count', 'SKU Count']
-                st.dataframe(ops_display, width="stretch", hide_index=True)
+                st.dataframe(ops_display, use_container_width=True, hide_index=True)
 
                 # Bar chart by state
                 fig = px.bar(company_ops, x='state', y='store_count',
@@ -570,7 +757,7 @@ with tab2:
                             labels={'state': 'State', 'store_count': 'Stores', 'sku_count': 'SKUs'},
                             title=f"{selected_company} - Stores by State")
                 fig.update_layout(height=300)
-                st.plotly_chart(fig, width="stretch")
+                st.plotly_chart(fig, use_container_width=True)
 
             with col2:
                 # Summary for selected company
@@ -606,7 +793,7 @@ with tab2:
                 aspect='auto'
             )
             fig.update_layout(height=400, title="Retail Presence by State (Store Count)")
-            st.plotly_chart(fig, width="stretch")
+            st.plotly_chart(fig, use_container_width=True)
     else:
         st.info("State operations data is being compiled.")
 
@@ -618,9 +805,9 @@ with tab2:
             'Processing': ['Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes'],
             'Store Count': [62, 15, 12, 18, 22, 8, 147, 28]
         })
-        st.dataframe(demo_ops, width="stretch", hide_index=True)
+        st.dataframe(demo_ops, use_container_width=True, hide_index=True)
 
-with tab3:
+with tab4:
     st.subheader("Stock Price Charts")
 
     # Company selector
@@ -671,7 +858,7 @@ with tab3:
                 xaxis_rangeslider_visible=False,
                 height=500
             )
-            st.plotly_chart(fig, width="stretch")
+            st.plotly_chart(fig, use_container_width=True)
 
             # Price metrics
             col1, col2, col3, col4 = st.columns(4)
@@ -722,9 +909,9 @@ with tab3:
             fig = px.line(combined, x='price_date', y='normalized', color='company',
                          labels={'price_date': 'Date', 'normalized': 'Normalized Price (Base=100)', 'company': 'Company'})
             fig.update_layout(height=400, title="90-Day Relative Performance (Normalized to 100)")
-            st.plotly_chart(fig, width="stretch")
+            st.plotly_chart(fig, use_container_width=True)
 
-with tab4:
+with tab5:
     st.subheader("Financial Metrics")
 
     if DEMO_MODE:
@@ -744,7 +931,7 @@ with tab4:
                         labels={'revenue_millions': 'Revenue ($M)', 'name': ''},
                         color='revenue_millions', color_continuous_scale='Greens')
             fig.update_layout(height=400, showlegend=False)
-            st.plotly_chart(fig, width="stretch")
+            st.plotly_chart(fig, use_container_width=True)
 
             # Financial metrics table
             st.markdown("### Financial Summary")
@@ -759,7 +946,7 @@ with tab4:
                        'Total Assets ($M)', 'Total Debt ($M)', 'Cash ($M)']:
                 fin_display[col] = fin_display[col].apply(lambda x: f"${x:,.0f}" if pd.notna(x) else "-")
 
-            st.dataframe(fin_display, width="stretch", hide_index=True)
+            st.dataframe(fin_display, use_container_width=True, hide_index=True)
 
             # Profitability scatter
             if fin_df['net_income_millions'].notna().any():
@@ -779,7 +966,7 @@ with tab4:
                                     color_continuous_midpoint=0)
                     fig.add_hline(y=0, line_dash="dash", line_color="gray")
                     fig.update_layout(height=400)
-                    st.plotly_chart(fig, width="stretch")
+                    st.plotly_chart(fig, use_container_width=True)
     else:
         st.info("Financial data is being collected. Run the SEC filing script to populate this section.")
 
@@ -796,9 +983,9 @@ with tab4:
                 ORDER BY filing_count DESC
             """))
             sec_df = pd.DataFrame(result.fetchall(), columns=['Company', 'Ticker', 'CIK', 'Filing Periods'])
-            st.dataframe(sec_df, width="stretch", hide_index=True)
+            st.dataframe(sec_df, use_container_width=True, hide_index=True)
 
-with tab5:
+with tab6:
     st.subheader("Shelf Analytics")
     st.markdown("Track public company brand presence across retail dispensaries")
 
@@ -829,7 +1016,7 @@ with tab5:
         shelf_display['avg_price'] = shelf_display['avg_price'].apply(lambda x: f"${x:.2f}")
         shelf_display['market_share'] = shelf_display['market_share'].apply(lambda x: f"{x:.1f}%")
         shelf_display.columns = ['Company', 'Brand', 'Category', 'Avg Price', 'Store Count', 'SKU Count', 'Market Share']
-        st.dataframe(shelf_display, width="stretch", hide_index=True)
+        st.dataframe(shelf_display, use_container_width=True, hide_index=True)
 
         # Market share visualization
         st.markdown("### Market Share by Brand")
@@ -839,7 +1026,7 @@ with tab5:
                     labels={'market_share': 'Market Share (%)', 'brand': '', 'company': 'Company'},
                     title="Brand Market Share")
         fig.update_layout(height=400)
-        st.plotly_chart(fig, width="stretch")
+        st.plotly_chart(fig, use_container_width=True)
 
         # Store presence by company
         st.markdown("### Store Presence by Company")
@@ -855,7 +1042,7 @@ with tab5:
                     color='Total SKUs', color_continuous_scale='Greens',
                     title="Company Retail Footprint")
         fig.update_layout(height=350)
-        st.plotly_chart(fig, width="stretch")
+        st.plotly_chart(fig, use_container_width=True)
 
         # Insights
         st.markdown("### Key Insights")
