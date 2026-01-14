@@ -469,6 +469,89 @@ def load_brand_details(company_id):
         return pd.DataFrame(result.fetchall(), columns=result.keys())
 
 
+@st.cache_data(ttl=60)
+def load_company_news(company_id=None, limit=50):
+    """Load recent news and SEC filings for companies."""
+    engine = get_engine()
+    with engine.connect() as conn:
+        try:
+            query = """
+                SELECT
+                    n.news_id, n.company_id, c.name as company_name, c.ticker_us,
+                    n.news_type, n.event_category, n.title, n.summary,
+                    n.source_url, n.filing_type, n.published_date,
+                    n.is_significant, n.created_at
+                FROM company_news n
+                JOIN public_company c ON c.company_id = n.company_id
+                WHERE 1=1
+            """
+            params = {}
+            if company_id:
+                query += " AND n.company_id = :company_id"
+                params['company_id'] = company_id
+            query += " ORDER BY n.published_date DESC NULLS LAST, n.created_at DESC LIMIT :limit"
+            params['limit'] = limit
+
+            result = conn.execute(text(query), params)
+            return pd.DataFrame(result.fetchall(), columns=result.keys())
+        except Exception as e:
+            return pd.DataFrame()
+
+
+@st.cache_data(ttl=60)
+def load_significant_events(days=30):
+    """Load significant events (M&A, executive changes) from recent news."""
+    engine = get_engine()
+    with engine.connect() as conn:
+        try:
+            result = conn.execute(text("""
+                SELECT
+                    n.news_id, c.name as company_name, c.ticker_us,
+                    n.event_category, n.title, n.summary,
+                    n.source_url, n.filing_type, n.published_date
+                FROM company_news n
+                JOIN public_company c ON c.company_id = n.company_id
+                WHERE n.is_significant = true
+                AND (n.published_date >= CURRENT_DATE - :days OR n.created_at >= CURRENT_DATE - :days)
+                ORDER BY n.published_date DESC NULLS LAST
+                LIMIT 20
+            """), {"days": days})
+            return pd.DataFrame(result.fetchall(), columns=result.keys())
+        except:
+            return pd.DataFrame()
+
+
+def get_demo_news():
+    """Generate demo news data."""
+    return pd.DataFrame([
+        {"company_name": "Curaleaf Holdings", "ticker_us": "CURLF", "news_type": "press_release",
+         "title": "Curaleaf Reports Q3 2025 Results with $340M Revenue", "event_category": "financial_results",
+         "published_date": datetime.now() - timedelta(days=5), "is_significant": False},
+        {"company_name": "Green Thumb Industries", "ticker_us": "GTBIF", "news_type": "press_release",
+         "title": "Green Thumb Expands Pennsylvania Retail Footprint with RISE Store", "event_category": "facility_operations",
+         "published_date": datetime.now() - timedelta(days=8), "is_significant": False},
+        {"company_name": "Trulieve Cannabis", "ticker_us": "TCNNF", "news_type": "sec_filing",
+         "title": "Trulieve Cannabis Quarterly Report (10-Q)", "filing_type": "10-Q",
+         "published_date": datetime.now() - timedelta(days=12), "is_significant": False},
+        {"company_name": "Canopy Growth", "ticker_us": "CGC", "news_type": "sec_filing",
+         "title": "Canopy Growth Current Report (8-K)", "filing_type": "8-K", "event_category": "executive_change",
+         "summary": "Items: Departure/Appointment of Directors/Officers",
+         "published_date": datetime.now() - timedelta(days=3), "is_significant": True},
+        {"company_name": "Tilray Brands", "ticker_us": "TLRY", "news_type": "sec_filing",
+         "title": "Tilray Brands Quarterly Report (10-Q)", "filing_type": "10-Q",
+         "published_date": datetime.now() - timedelta(days=6), "is_significant": False},
+        {"company_name": "Verano Holdings", "ticker_us": "VRNOF", "news_type": "press_release",
+         "title": "Verano Announces Strategic Partnership in New Market", "event_category": "merger_acquisition",
+         "published_date": datetime.now() - timedelta(days=10), "is_significant": True},
+        {"company_name": "Cresco Labs", "ticker_us": "CRLBF", "news_type": "press_release",
+         "title": "Cresco Labs Opens New Sunnyside Location in Illinois", "event_category": "facility_operations",
+         "published_date": datetime.now() - timedelta(days=15), "is_significant": False},
+        {"company_name": "Cronos Group", "ticker_us": "CRON", "news_type": "sec_filing",
+         "title": "Cronos Group Quarterly Report (10-Q)", "filing_type": "10-Q",
+         "published_date": datetime.now() - timedelta(days=20), "is_significant": False},
+    ])
+
+
 # Load data - use demo data in demo mode for consistent display
 if DEMO_MODE:
     companies = get_demo_companies()
@@ -476,7 +559,7 @@ else:
     companies = load_companies()
 
 # Tabs for different views
-tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs(["Overview", "Regulatory Map", "State Operations", "Stock Charts", "Financials", "Shelf Analytics"])
+tab1, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs(["Overview", "News & Filings", "Regulatory Map", "State Operations", "Stock Charts", "Financials", "Shelf Analytics"])
 
 with tab1:
     st.subheader("Public Cannabis Companies")
@@ -532,6 +615,158 @@ with tab1:
         st.plotly_chart(fig, use_container_width=True)
 
 with tab2:
+    st.subheader("News & SEC Filings")
+    st.markdown("Recent press releases, SEC filings (10-K, 10-Q, 8-K), and significant corporate events")
+
+    # Load news data
+    if DEMO_MODE:
+        news_data = get_demo_news()
+    else:
+        news_data = load_company_news(limit=50)
+
+    if not news_data.empty:
+        # Summary metrics
+        col1, col2, col3, col4 = st.columns(4)
+        with col1:
+            total_news = len(news_data)
+            st.metric("Recent Updates", total_news)
+        with col2:
+            sec_filings = len(news_data[news_data['news_type'] == 'sec_filing'])
+            st.metric("SEC Filings", sec_filings)
+        with col3:
+            press_releases = len(news_data[news_data['news_type'] == 'press_release'])
+            st.metric("Press Releases", press_releases)
+        with col4:
+            significant = len(news_data[news_data['is_significant'] == True]) if 'is_significant' in news_data.columns else 0
+            st.metric("Significant Events", significant, help="M&A, Executive Changes, etc.")
+
+        # Significant Events Section
+        st.markdown("### Significant Events")
+        st.markdown("Executive changes, M&A activity, and other material events")
+
+        significant_news = news_data[news_data.get('is_significant', False) == True] if 'is_significant' in news_data.columns else pd.DataFrame()
+
+        if not significant_news.empty:
+            for _, row in significant_news.head(5).iterrows():
+                event_type = row.get('event_category', 'corporate')
+                event_colors = {
+                    'executive_change': ('#fff3e0', '#e65100', 'Executive Change'),
+                    'merger_acquisition': ('#e8f5e9', '#2e7d32', 'M&A'),
+                    'capital_raise': ('#e3f2fd', '#1565c0', 'Capital'),
+                    'legal_regulatory': ('#fce4ec', '#c62828', 'Legal/Regulatory'),
+                }
+                bg_color, text_color, label = event_colors.get(event_type, ('#f5f5f5', '#424242', 'Corporate'))
+
+                pub_date = row.get('published_date')
+                date_str = pub_date.strftime('%b %d, %Y') if pd.notna(pub_date) else 'Recent'
+
+                st.markdown(f"""
+                <div style="background:{bg_color}; padding:1rem; border-radius:8px; margin-bottom:0.75rem; border-left:4px solid {text_color};">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <span style="background:{text_color}; color:white; padding:2px 8px; border-radius:4px; font-size:0.75rem;">{label}</span>
+                        <span style="color:#757575; font-size:0.85rem;">{date_str}</span>
+                    </div>
+                    <p style="margin:0.5rem 0 0.25rem 0; font-weight:600; color:#212121;">{row.get('company_name', '')} ({row.get('ticker_us', '')})</p>
+                    <p style="margin:0; color:#424242;">{row.get('title', '')}</p>
+                    {f'<p style="margin:0.25rem 0 0 0; font-size:0.85rem; color:#616161;">{row.get("summary", "")}</p>' if row.get('summary') else ''}
+                </div>
+                """, unsafe_allow_html=True)
+        else:
+            st.info("No significant events detected in recent filings. Check back for M&A activity, executive changes, and other material events.")
+
+        st.markdown("---")
+
+        # Recent SEC Filings
+        st.markdown("### Recent SEC Filings")
+
+        # Filter selector
+        col1, col2 = st.columns([1, 3])
+        with col1:
+            filing_filter = st.selectbox("Filing Type", ["All", "10-K (Annual)", "10-Q (Quarterly)", "8-K (Current)"], key="filing_filter")
+
+        sec_news = news_data[news_data['news_type'] == 'sec_filing'].copy()
+
+        if filing_filter != "All":
+            filter_map = {"10-K (Annual)": "10-K", "10-Q (Quarterly)": "10-Q", "8-K (Current)": "8-K"}
+            sec_news = sec_news[sec_news['filing_type'] == filter_map[filing_filter]]
+
+        if not sec_news.empty:
+            for _, row in sec_news.head(10).iterrows():
+                filing_type = row.get('filing_type', '')
+                filing_colors = {'10-K': '#1565c0', '10-Q': '#2e7d32', '8-K': '#7b1fa2'}
+                badge_color = filing_colors.get(filing_type, '#757575')
+
+                pub_date = row.get('published_date')
+                date_str = pub_date.strftime('%b %d, %Y') if pd.notna(pub_date) else 'Recent'
+                source_url = row.get('source_url', '#')
+
+                st.markdown(f"""
+                <div style="padding:0.75rem; border:1px solid #e0e0e0; border-radius:8px; margin-bottom:0.5rem;">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <div>
+                            <span style="background:{badge_color}; color:white; padding:2px 8px; border-radius:4px; font-size:0.8rem; margin-right:8px;">{filing_type}</span>
+                            <strong>{row.get('company_name', '')}</strong> <span style="color:#757575;">({row.get('ticker_us', '')})</span>
+                        </div>
+                        <span style="color:#757575; font-size:0.85rem;">{date_str}</span>
+                    </div>
+                    <p style="margin:0.5rem 0 0 0; color:#424242;">{row.get('title', '')}</p>
+                    {f'<p style="margin:0.25rem 0 0 0; font-size:0.85rem; color:#616161;">{row.get("summary", "")}</p>' if row.get('summary') else ''}
+                    <a href="{source_url}" target="_blank" style="font-size:0.85rem;">View Filing</a>
+                </div>
+                """, unsafe_allow_html=True)
+        else:
+            st.info("No SEC filings found. Companies with CIK numbers: Tilray, Canopy Growth, Aurora, Cronos, SNDL, and others.")
+
+        st.markdown("---")
+
+        # Recent Press Releases
+        st.markdown("### Recent Press Releases")
+
+        # Company filter
+        company_list = ["All Companies"] + sorted(news_data['company_name'].dropna().unique().tolist())
+        selected_company = st.selectbox("Filter by Company", company_list, key="pr_company_filter")
+
+        pr_news = news_data[news_data['news_type'] == 'press_release'].copy()
+        if selected_company != "All Companies":
+            pr_news = pr_news[pr_news['company_name'] == selected_company]
+
+        if not pr_news.empty:
+            for _, row in pr_news.head(10).iterrows():
+                pub_date = row.get('published_date')
+                date_str = pub_date.strftime('%b %d, %Y') if pd.notna(pub_date) else 'Recent'
+                source_url = row.get('source_url', '#')
+
+                category = row.get('event_category', '')
+                cat_labels = {
+                    'financial_results': 'Earnings',
+                    'facility_operations': 'Operations',
+                    'merger_acquisition': 'M&A',
+                    'executive_change': 'Leadership',
+                    'capital_raise': 'Capital',
+                }
+                cat_label = cat_labels.get(category, '')
+
+                st.markdown(f"""
+                <div style="padding:0.75rem; border:1px solid #e0e0e0; border-radius:8px; margin-bottom:0.5rem;">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <div>
+                            <strong>{row.get('company_name', '')}</strong> <span style="color:#757575;">({row.get('ticker_us', '')})</span>
+                            {f'<span style="background:#f5f5f5; padding:2px 6px; border-radius:4px; font-size:0.75rem; margin-left:8px;">{cat_label}</span>' if cat_label else ''}
+                        </div>
+                        <span style="color:#757575; font-size:0.85rem;">{date_str}</span>
+                    </div>
+                    <p style="margin:0.5rem 0 0 0; color:#424242;">{row.get('title', '')}</p>
+                    <a href="{source_url}" target="_blank" style="font-size:0.85rem;">Read More</a>
+                </div>
+                """, unsafe_allow_html=True)
+        else:
+            st.info("No press releases found for selected filter.")
+
+    else:
+        st.info("News data is being collected. Run the investor news script to populate this section.")
+        st.code("python scripts/fetch_investor_news.py", language="bash")
+
+with tab3:
     st.subheader("US Cannabis Regulatory Map")
     st.markdown("Real-time cannabis legalization status across all 50 states")
 
@@ -709,7 +944,7 @@ with tab2:
 
     st.caption("Data source: DISA, NCSL, state government websites. Updated January 2026.")
 
-with tab3:
+with tab4:
     st.subheader("State Operations")
     st.markdown("Track which states each company operates in and their retail footprint")
 
@@ -807,7 +1042,7 @@ with tab3:
         })
         st.dataframe(demo_ops, use_container_width=True, hide_index=True)
 
-with tab4:
+with tab5:
     st.subheader("Stock Price Charts")
 
     # Company selector
@@ -911,7 +1146,7 @@ with tab4:
             fig.update_layout(height=400, title="90-Day Relative Performance (Normalized to 100)")
             st.plotly_chart(fig, use_container_width=True)
 
-with tab5:
+with tab6:
     st.subheader("Financial Metrics")
 
     if DEMO_MODE:
@@ -985,7 +1220,7 @@ with tab5:
             sec_df = pd.DataFrame(result.fetchall(), columns=['Company', 'Ticker', 'CIK', 'Filing Periods'])
             st.dataframe(sec_df, use_container_width=True, hide_index=True)
 
-with tab6:
+with tab7:
     st.subheader("Shelf Analytics")
     st.markdown("Track public company brand presence across retail dispensaries")
 
@@ -1073,4 +1308,4 @@ with tab6:
 
 # Footer
 st.markdown("---")
-st.caption("Data sources: Yahoo Finance (stock prices), SEC EDGAR (financial filings)")
+st.caption("Data sources: SEC EDGAR (filings), Company IR websites (press releases), Yahoo Finance (stock prices)")
