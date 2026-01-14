@@ -8,7 +8,7 @@ from components.sidebar_nav import render_nav
 from core.db import get_engine
 from collections import defaultdict
 
-st.set_page_config(page_title="Brand Assets - CannLinx", layout="wide")
+st.set_page_config(page_title="Brand Assets - CannaLinx", layout="wide")
 render_nav()
 
 st.title("Brand Asset Compliance")
@@ -36,19 +36,23 @@ def get_product_images(brand: str):
     """Get product images across stores for a brand."""
     engine = get_engine()
     with engine.connect() as conn:
-        # Get products with image URLs from raw_json
+        # Get products with image URLs from raw_json (cast TEXT to JSONB)
         result = conn.execute(text("""
             SELECT
                 r.raw_name,
                 d.name as store_name,
                 d.dispensary_id,
-                r.raw_json->>'image' as image_url,
-                r.raw_json->>'imageUrl' as image_url2,
-                r.raw_json->>'photo' as photo_url
+                CASE WHEN r.raw_json IS NOT NULL AND r.raw_json <> ''
+                     THEN (r.raw_json::jsonb)->>'image' END as image_url,
+                CASE WHEN r.raw_json IS NOT NULL AND r.raw_json <> ''
+                     THEN (r.raw_json::jsonb)->>'imageUrl' END as image_url2,
+                CASE WHEN r.raw_json IS NOT NULL AND r.raw_json <> ''
+                     THEN (r.raw_json::jsonb)->>'photo' END as photo_url
             FROM raw_menu_item r
             JOIN dispensary d ON r.dispensary_id = d.dispensary_id
             WHERE UPPER(r.raw_brand) = :brand
             ORDER BY r.raw_name, d.name
+            LIMIT 500
         """), {"brand": brand}).fetchall()
 
         return result
@@ -64,9 +68,12 @@ def get_image_summary(brand: str):
                 r.raw_name,
                 COUNT(DISTINCT d.dispensary_id) as store_count,
                 COUNT(DISTINCT COALESCE(
-                    r.raw_json->>'image',
-                    r.raw_json->>'imageUrl',
-                    r.raw_json->>'photo',
+                    CASE WHEN r.raw_json IS NOT NULL AND r.raw_json <> ''
+                         THEN (r.raw_json::jsonb)->>'image' END,
+                    CASE WHEN r.raw_json IS NOT NULL AND r.raw_json <> ''
+                         THEN (r.raw_json::jsonb)->>'imageUrl' END,
+                    CASE WHEN r.raw_json IS NOT NULL AND r.raw_json <> ''
+                         THEN (r.raw_json::jsonb)->>'photo' END,
                     'no_image'
                 )) as unique_images
             FROM raw_menu_item r
@@ -74,6 +81,7 @@ def get_image_summary(brand: str):
             WHERE UPPER(r.raw_brand) = :brand
             GROUP BY r.raw_name
             ORDER BY unique_images DESC, store_count DESC
+            LIMIT 200
         """), {"brand": brand}).fetchall()
 
         return result
@@ -138,7 +146,7 @@ if selected_brand:
                     ] * len(row),
                     axis=1
                 ),
-                width="stretch",
+                use_container_width=True,
                 hide_index=True,
                 height=500
             )

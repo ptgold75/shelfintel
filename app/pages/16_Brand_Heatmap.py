@@ -11,7 +11,7 @@ from components.auth import is_authenticated
 from core.db import get_engine
 
 st.set_page_config(
-    page_title="Brand Coverage Heat Map - CannLinx",
+    page_title="Brand Coverage Heat Map - CannaLinx",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -79,7 +79,7 @@ if DEMO_MODE:
         )
         fig.update_layout(height=500)
         fig.update_coloraxes(colorbar_title="Penetration %")
-        st.plotly_chart(fig, width="stretch")
+        st.plotly_chart(fig, use_container_width=True)
 
     with col2:
         st.subheader("Penetration by County")
@@ -104,7 +104,7 @@ if DEMO_MODE:
             showlegend=False,
             xaxis=dict(range=[0, 100])
         )
-        st.plotly_chart(fig2, width="stretch")
+        st.plotly_chart(fig2, use_container_width=True)
 
     # Detailed table
     st.subheader("County Details")
@@ -112,7 +112,7 @@ if DEMO_MODE:
     display_df = df.copy()
     display_df['penetration'] = display_df['penetration'].apply(lambda x: f"{x}%")
     display_df.columns = ['County', 'Total Stores', 'Brand Stores', 'Penetration']
-    st.dataframe(display_df, width="stretch", hide_index=True)
+    st.dataframe(display_df, use_container_width=True, hide_index=True)
 
     # Gap analysis with store names
     st.subheader("Coverage Gaps - Sales Targets")
@@ -160,7 +160,7 @@ if DEMO_MODE:
             else:
                 display_gaps = gap_stores_df[gap_stores_df['County'] == county_filter]
 
-            st.dataframe(display_gaps, width="stretch", hide_index=True, height=300)
+            st.dataframe(display_gaps, use_container_width=True, hide_index=True, height=300)
 
             st.download_button(
                 label="Download Target List (CSV)",
@@ -322,7 +322,7 @@ else:
         )
         fig.update_layout(height=500)
         fig.update_coloraxes(colorbar_title="Penetration %")
-        st.plotly_chart(fig, width="stretch")
+        st.plotly_chart(fig, use_container_width=True)
 
     with col2:
         st.subheader("Penetration by County")
@@ -347,7 +347,7 @@ else:
             showlegend=False,
             xaxis=dict(range=[0, 105])
         )
-        st.plotly_chart(fig2, width="stretch")
+        st.plotly_chart(fig2, use_container_width=True)
 
     # Detailed table
     st.subheader("County Details")
@@ -355,7 +355,7 @@ else:
     display_df = df.copy()
     display_df['penetration'] = display_df['penetration'].apply(lambda x: f"{x}%")
     display_df.columns = ['County', 'Total Stores', 'Brand Stores', 'Penetration']
-    st.dataframe(display_df.sort_values('Total Stores', ascending=False), width="stretch", hide_index=True)
+    st.dataframe(display_df.sort_values('Total Stores', ascending=False), use_container_width=True, hide_index=True)
 
     # Gap analysis - Show actual stores not carrying the brand
     st.subheader("Coverage Gaps - Sales Targets")
@@ -400,7 +400,7 @@ else:
 
             st.dataframe(
                 display_gaps,
-                width="stretch",
+                use_container_width=True,
                 hide_index=True,
                 height=400
             )
@@ -419,4 +419,4 @@ else:
     # Store list - stores carrying the brand
     with st.expander("View Stores Currently Carrying This Brand"):
         store_df = get_brand_store_details(state, selected_brand)
-        st.dataframe(store_df, width="stretch", hide_index=True)
+        st.dataframe(store_df, use_container_width=True, hide_index=True)

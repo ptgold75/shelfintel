@@ -117,7 +117,7 @@ def render_sidebar_nav():
         # Logo - compact
         st.markdown("""
         <div class="sidebar-logo">
-            <h2>CannLinx</h2>
+            <h2>CannaLinx</h2>
             <p>Market Intelligence</p>
         </div>
         """, unsafe_allow_html=True)
@@ -206,7 +206,7 @@ def render_main_header():
     """Render the main content area header with banner."""
     banner_path = Path(__file__).parent.parent / "static" / "cannalinx_banner.png"
     if banner_path.exists():
-        st.image(str(banner_path), width="stretch")
+        st.image(str(banner_path), use_container_width=True)
 
 
 def render_state_filter():
@@ -243,7 +243,8 @@ def render_state_filter():
         return None
 
     if "selected_state" not in st.session_state:
-        st.session_state.selected_state = states[0] if states else None
+        # Default to MD if available, otherwise first state
+        st.session_state.selected_state = "MD" if "MD" in states else (states[0] if states else None)
 
     if st.session_state.selected_state not in states:
         st.session_state.selected_state = states[0] if states else None

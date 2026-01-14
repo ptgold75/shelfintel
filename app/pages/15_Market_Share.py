@@ -13,7 +13,7 @@ from sqlalchemy import text
 from core.db import get_engine
 from core.category_utils import get_normalized_category_sql
 
-st.set_page_config(page_title="Market Share | CannLinx", page_icon=None, layout="wide", initial_sidebar_state="expanded")
+st.set_page_config(page_title="Market Share | CannaLinx", page_icon=None, layout="wide", initial_sidebar_state="expanded")
 
 # Import and render navigation
 from components.sidebar_nav import render_nav
@@ -170,12 +170,12 @@ try:
             color_continuous_scale='Greens'
         )
         fig.update_layout(height=350, showlegend=False, coloraxis_showscale=False)
-        st.plotly_chart(fig, width="stretch")
+        st.plotly_chart(fig, use_container_width=True)
 
     with col2:
         st.dataframe(
             cat_sales.style.format({"Sales ($M)": "${:.1f}M"}),
-            width="stretch",
+            use_container_width=True,
             hide_index=True
         )
 
@@ -215,13 +215,13 @@ try:
             yaxis={'categoryorder': 'total ascending'},
             xaxis_tickformat='$,.0f'
         )
-        st.plotly_chart(fig, width="stretch")
+        st.plotly_chart(fig, use_container_width=True)
 
         # Revenue table
         display_df = top_brands.copy()
         display_df['estimated_revenue'] = display_df['estimated_revenue'].apply(lambda x: f"${x:,.0f}")
         display_df.columns = ['Brand', 'Est. Monthly Revenue', 'Store Reach', 'Total SKUs', 'Categories']
-        st.dataframe(display_df, width="stretch", hide_index=True)
+        st.dataframe(display_df, use_container_width=True, hide_index=True)
 
     with tab2:
         st.subheader("Top Brands by Category")
@@ -254,7 +254,7 @@ try:
                 xaxis_tickangle=-45,
                 yaxis_tickformat='$,.0f'
             )
-            st.plotly_chart(fig, width="stretch")
+            st.plotly_chart(fig, use_container_width=True)
 
             # Market share pie
             fig2 = px.pie(
@@ -264,7 +264,7 @@ try:
                 title=f"Top 10 {selected_cat} Market Share"
             )
             fig2.update_layout(height=400)
-            st.plotly_chart(fig2, width="stretch")
+            st.plotly_chart(fig2, use_container_width=True)
         else:
             st.info(f"No data available for {selected_cat}")
 
@@ -295,14 +295,14 @@ try:
                 names='category',
                 title=f"{selected_brand} Revenue by Category"
             )
-            st.plotly_chart(fig, width="stretch")
+            st.plotly_chart(fig, use_container_width=True)
 
             # Detail table
             detail_display = brand_detail[['category', 'store_count', 'sku_count', 'market_share_pct', 'estimated_revenue']].copy()
             detail_display['market_share_pct'] = detail_display['market_share_pct'].apply(lambda x: f"{x:.1f}%")
             detail_display['estimated_revenue'] = detail_display['estimated_revenue'].apply(lambda x: f"${x:,.0f}")
             detail_display.columns = ['Category', 'Stores', 'SKUs', 'Category Share', 'Est. Revenue']
-            st.dataframe(detail_display, width="stretch", hide_index=True)
+            st.dataframe(detail_display, use_container_width=True, hide_index=True)
         else:
             st.info(f"No data available for {selected_brand}")
 

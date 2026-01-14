@@ -10,7 +10,7 @@ from core.db import get_engine
 from core.loyalty import create_subscription, generate_random_address, parse_deal_with_ai
 
 st.set_page_config(
-    page_title="Loyalty Subscriptions - Admin - CannLinx",
+    page_title="Loyalty Subscriptions - Admin - CannaLinx",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -106,7 +106,7 @@ col1, col2, col3, col4 = st.columns(4)
 with col1:
     st.metric("Active Subscriptions", len(subs_df[subs_df['is_active'] == True]) if not subs_df.empty else 0)
 with col2:
-    st.metric("Total Messages", subs_df['message_count'].sum() if not subs_df.empty else 0)
+    st.metric("Total Messages", f"{subs_df['message_count'].sum():,}" if not subs_df.empty else 0)
 with col3:
     states = subs_df['state'].nunique() if not subs_df.empty else 0
     st.metric("States Covered", states)
@@ -149,7 +149,7 @@ with tab1:
                 "Messages": st.column_config.NumberColumn("Messages"),
                 "Last Message": "Last Message"
             },
-            width="stretch",
+            use_container_width=True,
             hide_index=True
         )
 

@@ -9,7 +9,7 @@ from components.auth import is_authenticated, is_admin
 from core.db import get_engine
 
 st.set_page_config(
-    page_title="Brand Hierarchy - Admin - CannLinx",
+    page_title="Brand Hierarchy - Admin - CannaLinx",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -55,34 +55,48 @@ def get_master_brands():
 def get_unmapped_brands(min_products=10):
     """Get brands that aren't in the hierarchy yet."""
     with engine.connect() as conn:
+        # Use LEFT JOIN instead of NOT IN for better performance
         result = conn.execute(text("""
-            SELECT UPPER(r.raw_brand) as brand, COUNT(*) as product_count
-            FROM raw_menu_item r
-            WHERE r.raw_brand IS NOT NULL AND r.raw_brand != ''
-            AND UPPER(r.raw_brand) NOT IN (
-                SELECT UPPER(child_brand) FROM brand_hierarchy
-            )
-            GROUP BY UPPER(r.raw_brand)
-            HAVING COUNT(*) >= :min_products
-            ORDER BY COUNT(*) DESC
+            SELECT brand_upper as brand, product_count
+            FROM (
+                SELECT UPPER(r.raw_brand) as brand_upper, COUNT(*) as product_count
+                FROM raw_menu_item r
+                WHERE r.raw_brand IS NOT NULL AND r.raw_brand != ''
+                GROUP BY UPPER(r.raw_brand)
+                HAVING COUNT(*) >= :min_products
+            ) brands
+            LEFT JOIN brand_hierarchy bh ON brands.brand_upper = UPPER(bh.child_brand)
+            WHERE bh.child_brand IS NULL
+            ORDER BY product_count DESC
             LIMIT 200
         """), {"min_products": min_products})
         rows = result.fetchall()
         return pd.DataFrame(rows, columns=['Brand', 'Products'])
 
 
-@st.cache_data(ttl=60)
+@st.cache_data(ttl=300)  # Cache for 5 minutes - stats don't change often
 def get_hierarchy_stats():
     """Get statistics about brand hierarchy."""
     with engine.connect() as conn:
-        # Count mapped products
+        # Optimized: Get basic counts quickly, estimate mapped products
         result = conn.execute(text("""
-            SELECT
-                (SELECT COUNT(DISTINCT master_brand) FROM brand_hierarchy) as master_count,
-                (SELECT COUNT(*) FROM brand_hierarchy) as mapping_count,
-                (SELECT COUNT(*) FROM raw_menu_item WHERE UPPER(raw_brand) IN
-                    (SELECT UPPER(child_brand) FROM brand_hierarchy)) as mapped_products,
-                (SELECT COUNT(*) FROM raw_menu_item WHERE raw_brand IS NOT NULL) as total_products
+            WITH hierarchy_stats AS (
+                SELECT COUNT(DISTINCT master_brand) as master_count,
+                       COUNT(*) as mapping_count
+                FROM brand_hierarchy
+            ),
+            product_stats AS (
+                SELECT COUNT(*) as total_products
+                FROM raw_menu_item
+                WHERE raw_brand IS NOT NULL
+            ),
+            mapped_estimate AS (
+                SELECT COUNT(*) as mapped_products
+                FROM raw_menu_item r
+                INNER JOIN brand_hierarchy bh ON UPPER(r.raw_brand) = UPPER(bh.child_brand)
+            )
+            SELECT hs.master_count, hs.mapping_count, me.mapped_products, ps.total_products
+            FROM hierarchy_stats hs, product_stats ps, mapped_estimate me
         """))
         return result.fetchone()
 
@@ -136,33 +150,45 @@ with tab1:
     master_brands = get_master_brands()
     filter_master = st.selectbox(
         "Filter by Master Brand",
-        ["All"] + master_brands,
+        ["-- Select to view --"] + master_brands,
         key="filter_master"
     )
 
-    df = get_brand_hierarchy()
+    if filter_master == "-- Select to view --":
+        # Show summary instead of loading all data
+        st.info(f"Select a master brand to view its child brands. Total: {len(master_brands)} master brands.")
 
-    if filter_master != "All":
+        # Show quick summary
+        col1, col2 = st.columns(2)
+        with col1:
+            st.markdown("**Master Brands:**")
+            for brand in master_brands[:15]:
+                st.caption(f"- {brand}")
+            if len(master_brands) > 15:
+                st.caption(f"... and {len(master_brands) - 15} more")
+    else:
+        df = get_brand_hierarchy()
         df = df[df['Master Brand'] == filter_master]
 
-    if not df.empty:
-        # Group by master brand for display
-        for master in df['Master Brand'].unique():
-            master_df = df[df['Master Brand'] == master]
-            with st.expander(f"**{master}** ({len(master_df)} brands)", expanded=(filter_master != "All")):
-                for _, row in master_df.iterrows():
-                    col1, col2, col3 = st.columns([3, 4, 1])
-                    with col1:
-                        st.write(f"**{row['Child Brand']}**")
-                    with col2:
-                        st.caption(row['Notes'] or "")
-                    with col3:
-                        if st.button("Delete", key=f"del_{row['ID']}", type="secondary"):
-                            delete_brand_mapping(row['Child Brand'])
-                            st.cache_data.clear()
-                            st.rerun()
-    else:
-        st.info("No brand mappings found")
+        if not df.empty:
+            st.markdown(f"**{filter_master}** has {len(df)} child brands:")
+
+            for _, row in df.iterrows():
+                col1, col2, col3 = st.columns([3, 4, 1])
+                with col1:
+                    st.write(f"**{row['Child Brand']}**")
+                with col2:
+                    st.caption(row['Notes'] or "")
+                with col3:
+                    if st.button("Delete", key=f"del_{row['ID']}", type="secondary"):
+                        delete_brand_mapping(row['Child Brand'])
+                        get_brand_hierarchy.clear()
+get_master_brands.clear()
+get_unmapped_brands.clear()
+get_hierarchy_stats.clear()
+                        st.rerun()
+        else:
+            st.info("No brand mappings found for this master brand")
 
 with tab2:
     st.subheader("Add Brand Mapping")
@@ -182,7 +208,10 @@ with tab2:
                 if new_child:
                     add_brand_mapping(selected_master, new_child, new_notes)
                     st.success(f"Added {new_child} under {selected_master}")
-                    st.cache_data.clear()
+                    get_brand_hierarchy.clear()
+get_master_brands.clear()
+get_unmapped_brands.clear()
+get_hierarchy_stats.clear()
                     st.rerun()
                 else:
                     st.error("Please enter a child brand name")
@@ -198,7 +227,10 @@ with tab2:
             if new_master and new_child_for_new:
                 add_brand_mapping(new_master, new_child_for_new, new_notes_for_new)
                 st.success(f"Created {new_master} with {new_child_for_new}")
-                st.cache_data.clear()
+                get_brand_hierarchy.clear()
+get_master_brands.clear()
+get_unmapped_brands.clear()
+get_hierarchy_stats.clear()
                 st.rerun()
             else:
                 st.error("Please enter both master and child brand names")
@@ -225,7 +257,10 @@ with tab2:
                 except Exception as e:
                     st.warning(f"Could not add {brand}: {e}")
             st.success(f"Added {added} brands under {bulk_master}")
-            st.cache_data.clear()
+            get_brand_hierarchy.clear()
+get_master_brands.clear()
+get_unmapped_brands.clear()
+get_hierarchy_stats.clear()
             st.rerun()
         else:
             st.error("Please enter master brand and at least one child brand")
@@ -275,7 +310,10 @@ with tab3:
                     if quick_master and quick_master != "-- Select Master Brand --":
                         add_brand_mapping(quick_master, row['Brand'])
                         st.success(f"Added {row['Brand']} to {quick_master}")
-                        st.cache_data.clear()
+                        get_brand_hierarchy.clear()
+get_master_brands.clear()
+get_unmapped_brands.clear()
+get_hierarchy_stats.clear()
                         st.rerun()
 
         if selected_brands:
@@ -285,14 +323,17 @@ with tab3:
                     for brand in selected_brands:
                         add_brand_mapping(quick_master, brand)
                     st.success(f"Added {len(selected_brands)} brands to {quick_master}")
-                    st.cache_data.clear()
+                    get_brand_hierarchy.clear()
+get_master_brands.clear()
+get_unmapped_brands.clear()
+get_hierarchy_stats.clear()
                     st.rerun()
                 else:
                     st.error("Please select a master brand first")
 
         # Show full list in expander
         with st.expander("View all unmapped brands"):
-            st.dataframe(unmapped, width="stretch", hide_index=True, height=400)
+            st.dataframe(unmapped, use_container_width=True, hide_index=True, height=400)
     else:
         st.success("All brands with significant products are mapped!")
 

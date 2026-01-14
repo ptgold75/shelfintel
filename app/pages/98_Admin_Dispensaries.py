@@ -12,7 +12,7 @@ from datetime import datetime, timedelta, timezone
 from sqlalchemy import text
 from core.db import get_engine
 
-st.set_page_config(page_title="Admin: Dispensaries | CannLinx", page_icon=None, layout="wide", initial_sidebar_state="expanded")
+st.set_page_config(page_title="Admin: Dispensaries | CannaLinx", page_icon=None, layout="wide", initial_sidebar_state="expanded")
 
 # Import and render navigation
 from components.sidebar_nav import render_nav
@@ -49,35 +49,12 @@ def get_md_dispensaries():
         """), conn)
 
 
-@st.cache_data(ttl=60)
+@st.cache_data(ttl=300)
 def get_dispensary_status():
-    """Get comprehensive status for all dispensaries."""
+    """Get status for active dispensaries only - fast query."""
     with engine.connect() as conn:
+        # Only get active dispensaries with product counts
         df = pd.read_sql(text("""
-            WITH latest_scrapes AS (
-                SELECT
-                    dispensary_id,
-                    MAX(CASE WHEN status = 'success' THEN started_at END) as last_success,
-                    MAX(CASE WHEN status = 'failed' THEN started_at END) as last_failure,
-                    MAX(started_at) as last_attempt
-                FROM scrape_run
-                GROUP BY dispensary_id
-            ),
-            product_stats AS (
-                SELECT
-                    r.dispensary_id,
-                    COUNT(DISTINCT r.raw_menu_item_id) as product_count,
-                    COUNT(DISTINCT r.raw_category) as category_count,
-                    STRING_AGG(DISTINCT COALESCE(r.raw_category, 'Unknown'), ', ' ORDER BY COALESCE(r.raw_category, 'Unknown')) as categories
-                FROM raw_menu_item r
-                JOIN scrape_run sr ON r.scrape_run_id = sr.scrape_run_id
-                WHERE sr.status = 'success'
-                AND sr.started_at = (
-                    SELECT MAX(started_at) FROM scrape_run sr2
-                    WHERE sr2.dispensary_id = r.dispensary_id AND sr2.status = 'success'
-                )
-                GROUP BY r.dispensary_id
-            )
             SELECT
                 d.dispensary_id,
                 d.name,
@@ -86,24 +63,18 @@ def get_dispensary_status():
                 d.menu_provider,
                 d.provider_metadata,
                 d.is_active,
-                ls.last_success,
-                ls.last_failure,
-                ls.last_attempt,
-                COALESCE(ps.product_count, 0) as product_count,
-                COALESCE(ps.category_count, 0) as category_count,
-                ps.categories
+                COALESCE(pc.product_count, 0) as product_count,
+                COALESCE(pc.category_count, 0) as category_count
             FROM dispensary d
-            LEFT JOIN latest_scrapes ls ON d.dispensary_id = ls.dispensary_id
-            LEFT JOIN product_stats ps ON d.dispensary_id = ps.dispensary_id
-            ORDER BY
-                -- Priority: No data or failed at top
-                CASE
-                    WHEN ps.product_count IS NULL OR ps.product_count = 0 THEN 0
-                    WHEN ps.product_count < 50 THEN 1
-                    WHEN ls.last_failure > ls.last_success THEN 2
-                    ELSE 3
-                END,
-                d.name
+            LEFT JOIN (
+                SELECT dispensary_id,
+                       COUNT(*) as product_count,
+                       COUNT(DISTINCT raw_category) as category_count
+                FROM raw_menu_item
+                GROUP BY dispensary_id
+            ) pc ON d.dispensary_id = pc.dispensary_id
+            WHERE d.is_active = true
+            ORDER BY d.state, d.name
         """), conn)
 
     # Parse metadata
@@ -148,15 +119,15 @@ tab1, tab2, tab3, tab4 = st.tabs(["Needs Attention", "All Dispensaries", "Produc
 
 with tab1:
     st.subheader("Dispensaries Needing Attention")
-    st.markdown("Missing data, low product counts, or failed scrapes")
+    st.markdown("Missing data or low product counts")
 
-    # Filter for problem dispensaries
-    problem_df = df[(df['product_count'] == 0) | (df['product_count'] < 50) |
-                    (df['last_failure'].notna() & (df['last_failure'] > df['last_success']))]
+    # Filter for problem dispensaries - simplified
+    problem_df = df[(df['product_count'] == 0) | (df['product_count'] < 50)].head(100)
 
     if problem_df.empty:
         st.success("All dispensaries are in good shape!")
     else:
+        st.info(f"Showing top 100 of {len(df[(df['product_count'] == 0) | (df['product_count'] < 50)])} dispensaries needing attention")
         for _, row in problem_df.iterrows():
             # Determine status
             if row['product_count'] == 0:
@@ -169,16 +140,14 @@ with tab1:
                 status = "FAILED"
                 status_color = "yellow"
 
-            with st.expander(f":{status_color}[{status}] **{row['name']}** - {row['product_count']} products, {row['category_count']} categories"):
+            with st.expander(f":{status_color}[{status}] **{row['name']}** ({row['state']}) - {row['product_count']:,} products"):
                 col1, col2 = st.columns(2)
 
                 with col1:
                     st.markdown("**Dispensary Info**")
                     st.write(f"**ID:** `{row['dispensary_id']}`")
-                    st.write(f"**County:** {row['county'] or 'Unknown'}")
+                    st.write(f"**State:** {row['state']}")
                     st.write(f"**Provider:** {row['menu_provider'] or 'Unknown'}")
-                    st.write(f"**Store ID:** {row['store_id'] or 'N/A'}")
-                    st.write(f"**Retailer ID:** {row['retailer_id'] or 'N/A'}")
 
                     if row['menu_url']:
                         st.write(f"**Menu URL:** [{row['menu_url'][:50]}...]({row['menu_url']})")
@@ -186,20 +155,7 @@ with tab1:
                         st.warning("No menu URL configured")
 
                 with col2:
-                    st.markdown("**Scrape Status**")
-                    if row['last_success']:
-                        st.write(f"**Last Success:** {row['last_success']}")
-                    else:
-                        st.write("**Last Success:** Never")
-
-                    if row['last_failure']:
-                        st.write(f"**Last Failure:** {row['last_failure']}")
-
-                    if row['categories']:
-                        st.write(f"**Categories Found:** {row['categories'][:100]}")
-
                     # Action buttons
-                    st.markdown("---")
                     url_input = st.text_input(f"Update Menu URL", value=row['menu_url'] or '', key=f"url_{row['dispensary_id']}")
                     if st.button("Save URL", key=f"save_{row['dispensary_id']}"):
                         with engine.connect() as conn:
@@ -208,7 +164,7 @@ with tab1:
                             """), {"url": url_input, "id": row['dispensary_id']})
                             conn.commit()
                         st.success("URL updated!")
-                        st.cache_data.clear()
+                        get_dispensary_status.clear()
                         st.rerun()
 
 with tab2:
@@ -217,7 +173,7 @@ with tab2:
     # Filters
     filter_col1, filter_col2, filter_col3 = st.columns(3)
     with filter_col1:
-        county_filter = st.selectbox("Filter by County", ["All"] + sorted(df['county'].dropna().unique().tolist()))
+        state_filter = st.selectbox("Filter by State", ["All"] + sorted(df['state'].dropna().unique().tolist()))
     with filter_col2:
         provider_filter = st.selectbox("Filter by Provider", ["All"] + sorted(df['menu_provider'].dropna().unique().tolist()))
     with filter_col3:
@@ -225,8 +181,8 @@ with tab2:
 
     # Apply filters
     filtered_df = df.copy()
-    if county_filter != "All":
-        filtered_df = filtered_df[filtered_df['county'] == county_filter]
+    if state_filter != "All":
+        filtered_df = filtered_df[filtered_df['state'] == state_filter]
     if provider_filter != "All":
         filtered_df = filtered_df[filtered_df['menu_provider'] == provider_filter]
     if status_filter == "Has Data":
@@ -237,12 +193,11 @@ with tab2:
         filtered_df = filtered_df[(filtered_df['product_count'] > 0) & (filtered_df['product_count'] < 50)]
 
     # Display table
-    display_df = filtered_df[['name', 'county', 'menu_provider', 'product_count', 'category_count', 'last_success', 'menu_url']].copy()
-    display_df.columns = ['Name', 'County', 'Provider', 'Products', 'Categories', 'Last Success', 'Menu URL']
-    display_df['Last Success'] = pd.to_datetime(display_df['Last Success']).dt.strftime('%Y-%m-%d %H:%M')
+    display_df = filtered_df[['name', 'state', 'menu_provider', 'product_count', 'category_count', 'menu_url']].copy()
+    display_df.columns = ['Name', 'State', 'Provider', 'Products', 'Categories', 'Menu URL']
     display_df['Menu URL'] = display_df['Menu URL'].apply(lambda x: x[:50] + '...' if x and len(x) > 50 else x)
 
-    st.dataframe(display_df, width="stretch", height=500)
+    st.dataframe(display_df, use_container_width=True, height=500)
 
     # Export
     if st.button("Export to CSV"):
@@ -251,24 +206,23 @@ with tab2:
 
 with tab3:
     st.subheader("Product Count Rankings")
-    st.markdown("Stores ranked by total products (most recent scrape)")
+    st.markdown("Stores ranked by total products")
 
     # Rankings table
-    rankings_df = df[df['product_count'] > 0].sort_values('product_count', ascending=False).copy()
+    rankings_df = df[df['product_count'] > 0].sort_values('product_count', ascending=False).head(200).copy()
     rankings_df['rank'] = range(1, len(rankings_df) + 1)
 
-    display_rankings = rankings_df[['rank', 'name', 'product_count', 'category_count', 'categories', 'menu_provider']].copy()
-    display_rankings.columns = ['Rank', 'Dispensary', 'Products', 'Categories', 'Category List', 'Provider']
-    display_rankings['Category List'] = display_rankings['Category List'].apply(lambda x: x[:80] + '...' if x and len(x) > 80 else x)
+    display_rankings = rankings_df[['rank', 'name', 'state', 'product_count', 'category_count', 'menu_provider']].copy()
+    display_rankings.columns = ['Rank', 'Dispensary', 'State', 'Products', 'Categories', 'Provider']
 
-    st.dataframe(display_rankings, width="stretch", height=600)
+    st.dataframe(display_rankings, use_container_width=True, height=600)
 
     # Summary stats
     st.markdown("---")
     col1, col2, col3 = st.columns(3)
-    col1.metric("Average Products/Store", f"{rankings_df['product_count'].mean():.0f}")
-    col2.metric("Median Products/Store", f"{rankings_df['product_count'].median():.0f}")
-    col3.metric("Max Products", f"{rankings_df['product_count'].max()}")
+    col1.metric("Average Products/Store", f"{rankings_df['product_count'].mean():,.0f}")
+    col2.metric("Median Products/Store", f"{rankings_df['product_count'].median():,.0f}")
+    col3.metric("Max Products", f"{rankings_df['product_count'].max():,}")
 
     st.markdown("---")
     st.markdown("**Note:** Stores with < 100 products may have incomplete scrapes (partial categories)")
@@ -471,139 +425,142 @@ with tab4:
 
     if display_md.empty:
         st.warning("No dispensaries match the current filters. Try changing the filter options.")
+        st.stop()
 
-    # Bulk actions
-    st.markdown("### Bulk Actions")
-    bulk_col1, bulk_col2, bulk_col3 = st.columns(3)
+    # Prepare display dataframe with Select column
+    table_df = display_md[['name', 'city', 'store_type', 'products', 'is_active', 'menu_provider', 'dispensary_id']].copy()
+    table_df = table_df.reset_index(drop=True)
 
-    with bulk_col1:
-        if st.button("Mark Selected as Duplicate", type="secondary"):
-            if 'selected_ids' in st.session_state and st.session_state.selected_ids:
-                with engine.connect() as conn:
-                    for did in st.session_state.selected_ids:
-                        conn.execute(text("""
-                            UPDATE dispensary SET store_type = 'duplicate', is_active = false
-                            WHERE dispensary_id = :id
-                        """), {"id": did})
-                    conn.commit()
-                st.success(f"Marked {len(st.session_state.selected_ids)} as duplicate")
-                st.session_state.selected_ids = []
-                st.cache_data.clear()
-                st.rerun()
+    # Add Select column - all unchecked by default
+    table_df.insert(0, 'Select', False)
 
-    with bulk_col2:
-        if st.button("Mark Selected as Smoke Shop", type="secondary"):
-            if 'selected_ids' in st.session_state and st.session_state.selected_ids:
-                with engine.connect() as conn:
-                    for did in st.session_state.selected_ids:
-                        conn.execute(text("""
-                            UPDATE dispensary SET store_type = 'smoke_shop', is_active = false
-                            WHERE dispensary_id = :id
-                        """), {"id": did})
-                    conn.commit()
-                st.success(f"Marked {len(st.session_state.selected_ids)} as smoke shop")
-                st.session_state.selected_ids = []
-                st.cache_data.clear()
-                st.rerun()
+    st.markdown("### Select Dispensaries to Update")
+    st.markdown("Check the boxes, then click an action button. Use the search filter above to find specific names.")
 
-    with bulk_col3:
-        if st.button("Reactivate Selected", type="primary"):
-            if 'selected_ids' in st.session_state and st.session_state.selected_ids:
-                with engine.connect() as conn:
-                    for did in st.session_state.selected_ids:
-                        conn.execute(text("""
-                            UPDATE dispensary SET store_type = 'dispensary', is_active = true
-                            WHERE dispensary_id = :id
-                        """), {"id": did})
-                    conn.commit()
-                st.success(f"Reactivated {len(st.session_state.selected_ids)}")
-                st.session_state.selected_ids = []
-                st.cache_data.clear()
-                st.rerun()
-
-    st.divider()
-
-    # Initialize selected_ids in session state
-    if 'selected_ids' not in st.session_state:
-        st.session_state.selected_ids = []
-
-    # Display dispensaries as a table with selection
-    st.markdown("### Dispensary List")
-
-    if not display_md.empty:
-        # Prepare display dataframe
-        table_df = display_md[['name', 'city', 'store_type', 'products', 'is_active', 'menu_provider', 'dispensary_id']].copy()
-        table_df['Status'] = table_df['is_active'].apply(lambda x: 'Active' if x else 'Inactive')
-        table_df['Products'] = table_df['products'].fillna(0).astype(int)
-        table_df['Type'] = table_df['store_type'].fillna('dispensary')
-        table_df['Provider'] = table_df['menu_provider'].fillna('unknown')
-
-        # Use data editor for selection
-        selected = st.data_editor(
-            table_df[['name', 'city', 'Type', 'Products', 'Status', 'Provider']].rename(columns={
+    # Use form to prevent auto-rerun on checkbox change
+    with st.form("md_cleanup_form"):
+        # Editable table with checkboxes
+        edited_df = st.data_editor(
+            table_df[['Select', 'name', 'city', 'store_type', 'products']].rename(columns={
                 'name': 'Name',
-                'city': 'City'
+                'city': 'City',
+                'store_type': 'Type',
+                'products': 'Products'
             }),
             hide_index=True,
             use_container_width=True,
-            height=400,
+            height=450,
             column_config={
-                "Products": st.column_config.NumberColumn("Products", width="small"),
-                "Status": st.column_config.TextColumn("Status", width="small"),
+                "Select": st.column_config.CheckboxColumn("Select", default=False, width="small"),
+                "Products": st.column_config.NumberColumn("Products", width="small", format="%d"),
                 "Type": st.column_config.TextColumn("Type", width="small"),
             },
-            disabled=True  # Read-only table
+            disabled=["Name", "City", "Type", "Products"],
+            key="md_data_editor"
         )
 
-        # Single dispensary actions
-        st.markdown("---")
-        st.markdown("**Quick Actions** (select a dispensary by name)")
+        # Action buttons inside the form
+        st.markdown("**Actions:**")
+        col1, col2, col3, col4 = st.columns(4)
 
-        disp_options = table_df['name'].tolist()
-        selected_name = st.selectbox("Select Dispensary", [""] + disp_options, key="quick_select")
+        with col1:
+            smoke_shop_btn = st.form_submit_button("Mark as Smoke Shop", type="primary", use_container_width=True)
+        with col2:
+            duplicate_btn = st.form_submit_button("Mark as Duplicate", use_container_width=True)
+        with col3:
+            reactivate_btn = st.form_submit_button("Reactivate", use_container_width=True)
+        with col4:
+            st.form_submit_button("Refresh", use_container_width=True)
 
-        if selected_name:
-            selected_row = table_df[table_df['name'] == selected_name].iloc[0]
-            disp_id = selected_row['dispensary_id']
+    # Process form submission
+    selected_mask = edited_df['Select'].fillna(False)
+    selected_ids = table_df.loc[selected_mask, 'dispensary_id'].tolist()
 
-            st.caption(f"ID: {disp_id}")
+    if smoke_shop_btn and selected_ids:
+        with engine.connect() as conn:
+            for did in selected_ids:
+                conn.execute(text("""
+                    UPDATE dispensary SET store_type = 'smoke_shop', is_active = false
+                    WHERE dispensary_id = :id
+                """), {"id": did})
+            conn.commit()
+        st.success(f"Marked {len(selected_ids)} as smoke shop! Click 'Refresh' to update the list.")
+        get_md_dispensaries.clear()
 
-            col1, col2, col3 = st.columns(3)
-            with col1:
-                if st.button("Mark as Duplicate", key="quick_dup"):
-                    with engine.connect() as conn:
-                        conn.execute(text("""
-                            UPDATE dispensary SET store_type = 'duplicate', is_active = false
-                            WHERE dispensary_id = :id
-                        """), {"id": disp_id})
-                        conn.commit()
-                    st.success(f"Marked {selected_name} as duplicate")
-                    st.cache_data.clear()
-                    st.rerun()
+    if duplicate_btn and selected_ids:
+        with engine.connect() as conn:
+            for did in selected_ids:
+                conn.execute(text("""
+                    UPDATE dispensary SET store_type = 'duplicate', is_active = false
+                    WHERE dispensary_id = :id
+                """), {"id": did})
+            conn.commit()
+        st.success(f"Marked {len(selected_ids)} as duplicate! Click 'Refresh' to update the list.")
+        get_md_dispensaries.clear()
 
-            with col2:
-                if st.button("Mark as Smoke Shop", key="quick_smoke"):
-                    with engine.connect() as conn:
-                        conn.execute(text("""
-                            UPDATE dispensary SET store_type = 'smoke_shop', is_active = false
-                            WHERE dispensary_id = :id
-                        """), {"id": disp_id})
-                        conn.commit()
-                    st.success(f"Marked {selected_name} as smoke shop")
-                    st.cache_data.clear()
-                    st.rerun()
+    if reactivate_btn and selected_ids:
+        with engine.connect() as conn:
+            for did in selected_ids:
+                conn.execute(text("""
+                    UPDATE dispensary SET store_type = 'dispensary', is_active = true
+                    WHERE dispensary_id = :id
+                """), {"id": did})
+            conn.commit()
+        st.success(f"Reactivated {len(selected_ids)}! Click 'Refresh' to update the list.")
+        get_md_dispensaries.clear()
 
-            with col3:
-                if st.button("Reactivate", key="quick_activate"):
-                    with engine.connect() as conn:
-                        conn.execute(text("""
-                            UPDATE dispensary SET store_type = 'dispensary', is_active = true
-                            WHERE dispensary_id = :id
-                        """), {"id": disp_id})
-                        conn.commit()
-                    st.success(f"Reactivated {selected_name}")
-                    st.cache_data.clear()
-                    st.rerun()
+    if (smoke_shop_btn or duplicate_btn or reactivate_btn) and not selected_ids:
+        st.warning("No dispensaries selected. Check boxes in the table first.")
+
+    st.divider()
+
+    # Quick single action
+    st.markdown("### Quick Single Action")
+    disp_options = table_df['name'].tolist()
+    selected_name = st.selectbox("Or select one dispensary", [""] + disp_options, key="quick_select")
+
+    if selected_name:
+        selected_row = table_df[table_df['name'] == selected_name].iloc[0]
+        disp_id = selected_row['dispensary_id']
+
+        st.caption(f"ID: {disp_id} | City: {selected_row['city']} | Products: {int(selected_row['products'] or 0):,}")
+
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            if st.button("Smoke Shop", key="quick_smoke"):
+                with engine.connect() as conn:
+                    conn.execute(text("""
+                        UPDATE dispensary SET store_type = 'smoke_shop', is_active = false
+                        WHERE dispensary_id = :id
+                    """), {"id": disp_id})
+                    conn.commit()
+                st.success(f"Marked {selected_name} as smoke shop")
+                get_md_dispensaries.clear()
+                st.rerun()
+
+        with col2:
+            if st.button("Duplicate", key="quick_dup"):
+                with engine.connect() as conn:
+                    conn.execute(text("""
+                        UPDATE dispensary SET store_type = 'duplicate', is_active = false
+                        WHERE dispensary_id = :id
+                    """), {"id": disp_id})
+                    conn.commit()
+                st.success(f"Marked {selected_name} as duplicate")
+                get_md_dispensaries.clear()
+                st.rerun()
+
+        with col3:
+            if st.button("Reactivate", key="quick_activate"):
+                with engine.connect() as conn:
+                    conn.execute(text("""
+                        UPDATE dispensary SET store_type = 'dispensary', is_active = true
+                        WHERE dispensary_id = :id
+                    """), {"id": disp_id})
+                    conn.commit()
+                st.success(f"Reactivated {selected_name}")
+                get_md_dispensaries.clear()
+                st.rerun()
 
 st.divider()
 
@@ -611,11 +568,12 @@ st.divider()
 st.subheader("URLs Needed")
 st.markdown("These dispensaries need menu URLs or updated configurations:")
 
-no_url_df = df[(df['menu_url'].isna()) | (df['menu_url'] == '') | (df['product_count'] == 0)]
+no_url_df = df[(df['menu_url'].isna()) | (df['menu_url'] == '') | (df['product_count'] == 0)].head(50)
 if not no_url_df.empty:
+    st.info(f"Showing first 50 dispensaries needing URLs")
     for _, row in no_url_df.iterrows():
-        st.markdown(f"- **{row['name']}** ({row['county'] or 'Unknown County'}): `{row['dispensary_id']}`")
+        st.markdown(f"- **{row['name']}** ({row['state']}): `{row['dispensary_id']}`")
 else:
     st.success("All dispensaries have URLs configured!")
 
-st.caption("Data refreshes every 60 seconds | Admin access required for edits")
+st.caption("Data refreshes every 5 minutes | Admin access required for edits")

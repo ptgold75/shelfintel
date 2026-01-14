@@ -12,7 +12,7 @@ from sqlalchemy import text
 from core.db import get_engine
 from core.category_utils import get_normalized_category_sql
 
-st.set_page_config(page_title="Price Analysis | CannLinx", page_icon=None, layout="wide", initial_sidebar_state="expanded")
+st.set_page_config(page_title="Price Analysis | CannaLinx", page_icon=None, layout="wide", initial_sidebar_state="expanded")
 
 # Import and render navigation
 from components.sidebar_nav import render_nav, get_section_from_params
@@ -340,12 +340,12 @@ with tab1:
                                 color='subcategory',
                                 color_discrete_sequence=subcat_df['color'].tolist())
                     fig.update_layout(xaxis_tickangle=-45, showlegend=False)
-                    st.plotly_chart(fig, width="stretch")
+                    st.plotly_chart(fig, use_container_width=True)
 
                 with col2:
                     display_df = subcat_df[['subcategory', 'products', 'avg_price', 'min_price', 'max_price']].copy()
                     display_df.columns = ['Subcategory', 'Products', 'Avg Price', 'Min', 'Max']
-                    st.dataframe(display_df, width="stretch", hide_index=True, height=450)
+                    st.dataframe(display_df, use_container_width=True, hide_index=True, height=450)
 
                 # Show breakdown explanation
                 st.caption("""
@@ -365,10 +365,10 @@ with tab1:
                                 title='Average Price by Category',
                                 labels={'avg_price': 'Avg Price ($)'})
                     fig.update_layout(xaxis_tickangle=-45)
-                    st.plotly_chart(fig, width="stretch")
+                    st.plotly_chart(fig, use_container_width=True)
 
                 with col2:
-                    st.dataframe(price_df, width="stretch", height=400)
+                    st.dataframe(price_df, use_container_width=True, height=400)
             else:
                 st.warning("No price data found for selected filters")
 
@@ -379,7 +379,7 @@ with tab1:
             selected_cat = st.selectbox("Select Category", price_df['category'].tolist())
             if selected_cat:
                 cheapest = get_cheapest_by_category(selected_cat, selected_state, min_price_filter)
-                st.dataframe(cheapest, width="stretch")
+                st.dataframe(cheapest, use_container_width=True)
     except Exception as e:
         st.error(f"Error: {e}")
 
@@ -399,10 +399,10 @@ with tab2:
             with col1:
                 st.subheader("Price by Size")
                 fig = px.bar(size_stats, x='size', y='avg_price', title='Avg Vape Price by Size')
-                st.plotly_chart(fig, width="stretch")
+                st.plotly_chart(fig, use_container_width=True)
             
             with col2:
-                st.dataframe(size_stats, width="stretch")
+                st.dataframe(size_stats, use_container_width=True)
             
             # Cheapest vapes
             st.subheader("Cheapest Vapes")
@@ -412,7 +412,7 @@ with tab2:
             else:
                 display_df = vape_df[vape_df['size'] == size_filter].head(30)
             
-            st.dataframe(display_df, width="stretch")
+            st.dataframe(display_df, use_container_width=True)
         else:
             st.warning("No vape data found for selected filters")
     except Exception as e:
@@ -423,7 +423,7 @@ with tab3:
     try:
         deals_df = get_deals(selected_state, min_price_filter)
         if not deals_df.empty:
-            st.metric("Products on Sale", len(deals_df))
+            st.metric("Products on Sale", f"{len(deals_df):,}")
             
             # Format prices
             deals_df['original_price'] = deals_df['original_price'].apply(lambda x: f"${x:.2f}")
@@ -431,7 +431,7 @@ with tab3:
             deals_df['savings'] = deals_df['savings'].apply(lambda x: f"${x:.2f}")
             deals_df['pct_off'] = deals_df['pct_off'].apply(lambda x: f"{x:.0f}%")
             
-            st.dataframe(deals_df, width="stretch", height=500)
+            st.dataframe(deals_df, use_container_width=True, height=500)
         else:
             st.info("No sale items found for selected filters")
     except Exception as e:
@@ -472,7 +472,7 @@ with tab4:
             
             if not results.empty:
                 st.success(f"Found {len(results)} products")
-                st.dataframe(results, width="stretch")
+                st.dataframe(results, use_container_width=True)
             else:
                 st.warning("No products found")
         except Exception as e:

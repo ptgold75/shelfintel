@@ -13,7 +13,7 @@ from sqlalchemy import text
 from core.db import get_engine
 from core.category_utils import get_normalized_category_sql
 
-st.set_page_config(page_title="Brand Analytics | CannLinx", page_icon=None, layout="wide", initial_sidebar_state="expanded")
+st.set_page_config(page_title="Brand Analytics | CannaLinx", page_icon=None, layout="wide", initial_sidebar_state="expanded")
 
 # Import and render navigation
 from components.sidebar_nav import render_nav
@@ -83,7 +83,7 @@ try:
     # Key metrics
     c1, c2, c3, c4 = st.columns(4)
     c1.metric("Total Brands", f"{total_brands:,}")
-    c2.metric("Stores Tracked", f"{total_stores}")
+    c2.metric("Stores Tracked", f"{total_stores:,}")
 
     if not brand_presence.empty:
         top_brand = brand_presence.iloc[0]
@@ -118,7 +118,7 @@ try:
                 yaxis={'categoryorder': 'total ascending'},
                 coloraxis_colorbar_title='Products'
             )
-            st.plotly_chart(fig, width="stretch")
+            st.plotly_chart(fig, use_container_width=True)
 
             # Brand reach distribution
             st.subheader("Brand Reach Distribution")
@@ -132,7 +132,7 @@ try:
                 labels={'stores': 'Number of Stores', 'brands': 'Number of Brands'}
             )
             fig2.update_layout(height=300)
-            st.plotly_chart(fig2, width="stretch")
+            st.plotly_chart(fig2, use_container_width=True)
 
             st.caption(f"Distribution shows how many brands are in N stores (e.g., {reach_dist.iloc[-1]['brands']} brands are in {reach_dist.iloc[-1]['stores']} stores)")
 
@@ -164,7 +164,7 @@ try:
                     labels={'products': 'Product Count', 'brand': 'Brand'}
                 )
                 fig.update_layout(height=400, xaxis_tickangle=-45)
-                st.plotly_chart(fig, width="stretch")
+                st.plotly_chart(fig, use_container_width=True)
 
                 # Category breakdown table
                 pivot = filtered.pivot_table(
@@ -173,7 +173,7 @@ try:
                     values='products',
                     fill_value=0
                 )
-                st.dataframe(pivot, width="stretch")
+                st.dataframe(pivot, use_container_width=True)
         else:
             st.info("No category data available")
 
@@ -214,7 +214,7 @@ try:
                 yaxis_title='Average Price ($)',
                 showlegend=False
             )
-            st.plotly_chart(fig, width="stretch")
+            st.plotly_chart(fig, use_container_width=True)
 
             # Price range scatter
             st.subheader("Price Range by Brand")
@@ -244,7 +244,7 @@ try:
                 yaxis_title='Price ($)',
                 xaxis_title='Brand'
             )
-            st.plotly_chart(fig2, width="stretch")
+            st.plotly_chart(fig2, use_container_width=True)
             st.caption("Lines show min-max range, diamonds show average price")
 
         else:

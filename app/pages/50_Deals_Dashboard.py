@@ -10,7 +10,7 @@ from components.auth import is_authenticated
 from core.db import get_engine
 
 st.set_page_config(
-    page_title="Deals & Promotions - CannLinx",
+    page_title="Deals & Promotions - CannaLinx",
     layout="wide",
     initial_sidebar_state="expanded"
 )

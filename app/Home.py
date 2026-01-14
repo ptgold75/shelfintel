@@ -1,5 +1,5 @@
 # app/Home.py
-"""CannLinx - Clean Homepage with User Type Selection"""
+"""CannaLinx - Clean Homepage with User Type Selection"""
 
 import sys
 import os
@@ -11,7 +11,7 @@ from core.db import get_engine
 from components.sidebar_nav import render_nav
 
 st.set_page_config(
-    page_title="CannLinx - Cannabis Market Intelligence",
+    page_title="CannaLinx - Cannabis Market Intelligence",
     page_icon=None,
     layout="wide",
     initial_sidebar_state="expanded"
@@ -295,7 +295,7 @@ with cta_col2:
 # Footer - minimal
 st.markdown(
     f"<div style='text-align:center;color:#94a3b8;font-size:0.7rem;margin-top:1rem;'>"
-    f"CannLinx &middot; {states} States &middot; support@cannlinx.com"
+    f"CannaLinx &middot; {states} States &middot; support@cannlinx.com"
     "</div>",
     unsafe_allow_html=True
 )

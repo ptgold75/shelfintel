@@ -6,7 +6,7 @@ from components.sidebar_nav import render_nav
 from components.auth import login, is_authenticated, init_session_state
 
 st.set_page_config(
-    page_title="Login - CannLinx",
+    page_title="Login - CannaLinx",
     page_icon=None,
     layout="wide",
     initial_sidebar_state="expanded"
@@ -21,7 +21,7 @@ if is_authenticated():
     st.success("You are already logged in!")
     st.page_link("pages/10_Brand_Intelligence.py", label="Go to Brand Dashboard")
 else:
-    st.markdown("### Login to CannLinx")
+    st.markdown("### Login to CannaLinx")
     st.markdown("Access your market intelligence dashboard.")
 
     col1, col2, col3 = st.columns([1, 2, 1])
@@ -30,7 +30,7 @@ else:
         with st.form("login_form"):
             email = st.text_input("Email or Username")
             password = st.text_input("Password", type="password")
-            submitted = st.form_submit_button("Login", width="stretch", type="primary")
+            submitted = st.form_submit_button("Login", use_container_width=True, type="primary")
 
             if submitted:
                 if email and password:

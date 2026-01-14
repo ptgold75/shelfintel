@@ -11,7 +11,7 @@ from sqlalchemy import text
 from core.db import get_engine
 
 st.set_page_config(
-    page_title="Data Licensing | CannLinx",
+    page_title="Data Licensing | CannaLinx",
     page_icon=None,
     layout="wide",
     initial_sidebar_state="expanded"
@@ -213,7 +213,7 @@ try:
             'URL Coverage %': '{:.0f}%',
             'Phone Coverage %': '{:.0f}%'
         }),
-        width="stretch",
+        use_container_width=True,
         height=600
     )
 
@@ -275,7 +275,7 @@ with sample_col2:
             if 'Website' in sample.columns:
                 sample['Website'] = sample['Website'].apply(lambda x: x[:50] + '...' if len(str(x)) > 50 else x)
 
-            st.dataframe(sample, width="stretch", hide_index=True)
+            st.dataframe(sample, use_container_width=True, hide_index=True)
         except Exception as e:
             st.info("Select a state to see sample data")
 
@@ -335,4 +335,4 @@ with st.form("data_request"):
             st.error("Please provide your name and email address.")
 
 st.divider()
-st.caption("CannLinx Data Licensing | sales@cannlinx.com | Data updated daily")
+st.caption("CannaLinx Data Licensing | sales@cannlinx.com | Data updated daily")

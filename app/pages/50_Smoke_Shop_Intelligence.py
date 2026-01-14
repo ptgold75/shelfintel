@@ -17,7 +17,7 @@ from sqlalchemy import text
 from core.db import get_engine
 
 st.set_page_config(
-    page_title="Smoke Shop Intelligence | CannLinx",
+    page_title="Smoke Shop Intelligence | CannaLinx",
     page_icon=None,
     layout="wide",
     initial_sidebar_state="expanded"
@@ -245,7 +245,7 @@ try:
                     title='Smoke Shop Density by State'
                 )
                 fig.update_layout(margin=dict(t=50, b=20, l=20, r=20), height=400)
-                st.plotly_chart(fig, width="stretch")
+                st.plotly_chart(fig, use_container_width=True)
 
             with col2:
                 st.markdown("**Top States by Smoke Shop Count**")
@@ -271,7 +271,7 @@ try:
                     'with_data': '{:,}',
                     'products': '{:,}'
                 }),
-                width="stretch",
+                use_container_width=True,
                 height=400
             )
         else:
@@ -302,7 +302,7 @@ try:
                     showlegend=False,
                     coloraxis_showscale=False
                 )
-                st.plotly_chart(fig, width="stretch")
+                st.plotly_chart(fig, use_container_width=True)
 
             with col2:
                 st.markdown("**Category Breakdown**")
@@ -330,7 +330,7 @@ try:
             )
             fig.update_layout(margin=dict(t=20, b=20, l=20, r=20), height=300)
             fig.update_traces(textposition='inside', textinfo='percent+label')
-            st.plotly_chart(fig, width="stretch")
+            st.plotly_chart(fig, use_container_width=True)
         else:
             st.info("No product data available yet. Run the smoke shop scraper to collect product data.")
 
@@ -340,7 +340,7 @@ try:
             st.subheader("Recently Collected Products")
             st.dataframe(
                 recent[['store', 'state', 'product', 'category', 'brand', 'price']].head(20),
-                width="stretch",
+                use_container_width=True,
                 height=400
             )
 
@@ -373,7 +373,7 @@ try:
                         yaxis={'categoryorder': 'total ascending'},
                         coloraxis_showscale=True
                     )
-                    st.plotly_chart(fig, width="stretch")
+                    st.plotly_chart(fig, use_container_width=True)
 
                 # Show independent count
                 indep = chains[chains['chain'] == 'Independent']
@@ -405,7 +405,7 @@ try:
             st.markdown("**All Identified Chains**")
             st.dataframe(
                 chains.style.format({'locations': '{:,}', 'states': '{:,}'}),
-                width="stretch",
+                use_container_width=True,
                 height=300
             )
 
@@ -446,7 +446,7 @@ try:
                     xaxis_tickangle=-45,
                     legend=dict(orientation="h", y=1.1)
                 )
-                st.plotly_chart(fig, width="stretch")
+                st.plotly_chart(fig, use_container_width=True)
 
             with col2:
                 st.markdown("**States with Highest Gray Market Presence**")
@@ -508,7 +508,7 @@ try:
                     'Smoke Shops': '{:,}',
                     'Unverified': '{:,}'
                 }),
-                width="stretch",
+                use_container_width=True,
                 height=400
             )
         else:

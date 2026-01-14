@@ -13,7 +13,7 @@ from sqlalchemy import text
 from core.db import get_engine
 from core.category_utils import get_normalized_category_sql
 
-st.set_page_config(page_title="Dashboard | CannLinx", page_icon=None, layout="wide", initial_sidebar_state="expanded")
+st.set_page_config(page_title="Dashboard | CannaLinx", page_icon=None, layout="wide", initial_sidebar_state="expanded")
 
 # Import and render navigation
 from components.sidebar_nav import render_nav
@@ -151,7 +151,7 @@ try:
             fig.update_layout(margin=dict(t=20, b=20, l=20, r=20), height=350,
                             showlegend=True, legend=dict(orientation="h", y=-0.1))
             fig.update_traces(textposition='inside', textinfo='percent+label')
-            st.plotly_chart(fig, width="stretch")
+            st.plotly_chart(fig, use_container_width=True)
         else:
             st.info("No category data available")
 
@@ -163,7 +163,7 @@ try:
             fig.update_layout(margin=dict(t=20, b=20, l=20, r=20), height=350,
                             yaxis={'categoryorder': 'total ascending'},
                             showlegend=False, coloraxis_showscale=False)
-            st.plotly_chart(fig, width="stretch")
+            st.plotly_chart(fig, use_container_width=True)
         else:
             st.info("No brand data available")
 
@@ -179,7 +179,7 @@ try:
             fig.update_layout(margin=dict(t=20, b=60, l=20, r=20), height=350,
                             xaxis_tickangle=-45, showlegend=False, coloraxis_showscale=False)
             fig.update_yaxes(title_text="Avg Price ($)")
-            st.plotly_chart(fig, width="stretch")
+            st.plotly_chart(fig, use_container_width=True)
         else:
             st.info("No price data available")
 
@@ -190,7 +190,7 @@ try:
                         color_discrete_sequence=px.colors.qualitative.Pastel)
             fig.update_layout(margin=dict(t=20, b=20, l=20, r=20), height=350)
             fig.update_traces(textposition='inside', textinfo='percent+label')
-            st.plotly_chart(fig, width="stretch")
+            st.plotly_chart(fig, use_container_width=True)
         else:
             st.info("No provider data available")
 
@@ -204,7 +204,7 @@ try:
                         xaxis_tickangle=-45, showlegend=False, coloraxis_showscale=False)
         fig.update_yaxes(title_text="Unique Products")
         fig.update_xaxes(title_text="")
-        st.plotly_chart(fig, width="stretch")
+        st.plotly_chart(fig, use_container_width=True)
     else:
         st.info("No store inventory data available")
 

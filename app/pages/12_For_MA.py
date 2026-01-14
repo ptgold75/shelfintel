@@ -7,7 +7,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspa
 
 import streamlit as st
 
-st.set_page_config(page_title="M&A Due Diligence | CannLinx", page_icon=None, layout="wide")
+st.set_page_config(page_title="M&A Due Diligence | CannaLinx", page_icon=None, layout="wide")
 
 st.markdown("""
 <style>
@@ -170,7 +170,7 @@ with st.expander("Target Overview", expanded=True):
     - "Premium pricing with strong margins"
     - "Rapid growth trajectory"
 
-    **CannLinx Verification:**
+    **CannaLinx Verification:**
     | Claim | Stated | Verified | Assessment |
     |-------|--------|----------|------------|
     | Distribution | 85% | 62% | Overstated |
@@ -220,4 +220,4 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-st.page_link("Home.py", label="Back to Home", width="stretch")
+st.page_link("Home.py", label="Back to Home", use_container_width=True)

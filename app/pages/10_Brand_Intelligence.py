@@ -12,7 +12,7 @@ from components.sidebar_nav import render_nav, get_section_from_params, render_s
 from components.auth import is_authenticated
 from core.db import get_engine
 
-st.set_page_config(page_title="Brand Intelligence - CannLinx", layout="wide")
+st.set_page_config(page_title="Brand Intelligence - CannaLinx", layout="wide")
 render_nav(require_login=False)  # Allow demo access
 
 # Check if user is authenticated for real data vs demo
@@ -818,7 +818,7 @@ if selected_brand:
                     x=-0.1
                 )
             )
-            st.plotly_chart(fig, width="stretch")
+            st.plotly_chart(fig, use_container_width=True)
         else:
             st.info("No category data available")
 
@@ -841,7 +841,7 @@ if selected_brand:
                 xaxis_tickangle=-45,
                 margin=dict(t=20, b=60, l=40, r=20)
             )
-            st.plotly_chart(fig, width="stretch")
+            st.plotly_chart(fig, use_container_width=True)
         else:
             st.info("No market share data available")
 
@@ -861,7 +861,7 @@ if selected_brand:
                 labels={"range": "Price Range", "count": "SKUs"}
             )
             fig.update_layout(height=280, showlegend=False, margin=dict(t=20, b=40, l=40, r=20))
-            st.plotly_chart(fig, width="stretch")
+            st.plotly_chart(fig, use_container_width=True)
         else:
             st.info("No pricing data available")
 
@@ -887,7 +887,7 @@ if selected_brand:
                     xaxis_title="",
                     yaxis_title="Stores"
                 )
-                st.plotly_chart(fig, width="stretch")
+                st.plotly_chart(fig, use_container_width=True)
         else:
             st.markdown("**Top Products by Distribution**")
             # For real mode, could add top products query here
@@ -947,7 +947,7 @@ if selected_brand:
 
             with st.expander(f"View {len(gaps)} target stores"):
                 df = pd.DataFrame(gaps, columns=["Store", "City", "County"])
-                st.dataframe(df, width="stretch", hide_index=True, height=300)
+                st.dataframe(df, use_container_width=True, hide_index=True, height=300)
 
         # Pricing Issues - use pre-loaded data
         if pricing_issues:
@@ -964,7 +964,7 @@ if selected_brand:
                 df["Min Price"] = df["Min Price"].apply(lambda x: f"${x:.2f}")
                 df["Max Price"] = df["Max Price"].apply(lambda x: f"${x:.2f}")
                 df["Spread"] = df["Spread"].apply(lambda x: f"${x:.2f}")
-                st.dataframe(df, width="stretch", hide_index=True)
+                st.dataframe(df, use_container_width=True, hide_index=True)
 
         # No critical issues
         if not gaps and not pricing_issues:
@@ -1007,13 +1007,13 @@ if selected_brand:
             st.markdown(f"**Currently Carrying ({len(carrying)} stores)**")
             if carrying:
                 df = pd.DataFrame(carrying, columns=["Store", "City", "County", "Products"])
-                st.dataframe(df, width="stretch", hide_index=True, height=350)
+                st.dataframe(df, use_container_width=True, hide_index=True, height=350)
 
         with col2:
             st.markdown(f"**Not Carrying - Sales Targets ({len(gaps)} stores)**")
             if gaps:
                 df = pd.DataFrame(gaps, columns=["Store", "City", "County"])
-                st.dataframe(df, width="stretch", hide_index=True, height=350)
+                st.dataframe(df, use_container_width=True, hide_index=True, height=350)
 
         # Top products chart (demo mode)
         if DEMO_MODE and demo_data.get("top_products"):
@@ -1030,7 +1030,7 @@ if selected_brand:
                 labels={"stores": "Stores Carrying", "product": "", "avg_price": "Avg Price"}
             )
             fig.update_layout(height=280, margin=dict(t=10, b=40, l=10, r=20))
-            st.plotly_chart(fig, width="stretch")
+            st.plotly_chart(fig, use_container_width=True)
 
     with tab3:
         st.markdown('<p class="section-header">Coverage by County</p>', unsafe_allow_html=True)
@@ -1056,7 +1056,7 @@ if selected_brand:
                 st.markdown("**Coverage Table** - Sorted by opportunity size")
                 display_df = df[["County", "Carrying", "Total Stores", "Coverage %", "Gap"]].copy()
                 display_df["Coverage %"] = display_df["Coverage %"].apply(lambda x: f"{x}%")
-                st.dataframe(display_df, width="stretch", hide_index=True, height=350)
+                st.dataframe(display_df, use_container_width=True, hide_index=True, height=350)
 
             with col2:
                 st.markdown("**Coverage by County** - Higher % = better penetration")
@@ -1071,7 +1071,7 @@ if selected_brand:
                     color_continuous_scale=["#dc3545", "#ffc107", "#28a745"]
                 )
                 fig.update_layout(height=350, showlegend=False, margin=dict(t=10, b=40, l=10, r=20))
-                st.plotly_chart(fig, width="stretch")
+                st.plotly_chart(fig, use_container_width=True)
 
     with tab4:
         st.markdown('<p class="section-header">Competitor Deep-Dive</p>', unsafe_allow_html=True)
@@ -1101,7 +1101,7 @@ if selected_brand:
                     color_discrete_map={"You": "#1e3a5f", "Competitor": "#94a3b8"}
                 )
                 fig.update_layout(height=300, showlegend=False, margin=dict(t=10, b=40, l=10, r=20))
-                st.plotly_chart(fig, width="stretch")
+                st.plotly_chart(fig, use_container_width=True)
 
             with col2:
                 st.markdown("**Your Position**")
@@ -1352,7 +1352,7 @@ if selected_brand:
     # Value Proposition Footer
     st.markdown("---")
     st.markdown("""
-    **Ready to grow your distribution?** CannLinx provides daily updates on:
+    **Ready to grow your distribution?** CannaLinx provides daily updates on:
     - Real-time store coverage tracking
     - Competitive intelligence alerts
     - Pricing compliance monitoring

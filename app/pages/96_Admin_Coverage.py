@@ -13,7 +13,7 @@ from datetime import datetime, timedelta, timezone
 from sqlalchemy import text
 from core.db import get_engine
 
-st.set_page_config(page_title="Admin: Coverage | CannLinx", page_icon=None, layout="wide", initial_sidebar_state="expanded")
+st.set_page_config(page_title="Admin: Coverage | CannaLinx", page_icon=None, layout="wide", initial_sidebar_state="expanded")
 
 # Import and render navigation
 from components.sidebar_nav import render_nav
@@ -177,7 +177,7 @@ with tab1:
         xaxis=dict(range=[0, 105]),
     )
 
-    st.plotly_chart(fig, width="stretch")
+    st.plotly_chart(fig, use_container_width=True)
 
     # Detailed table
     st.subheader("Detailed Coverage Table")
@@ -207,7 +207,7 @@ with tab1:
             return ['background-color: #fee2e2'] * len(row)
 
     styled_df = table_df.style.apply(highlight_status, axis=1)
-    st.dataframe(styled_df, width="stretch", height=450)
+    st.dataframe(styled_df, use_container_width=True, height=450)
 
     # Summary by status
     st.markdown("---")
@@ -246,14 +246,14 @@ with tab2:
         height=400,
     )
 
-    st.plotly_chart(fig2, width="stretch")
+    st.plotly_chart(fig2, use_container_width=True)
 
     # Provider table
     provider_table = provider_df.copy()
     provider_table['needs_work'] = provider_table['total'] - provider_table['with_data']
     provider_table.columns = ['Provider', 'Total', 'With Data', 'Products', 'Success Rate %', 'Needs Work']
 
-    st.dataframe(provider_table, width="stretch")
+    st.dataframe(provider_table, use_container_width=True)
 
     # Provider recommendations
     st.markdown("---")
@@ -282,7 +282,7 @@ with tab3:
             title="Blockers by Type",
             color_discrete_sequence=px.colors.qualitative.Set2
         )
-        st.plotly_chart(fig3, width="stretch")
+        st.plotly_chart(fig3, use_container_width=True)
 
         # Detailed blocker list by state
         st.markdown("---")
@@ -337,7 +337,7 @@ with tab4:
             height=350,
         )
 
-        st.plotly_chart(fig4, width="stretch")
+        st.plotly_chart(fig4, use_container_width=True)
 
         # Products scraped
         fig5 = px.line(
@@ -348,14 +348,14 @@ with tab4:
             markers=True
         )
         fig5.update_layout(height=300)
-        st.plotly_chart(fig5, width="stretch")
+        st.plotly_chart(fig5, use_container_width=True)
 
         # Activity table
         st.markdown("---")
         activity_table = activity_df.copy()
         activity_table['success_rate'] = (activity_table['successes'] / activity_table['total_runs'] * 100).round(1)
         activity_table.columns = ['Date', 'Total Runs', 'Successes', 'Failures', 'Products', 'Success Rate %']
-        st.dataframe(activity_table, width="stretch")
+        st.dataframe(activity_table, use_container_width=True)
 
 st.divider()
 

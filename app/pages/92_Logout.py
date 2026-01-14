@@ -6,7 +6,7 @@ from components.auth import logout, init_session_state
 from components.sidebar_nav import render_sidebar_nav, render_main_header
 
 st.set_page_config(
-    page_title="Logout - CannLinx",
+    page_title="Logout - CannaLinx",
     page_icon=None,
     layout="wide",
     initial_sidebar_state="expanded"

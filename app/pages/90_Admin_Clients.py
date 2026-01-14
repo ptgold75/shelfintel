@@ -8,7 +8,7 @@ from components.sidebar_nav import render_nav, get_available_states
 from components.auth import hash_password, is_admin, require_admin
 
 st.set_page_config(
-    page_title="Client Management - CannLinx",
+    page_title="Client Management - CannaLinx",
     page_icon=None,
     layout="wide",
     initial_sidebar_state="expanded"
@@ -201,7 +201,7 @@ with tab2:
             monthly = len(selected_states) * 399
             st.info(f"Monthly subscription: ${monthly:,} ({len(selected_states)} state(s) x $399)")
 
-        submitted = st.form_submit_button("Create Client", width="stretch", type="primary")
+        submitted = st.form_submit_button("Create Client", use_container_width=True, type="primary")
 
         if submitted:
             errors = []

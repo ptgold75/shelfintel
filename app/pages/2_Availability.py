@@ -13,7 +13,7 @@ from sqlalchemy import text
 from core.db import get_engine
 from core.category_utils import get_normalized_category_sql
 
-st.set_page_config(page_title="Availability | CannLinx", page_icon=None, layout="wide", initial_sidebar_state="expanded")
+st.set_page_config(page_title="Availability | CannaLinx", page_icon=None, layout="wide", initial_sidebar_state="expanded")
 
 # Import and render navigation
 from components.sidebar_nav import render_nav
@@ -209,7 +209,7 @@ selected_store = st.sidebar.selectbox("Dispensary", store_options)
 if selected_store == 'Select a store...':
     st.info(f"📍 **{len(stores_df)}** dispensaries in **{selected_state}**")
     st.markdown("Select a store from the sidebar to view inventory details.")
-    st.dataframe(stores_df[['name', 'state']], width="stretch", height=400)
+    st.dataframe(stores_df[['name', 'state']], use_container_width=True, height=400)
 else:
     # Get dispensary ID
     disp_row = stores_df[stores_df['name'] == selected_store].iloc[0]
@@ -241,14 +241,14 @@ else:
                 with col1:
                     fig = px.pie(categories_df, values='cnt', names='category', 
                                 title='Inventory by Category', hole=0.4)
-                    st.plotly_chart(fig, width="stretch")
+                    st.plotly_chart(fig, use_container_width=True)
                 
                 with col2:
                     st.markdown("**Category Details**")
                     categories_df['pct'] = (categories_df['cnt'] / total_products * 100).round(1)
                     categories_df['pct'] = categories_df['pct'].apply(lambda x: f"{x}%")
-                    st.dataframe(categories_df.rename(columns={'cnt': 'products'}), 
-                               width="stretch", height=350)
+                    st.dataframe(categories_df.rename(columns={'cnt': 'products'}),
+                               use_container_width=True, height=350)
             
             with tab2:
                 col1, col2 = st.columns(2)
@@ -258,11 +258,11 @@ else:
                     top_brands = brands_df.head(15)
                     fig = px.pie(top_brands, values='products', names='brand',
                                 title='Top 15 Brands')
-                    st.plotly_chart(fig, width="stretch")
+                    st.plotly_chart(fig, use_container_width=True)
                 
                 with col2:
                     st.markdown(f"**All Brands ({len(brands_df)})**")
-                    st.dataframe(brands_df, width="stretch", height=400)
+                    st.dataframe(brands_df, use_container_width=True, height=400)
             
             with tab3:
                 # Category filter
@@ -287,9 +287,9 @@ else:
                             col1, col2 = st.columns(2)
                             with col1:
                                 fig = px.pie(size_counts, values='count', names='size', title='Products by Size')
-                                st.plotly_chart(fig, width="stretch")
+                                st.plotly_chart(fig, use_container_width=True)
                             with col2:
-                                st.dataframe(size_counts, width="stretch")
+                                st.dataframe(size_counts, use_container_width=True)
                     
                     st.markdown(f"**Products ({len(products_df)} items)**")
                     
@@ -297,8 +297,8 @@ else:
                     products_df['price'] = products_df['price'].apply(lambda x: f"${x:.2f}" if pd.notna(x) else "")
                     products_df['sale_price'] = products_df['sale_price'].apply(lambda x: f"${x:.2f}" if pd.notna(x) and x > 0 else "")
                     
-                    st.dataframe(products_df[['product', 'brand', 'category', 'size', 'price', 'sale_price']], 
-                               width="stretch", height=400)
+                    st.dataframe(products_df[['product', 'brand', 'category', 'size', 'price', 'sale_price']],
+                               use_container_width=True, height=400)
                 else:
                     st.warning("No products found")
         else:

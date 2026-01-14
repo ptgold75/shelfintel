@@ -12,7 +12,7 @@ from sqlalchemy import text
 from core.db import get_engine
 from core.category_utils import get_normalized_category_sql
 
-st.set_page_config(page_title="Brand Integrity | CannLinx", page_icon=None, layout="wide", initial_sidebar_state="expanded")
+st.set_page_config(page_title="Brand Integrity | CannaLinx", page_icon=None, layout="wide", initial_sidebar_state="expanded")
 
 # Import and render navigation
 from components.sidebar_nav import render_nav
@@ -144,8 +144,8 @@ if not selected_brand:
 brand_info = brands_df[brands_df['brand'] == selected_brand].iloc[0]
 st.markdown(f"### {selected_brand}")
 col1, col2 = st.columns(2)
-col1.metric("Products", brand_info['products'])
-col2.metric("Stores Carrying", brand_info['stores'])
+col1.metric("Products", f"{brand_info['products']:,}")
+col2.metric("Stores Carrying", f"{brand_info['stores']:,}")
 
 st.divider()
 
@@ -239,7 +239,7 @@ for i in range(0, len(image_items), cols_per_row):
                 st.caption(f"**{item['dispensary'][:20]}**")
                 if item['has_image']:
                     try:
-                        st.image(item['image'], width="stretch")
+                        st.image(item['image'], use_container_width=True)
                     except:
                         st.markdown("*Image load error*")
                 else:
@@ -271,7 +271,7 @@ for item in product_images:
     })
 
 summary_df = pd.DataFrame(summary_data)
-st.dataframe(summary_df, width="stretch", height=300)
+st.dataframe(summary_df, use_container_width=True, height=300)
 
 st.divider()
 

@@ -7,7 +7,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspa
 
 import streamlit as st
 
-st.set_page_config(page_title="For Manufacturers | CannLinx", page_icon=None, layout="wide")
+st.set_page_config(page_title="For Manufacturers | CannaLinx", page_icon=None, layout="wide")
 
 st.markdown("""
 <style>
@@ -260,4 +260,4 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-st.page_link("Home.py", label="Back to Home", width="stretch")
+st.page_link("Home.py", label="Back to Home", use_container_width=True)

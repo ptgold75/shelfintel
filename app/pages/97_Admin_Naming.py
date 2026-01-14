@@ -15,7 +15,7 @@ from core.product_normalizer import (
     extract_form_factor, normalize_brand
 )
 
-st.set_page_config(page_title="Admin: Naming | CannLinx", page_icon=None, layout="wide", initial_sidebar_state="expanded")
+st.set_page_config(page_title="Admin: Naming | CannaLinx", page_icon=None, layout="wide", initial_sidebar_state="expanded")
 
 # Import and render navigation
 from components.sidebar_nav import render_nav
@@ -233,13 +233,13 @@ with tab2:
                 }).reset_index()
                 grouped.columns = ['Base Name', 'Category', 'Variations', 'Sizes Available', 'Form', 'Stores']
 
-                st.dataframe(grouped.sort_values('Variations', ascending=False), width="stretch", hide_index=True)
+                st.dataframe(grouped.sort_values('Variations', ascending=False), use_container_width=True, hide_index=True)
 
                 # Detail view
                 st.markdown("### All Products")
                 display_df = brand_products[['raw_name', 'raw_category', 'raw_price', 'store_name', 'base_name', 'size', 'form']]
                 display_df.columns = ['Original Name', 'Category', 'Price', 'Store', 'Base Name', 'Size', 'Form']
-                st.dataframe(display_df, width="stretch", hide_index=True)
+                st.dataframe(display_df, use_container_width=True, hide_index=True)
 
 with tab3:
     st.subheader("Product Search")
@@ -274,12 +274,12 @@ with tab3:
                 'store': 'nunique'
             }).reset_index()
             summary.columns = ['Key', 'Sample Name', 'Brand', 'Category', 'Base Name', 'Size', 'Form', 'Avg Price', 'Min Price', 'Max Price', 'Stores']
-            st.dataframe(summary, width="stretch", hide_index=True)
+            st.dataframe(summary, use_container_width=True, hide_index=True)
 
             # Full results
             st.markdown("### All Results")
             st.dataframe(results[['brand', 'name', 'category', 'price', 'store', 'base_name', 'size', 'form']],
-                        width="stretch", hide_index=True)
+                        use_container_width=True, hide_index=True)
         else:
             st.info("No results found")
     elif search_query:
@@ -332,7 +332,7 @@ with tab4:
             })
 
         preview_df = pd.DataFrame(preview_data)
-        st.dataframe(preview_df, width="stretch", hide_index=True, height=500)
+        st.dataframe(preview_df, use_container_width=True, hide_index=True, height=500)
 
 st.divider()
 st.caption("Naming Convention Tool | Use this to verify product grouping accuracy")

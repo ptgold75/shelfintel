@@ -237,7 +237,7 @@ if user_type:
         )
 
         # Submit button
-        submitted = st.form_submit_button("Submit Registration", width="stretch")
+        submitted = st.form_submit_button("Submit Registration", use_container_width=True)
 
         if submitted:
             # Validation
