@@ -258,6 +258,83 @@ def get_demo_shelf_analytics():
     ])
 
 
+def get_demo_earnings_calendar():
+    """Generate demo earnings calendar data."""
+    today = datetime.now().date()
+    return pd.DataFrame([
+        {"company": "Curaleaf Holdings", "ticker": "CURLF", "report_date": today + timedelta(days=12),
+         "fiscal_quarter": "Q4 2025", "estimate_eps": -0.02, "estimate_revenue": 340.0, "status": "Upcoming"},
+        {"company": "Green Thumb Industries", "ticker": "GTBIF", "report_date": today + timedelta(days=18),
+         "fiscal_quarter": "Q4 2025", "estimate_eps": 0.05, "estimate_revenue": 280.0, "status": "Upcoming"},
+        {"company": "Trulieve Cannabis", "ticker": "TCNNF", "report_date": today + timedelta(days=25),
+         "fiscal_quarter": "Q4 2025", "estimate_eps": 0.12, "estimate_revenue": 310.0, "status": "Upcoming"},
+        {"company": "Verano Holdings", "ticker": "VRNOF", "report_date": today + timedelta(days=8),
+         "fiscal_quarter": "Q4 2025", "estimate_eps": -0.01, "estimate_revenue": 230.0, "status": "Upcoming"},
+        {"company": "Cresco Labs", "ticker": "CRLBF", "report_date": today - timedelta(days=5),
+         "fiscal_quarter": "Q3 2025", "estimate_eps": -0.03, "actual_eps": -0.02, "estimate_revenue": 195.0,
+         "actual_revenue": 198.0, "status": "Reported", "surprise": "Beat"},
+        {"company": "AYR Wellness", "ticker": "AYRWF", "report_date": today - timedelta(days=12),
+         "fiscal_quarter": "Q3 2025", "estimate_eps": -0.15, "actual_eps": -0.18, "estimate_revenue": 115.0,
+         "actual_revenue": 112.0, "status": "Reported", "surprise": "Miss"},
+        {"company": "TerrAscend", "ticker": "TRSSF", "report_date": today - timedelta(days=8),
+         "fiscal_quarter": "Q3 2025", "estimate_eps": 0.02, "actual_eps": 0.03, "estimate_revenue": 85.0,
+         "actual_revenue": 88.0, "status": "Reported", "surprise": "Beat"},
+        {"company": "Vireo Growth", "ticker": "VREOF", "report_date": today + timedelta(days=30),
+         "fiscal_quarter": "Q4 2025", "estimate_eps": 0.01, "estimate_revenue": 45.0, "status": "Upcoming"},
+    ])
+
+
+def get_demo_comparative_metrics():
+    """Generate demo comparative metrics for MSOs."""
+    return pd.DataFrame([
+        {"company": "Curaleaf Holdings", "ticker": "CURLF", "revenue_ttm": 1340, "ebitda_margin": 18.5,
+         "gross_margin": 48.2, "stores": 151, "revenue_per_store": 8.87, "debt_millions": 850,
+         "cash_millions": 120, "enterprise_value": 2100, "ev_revenue": 1.57},
+        {"company": "Green Thumb Industries", "ticker": "GTBIF", "revenue_ttm": 1100, "ebitda_margin": 28.5,
+         "gross_margin": 52.1, "stores": 98, "revenue_per_store": 11.22, "debt_millions": 520,
+         "cash_millions": 180, "enterprise_value": 2050, "ev_revenue": 1.86},
+        {"company": "Trulieve Cannabis", "ticker": "TCNNF", "revenue_ttm": 1220, "ebitda_margin": 32.1,
+         "gross_margin": 58.5, "stores": 206, "revenue_per_store": 5.92, "debt_millions": 680,
+         "cash_millions": 95, "enterprise_value": 1850, "ev_revenue": 1.52},
+        {"company": "Verano Holdings", "ticker": "VRNOF", "revenue_ttm": 920, "ebitda_margin": 24.8,
+         "gross_margin": 50.2, "stores": 145, "revenue_per_store": 6.34, "debt_millions": 420,
+         "cash_millions": 75, "enterprise_value": 680, "ev_revenue": 0.74},
+        {"company": "Cresco Labs", "ticker": "CRLBF", "revenue_ttm": 780, "ebitda_margin": 15.2,
+         "gross_margin": 45.8, "stores": 72, "revenue_per_store": 10.83, "debt_millions": 380,
+         "cash_millions": 55, "enterprise_value": 520, "ev_revenue": 0.67},
+        {"company": "AYR Wellness", "ticker": "AYRWF", "revenue_ttm": 460, "ebitda_margin": 8.5,
+         "gross_margin": 42.1, "stores": 90, "revenue_per_store": 5.11, "debt_millions": 620,
+         "cash_millions": 25, "enterprise_value": 180, "ev_revenue": 0.39},
+        {"company": "TerrAscend", "ticker": "TRSSF", "revenue_ttm": 340, "ebitda_margin": 22.5,
+         "gross_margin": 49.8, "stores": 38, "revenue_per_store": 8.95, "debt_millions": 280,
+         "cash_millions": 45, "enterprise_value": 620, "ev_revenue": 1.82},
+        {"company": "Vireo Growth", "ticker": "VREOF", "revenue_ttm": 180, "ebitda_margin": 12.5,
+         "gross_margin": 46.2, "stores": 128, "revenue_per_store": 1.41, "debt_millions": 95,
+         "cash_millions": 35, "enterprise_value": 720, "ev_revenue": 4.00},
+    ])
+
+
+def get_demo_mna_activity():
+    """Generate demo M&A activity data."""
+    return pd.DataFrame([
+        {"date": datetime(2025, 12, 15), "acquirer": "Vireo Growth", "target": "Schwazze",
+         "deal_value": 85.0, "stores_acquired": 63, "states": "CO, NM", "status": "Pending",
+         "price_per_store": 1.35, "strategic_rationale": "Western expansion, scale"},
+        {"date": datetime(2025, 12, 1), "acquirer": "Vireo Growth", "target": "Eaze",
+         "deal_value": 47.0, "stores_acquired": 65, "states": "CA, FL, CO", "status": "Pending",
+         "price_per_store": 0.72, "strategic_rationale": "Delivery platform, CA footprint"},
+        {"date": datetime(2025, 9, 20), "acquirer": "Curaleaf Holdings", "target": "Tryke Companies",
+         "deal_value": 286.0, "stores_acquired": 15, "states": "NV, AZ, UT", "status": "Completed",
+         "price_per_store": 19.07, "strategic_rationale": "Southwest market consolidation"},
+        {"date": datetime(2025, 6, 15), "acquirer": "Verano Holdings", "target": "Goodness Growth",
+         "deal_value": 413.0, "stores_acquired": 17, "states": "MN, NY, MD, NM", "status": "Completed",
+         "price_per_store": 24.29, "strategic_rationale": "East Coast medical markets"},
+        {"date": datetime(2025, 3, 1), "acquirer": "Trulieve Cannabis", "target": "Harvest Health",
+         "deal_value": 2100.0, "stores_acquired": 62, "states": "AZ, PA, MD, FL", "status": "Completed",
+         "price_per_store": 33.87, "strategic_rationale": "National footprint expansion"},
+    ])
+
+
 @st.cache_data(ttl=300)
 def load_companies():
     """Load all public companies with latest prices."""
@@ -565,7 +642,7 @@ else:
     companies = load_companies()
 
 # Tabs for different views
-tab1, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs(["Overview", "News & Filings", "Regulatory Map", "State Operations", "Stock Charts", "Financials", "Shelf Analytics"])
+tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8 = st.tabs(["Overview", "News & Filings", "Earnings & Metrics", "Regulatory Map", "State Operations", "Stock Charts", "Financials", "Shelf Analytics"])
 
 with tab1:
     st.subheader("Public Cannabis Companies")
@@ -773,6 +850,151 @@ with tab2:
         st.code("python scripts/fetch_investor_news.py", language="bash")
 
 with tab3:
+    st.subheader("Earnings & Comparative Metrics")
+    st.markdown("Track earnings releases, analyst estimates, and compare key financial metrics across MSOs")
+
+    # Earnings Calendar Section
+    st.markdown("### Upcoming Earnings Calendar")
+    earnings_data = get_demo_earnings_calendar()
+
+    # Separate upcoming and reported
+    upcoming = earnings_data[earnings_data['status'] == 'Upcoming'].sort_values('report_date')
+    reported = earnings_data[earnings_data['status'] == 'Reported'].sort_values('report_date', ascending=False)
+
+    # Upcoming earnings
+    if not upcoming.empty:
+        col1, col2, col3 = st.columns(3)
+        for idx, (_, row) in enumerate(upcoming.head(3).iterrows()):
+            with [col1, col2, col3][idx]:
+                days_until = (row['report_date'] - datetime.now().date()).days
+                st.markdown(f"""
+                <div style="background:#fff3e0; padding:1rem; border-radius:8px; border-left:4px solid #ff9800;">
+                    <p style="margin:0; font-weight:600; color:#e65100;">{row['company']}</p>
+                    <p style="margin:0; font-size:0.9rem;">{row['ticker']} · {row['fiscal_quarter']}</p>
+                    <p style="margin:0.5rem 0 0 0; font-size:1.1rem; color:#bf360c;"><strong>{days_until} days</strong></p>
+                    <p style="margin:0; font-size:0.8rem; color:#666;">Est. Rev: ${row['estimate_revenue']:.0f}M</p>
+                </div>
+                """, unsafe_allow_html=True)
+
+    # Full calendar table
+    st.markdown("#### Full Earnings Schedule")
+    calendar_display = earnings_data[['company', 'ticker', 'report_date', 'fiscal_quarter',
+                                       'estimate_revenue', 'status']].copy()
+    calendar_display['report_date'] = pd.to_datetime(calendar_display['report_date']).dt.strftime('%Y-%m-%d')
+    calendar_display['estimate_revenue'] = calendar_display['estimate_revenue'].apply(lambda x: f"${x:.0f}M")
+    calendar_display.columns = ['Company', 'Ticker', 'Report Date', 'Quarter', 'Est. Revenue', 'Status']
+    st.dataframe(calendar_display, use_container_width=True, hide_index=True)
+
+    # Recent Results
+    st.markdown("### Recent Earnings Results")
+    if not reported.empty:
+        for _, row in reported.iterrows():
+            surprise_color = "#4caf50" if row.get('surprise') == 'Beat' else "#f44336"
+            surprise_icon = "↑" if row.get('surprise') == 'Beat' else "↓"
+            st.markdown(f"""
+            <div style="background:#f5f5f5; padding:0.75rem; border-radius:6px; margin-bottom:0.5rem;
+                        border-left:4px solid {surprise_color};">
+                <span style="font-weight:600;">{row['company']}</span> ({row['ticker']}) · {row['fiscal_quarter']}
+                <span style="float:right; color:{surprise_color}; font-weight:600;">{surprise_icon} {row.get('surprise', 'N/A')}</span>
+                <br><span style="font-size:0.85rem; color:#666;">
+                Rev: ${row.get('actual_revenue', 0):.0f}M vs ${row['estimate_revenue']:.0f}M est. ·
+                EPS: ${row.get('actual_eps', 0):.2f} vs ${row.get('estimate_eps', 0):.2f} est.
+                </span>
+            </div>
+            """, unsafe_allow_html=True)
+
+    st.markdown("---")
+
+    # Comparative Metrics Section
+    st.markdown("### Comparative Financial Metrics")
+    st.markdown("Key operating and valuation metrics across major MSOs (TTM data)")
+
+    metrics_data = get_demo_comparative_metrics()
+
+    # Summary metrics
+    col1, col2, col3, col4 = st.columns(4)
+    with col1:
+        avg_margin = metrics_data['ebitda_margin'].mean()
+        st.metric("Avg EBITDA Margin", f"{avg_margin:.1f}%")
+    with col2:
+        avg_ev_rev = metrics_data['ev_revenue'].mean()
+        st.metric("Avg EV/Revenue", f"{avg_ev_rev:.2f}x")
+    with col3:
+        total_stores = metrics_data['stores'].sum()
+        st.metric("Total Stores (Top 8)", f"{total_stores:,}")
+    with col4:
+        avg_rev_store = metrics_data['revenue_per_store'].mean()
+        st.metric("Avg Rev/Store", f"${avg_rev_store:.1f}M")
+
+    # Metrics table
+    metrics_display = metrics_data.copy()
+    metrics_display['revenue_ttm'] = metrics_display['revenue_ttm'].apply(lambda x: f"${x:,.0f}M")
+    metrics_display['ebitda_margin'] = metrics_display['ebitda_margin'].apply(lambda x: f"{x:.1f}%")
+    metrics_display['gross_margin'] = metrics_display['gross_margin'].apply(lambda x: f"{x:.1f}%")
+    metrics_display['revenue_per_store'] = metrics_display['revenue_per_store'].apply(lambda x: f"${x:.2f}M")
+    metrics_display['debt_millions'] = metrics_display['debt_millions'].apply(lambda x: f"${x:,.0f}M")
+    metrics_display['cash_millions'] = metrics_display['cash_millions'].apply(lambda x: f"${x:,.0f}M")
+    metrics_display['ev_revenue'] = metrics_display['ev_revenue'].apply(lambda x: f"{x:.2f}x")
+
+    metrics_display = metrics_display[['company', 'ticker', 'revenue_ttm', 'ebitda_margin',
+                                        'gross_margin', 'stores', 'revenue_per_store', 'ev_revenue']]
+    metrics_display.columns = ['Company', 'Ticker', 'Revenue (TTM)', 'EBITDA %', 'Gross %',
+                               'Stores', 'Rev/Store', 'EV/Rev']
+    st.dataframe(metrics_display, use_container_width=True, hide_index=True)
+
+    # Margin comparison chart
+    st.markdown("#### Profitability Comparison")
+    fig = px.bar(metrics_data.sort_values('ebitda_margin', ascending=True),
+                 x='ebitda_margin', y='company', orientation='h',
+                 color='gross_margin', color_continuous_scale='Greens',
+                 labels={'ebitda_margin': 'EBITDA Margin (%)', 'company': '', 'gross_margin': 'Gross Margin %'},
+                 title="EBITDA Margin by Company")
+    fig.update_layout(height=350)
+    st.plotly_chart(fig, use_container_width=True)
+
+    # Valuation comparison
+    st.markdown("#### Valuation Comparison")
+    fig = px.scatter(metrics_data, x='ev_revenue', y='ebitda_margin',
+                     size='revenue_ttm', color='company',
+                     hover_data=['stores', 'revenue_per_store'],
+                     labels={'ev_revenue': 'EV/Revenue Multiple', 'ebitda_margin': 'EBITDA Margin (%)',
+                             'revenue_ttm': 'Revenue'},
+                     title="Valuation vs Profitability (bubble size = revenue)")
+    fig.update_layout(height=400)
+    st.plotly_chart(fig, use_container_width=True)
+
+    st.markdown("---")
+
+    # M&A Activity Section
+    st.markdown("### M&A Activity Tracker")
+    mna_data = get_demo_mna_activity()
+
+    # Summary stats
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        total_deals = len(mna_data)
+        st.metric("Deals Tracked", total_deals)
+    with col2:
+        total_value = mna_data['deal_value'].sum()
+        st.metric("Total Deal Value", f"${total_value:,.0f}M")
+    with col3:
+        avg_price = mna_data['price_per_store'].mean()
+        st.metric("Avg Price/Store", f"${avg_price:.1f}M")
+
+    # M&A table
+    mna_display = mna_data.copy()
+    mna_display['date'] = pd.to_datetime(mna_display['date']).dt.strftime('%Y-%m-%d')
+    mna_display['deal_value'] = mna_display['deal_value'].apply(lambda x: f"${x:.0f}M")
+    mna_display['price_per_store'] = mna_display['price_per_store'].apply(lambda x: f"${x:.1f}M")
+    mna_display = mna_display[['date', 'acquirer', 'target', 'deal_value', 'stores_acquired',
+                               'states', 'price_per_store', 'status']]
+    mna_display.columns = ['Date', 'Acquirer', 'Target', 'Deal Value', 'Stores', 'States',
+                           '$/Store', 'Status']
+    st.dataframe(mna_display, use_container_width=True, hide_index=True)
+
+    st.caption("Data sources: SEC filings, company press releases, news reports. Estimates may vary.")
+
+with tab4:
     st.subheader("US Cannabis Regulatory Map")
     st.markdown("Real-time cannabis legalization status across all 50 states")
 
@@ -950,7 +1172,7 @@ with tab3:
 
     st.caption("Data source: DISA, NCSL, state government websites. Updated January 2026.")
 
-with tab4:
+with tab5:
     st.subheader("State Operations")
     st.markdown("Track which states each company operates in and their *owned* retail footprint (company-operated dispensaries)")
 
@@ -1048,7 +1270,7 @@ with tab4:
         })
         st.dataframe(demo_ops, use_container_width=True, hide_index=True)
 
-with tab5:
+with tab6:
     st.subheader("Stock Price Charts")
 
     # Company selector
@@ -1152,7 +1374,7 @@ with tab5:
             fig.update_layout(height=400, title="90-Day Relative Performance (Normalized to 100)")
             st.plotly_chart(fig, use_container_width=True)
 
-with tab6:
+with tab7:
     st.subheader("Financial Metrics")
 
     if DEMO_MODE:
@@ -1226,7 +1448,7 @@ with tab6:
             sec_df = pd.DataFrame(result.fetchall(), columns=['Company', 'Ticker', 'CIK', 'Filing Periods'])
             st.dataframe(sec_df, use_container_width=True, hide_index=True)
 
-with tab7:
+with tab8:
     st.subheader("Shelf Analytics")
     st.markdown("Track public company brand presence across retail dispensaries. This shows stores *carrying* brands (based on menu data), which differs from stores *owned* by each company shown in State Operations.")
 
