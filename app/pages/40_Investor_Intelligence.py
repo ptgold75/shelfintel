@@ -386,6 +386,16 @@ def get_state_dispensary_consolidation():
                     'MSOs racing to acquire independent dispensaries to hit cap',
                     'Employee Stock Ownership Plans (ESOPs) approved as exit strategy alternative to M&A',
                     'ESOPs offer tax benefits in challenging cannabis M&A environment'
+                ],
+                'market_highlight': {
+                    'first_year_sales': '$1.1 billion',
+                    'adult_use_launch': 'July 2023',
+                    'voter_approval': 'November 2022'
+                },
+                'drivers': [
+                    {'title': 'Adult-Use Legalization', 'description': 'Voter approval in Nov 2022, launched July 2023, sparked a "land grab" for quality assets and licenses among MSOs.'},
+                    {'title': 'Limited Licenses & Caps', 'description': 'Regulatory framework with license caps per operator drives acquisition of existing licensed businesses to maximize market share.'},
+                    {'title': 'Federal Uncertainty', 'description': 'Federal illegality complicates banking and interstate commerce, making state-level consolidation and ESOPs more attractive.'},
                 ]
             }
         }
@@ -1099,6 +1109,28 @@ with tab3:
             st.markdown("---")
             st.markdown(f"#### {narrative.get('title', f'{selected_state} M&A Overview')}")
 
+            # Market highlight banner
+            if 'market_highlight' in narrative:
+                highlight = narrative['market_highlight']
+                st.markdown(f"""
+                <div style="background: linear-gradient(135deg, #1a237e 0%, #4a148c 100%); padding:1.25rem; border-radius:10px; margin-bottom:1rem; color:white;">
+                    <div style="display:flex; justify-content:space-around; text-align:center;">
+                        <div>
+                            <p style="margin:0; font-size:1.8rem; font-weight:700;">{highlight.get('first_year_sales', 'N/A')}</p>
+                            <p style="margin:0; font-size:0.85rem; opacity:0.9;">First Year Adult-Use Sales</p>
+                        </div>
+                        <div>
+                            <p style="margin:0; font-size:1.8rem; font-weight:700;">{highlight.get('adult_use_launch', 'N/A')}</p>
+                            <p style="margin:0; font-size:0.85rem; opacity:0.9;">Adult-Use Launch</p>
+                        </div>
+                        <div>
+                            <p style="margin:0; font-size:1.8rem; font-weight:700;">{highlight.get('voter_approval', 'N/A')}</p>
+                            <p style="margin:0; font-size:0.85rem; opacity:0.9;">Voter Approval</p>
+                        </div>
+                    </div>
+                </div>
+                """, unsafe_allow_html=True)
+
             # Store limit info
             if 'store_limit' in narrative:
                 st.info(f"**Dispensary Ownership Cap:** {narrative['store_limit']} stores per operator")
@@ -1113,6 +1145,12 @@ with tab3:
                         <span style="font-size:0.9rem; color:#424242;">{deal['description']}</span>
                     </div>
                     """, unsafe_allow_html=True)
+
+            # Industry drivers
+            if 'drivers' in narrative:
+                st.markdown("##### Industry Drivers & Challenges")
+                for driver in narrative['drivers']:
+                    st.markdown(f"**{driver['title']}:** {driver['description']}")
 
             # Market trends
             if 'trends' in narrative:

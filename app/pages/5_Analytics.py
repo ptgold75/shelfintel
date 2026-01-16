@@ -66,11 +66,18 @@ def load_state_data():
     engine = get_db_engine()
     with engine.connect() as conn:
         states = pd.read_sql(text("""
-            SELECT COALESCE(state, 'MD') as state, COUNT(*) as store_count
-            FROM dispensary
-            GROUP BY COALESCE(state, 'MD')
-            ORDER BY store_count DESC
+            SELECT
+                d.state,
+                COUNT(DISTINCT d.dispensary_id) as store_count,
+                COUNT(DISTINCT CASE WHEN r.dispensary_id IS NOT NULL THEN d.dispensary_id END) as with_data
+            FROM dispensary d
+            LEFT JOIN raw_menu_item r ON r.dispensary_id = d.dispensary_id
+            WHERE d.state IS NOT NULL AND d.is_active = true
+            GROUP BY d.state
+            ORDER BY d.state
         """), conn)
+    # Calculate coverage percentage
+    states['coverage_pct'] = (states['with_data'] / states['store_count'] * 100).round(1)
     return states
 
 try:
@@ -82,7 +89,7 @@ except Exception as e:
 
 # Sidebar - State Filter
 st.sidebar.header("Filters")
-states_list = ['All States'] + state_df['state'].tolist()
+states_list = ['All States'] + sorted(state_df['state'].dropna().tolist())
 selected_state = st.sidebar.selectbox("State", states_list)
 
 tab1, tab2, tab3, tab4 = st.tabs(["Overview", "Brands", "Categories", "Stores"])
@@ -98,8 +105,51 @@ with tab1:
     st.divider()
     st.subheader("Coverage by State")
     if not state_df.empty:
-        fig = px.pie(state_df, values='store_count', names='state', title='Dispensaries by State')
+        # Sort by state name for display
+        display_df = state_df.sort_values('state')
+
+        # Create bar chart with dispensary count and coverage
+        import plotly.graph_objects as go
+        fig = go.Figure()
+
+        # Add bars for total dispensaries
+        fig.add_trace(go.Bar(
+            x=display_df['state'],
+            y=display_df['store_count'],
+            name='Total Dispensaries',
+            marker_color='#94a3b8',
+            text=display_df['store_count'],
+            textposition='outside',
+        ))
+
+        # Add bars for dispensaries with data (stacked appearance via overlay)
+        fig.add_trace(go.Bar(
+            x=display_df['state'],
+            y=display_df['with_data'],
+            name='With Menu Data',
+            marker_color=display_df['coverage_pct'].apply(
+                lambda x: '#22c55e' if x >= 70 else ('#f59e0b' if x >= 40 else '#ef4444')
+            ),
+            text=display_df.apply(lambda r: f"{r['coverage_pct']:.0f}%", axis=1),
+            textposition='inside',
+        ))
+
+        fig.update_layout(
+            title="Dispensaries and Coverage by State",
+            xaxis_title="State",
+            yaxis_title="Number of Dispensaries",
+            barmode='overlay',
+            height=500,
+            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+        )
+        fig.update_xaxes(tickangle=-45)
         st.plotly_chart(fig, use_container_width=True)
+
+        # Summary table below chart
+        st.markdown("**Coverage Summary:**")
+        summary_df = display_df[['state', 'store_count', 'with_data', 'coverage_pct']].copy()
+        summary_df.columns = ['State', 'Total Stores', 'With Data', 'Coverage %']
+        st.dataframe(summary_df, use_container_width=True, height=300)
 
 with tab2:
     st.header("Brand Analysis")

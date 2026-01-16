@@ -40,7 +40,7 @@ class LeafBridgeProvider(BaseProvider):
         dispensary_id: str,
         retailer_id: str,
         base_url: str,
-        use_proxy: bool = False
+        use_proxy: bool = True
     ):
         """Initialize LeafBridge provider.
 
@@ -48,7 +48,7 @@ class LeafBridgeProvider(BaseProvider):
             dispensary_id: Human-readable dispensary identifier
             retailer_id: LeafBridge/Dutchie retailer UUID
             base_url: Base URL of the dispensary website (e.g., https://healthforlifedispensaries.com)
-            use_proxy: Whether to use proxy for requests
+            use_proxy: Whether to use proxy for requests (default: True)
         """
         super().__init__(dispensary_id)
         self.retailer_id = retailer_id

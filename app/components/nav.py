@@ -188,64 +188,45 @@ def render_header():
     show_admin = is_authenticated() and is_admin()
     logged_in = is_authenticated()
 
-    # Build nav HTML
+    # Build nav HTML - Consolidated navigation with all pages under 4 main categories
     nav_html = '''<div class="nav-container">
     <a href="/" target="_self" class="nav-link">Home</a>
-    <div class="nav-dropdown">
-        <a href="/Brand_Intelligence" target="_self" class="nav-link has-dropdown">Brands</a>
-        <div class="dropdown-content">
-            <a href="/Brand_Intelligence" target="_self">Brand Dashboard</a>
-            <a href="/Brand_Intelligence?section=insights" target="_self">Actionable Insights</a>
-            <a href="/Brand_Intelligence?section=distribution" target="_self">Store Distribution</a>
-            <a href="/Brand_Intelligence?section=coverage" target="_self">County Coverage</a>
-            <a href="/Brand_Assets" target="_self">Brand Assets</a>
-        </div>
-    </div>
     <div class="nav-dropdown">
         <a href="/Retail_Intelligence" target="_self" class="nav-link has-dropdown">Retail</a>
         <div class="dropdown-content">
             <a href="/Retail_Intelligence" target="_self">Retail Dashboard</a>
-            <a href="/Retail_Intelligence?section=insights" target="_self">Actionable Insights</a>
-            <a href="/Retail_Intelligence?section=prices" target="_self">Price Comparison</a>
-            <a href="/Retail_Intelligence?section=gaps" target="_self">Assortment Gaps</a>
-            <a href="/Retail_Intelligence?section=category" target="_self">Category Mix</a>
+            <a href="/Product_Search" target="_self">Product Search</a>
+            <a href="/Price_Analysis" target="_self">Price Analysis</a>
             <a href="/Availability" target="_self">Availability Tracker</a>
+            <a href="/Competitive_Intel" target="_self">Competitive Intel</a>
+            <a href="/Competitor_Compare" target="_self">Store Comparison</a>
+            <a href="/County_Insights" target="_self">County Insights</a>
+            <a href="/Deals_Dashboard" target="_self">Deals & Promotions</a>
         </div>
     </div>
     <div class="nav-dropdown">
-        <a href="/Grower_Intelligence" target="_self" class="nav-link has-dropdown">Growers</a>
+        <a href="/Grower_Intelligence" target="_self" class="nav-link has-dropdown">Wholesale</a>
         <div class="dropdown-content">
             <a href="/Grower_Intelligence" target="_self">Grower Dashboard</a>
-            <a href="/Grower_Intelligence?section=category" target="_self">Category Analysis</a>
-            <a href="/Grower_Intelligence?section=strains" target="_self">Top Strains</a>
-            <a href="/Grower_Intelligence?section=distribution" target="_self">Brand Distribution</a>
-            <a href="/Grower_Intelligence?section=prices" target="_self">Price Benchmarks</a>
-            <a href="/Grower_Intelligence?section=sizes" target="_self">Size Distribution</a>
-        </div>
-    </div>
-    <div class="nav-dropdown">
-        <a href="/Product_Search" target="_self" class="nav-link has-dropdown">Tools</a>
-        <div class="dropdown-content">
-            <a href="/Product_Search" target="_self">Product Search</a>
-            <a href="/Product_Search?section=prices" target="_self">Price List</a>
-            <a href="/Product_Search?section=compare" target="_self">Store Comparison</a>
-            <a href="/Price_Analysis" target="_self">Price Overview</a>
-            <a href="/Price_Analysis?section=category" target="_self">Category Prices</a>
-            <a href="/Price_Analysis?section=vapes" target="_self">Vape Analysis</a>
-            <a href="/Price_Analysis?section=deals" target="_self">Best Deals</a>
-            <a href="/Price_Analysis?section=search" target="_self">Price Search</a>
-            <a href="/Availability" target="_self">Availability Tracker</a>
+            <a href="/Brand_Intelligence" target="_self">Brand Dashboard</a>
+            <a href="/Brand_Analytics" target="_self">Brand Analytics</a>
+            <a href="/Brand_Integrity" target="_self">Brand Integrity</a>
+            <a href="/Brand_Heatmap" target="_self">Brand Heatmap</a>
+            <a href="/Brand_Assets" target="_self">Brand Assets</a>
+            <a href="/Market_Share" target="_self">Market Share</a>
+            <a href="/State_Reports" target="_self">State Reports</a>
         </div>
     </div>
     <div class="nav-dropdown">
         <a href="/Investor_Intelligence" target="_self" class="nav-link has-dropdown">Investors</a>
         <div class="dropdown-content">
             <a href="/Investor_Intelligence" target="_self">Investor Dashboard</a>
-            <a href="/Investor_Intelligence?section=companies" target="_self">Public Companies</a>
-            <a href="/Investor_Intelligence?section=stocks" target="_self">Stock Performance</a>
-            <a href="/Investor_Intelligence?section=financials" target="_self">Financial Metrics</a>
-            <a href="/Investor_Intelligence?section=states" target="_self">State Operations</a>
-            <a href="/Investor_Intelligence?section=shelf" target="_self">Shelf Analytics</a>
+            <a href="/Investor_Intelligence?tab=earnings" target="_self">Earnings & Metrics</a>
+            <a href="/Investor_Intelligence?tab=regulatory" target="_self">Regulatory Map</a>
+            <a href="/Investor_Intelligence?tab=states" target="_self">State Operations</a>
+            <a href="/Investor_Intelligence?tab=stocks" target="_self">Stock Charts</a>
+            <a href="/Investor_Intelligence?tab=financials" target="_self">Financials</a>
+            <a href="/Investor_Intelligence?tab=shelf" target="_self">Shelf Analytics</a>
         </div>
     </div>'''
 
@@ -256,9 +237,16 @@ def render_header():
         <a href="/Admin_Dispensaries" target="_self" class="nav-link has-dropdown">Admin</a>
         <div class="dropdown-content">
             <a href="/Admin_Dispensaries" target="_self">Dispensaries</a>
-            <a href="/Admin_Naming" target="_self">Naming Rules</a>
-            <a href="/Product_Dedup" target="_self">Product Dedup</a>
             <a href="/Admin_Clients" target="_self">Client Management</a>
+            <a href="/Admin_Naming" target="_self">Naming Rules</a>
+            <a href="/Admin_Brands" target="_self">Brand Management</a>
+            <a href="/Product_Dedup" target="_self">Product Dedup</a>
+            <a href="/Naming_Review" target="_self">Naming Review</a>
+            <a href="/Admin_Coverage" target="_self">Coverage Report</a>
+            <a href="/Admin_Loyalty" target="_self">Loyalty Programs</a>
+            <a href="/Alert_Settings" target="_self">Alert Settings</a>
+            <a href="/Data_Licensing" target="_self">Data Licensing</a>
+            <a href="/Admin_Setup" target="_self">System Setup</a>
         </div>
     </div>'''
 

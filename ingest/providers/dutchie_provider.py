@@ -120,12 +120,12 @@ def fetch_menu_items(
     # Extract Dutchie slug from URL for Playwright fallback
     dutchie_slug = _extract_dutchie_slug(menu_url)
 
-    # Create provider instance (disable proxy for now)
+    # Create provider instance with proxy enabled
     provider = DutchieProvider(
         dispensary_id=dutchie_slug,  # Used for Playwright URL construction
         retailer_id=resolved_retailer_id,
         api_base=api_base,
-        use_proxy=False,
+        use_proxy=True,
     )
 
     # Map menu_type to pricing_type

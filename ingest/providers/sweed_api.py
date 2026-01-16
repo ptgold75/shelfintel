@@ -47,7 +47,7 @@ def get_categories(
     store_id: str,
     sale_type: str = "Recreational",
     referer: Optional[str] = None,
-    use_proxy: bool = False,  # Default False - Sweed blocks proxy IPs
+    use_proxy: bool = True,  # Enable proxy for all requests
 ) -> List[Dict[str, Any]]:
     """
     Fetch product categories for a store.
@@ -93,7 +93,7 @@ def get_product_list(
     sorting_method_id: int = 7,
     search_term: str = "",
     referer: Optional[str] = None,
-    use_proxy: bool = False,  # Default False - Sweed blocks proxy IPs
+    use_proxy: bool = True,  # Enable proxy for all requests
     proxies: Optional[Dict[str, str]] = None,
 ) -> Dict[str, Any]:
     """
@@ -169,7 +169,7 @@ def fetch_all_products_for_category(
     max_pages: int = 100,
     polite_delay_s: float = 0.15,
     referer: Optional[str] = None,
-    use_proxy: bool = False,  # Default False - Sweed blocks proxy IPs
+    use_proxy: bool = True,  # Enable proxy for all requests
 ) -> List[Dict[str, Any]]:
     """
     Fetch all products for a category, handling pagination.

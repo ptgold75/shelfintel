@@ -166,6 +166,9 @@ RATE_LIMITERS = {
     "sweed": RateLimiter(requests_per_minute=60),
     "dutchie": RateLimiter(requests_per_minute=30),
     "jane": RateLimiter(requests_per_minute=30),
+    "weedmaps": RateLimiter(requests_per_minute=40),
+    "curaleaf": RateLimiter(requests_per_minute=20),
+    "leafbridge": RateLimiter(requests_per_minute=30),
 }
 
 

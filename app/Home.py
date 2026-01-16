@@ -166,20 +166,20 @@ st.markdown(f"""
 
 st.markdown('<p class="section-header">Choose Your Role</p>', unsafe_allow_html=True)
 
-# User type cards - 4 columns
-col1, col2, col3, col4 = st.columns(4)
+# User type cards - 3 columns (consolidated)
+col1, col2, col3 = st.columns(3)
 
 with col1:
     st.markdown("""
     <a href="/Retail_Intelligence" target="_self" style="text-decoration:none;">
         <div class="user-card">
-            <h3>Dispensaries</h3>
-            <p>Competitive pricing & inventory insights</p>
+            <h3>Retail</h3>
+            <p>Competitive pricing & inventory insights for dispensaries</p>
             <ul>
                 <li>Price vs competitors</li>
                 <li>Assortment gaps</li>
                 <li>Category optimization</li>
-                <li>Stock alerts</li>
+                <li>County-level insights</li>
             </ul>
             <span class="card-link">Explore Retail Tools &rarr;</span>
         </div>
@@ -190,13 +190,13 @@ with col2:
     st.markdown("""
     <a href="/Grower_Intelligence" target="_self" style="text-decoration:none;">
         <div class="user-card">
-            <h3>Growers</h3>
-            <p>Distribution & territory insights</p>
+            <h3>Wholesale</h3>
+            <p>Distribution & market insights for growers and brands</p>
             <ul>
-                <li>Strain rankings</li>
-                <li>Category trends</li>
-                <li>Territory analysis</li>
-                <li>Product tracking</li>
+                <li>Strain & product rankings</li>
+                <li>Store distribution maps</li>
+                <li>Pricing compliance</li>
+                <li>Market share analysis</li>
             </ul>
             <span class="card-link">Explore Wholesale Tools &rarr;</span>
         </div>
@@ -205,32 +205,15 @@ with col2:
 
 with col3:
     st.markdown("""
-    <a href="/Brand_Intelligence" target="_self" style="text-decoration:none;">
-        <div class="user-card">
-            <h3>Brands</h3>
-            <p>Distribution & compliance tracking</p>
-            <ul>
-                <li>Store coverage</li>
-                <li>Pricing compliance</li>
-                <li>Image consistency</li>
-                <li>Naming standards</li>
-            </ul>
-            <span class="card-link">Explore Brand Tools &rarr;</span>
-        </div>
-    </a>
-    """, unsafe_allow_html=True)
-
-with col4:
-    st.markdown("""
     <a href="/Investor_Intelligence" target="_self" style="text-decoration:none;">
         <div class="user-card">
             <h3>Investors</h3>
-            <p>Public company analytics</p>
+            <p>Public company analytics & M&A tracking</p>
             <ul>
-                <li>Stock prices</li>
-                <li>SKU penetration</li>
-                <li>Market share</li>
-                <li>Financials</li>
+                <li>Stock performance</li>
+                <li>Earnings & metrics</li>
+                <li>State operations</li>
+                <li>M&A activity</li>
             </ul>
             <span class="card-link">Explore Investor Tools &rarr;</span>
         </div>
@@ -277,6 +260,39 @@ with h4:
         <div class="how-step-desc">Make data-driven decisions</div>
     </div>
     """, unsafe_allow_html=True)
+
+# Maryland Launch Market Showcase
+st.markdown('<p class="section-header">Featured Market: Maryland</p>', unsafe_allow_html=True)
+
+st.markdown("""
+<div style="background: linear-gradient(135deg, #1e3a5f 0%, #2d5a87 100%); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <div style="flex: 1; min-width: 200px;">
+            <h3 style="color: white; margin: 0 0 0.5rem 0; font-size: 1.1rem;">Maryland Cannabis Market Intelligence</h3>
+            <p style="color: #94c5eb; margin: 0; font-size: 0.85rem;">
+                Complete coverage of Maryland's booming adult-use market with M&A tracking and consolidation analysis.
+            </p>
+        </div>
+        <div style="display: flex; gap: 1.5rem; flex-wrap: wrap;">
+            <div style="text-align: center;">
+                <p style="color: white; font-size: 1.3rem; font-weight: 700; margin: 0;">$1.1B</p>
+                <p style="color: #94c5eb; font-size: 0.65rem; text-transform: uppercase; margin: 0;">First Year Sales</p>
+            </div>
+            <div style="text-align: center;">
+                <p style="color: white; font-size: 1.3rem; font-weight: 700; margin: 0;">114</p>
+                <p style="color: #94c5eb; font-size: 0.65rem; text-transform: uppercase; margin: 0;">Dispensaries</p>
+            </div>
+            <div style="text-align: center;">
+                <p style="color: white; font-size: 1.3rem; font-weight: 700; margin: 0;">16+</p>
+                <p style="color: #94c5eb; font-size: 0.65rem; text-transform: uppercase; margin: 0;">M&A Deals Tracked</p>
+            </div>
+        </div>
+        <a href="/Investor_Intelligence" target="_self" style="background: #f59e0b; color: #1e3a5f; padding: 0.6rem 1.2rem; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 0.85rem; white-space: nowrap;">
+            Explore MD Market &rarr;
+        </a>
+    </div>
+</div>
+""", unsafe_allow_html=True)
 
 # Simple CTA
 st.markdown("---")
